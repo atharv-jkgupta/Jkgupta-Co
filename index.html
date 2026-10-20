@@ -1,5 +1,5 @@
 <!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>JK Gupta &amp; Co</title>
-<meta name="description" content="JK Gupta &amp; Co. client accounting workspace"><meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#0f2742"><meta name="jkg-build" content="b2610201103"><script>try{var t=localStorage.getItem("jkgtheme")||(matchMedia("(prefers-color-scheme:dark)").matches?"dark":"light");document.documentElement.dataset.theme=t}catch(e){document.documentElement.dataset.theme="light"}</script><link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27%3E%3Crect width=%2764%27 height=%2764%27 rx=%2714%27 fill=%27%230f2742%27/%3E%3Ctext x=%2732%27 y=%2742%27 font-size=%2734%27 font-family=%27Georgia,serif%27 font-weight=%27700%27 text-anchor=%27middle%27 fill=%27%23e9d9ae%27%3EJK%3C/text%3E%3C/svg%3E"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:wght@500;600;700&display=swap"><style>
+<meta name="description" content="JK Gupta &amp; Co. client accounting workspace"><meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#0f2742"><meta name="jkg-build" content="b2610201110"><script>try{var t=localStorage.getItem("jkgtheme")||(matchMedia("(prefers-color-scheme:dark)").matches?"dark":"light");document.documentElement.dataset.theme=t}catch(e){document.documentElement.dataset.theme="light"}</script><link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27%3E%3Crect width=%2764%27 height=%2764%27 rx=%2714%27 fill=%27%230f2742%27/%3E%3Ctext x=%2732%27 y=%2742%27 font-size=%2734%27 font-family=%27Georgia,serif%27 font-weight=%27700%27 text-anchor=%27middle%27 fill=%27%23e9d9ae%27%3EJK%3C/text%3E%3C/svg%3E"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:wght@500;600;700&display=swap"><style>
 /* ============ tokens ============ */
 :root{--serif:'Source Serif 4',Georgia,'Times New Roman',serif;--sans:'Inter','Segoe UI',system-ui,-apple-system,Arial,sans-serif;--r:12px;--ease:cubic-bezier(.2,.7,.2,1)}
 :root,:root[data-theme=light]{color-scheme:light;
@@ -389,7 +389,7 @@ body.out .bgart>rect{fill:#14130f}
 #md .box{max-height:calc(100vh - 100px);overflow:auto}
 </style></head><body class="out">
 <div id="top"><div class="tl"><button id="mb" class="ib" onclick="tg()" aria-label="Menu">&#9776;</button><div class="brandR" onclick="logo()" title="JK Gupta &amp; Co.">JK<span>&amp;</span>CO.<small>CHARTERED ACCOUNTANTS</small></div></div><div class="tr"><span id="sv"></span><button id="tm" class="ib" onclick="theme()" aria-label="Theme"></button><button id="dm" class="ib" onclick="dm(event)" aria-label="More">&#8942;</button></div></div>
-<div id="dd"></div><div id="md"></div><input type="file" id="lb" accept=".json" onchange="imp(this)" hidden>
+<div id="dd"></div><div id="md"></div><input type="file" id="lb" accept=".json,application/json,text/plain,*/*" onchange="imp(this)" hidden>
 <aside id="sb"></aside><div id="ov" onclick="tg(0)"></div><main id="app"><div class="boot">Loading...</div></main><datalist id="ll"></datalist>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <script>
@@ -1031,7 +1031,7 @@ function pcEx(f){const p=DB.pc,mo=S.pm;p.cash=v('pc1').trim()||'Petty Cash';p.ex
    JK Gupta & Co. - interface, client tracker, attendance, staff control
    (added on top of the original program; everything above is unchanged)
    ==================================================================== */
-const BUILD='b2610201103';
+const BUILD='b2610201110';
 let CURP='';
 const $id=i=>document.getElementById(i);
 const jkP2=n=>String(n).padStart(2,'0');
@@ -1245,7 +1245,7 @@ function attSelf(){const same=pgIn('att'),o=attGet(USER),now=new Date(),td=ymd(n
  app.innerHTML='<i data-pg="att" hidden></i><div class="clock"><div><small>Today</small><div class="t" id="clk">--:--:--</div><div class="d">'+now.toLocaleDateString('en-IN',{weekday:'long',day:'numeric',month:'long',year:'numeric'})+'</div>'
   +'<div class="d" style="margin-top:8px">'+(r.i?('In at <b>'+r.i+'</b>'+(r.o?' · Out at <b>'+r.o+'</b> · '+hfmt(hrs(r)):' · still working')):'You have not checked in yet.')+'</div></div>'
   +'<div class="btns"><button onclick="attIn()"'+(r.i?' disabled':'')+'>Check in</button><button class="g" onclick="attOut()"'+(!r.i||r.o?' disabled':'')+'>Check out</button></div></div>'
-  +'<div class="toolbar"><div class="mo"><button onclick="attMo(-1)" aria-label="Previous month">&lsaquo;</button><b>'+mLabel(mo)+'</b><button onclick="attMo(1)" aria-label="Next month">&rsaquo;</button></div></div>'
+  +'<div class="toolbar"><div class="mo"><button onclick="attMo(-1)" aria-label="Previous month">&lsaquo;</button><b>'+mLabel(mo)+'</b><button onclick="attMo(1)" aria-label="Next month">&rsaquo;</button></div><button class="g" onclick="attXlsSelf()">Download my attendance (Excel)</button></div>'
   +'<div class="stats"><div><b>'+T.P+'</b>Present</div><div><b>'+T.H+'</b>Half days</div><div><b>'+T.L+'</b>Leave</div><div><b>'+hfmt(T.h)+'</b>Hours worked</div></div>'
   +'<div class="card"><div class="cal">'+cells+'</div></div><small>The admin can correct any day. Times come from this computer\'s clock.</small>';
  attTick();ATI=setInterval(attTick,1000)}
@@ -1269,11 +1269,19 @@ function attPick(k,b){ATS.pick=ATS.pick==k?'':k;document.querySelectorAll('#adS 
 function attDaySave(){const[si,d]=ATS.cur,u=ATS.L[si],o=attGet(u),i=v('adi'),ot=v('ado'),n=v('adn').trim();let s=ATS.pick;if(!s&&(i||ot))s='P';
  if(!s&&!n&&!i&&!ot)delete o.d[d];else o.d[d]={s,i,o:ot,n};attSave(u,o);modal();attAdmin()}
 function attDayClear(){const[si,d]=ATS.cur,u=ATS.L[si],o=attGet(u);delete o.d[d];attSave(u,o);modal();attAdmin()}
+function attSheet(a,sh,nm){if(window.XLSX){const wb=XLSX.utils.book_new();sh.forEach(([n,r])=>{const w=XLSX.utils.aoa_to_sheet(r);w['!cols']=r[0].map((_,i)=>({wch:Math.min(38,Math.max(8,...r.map(x=>String(x[i]==null?'':x[i]).length+2)))}));XLSX.utils.book_append_sheet(wb,w,n)});XLSX.writeFile(wb,nm+'.xlsx')}
+ else{const q=r=>r.map(x=>x.map(c=>'"'+String(c==null?'':c).replace(/"/g,'""')+'"').join(',')).join('\r\n');dl(nm+'.csv','\uFEFF'+sh.map(([n,r])=>'## '+n+'\r\n'+q(r)).join('\r\n\r\n'),'text/csv')}}
+function attDetail(u,mo){const o=attGet(u),dim=new Date(+mo.slice(0,4),+mo.slice(5),0).getDate(),R=[];
+ for(let d=1;d<=dim;d++){const k=mo+'-'+jkP2(d),x=o.d[k]||{},dow=new Date(+mo.slice(0,4),+mo.slice(5)-1,d).getDay();R.push([fd(k),'Sun Mon Tue Wed Thu Fri Sat'.split(' ')[dow],x.s?ATM[x.s][0]:(dow==0?'Week off':''),x.i||'',x.o||'',x.i&&x.o?Math.round(hrs(x)*100)/100:'',x.n||''])}
+ return R}
+function attXlsSelf(){const mo=attMonth(),T=attTot(attGet(USER),mo),R=[['Date','Day','Status','In','Out','Hours','Note']].concat(attDetail(USER,mo));
+ R.push([],['Present',T.P],['Half days',T.H],['Leave',T.L],['Absent',T.A],['Days worked',T.P+T.H/2],['Hours worked',Math.round(T.h*100)/100]);
+ attSheet(0,[[mLabel(mo).slice(0,28),R]],'JK-Attendance-'+USER+'-'+mo)}
 function attXls(){const L=Object.keys(U()),mo=attMonth(),dim=new Date(+mo.slice(0,4),+mo.slice(5),0).getDate();
  const R=[['Staff'].concat(Array.from({length:dim},(_,i)=>i+1),['Present','Half day','Leave','Absent','Days worked','Hours'])];
  L.forEach(u=>{const o=attGet(u),T=attTot(o,mo);R.push([u].concat(Array.from({length:dim},(_,i)=>{const x=o.d[mo+'-'+jkP2(i+1)];return x&&x.s?x.s:''}),[T.P,T.H,T.L,T.A,T.P+T.H/2,Math.round(T.h*100)/100]))});
- if(window.XLSX){const wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(R),'Attendance');XLSX.writeFile(wb,'JK-Attendance-'+mo+'.xlsx')}
- else dl('JK-Attendance-'+mo+'.csv',R.map(r=>r.map(x=>'"'+String(x).replace(/"/g,'""')+'"').join(',')).join('\r\n'),'text/csv')}
+ const D=[['Staff','Date','Day','Status','In','Out','Hours','Note']];L.forEach(u=>attDetail(u,mo).forEach(r=>D.push([u].concat(r))));
+ attSheet(0,[['Summary',R],['Daily details',D]],'JK-Attendance-'+mo)}
 
 /* ====================================================================
    STAFF & ACCESS  (admin only)
@@ -1346,6 +1354,19 @@ async function verCheck(){if(verCheck.t&&Date.now()-verCheck.t<60000)return;verC
 setInterval(()=>{if(document.visibilityState==='visible')verCheck()},180000);
 document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')verCheck()});
 
+/* ---------------- load backup (more forgiving) ---------------- */
+function imp(inp){const f=inp.files&&inp.files[0];if(!f)return;const reset=()=>{try{inp.value=''}catch(e){}};
+ const rd=new FileReader();rd.onerror=()=>{reset();alert('This file could not be opened.')};
+ rd.onload=()=>{let o=null;try{o=JSON.parse(String(rd.result).replace(/^﻿/,''))}catch(e){reset();return alert('This is not a valid backup file. Use the file made by "Download backup" (it ends with .json).')}
+  /* accepted shapes: {clients:{...}} | {jkg_<user>:"{...}"} (a full browser dump) | a JSON string holding either */
+  if(typeof o==='string'){try{o=JSON.parse(o)}catch(e){}}
+  let d=null;if(o&&o.clients&&typeof o.clients==='object')d=o;
+  else if(o&&typeof o==='object'){const k=Object.keys(o).find(x=>x==='jkg_'+(VIEW||USER))||Object.keys(o).find(x=>/^jkg_/.test(x)&&x!=='jkg_conf');if(k){try{const t=typeof o[k]==='string'?JSON.parse(o[k]):o[k];if(t&&t.clients)d=t}catch(e){}}}
+  if(!d){reset();return alert('This file does not look like a JK Gupta backup (no clients found in it).')}
+  const n=Object.keys(d.clients).length;if(!confirm('This replaces all data of '+(VIEW?VIEW+'\'s':'this')+' login with the backup ('+n+' client'+(n==1?'':'s')+'). Continue?')){reset();return}
+  DB=d;Object.values(DB.clients).forEach(fixN);save();reset();S={};home();toast('Backup loaded: '+n+' client'+(n==1?'':'s')+'.')};
+ rd.readAsText(f)}
+
 /* ====================================================================
    RECO  -  GSTR-2B vs purchase register, and bank reconciliation (BRS)
    Everything runs in the browser. Files are never uploaded anywhere.
@@ -1382,12 +1403,12 @@ function rcCsv(t){const rows=[];let r=[],c='',q=false;for(let i=0;i<t.length;i++
 /* ---------- finding the header row and the columns ---------- */
 const RCF={
  gst:{gstin:/gstin|gst\s*no|gst\s*in|\buin\b|gst\s*reg/i,party:/trade|legal|party|supplier|vendor|particulars|ledger|name/i,inv:/invoice\s*(no|num)|inv\.?\s*(no|num|#)|bill\s*(no|num)|document\s*(no|num)|note\s*(no|num)|supplier\s*inv|vch\s*ref|reference\s*no|ref\.?\s*no|voucher\s*no|^invoice$|^inv$|^bill$/i,
-  date:/invoice\s*date|note\s*date|inv\.?\s*date|bill\s*date|document\s*date|^date$|voucher\s*date/i,val:/invoice\s*value|gross\s*total|bill\s*value|total\s*(value|amount)|^total$/i,taxable:/taxable/i,igst:/integrated|igst/i,cgst:/central|cgst/i,sgst:/state\s*\/?\s*ut|sgst|state\s*tax|utgst/i,cess:/cess/i,itc:/itc\s*avail|eligib/i,note:/note\s*type|document\s*type|voucher\s*type/i},
+  date:/invoice\s*date|note\s*date|inv\.?\s*date|bill\s*date|document\s*date|^date$|voucher\s*date/i,val:/invoice\s*value|gross\s*total|bill\s*value|total\s*(value|amount)|^total$/i,taxable:/taxable/i,igst:/integrated|igst/i,cgst:/central|cgst/i,sgst:/state\s*\/?\s*ut|sgst|state\s*tax|utgst/i,cess:/cess/i,rate:/^rate(\b|\s|\()/i,itc:/itc\s*avail|eligib/i,note:/note\s*type|document\s*type|voucher\s*type/i},
  book:{date:/^date$|txn\s*date|trans\w*\s*date|voucher\s*date|value\s*date|post\w*\s*date|^dt$/i,desc:/particulars|narration|description|remarks|details|ledger|party/i,ref:/vch\s*no|voucher\s*no|chq|cheque|ref|instrument|utr|transaction\s*id|^no\.?$/i,debit:/debit|\bdr\b|^dr\.?$|payment|withdraw/i,credit:/credit|\bcr\b|^cr\.?$|receipt|deposit/i,amount:/^amount$|^amt$|txn\s*amount/i,bal:/balance/i}};
 function rcHead(rows,kind){const F=kind=='gst'?RCF.gst:RCF.book;const keys=Object.keys(F);let best=-1,bi=0;
  for(let i=0;i<Math.min(rows.length,40);i++){const r=rows[i]||[];let sc=0;keys.forEach(k=>{if(r.some(c=>c!==''&&F[k].test(String(c))))sc++});if(sc>best){best=sc;bi=i}}
  return best>=2?bi:-1}
-function rcMap(h,kind,side){const F=kind=='gst'?RCF.gst:RCF.book,m={},used=new Set();const order=kind=='gst'?['gstin','inv','date','taxable','igst','cgst','sgst','cess','val','itc','note','party']:['date','ref','debit','credit','amount','bal','desc'];
+function rcMap(h,kind,side){const F=kind=='gst'?RCF.gst:RCF.book,m={},used=new Set();const order=kind=='gst'?['gstin','inv','date','taxable','rate','igst','cgst','sgst','cess','val','itc','note','party']:['date','ref','debit','credit','amount','bal','desc'];
  order.forEach(k=>{let j=h.findIndex((c,i)=>!used.has(i)&&c!==''&&F[k].test(String(c)));if(k=='debit'||k=='credit'){if(side=='bank'&&false)j=j}if(j>=0){m[k]=j;used.add(j)}});
  if(kind=='book'&&side=='bank'){/* bank statement: withdrawal = out, deposit = in */}
  return m}
@@ -1402,15 +1423,15 @@ function rcGstRows(rows,src,sign){const hi=rcHead(rows,'gst');if(hi<0)return{err
   if(!g){const f=r.map(String).join(' ').toUpperCase().match(GSTINRX);if(f)g=f[0]}
   if(!inv||/^total|^grand/i.test(inv))continue;
   let sg=sign;if(m.note!=null&&/credit/i.test(String(r[m.note])))sg=-1;
-  const t=rcN(r[m.taxable])*sg,ig=rcN(r[m.igst])*sg,cg=rcN(r[m.cgst])*sg,sc=rcN(r[m.sgst])*sg,ce=rcN(r[m.cess])*sg;
+  const ns=m.igst==null&&m.cgst==null&&m.sgst==null&&m.rate!=null;const t=rcN(r[m.taxable])*sg;let ig=rcN(r[m.igst])*sg,cg=rcN(r[m.cgst])*sg,sc=rcN(r[m.sgst])*sg;const ce=rcN(r[m.cess])*sg;if(ns)ig=rcR(t*rcN(r[m.rate])/100);
   if(!t&&!ig&&!cg&&!sc)continue;
-  out.push({src,row:i+1,gstin:g,party:m.party!=null?String(r[m.party]||'').trim():'',inv,date:rcDate(r[m.date]),taxable:t,igst:ig,cgst:cg,sgst:sc,cess:ce,itc:m.itc!=null?String(r[m.itc]||''):'',vc:m.note!=null?String(r[m.note]||''):''})}
+  out.push({src,ns,row:i+1,gstin:g,party:m.party!=null?String(r[m.party]||'').trim():'',inv,date:rcDate(r[m.date]),taxable:t,igst:ig,cgst:cg,sgst:sc,cess:ce,itc:m.itc!=null?String(r[m.itc]||''):'',vc:m.note!=null?String(r[m.note]||''):''})}
  return{rows:out,cols:h.filter((_,i)=>Object.values(m).includes(i)).length}}
-function rcAgg(L){const M=new Map();L.forEach(x=>{const k=(x.gstin||'?')+'|'+rcInv(x.inv);let a=M.get(k);if(!a){a=Object.assign({},x,{n:1,keyInv:rcInv(x.inv),rows:[x.row]});M.set(k,a)}else{['taxable','igst','cgst','sgst','cess'].forEach(f=>a[f]+=x[f]);a.n++;a.rows.push(x.row);if(!a.date)a.date=x.date;if(!a.party)a.party=x.party}});
+function rcAgg(L){const M=new Map();L.forEach(x=>{const k=(x.gstin||'?')+'|'+rcInv(x.inv);let a=M.get(k);if(!a){a=Object.assign({},x,{n:1,keyInv:rcInv(x.inv),rows:[x.row]});M.set(k,a)}else{if(x.ns)a.ns=true;['taxable','igst','cgst','sgst','cess'].forEach(f=>a[f]+=x[f]);a.n++;a.rows.push(x.row);if(!a.date)a.date=x.date;if(!a.party)a.party=x.party}});
  return[...M.values()].map(a=>{['taxable','igst','cgst','sgst','cess'].forEach(f=>a[f]=rcR(a[f]));a.tax=rcR(a.igst+a.cgst+a.sgst);return a})}
 
 /* ---------- GST matching ---------- */
-function rcDiff(b,g,tol){const d=[];[['taxable','Taxable'],['igst','IGST'],['cgst','CGST'],['sgst','SGST']].forEach(([f,l])=>{const x=rcR(b[f]-g[f]);if(Math.abs(x)>tol)d.push({f,l,x})});return d}
+function rcDiff(b,g,tol){const d=[];if(b.ns||g.ns){const x=rcR(b.taxable-g.taxable),y=rcR(b.tax-g.tax);if(Math.abs(x)>tol)d.push({f:'taxable',l:'Taxable',x});if(Math.abs(y)>tol)d.push({f:'tax',l:'Tax',x:y});return d}[['taxable','Taxable'],['igst','IGST'],['cgst','CGST'],['sgst','SGST']].forEach(([f,l])=>{const x=rcR(b[f]-g[f]);if(Math.abs(x)>tol)d.push({f,l,x})});return d}
 function rcGst(books,gstr,tol){const B=rcAgg(books),G=rcAgg(gstr),res=[],gmap=new Map(),usedB=new Set(),usedG=new Set();
  G.forEach((g,i)=>gmap.set((g.gstin||'?')+'|'+g.keyInv,i));
  const pair=(bi,gi,kind,why)=>{usedB.add(bi);usedG.add(gi);const b=B[bi],g=G[gi],d=rcDiff(b,g,tol);
@@ -1482,7 +1503,7 @@ function rcDz(){document.querySelectorAll('.rcd .dz').forEach(z=>{['dragover','d
  z.addEventListener('drop',ev=>{const f=ev.dataTransfer.files[0],i=z.querySelector('input');if(f&&i){const dt=new DataTransfer();dt.items.add(f);i.files=dt.files;i.dispatchEvent(new Event('change'))}})})}
 async function rcFile(inp,key){const f=inp.files[0];if(!f)return;const o={name:f.name,n:0};RCS[key]=o;RCS.R=null;
  try{const sh=await rcRead(f);let rows=[],cdn=[],err='';
-  if(RCS.tab=='gst'){const p=rcPick(sh,'gst'),sign=1;p.main.forEach(s=>{const r=rcGstRows(s.rows,key=='A'?'books':'gstr',sign);if(r.err)err=r.err;rows=rows.concat(r.rows)});p.cdn.forEach(s=>{const r=rcGstRows(s.rows,'gstr',-1);cdn=cdn.concat(r.rows)});rows=rows.concat(cdn);
+  if(RCS.tab!='bank'){const p=rcPick(sh,'gst'),sign=1;p.main.forEach(s=>{const r=rcGstRows(s.rows,key=='A'?'books':'gstr',sign);if(r.err)err=r.err;rows=rows.concat(r.rows)});p.cdn.forEach(s=>{const r=rcGstRows(s.rows,'gstr',-1);cdn=cdn.concat(r.rows)});rows=rows.concat(cdn);
    if(key=='A'&&sh.length>1&&!rows.length){/* books file may keep the register on any sheet */for(const s of sh){const r=rcGstRows(s.rows,'books',1);if(r.rows.length){rows=r.rows;err='';break}}}}
   else{for(const s of sh){const r=rcBankRows(s.rows,key=='A'?'books':'bank');if(r.rows.length){rows=r.rows;err='';break}err=r.err||err}}
   o.rows=rows;o.n=rows.length;if(!rows.length)o.err=err||'No rows could be read from this file.'}catch(e){o.err=e.message||'This file could not be read.'}
@@ -1490,27 +1511,30 @@ async function rcFile(inp,key){const f=inp.files[0];if(!f)return;const o={name:f
 function rcSet(k,v){RCS[k]=v}
 function rcTab(t){RCS.tab=t;RCS.A=RCS.B=RCS.R=null;RCS.fl='all';recoPage()}
 function reco(){if(!USER)return home();CURP='reco';sb();tg(0);recoPage()}
-function recoPage(keep){CURP='reco';sb();pgIn('reco');const g=RCS.tab=='gst',cl=Object.keys(DB.clients),A=RCS.A,B=RCS.B,ready=A&&B&&A.rows&&B.rows&&A.rows.length&&B.rows.length;
+function recoPage(keep){CURP='reco';sb();pgIn('reco');const g=RCS.tab!='bank',cl=Object.keys(DB.clients),A=RCS.A,B=RCS.B,ready=A&&B&&A.rows&&B.rows&&A.rows.length&&B.rows.length;
  app.innerHTML='<i data-pg="reco" hidden></i><div class="rch"><div><h2 style="margin:0">Reco</h2><small>Match two sets of records and see exactly what differs. Files stay in your browser.</small></div></div>'
-  +'<div class="seg" style="margin:14px 0"><button class="'+(g?'on':'')+'" onclick="rcTab(\'gst\')">GSTR-2B vs Purchase register</button><button class="'+(!g?'on':'')+'" onclick="rcTab(\'bank\')">Bank reco (BRS)</button></div>'
-  +'<div class="card rcc"><div class="rcg">'+(g?rcDrop('a','1. Purchase register','From Tally: Gateway, Display, Purchase Register, export to Excel. Any column order works.','A')+rcDrop('b','2. GSTR-2B','The Excel file downloaded from the GST portal (B2B sheet is read, credit notes too).','B')
+  +'<div class="seg" style="margin:14px 0"><button class="'+(RCS.tab=='gst'?'on':'')+'" onclick="rcTab(\'gst\')">GSTR-2B vs Purchase register</button><button class="'+(RCS.tab=='sale'?'on':'')+'" onclick="rcTab(\'sale\')">GSTR-1 vs Sales register</button><button class="'+(RCS.tab=='bank'?'on':'')+'" onclick="rcTab(\'bank\')">Bank reco (BRS)</button></div>'
+  +'<div class="card rcc"><div class="rcg">'+(g?(rcSl()?rcDrop('a','1. Sales register','From Tally: Gateway, Display, Sales Register, export to Excel. Any column order works.','A')+rcDrop('b','2. GSTR-1','The Excel file downloaded from the GST portal or the GSTR-1 offline tool (B2B sheet is read, credit notes too).','B'):rcDrop('a','1. Purchase register','From Tally: Gateway, Display, Purchase Register, export to Excel. Any column order works.','A')+rcDrop('b','2. GSTR-2B','The Excel file downloaded from the GST portal (B2B sheet is read, credit notes too).','B'))
    :rcDrop('a','1. Bank ledger from Tally','Export the bank ledger (Ledger Vouchers) to Excel. Debit = money received.','A')+rcDrop('b','2. Bank statement','Excel or CSV from the bank. Needs Date, Debit/Withdrawal, Credit/Deposit.','B'))+'</div>'
   +'<div class="rco"><label>Client (optional)<select id="rcc" onchange="RCS.client=this.value"><option value="">General</option>'+cl.map(n=>'<option'+(RCS.client==n?' selected':'')+'>'+E(n)+'</option>').join('')+'</select></label>'
   +(g?'<label>Rounding tolerance (₹)<input type="number" min="0" step="0.5" value="'+RCS.tol+'" onchange="RCS.tol=Math.max(0,+this.value||0)"></label>':'<label>Date window (days)<input type="number" min="0" max="30" value="'+RCS.win+'" onchange="RCS.win=Math.max(0,Math.min(30,+this.value||0))"></label><label>Closing balance per books (₹)<input id="rbk" type="number" step="0.01" placeholder="optional" value="'+(RCS.bk==null?'':RCS.bk)+'" onchange="RCS.bk=this.value"></label><label>Closing balance per bank (₹)<input id="rbn" type="number" step="0.01" placeholder="optional" value="'+(RCS.bn==null?'':RCS.bn)+'" onchange="RCS.bn=this.value"></label>')
   +'<button onclick="rcRun()"'+(ready?'':' disabled')+'>Run reco</button></div></div><div id="rcres">'+(RCS.R?rcResHtml():'')+'</div>';rcDz()}
-function rcRun(){if(!(RCS.A&&RCS.B))return;const g=RCS.tab=='gst';
- if(g){const R=rcGst(RCS.A.rows,RCS.B.rows,RCS.tol);RCS.R={t:'gst',R,S:rcGstSum(R)}}
+function rcRun(){if(!(RCS.A&&RCS.B))return;const g=RCS.tab!='bank';
+ if(g){const R=rcGst(RCS.A.rows,RCS.B.rows,RCS.tol);RCS.R={t:'gst',k:RCS.tab,R,S:rcGstSum(R)}}
  else{const R=rcBank(RCS.A.rows,RCS.B.rows,RCS.win);RCS.R={t:'bank',R,S:rcBrs(R,RCS.bk,RCS.bn)}}
  RCS.fl='all';RCS.q='';rcSave();$id('rcres').innerHTML=rcResHtml();$id('rcres').scrollIntoView({behavior:'smooth',block:'start'})}
 function rcSave(){const c=RCS.client&&DB.clients[RCS.client];if(!c)return;c.rc=c.rc||{};const S=RCS.R.S;c.rc[RCS.R.t]={at:new Date().toISOString(),S};save()}
-const RCL={match:['Matched','ok'],mismatch:['Value mismatch','bad'],probable:['Probable match','warn'],missG:['In books, not in 2B','bad'],missB:['In 2B, not in books','info']};
+const RCL0={match:['Matched','ok'],mismatch:['Value mismatch','bad'],probable:['Probable match','warn'],missG:['In books, not in 2B','bad'],missB:['In 2B, not in books','info']};
+const RCL1={match:['Matched','ok'],mismatch:['Value mismatch','bad'],probable:['Probable match','warn'],missG:['In books, not in GSTR-1','bad'],missB:['In GSTR-1, not in books','info']};
+const RCL=new Proxy({},{get:(_,k)=>(RCS.tab=='sale'?RCL1:RCL0)[k]});
+const rcSl=()=>RCS.tab=='sale';
 function rcFlt(f){RCS.fl=f;$id('rcres').innerHTML=rcResHtml()}
 function rcQ(v){RCS.q=v;clearTimeout(rcQ.t);rcQ.t=setTimeout(()=>{const t=$id('rcl');if(t)t.innerHTML=rcTable()},150)}
 function rcAcc(i){const r=RCS.R.R[i];if(r)r.acc=r.acc?0:1;RCS.R.S=rcGstSum(RCS.R.R);$id('rcres').innerHTML=rcResHtml()}
-function rcResHtml(){const X=RCS.R;if(!X)return'';if(X.t=='gst'){const S=X.S;const tiles=[['match','Matched',S.match,'ok'],['mismatch','Value mismatch',S.mismatch,'bad'],['probable','Probable',S.probable,'warn'],['missG','Not in 2B',S.missG,'bad'],['missB','Not in books',S.missB,'info']];
+function rcResHtml(){const X=RCS.R;if(!X)return'';if(X.t=='gst'){const S=X.S;const tiles=[['match','Matched',S.match,'ok'],['mismatch','Value mismatch',S.mismatch,'bad'],['probable','Probable',S.probable,'warn'],['missG','Not in '+(rcSl()?'GSTR-1':'2B'),S.missG,'bad'],['missB','Not in books',S.missB,'info']];
   return '<h3>Result</h3><div class="rcs">'+tiles.map(t=>'<button class="rct '+t[3]+(RCS.fl==t[0]?' on':'')+'" onclick="rcFlt(\''+(RCS.fl==t[0]?'all':t[0])+'\')"><b>'+t[2]+'</b><span>'+t[1]+'</span></button>').join('')+'</div>'
-  +'<div class="rcm"><div><small>ITC as per books</small><b>₹ '+rcMoney(S.itcB)+'</b></div><div><small>ITC as per GSTR-2B</small><b>₹ '+rcMoney(S.itcG)+'</b></div><div class="w"><small>ITC at risk (claimed, not in 2B)</small><b>₹ '+rcMoney(S.risk)+'</b></div><div class="g"><small>ITC available, not booked</small><b>₹ '+rcMoney(S.extra)+'</b></div></div>'
-  +'<div class="toolbar"><input class="sq" style="flex:1;min-width:200px;margin:0" placeholder="Search supplier, GSTIN or invoice..." value="'+E(RCS.q)+'" oninput="rcQ(this.value)"><button onclick="rcXls()">Download Excel</button></div><div id="rcl">'+rcTable()+'</div>'}
+  +'<div class="rcm"><div><small>'+(rcSl()?'Tax as per books':'ITC as per books')+'</small><b>₹ '+rcMoney(S.itcB)+'</b></div><div><small>'+(rcSl()?'Tax as per GSTR-1':'ITC as per GSTR-2B')+'</small><b>₹ '+rcMoney(S.itcG)+'</b></div><div class="w"><small>'+(rcSl()?'In books, not reported in GSTR-1':'ITC at risk (claimed, not in 2B)')+'</small><b>₹ '+rcMoney(S.risk)+'</b></div><div class="g"><small>'+(rcSl()?'In GSTR-1, not in books':'ITC available, not booked')+'</small><b>₹ '+rcMoney(S.extra)+'</b></div></div>'
+  +'<div class="toolbar"><input class="sq" style="flex:1;min-width:200px;margin:0" placeholder="Search party, GSTIN or invoice..." value="'+E(RCS.q)+'" oninput="rcQ(this.value)"><button onclick="rcXls()">Download Excel</button></div><div id="rcl">'+rcTable()+'</div>'}
  const S=X.S,gap=S.gap;
  return '<h3>Result</h3><div class="rcs"><button class="rct ok'+(RCS.fl=='match'?' on':'')+'" onclick="rcFlt(\''+(RCS.fl=='match'?'all':'match')+'\')"><b>'+S.nM+'</b><span>Matched</span></button><button class="rct warn'+(RCS.fl=='bOnly'?' on':'')+'" onclick="rcFlt(\''+(RCS.fl=='bOnly'?'all':'bOnly')+'\')"><b>'+S.nB+'</b><span>In books, not in bank</span></button><button class="rct bad'+(RCS.fl=='kOnly'?' on':'')+'" onclick="rcFlt(\''+(RCS.fl=='kOnly'?'all':'kOnly')+'\')"><b>'+S.nK+'</b><span>In bank, not in books</span></button></div>'
   +'<div class="card brs"><b>Bank reconciliation statement</b><table><tr><td>Balance as per books</td><td class="n">'+(RCS.bk===''||RCS.bk==null?'<small>enter above</small>':rcMoney(+RCS.bk))+'</td></tr>'
@@ -1523,10 +1547,10 @@ function rcTable(){const X=RCS.R,q=RCS.q.toLowerCase();if(X.t=='gst'){
   const L=X.R.map((r,i)=>[r,i]).filter(([r,i])=>{const st=r.acc&&r.st=='probable'?'match':r.st;if(RCS.fl!='all'&&st!=RCS.fl&&r.st!=RCS.fl)return false;if(!q)return true;const o=r.b||r.g;return(o.inv+' '+o.gstin+' '+o.party+' '+(r.g?r.g.party:'')).toLowerCase().includes(q)});
   if(!L.length)return'<div class="card" style="text-align:center;padding:26px"><b>Nothing to show here</b></div>';
   const cell=(x,k)=>x?rcMoney(x[k]):'';
-  return '<div class="rct-w"><table class="rctb"><tr><th>Status</th><th>Supplier</th><th>Invoice</th><th>Date</th><th class="n">Taxable (books)</th><th class="n">Taxable (2B)</th><th class="n">Tax (books)</th><th class="n">Tax (2B)</th><th>Note</th></tr>'
+  return '<div class="rct-w"><table class="rctb"><tr><th>Status</th><th>'+(rcSl()?'Customer':'Supplier')+'</th><th>Invoice</th><th>Date</th><th class="n">Taxable (books)</th><th class="n">Taxable ('+(rcSl()?'GSTR-1':'2B')+')</th><th class="n">Tax (books)</th><th class="n">Tax ('+(rcSl()?'GSTR-1':'2B')+')</th><th>Note</th></tr>'
   +L.slice(0,1500).map(([r,i])=>{const o=r.b||r.g,st=r.acc&&r.st=='probable'?'match':r.st,l=RCL[st];
    const note=r.st=='mismatch'?r.diff.map(d=>d.l+' '+(d.x>0?'+':'')+rcMoney(d.x)).join(', '):r.why;
-   return '<tr class="st-'+st+'"><td><span class="tag '+l[1]+'">'+l[0]+'</span></td><td><b>'+E(o.party||'')+'</b><br><small>'+E(o.gstin)+'</small></td><td>'+E(o.inv)+(r.b&&r.g&&r.b.inv!==r.g.inv?'<br><small>2B: '+E(r.g.inv)+'</small>':'')+'</td><td>'+fd(o.date)+'</td><td class="n">'+cell(r.b,'taxable')+'</td><td class="n">'+cell(r.g,'taxable')+'</td><td class="n">'+cell(r.b,'tax')+'</td><td class="n">'+cell(r.g,'tax')+'</td><td>'+E(note)+(r.st=='probable'?' <button class="g sm" onclick="rcAcc('+i+')">'+(r.acc?'Undo':'Accept')+'</button>':'')+(r.g&&r.g.itc&&/^n/i.test(r.g.itc)?' <span class="tag bad">ITC not available</span>':'')+'</td></tr>'}).join('')+'</table></div>'+(L.length>1500?'<small>Showing the first 1500 rows. The Excel file has all of them.</small>':'')}
+   return '<tr class="st-'+st+'"><td><span class="tag '+l[1]+'">'+l[0]+'</span></td><td><b>'+E(o.party||'')+'</b><br><small>'+E(o.gstin)+'</small></td><td>'+E(o.inv)+(r.b&&r.g&&r.b.inv!==r.g.inv?'<br><small>'+(rcSl()?'GSTR-1':'2B')+': '+E(r.g.inv)+'</small>':'')+'</td><td>'+fd(o.date)+'</td><td class="n">'+cell(r.b,'taxable')+'</td><td class="n">'+cell(r.g,'taxable')+'</td><td class="n">'+cell(r.b,'tax')+'</td><td class="n">'+cell(r.g,'tax')+'</td><td>'+E(note)+(r.st=='probable'?' <button class="g sm" onclick="rcAcc('+i+')">'+(r.acc?'Undo':'Accept')+'</button>':'')+(!rcSl()&&r.g&&r.g.itc&&/^n/i.test(r.g.itc)?' <span class="tag bad">ITC not available</span>':'')+'</td></tr>'}).join('')+'</table></div>'+(L.length>1500?'<small>Showing the first 1500 rows. The Excel file has all of them.</small>':'')}
  const L=X.R.filter(r=>{if(RCS.fl!='all'&&r.st!=RCS.fl)return false;if(!q)return true;return[...r.books,...r.bank].map(x=>x.desc+' '+x.ref+' '+x.amt).join(' ').toLowerCase().includes(q)});
  if(!L.length)return'<div class="card" style="text-align:center;padding:26px"><b>Nothing to show here</b></div>';
  const nm={match:['Matched','ok'],bOnly:['In books only','warn'],kOnly:['In bank only','bad']};
@@ -1535,13 +1559,13 @@ function rcTable(){const X=RCS.R,q=RCS.q.toLowerCase();if(X.t=='gst'){
   return '<tr class="st-'+r.st+'"><td><span class="tag '+l[1]+'">'+l[0]+'</span></td><td>'+part(r.books)+'</td><td>'+part(r.bank)+'</td><td>'+E(todo)+'</td></tr>'}).join('')+'</table></div>'}
 
 /* ---------- Excel export ---------- */
-function rcXls(){const X=RCS.R,nm=(RCS.client||'Reco').replace(/[^\w\- ]/g,'')+(X.t=='gst'?'-GSTR2B-Reco':'-Bank-Reco'),sh=[];
- if(X.t=='gst'){const S=X.S,hd=['Status','Supplier','GSTIN','Invoice (books)','Invoice (2B)','Date','Taxable (books)','Taxable (2B)','IGST (books)','IGST (2B)','CGST (books)','CGST (2B)','SGST (books)','SGST (2B)','Tax (books)','Tax (2B)','Note'];
+function rcXls(){const X=RCS.R,nm=(RCS.client||'Reco').replace(/[^\w\- ]/g,'')+(X.t=='gst'?(rcSl()?'-GSTR1-Reco':'-GSTR2B-Reco'):'-Bank-Reco'),sh=[];
+ if(X.t=='gst'){const S=X.S,W=rcSl()?'GSTR-1':'2B',hd=['Status',rcSl()?'Customer':'Supplier','GSTIN','Invoice (books)','Invoice ('+W+')','Date','Taxable (books)','Taxable ('+W+')','IGST (books)','IGST ('+W+')','CGST (books)','CGST ('+W+')','SGST (books)','SGST ('+W+')','Tax (books)','Tax ('+W+')','Note'];
   const row=r=>{const o=r.b||r.g,st=r.acc&&r.st=='probable'?'match':r.st,b=r.b||{},g=r.g||{};return[RCL[st][0],o.party||'',o.gstin,b.inv||'',g.inv||'',o.date,b.taxable??'',g.taxable??'',b.igst??'',g.igst??'',b.cgst??'',g.cgst??'',b.sgst??'',g.sgst??'',b.tax??'',g.tax??'',r.st=='mismatch'?r.diff.map(d=>d.l+' '+d.x).join('; '):r.why]};
-  sh.push(['Summary',[['GSTR-2B vs Purchase register'],['Run on',new Date().toLocaleString('en-IN')],[],['Matched',S.match],['Value mismatch',S.mismatch],['Probable match',S.probable],['In books, not in 2B',S.missG],['In 2B, not in books',S.missB],[],['ITC as per books',S.itcB],['ITC as per GSTR-2B',S.itcG],['ITC at risk',S.risk],['ITC available, not booked',S.extra]]]);
-  [['Matched',r=>(r.acc&&r.st=='probable')||r.st=='match'],['Mismatch',r=>r.st=='mismatch'],['Probable',r=>r.st=='probable'&&!r.acc],['Not in 2B',r=>r.st=='missG'],['Not in books',r=>r.st=='missB']].forEach(([n,f])=>sh.push([n,[hd].concat(X.R.filter(f).map(row))]));
+  sh.push(['Summary',[[rcSl()?'GSTR-1 vs Sales register':'GSTR-2B vs Purchase register'],['Run on',new Date().toLocaleString('en-IN')],[],['Matched',S.match],['Value mismatch',S.mismatch],['Probable match',S.probable],[RCL['missG'][0],S.missG],[RCL['missB'][0],S.missB],[],[rcSl()?'Tax as per books':'ITC as per books',S.itcB],[rcSl()?'Tax as per GSTR-1':'ITC as per GSTR-2B',S.itcG],[rcSl()?'In books, not in GSTR-1':'ITC at risk',S.risk],[rcSl()?'In GSTR-1, not in books':'ITC available, not booked',S.extra]]]);
+  [['Matched',r=>(r.acc&&r.st=='probable')||r.st=='match'],['Mismatch',r=>r.st=='mismatch'],['Probable',r=>r.st=='probable'&&!r.acc],[rcSl()?'Not in GSTR-1':'Not in 2B',r=>r.st=='missG'],['Not in books',r=>r.st=='missB']].forEach(([n,f])=>sh.push([n,[hd].concat(X.R.filter(f).map(row))]));
   const V={};X.R.forEach(r=>{const o=r.b||r.g,k=o.gstin||o.party;const v=V[k]=V[k]||{p:o.party||'',g:o.gstin,b:0,n:0,m:0,x:0};if(r.b)v.b+=r.b.tax;if(r.g)v.n+=r.g.tax;if(r.st=='missG')v.m++;if(r.st=='missB'||r.st=='mismatch')v.x++});
-  sh.push(['Supplier-wise',[['Supplier','GSTIN','ITC books','ITC 2B','Difference','Invoices not in 2B','Invoices to check']].concat(Object.values(V).sort((a,b)=>Math.abs(b.b-b.n)-Math.abs(a.b-a.n)).map(v=>[v.p,v.g,rcR(v.b),rcR(v.n),rcR(v.b-v.n),v.m,v.x]))])}
+  sh.push([rcSl()?'Customer-wise':'Supplier-wise',[[rcSl()?'Customer':'Supplier','GSTIN','Tax books','Tax '+W,'Difference','Invoices not in '+W,'Invoices to check']].concat(Object.values(V).sort((a,b)=>Math.abs(b.b-b.n)-Math.abs(a.b-a.n)).map(v=>[v.p,v.g,rcR(v.b),rcR(v.n),rcR(v.b-v.n),v.m,v.x]))])}
  else{const S=X.S,hd=['Status','Date (books)','Narration (books)','Ref (books)','Amount (books)','Date (bank)','Narration (bank)','Ref (bank)','Amount (bank)','How'];
   const row=r=>{const b=r.books[0]||{},k=r.bank[0]||{};return[r.st=='match'?'Matched':r.st=='bOnly'?'In books only':'In bank only',b.date||'',b.desc||'',b.ref||'',r.books.length?r.books.reduce((s,x)=>s+x.amt,0):'',k.date||'',k.desc||'',k.ref||'',r.bank.length?r.bank.reduce((s,x)=>s+x.amt,0):'',r.how||(r.st=='bOnly'?(b.amt<0?'Cheque issued, not cleared':'Deposit not credited'):r.st=='kOnly'?'Enter in Tally':'')]};
   sh.push(['BRS',[['Bank reconciliation statement'],[],['Balance as per books',RCS.bk===''||RCS.bk==null?'':+RCS.bk],['Add: credited by bank, not in books',S.knIn],['Less: debited by bank, not in books',-S.knOut],['Add: cheques issued, not cleared',S.bkOut],['Less: deposits not yet credited',-S.bkIn],['Balance as per bank (calculated)',S.calc??''],['Balance as per bank statement',S.bank??''],['Difference',S.gap??'']]]);
