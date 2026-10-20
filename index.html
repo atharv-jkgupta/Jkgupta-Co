@@ -1,5 +1,5 @@
 <!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>JK Gupta &amp; Co</title>
-<meta name="description" content="JK Gupta &amp; Co. client accounting workspace"><meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#0f2742"><meta name="jkg-build" content="b2610201055"><script>try{var t=localStorage.getItem("jkgtheme")||(matchMedia("(prefers-color-scheme:dark)").matches?"dark":"light");document.documentElement.dataset.theme=t}catch(e){document.documentElement.dataset.theme="light"}</script><link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27%3E%3Crect width=%2764%27 height=%2764%27 rx=%2714%27 fill=%27%230f2742%27/%3E%3Ctext x=%2732%27 y=%2742%27 font-size=%2734%27 font-family=%27Georgia,serif%27 font-weight=%27700%27 text-anchor=%27middle%27 fill=%27%23e9d9ae%27%3EJK%3C/text%3E%3C/svg%3E"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:wght@500;600;700&display=swap"><style>
+<meta name="description" content="JK Gupta &amp; Co. client accounting workspace"><meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#0f2742"><meta name="jkg-build" content="b2610201103"><script>try{var t=localStorage.getItem("jkgtheme")||(matchMedia("(prefers-color-scheme:dark)").matches?"dark":"light");document.documentElement.dataset.theme=t}catch(e){document.documentElement.dataset.theme="light"}</script><link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27%3E%3Crect width=%2764%27 height=%2764%27 rx=%2714%27 fill=%27%230f2742%27/%3E%3Ctext x=%2732%27 y=%2742%27 font-size=%2734%27 font-family=%27Georgia,serif%27 font-weight=%27700%27 text-anchor=%27middle%27 fill=%27%23e9d9ae%27%3EJK%3C/text%3E%3C/svg%3E"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:wght@500;600;700&display=swap"><style>
 /* ============ tokens ============ */
 :root{--serif:'Source Serif 4',Georgia,'Times New Roman',serif;--sans:'Inter','Segoe UI',system-ui,-apple-system,Arial,sans-serif;--r:12px;--ease:cubic-bezier(.2,.7,.2,1)}
 :root,:root[data-theme=light]{color-scheme:light;
@@ -371,225 +371,6 @@ body.out{color-scheme:dark;
  --hero1:#15263d;--hero2:#0f1b2c;--heroink:#f2f5fa;--herosub:#9fb0c6;
  --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.35);--shadow2:0 14px 40px rgba(0,0,0,.55);--ring:rgba(216,182,106,.5);
  --sigink:#fff;--sigglow:rgba(255,255,255,.2);--artbg:#0b1017;--artfill:#6b2f45;--artop:.26;--arts:.5}
-
-*{box-sizing:border-box}
-html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
-body{margin:0;font:15px/1.55 var(--sans);background:var(--bg);color:var(--ink);transition:background .25s,color .25s;-webkit-font-smoothing:antialiased}
-body:before{content:'';position:fixed;inset:0;z-index:-2;pointer-events:none;background:radial-gradient(900px 500px at 85% -10%,color-mix(in srgb,var(--gold) 14%,transparent),transparent 70%),radial-gradient(700px 500px at -10% 110%,color-mix(in srgb,var(--navy2) 10%,transparent),transparent 70%)}
-a{color:var(--link)}
-::selection{background:var(--gold2);color:var(--ink)}
-h2{font:600 28px/1.2 var(--serif);color:var(--navy);margin:.2em 0 .5em;letter-spacing:-.2px}
-h3{font:700 11.5px/1.3 var(--sans);color:var(--mute);text-transform:uppercase;letter-spacing:.12em;margin:1.8em 0 .7em}
-small{color:var(--mute)}
-hr{border:0;border-top:1px solid var(--line);margin:18px 0}
-.boot{padding:90px 0;text-align:center;color:var(--mute)}
-.boot:before{content:'';display:block;width:30px;height:30px;margin:0 auto 14px;border-radius:50%;border:3px solid var(--line2);border-top-color:var(--gold);animation:spin .8s linear infinite}
-@keyframes spin{to{transform:rotate(360deg)}}
-@keyframes up{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
-@keyframes fade{from{opacity:0}to{opacity:1}}
-@keyframes pop{0%{transform:scale(.6)}60%{transform:scale(1.18)}100%{transform:scale(1)}}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
-@keyframes wr{to{-webkit-mask-size:150% 100%;mask-size:150% 100%}}
-@keyframes fin{from{opacity:0}to{opacity:1}}
-@keyframes slide{from{opacity:0;transform:translateX(-10px)}to{opacity:1;transform:none}}
-@keyframes grow{from{width:0}}
-
-/* page enter animation (added by JS on navigation) */
-#app.pgin>*{animation:up .5s var(--ease) both}
-#app.pgin>*:nth-child(2){animation-delay:.05s}#app.pgin>*:nth-child(3){animation-delay:.1s}#app.pgin>*:nth-child(4){animation-delay:.15s}
-#app.pgin>*:nth-child(5){animation-delay:.2s}#app.pgin>*:nth-child(6){animation-delay:.25s}#app.pgin>*:nth-child(n+7){animation-delay:.3s}
-
-/* ============ top bar ============ */
-#top{display:flex;align-items:center;justify-content:space-between;height:62px;padding:0 18px;background:color-mix(in srgb,var(--s1) 88%,transparent);backdrop-filter:saturate(1.4) blur(12px);-webkit-backdrop-filter:saturate(1.4) blur(12px);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:20}
-#top:after{content:'';position:absolute;left:0;right:0;bottom:-1px;height:2px;background:linear-gradient(90deg,transparent,var(--gold),transparent);opacity:.7}
-.tl,.tr{display:flex;align-items:center;gap:12px}
-.brandR{text-align:left;line-height:1;font:700 25px var(--serif);color:var(--navy);cursor:pointer;letter-spacing:.5px;user-select:none}
-.brandR span{color:var(--gold);margin:0 2px}
-.brandR small{display:block;margin-top:4px;font:600 8.5px var(--sans);letter-spacing:.24em;color:var(--mute)}
-button.ib{display:inline-flex;align-items:center;justify-content:center;width:40px;height:40px;padding:0;margin:0;font-size:20px;line-height:1;background:var(--s1);color:var(--navy);border:1px solid var(--line2);border-radius:11px;box-shadow:none;transition:background .15s,transform .15s,border-color .15s}
-button.ib:hover{background:var(--s3);border-color:var(--gold);transform:translateY(-1px)}
-button.ib svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
-body.out #mb,body.out #dm{display:none}
-#sv{display:inline-flex;align-items:center;gap:7px;font-size:12px;color:var(--mute);white-space:nowrap}
-#sv i{width:8px;height:8px;border-radius:50%;background:var(--ok)}
-#sv.busy i{background:var(--warn);animation:pulse .9s infinite}#sv.err{color:var(--bad);font-weight:600}#sv.err i{background:var(--bad)}
-@media(max-width:600px){#sv{font-size:0}#sv i{display:inline-block}}
-
-/* ============ sidebar and menus ============ */
-#sb{position:fixed;top:62px;left:0;bottom:0;width:300px;max-width:88vw;background:var(--s1);border-right:1px solid var(--line);padding:16px 14px 28px;overflow:auto;transform:translateX(-102%);transition:transform .22s var(--ease),box-shadow .22s;z-index:15}
-#sb.o{transform:none;box-shadow:var(--shadow2)}
-#sb input,#sb select{width:100%;margin:3px 0 8px}
-#ov{display:none;position:fixed;inset:62px 0 0 0;background:rgba(5,12,22,.45);backdrop-filter:blur(2px);z-index:14;animation:fade .2s}#ov.o{display:block}
-.me{display:flex;align-items:center;gap:12px;padding:10px 12px;margin-bottom:12px;border-radius:14px;background:linear-gradient(135deg,var(--hero1),var(--hero2));color:var(--heroink)}
-.me .av{flex:none;width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font:700 16px var(--serif);background:var(--gold);color:#1a1305}
-.me b{display:block;line-height:1.2}.me small{color:var(--herosub)}
-.li{display:flex;align-items:center;gap:11px;padding:9px 11px;border-radius:10px;cursor:pointer;color:var(--ink);font-weight:500;transition:background .12s,transform .12s;position:relative}
-.li:hover{background:var(--s3);transform:translateX(2px)}
-.li.act{background:var(--goldbg);color:var(--navy);font-weight:700}.li.act:before{content:'';position:absolute;left:-14px;top:8px;bottom:8px;width:3px;border-radius:3px;background:var(--gold)}
-.li svg{flex:none;width:19px;height:19px;stroke:var(--gold);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
-.li em{margin-left:auto;font-style:normal;font-size:11px;font-weight:700;padding:1px 8px;border-radius:20px;background:var(--badbg);color:var(--bad)}
-.li.cl{font-weight:500;padding-left:14px}
-#dd{display:none;position:fixed;top:66px;right:12px;width:260px;background:var(--s1);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow2);z-index:30;padding:6px;transform-origin:top right}
-#dd.o{display:block;animation:pop .18s var(--ease)}
-#dd a{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:9px;cursor:pointer;color:var(--ink);font-size:14px}#dd a:hover{background:var(--s3)}
-#dd a.dg{color:var(--bad)}#dd hr{margin:5px 8px}
-#md{display:none;position:fixed;inset:0;background:rgba(5,12,22,.55);backdrop-filter:blur(3px);z-index:40;overflow:auto;padding:64px 14px;animation:fade .18s}#md.o{display:block}
-#md .box{background:var(--s1);color:var(--ink);max-width:620px;margin:0 auto;border-radius:18px;padding:24px;box-shadow:var(--shadow2);border:1px solid var(--line);animation:up .28s var(--ease)}
-#md .box h3{margin-top:0}#md input,#md select{width:100%;margin:4px 0}#md li{margin:6px 0}
-
-main{max-width:1120px;margin:0 auto;padding:26px 20px 70px}
-@media(max-width:600px){main{padding:16px 12px 50px}}
-
-/* ============ buttons and fields ============ */
-button{background:var(--pri);color:var(--priink);border:1px solid var(--pri);padding:9px 17px;border-radius:10px;cursor:pointer;margin:3px;font:600 14px var(--sans);transition:background .14s,border-color .14s,transform .12s,box-shadow .14s}
-button:hover{background:var(--pri2);border-color:var(--pri2);transform:translateY(-1px);box-shadow:0 6px 16px rgba(15,39,66,.18)}
-button:active{transform:translateY(0) scale(.98);box-shadow:none}
-button:focus-visible,a:focus-visible,summary:focus-visible,.tkb:focus-visible{outline:3px solid var(--ring);outline-offset:2px}
-button.g{background:var(--s1);color:var(--ink);border:1px solid var(--line2)}
-button.g:hover{background:var(--s3);border-color:var(--gold);box-shadow:none}
-button.xb.on{background:var(--pri);color:var(--priink);border-color:var(--pri)}
-button.sm{padding:5px 11px;font-size:13px;border-radius:8px}
-button[disabled]{opacity:.5;cursor:not-allowed;transform:none;box-shadow:none}
-input,select,textarea{padding:9px 12px;border:1px solid var(--line2);border-radius:10px;font:inherit;background:var(--s1);color:var(--ink);max-width:100%;transition:border-color .15s,box-shadow .15s}
-input::placeholder,textarea::placeholder{color:var(--mute);opacity:.75}
-input:focus,select:focus,textarea:focus{outline:0;border-color:var(--gold);box-shadow:0 0 0 4px var(--ring)}
-textarea{width:100%}
-input[type=checkbox]{accent-color:var(--gold);width:16px;height:16px}
-label{font-weight:600}
-.sq{width:100%;margin:6px 0 16px;padding:12px 16px 12px 42px;font-size:15px;background:var(--s1) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round'%3E%3Ccircle cx='11' cy='11' r='7'/%3E%3Cpath d='M20 20l-3.5-3.5'/%3E%3C/svg%3E") 14px center/18px no-repeat}
-
-/* ============ tables and cards ============ */
-table{border-collapse:separate;border-spacing:0;width:100%;background:var(--s1);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;box-shadow:var(--shadow)}
-td,th{border-bottom:1px solid var(--line);padding:11px 14px;text-align:left;vertical-align:middle}
-tr:last-child td{border-bottom:0}
-th{background:var(--s2);color:var(--mute);font:700 11px var(--sans);text-transform:uppercase;letter-spacing:.09em}
-tr:hover td{background:var(--s2)}tr:hover th{background:var(--s2)}
-.card,details,.stp,.kc,.cc{background:var(--s1);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow)}
-.card{padding:16px 18px;margin:14px 0}
-.ok{border-left:4px solid var(--ok)}.ask{border-left:4px solid var(--warn)}.bad{border-left:4px solid var(--bad)}
-details{padding:12px 16px;margin:14px 0;transition:border-color .15s}details[open]{border-color:var(--line2)}
-summary{cursor:pointer;font-weight:600;color:var(--navy)}
-.w{color:var(--bad);font-weight:600}.g2{color:var(--ok);font-weight:600}
-.ch{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:8px}.ch button{margin-left:auto}
-#le{color:var(--bad);margin-top:10px;min-height:20px;font-size:14px}
-
-/* ============ stat tiles ============ */
-.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;margin:14px 0}
-.stats div{position:relative;overflow:hidden;background:var(--s1);border:1px solid var(--line);border-radius:var(--r);padding:16px 18px;color:var(--mute);font-size:13px;font-weight:500;box-shadow:var(--shadow);transition:transform .2s var(--ease),box-shadow .2s}
-.stats div:hover{transform:translateY(-3px);box-shadow:var(--shadow2)}
-.stats div:before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--navy)}
-.stats div:nth-child(2):before{background:var(--gold)}.stats div:nth-child(3):before{background:#d2693a}.stats div:nth-child(4):before{background:var(--ok)}
-.stats b{display:block;font:600 34px/1.15 var(--serif);color:var(--navy);margin-bottom:2px}.stats b.w{color:var(--bad)}
-.stats input[type=month]{margin-bottom:4px}
-
-/* ============ dashboard hero and deadlines ============ */
-.hero{position:relative;overflow:hidden;display:flex;flex-wrap:wrap;gap:20px;justify-content:space-between;align-items:center;background:linear-gradient(120deg,var(--hero1),var(--hero2));color:var(--heroink);border-radius:20px;padding:28px 32px;margin:2px 0 18px;box-shadow:var(--shadow2)}
-.hero:before{content:'';position:absolute;right:-60px;top:-80px;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,color-mix(in srgb,var(--gold) 45%,transparent),transparent 65%)}
-.hero:after{content:'';position:absolute;left:0;right:0;bottom:0;height:3px;background:linear-gradient(90deg,var(--gold),transparent 70%)}
-.hero>*{position:relative;z-index:1}
-.hero small{letter-spacing:.2em;font-size:11px;color:var(--herosub);text-transform:uppercase}
-.hero h1{font:600 clamp(26px,4vw,38px)/1.15 var(--serif);margin:6px 0 4px;color:var(--heroink)}.hero h1 span{color:var(--gold2)}
-.hero p{margin:0;color:var(--herosub)}
-.nxt{background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.2);backdrop-filter:blur(6px);border-radius:16px;padding:14px 24px;text-align:center;min-width:220px}
-.nxt small{color:var(--herosub)}.nxt b{font:600 48px/1 var(--serif);color:var(--gold2);display:block}.nxt div{font-size:13px;margin-top:4px;color:var(--heroink)}
-.ql{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin:14px 0}
-.qa{display:flex;align-items:center;gap:14px;padding:14px 16px;background:var(--s1);border:1px solid var(--line);border-radius:var(--r);cursor:pointer;box-shadow:var(--shadow);transition:transform .2s var(--ease),border-color .2s,box-shadow .2s}
-.qa:hover{transform:translateY(-3px);border-color:var(--gold);box-shadow:var(--shadow2)}
-.qa i{flex:none;width:42px;height:42px;border-radius:12px;display:flex;align-items:center;justify-content:center;background:var(--goldbg);color:var(--gold)}
-.qa i svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
-.qa b{display:block;color:var(--navy);line-height:1.25}.qa small{display:block;line-height:1.3}
-.kd{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:14px;margin:16px 0 6px}
-.kc{padding:16px 18px;border-top:3px solid var(--navy)}.kc.au{border-top-color:var(--gold)}.kc.fe{border-top-color:var(--ok)}.kc h3{margin:0 0 8px}
-.kc .r{display:flex;justify-content:space-between;gap:10px;align-items:center;padding:9px 0;border-bottom:1px solid var(--line);font-size:14px}.kc .r:last-child{border:0}
-.kc .r i{display:block;font-style:normal;color:var(--mute);font-size:12px}
-.dp{flex:none;border-radius:20px;padding:3px 12px;font-size:12px;font-weight:700;white-space:nowrap}
-.dp.r{background:var(--badbg);color:var(--bad)}.dp.a{background:var(--warnbg);color:var(--warn)}.dp.g{background:var(--okbg);color:var(--ok)}
-
-/* ============ client cards ============ */
-.cg{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:14px}
-.cc{padding:18px 20px;cursor:pointer;content-visibility:auto;contain-intrinsic-size:150px;transition:transform .2s var(--ease),border-color .2s,box-shadow .2s;animation:up .45s var(--ease) both}
-.cc:hover{border-color:var(--gold);box-shadow:var(--shadow2);transform:translateY(-3px)}
-.cc .cn{font:600 20px var(--serif);color:var(--navy)}
-.cs{margin:10px 0;font-size:12.5px;font-weight:700;padding:3px 12px;border-radius:20px;display:inline-block}
-.cs.g{background:var(--okbg);color:var(--ok)}.cs.r{background:var(--badbg);color:var(--bad)}.cs.n{background:var(--s3);color:var(--mute)}
-.mc{display:flex;gap:16px;font-size:13px;color:var(--mute)}.mc b{color:var(--navy)}
-
-/* ============ steps and uploads (original screens) ============ */
-.wz{display:grid;gap:12px}.stp{display:flex;gap:14px;padding:16px 18px;align-items:flex-start}.stp>div{flex:1}
-.no{flex:none;width:34px;height:34px;border-radius:50%;background:var(--pri);color:var(--priink);display:flex;align-items:center;justify-content:center;font-weight:700}
-.chips{margin:8px 0}.chip{display:inline-block;padding:6px 15px;margin:3px;border:1px solid var(--line2);border-radius:20px;cursor:pointer;color:var(--ink);font-size:13px;font-weight:600;background:var(--s1);transition:all .14s}
-.chip:hover{background:var(--s3);border-color:var(--gold)}.chip.on{background:var(--pri);color:var(--priink);border-color:var(--pri)}
-.dz{display:block;border:2px dashed var(--line2);border-radius:16px;padding:32px;text-align:center;cursor:pointer;background:var(--s2);color:var(--navy);margin-bottom:10px;transition:all .18s}
-.dz:hover,.dz.ov{background:var(--goldbg);border-color:var(--gold);transform:scale(1.005)}
-.sb{display:flex;margin:6px 0 24px;isolation:isolate}.sb div{flex:1;text-align:center;font-size:12px;color:var(--mute);position:relative}
-.sb span{display:flex;margin:0 auto 6px;width:36px;height:36px;border-radius:50%;background:var(--s3);color:var(--mute);align-items:center;justify-content:center;font-weight:700;transition:all .25s}
-.sb .on{color:var(--navy);font-weight:700}.sb .on span{background:var(--pri);color:var(--priink);box-shadow:0 0 0 5px var(--ring)}.sb .dn{color:var(--ok)}.sb .dn span{background:var(--ok);color:#fff}
-.sb div+div:before{content:'';position:absolute;top:18px;right:50%;width:100%;height:2px;background:var(--line2);z-index:-1}
-
-.lph{text-align:center;margin:10px 0}.lpl{font:700 42px var(--serif);color:var(--navy);letter-spacing:-.5px}.lpl span{color:var(--gold)}.lph small{letter-spacing:.3em;font-weight:700}
-.lpt{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;align-items:center;margin:8px 0 18px}
-.pill{background:var(--okbg);color:var(--ok);font-weight:700;border-radius:20px;padding:4px 13px;font-size:13px}
-.lpc{padding:26px;text-align:center}.lpc h2{margin-top:0}.lpc .dz{margin:14px auto;max-width:540px}
-.bk{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin:10px 0}
-.lpf{text-align:left;max-width:560px;margin:10px auto}.lpf label{display:block;margin-top:12px;color:var(--navy)}.lpf input,.lpf select{width:100%}
-
-.top2{display:grid;grid-template-columns:1fr 280px;gap:14px;align-items:start}@media(max-width:800px){.top2{grid-template-columns:1fr}}
-.dues{margin:8px 0}.dues div{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--line);font-size:13px}.dues div:last-child{border:0}.dues .hot{color:var(--bad);font-weight:700}
-.pcb{background:linear-gradient(120deg,var(--hero1),var(--hero2));color:var(--heroink);border-radius:20px;padding:24px 28px;margin-bottom:14px;box-shadow:var(--shadow2);position:relative;overflow:hidden}
-.pcb:after{content:'';position:absolute;left:0;right:0;bottom:0;height:3px;background:linear-gradient(90deg,var(--gold),transparent 70%)}
-.pcb h2{color:var(--heroink);margin:0 0 2px}.pcb small{color:var(--herosub);font-size:14px}
-.bar{height:8px;border-radius:5px;background:linear-gradient(90deg,var(--gold),var(--navy2));margin-top:4px;animation:grow .8s var(--ease)}
-.pf{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px 14px;margin:10px 0 6px}
-.pf label{display:block;font-size:13px;font-weight:600;color:var(--mute)}.pf input{display:block;width:100%;margin-top:4px;font-weight:400;font-size:15px}
-.pf .wd{grid-column:span 2}@media(max-width:600px){.pf .wd{grid-column:auto}}
-.vb{position:sticky;top:66px;z-index:12;background:var(--warnbg);border:1px solid var(--warn);border-radius:var(--r);padding:10px 16px;margin-bottom:14px;display:flex;flex-wrap:wrap;align-items:center;gap:8px;color:var(--ink);box-shadow:var(--shadow)}.vb button{margin-left:auto}
-.stf td small{color:var(--mute)}
-.tw{overflow-x:auto;border-radius:var(--r)}
-
-/* ============ switches, badges ============ */
-.sw{position:relative;display:inline-flex;align-items:center;gap:9px;cursor:pointer;font-weight:500;font-size:13px;color:var(--mute);user-select:none}
-.sw input{position:absolute;opacity:0;width:0;height:0}
-.sw i{width:40px;height:23px;border-radius:20px;background:var(--line2);position:relative;transition:background .2s;flex:none}
-.sw i:after{content:'';position:absolute;left:3px;top:3px;width:17px;height:17px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.3);transition:transform .22s var(--ease)}
-.sw input:checked+i{background:var(--ok)}.sw input:checked+i:after{transform:translateX(17px)}
-.sw input:focus-visible+i{outline:3px solid var(--ring);outline-offset:2px}
-.sw input:checked~span{color:var(--ink)}
-.tag{display:inline-block;padding:2px 10px;border-radius:20px;font-size:12px;font-weight:700;background:var(--s3);color:var(--mute)}
-.tag.ok{background:var(--okbg);color:var(--ok);border:0}.tag.warn{background:var(--warnbg);color:var(--warn)}.tag.bad{background:var(--badbg);color:var(--bad);border:0}.tag.info{background:var(--infobg);color:var(--info)}.tag.gold{background:var(--goldbg);color:var(--gold)}
-.toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:12px 0}
-.seg{display:inline-flex;background:var(--s3);border-radius:12px;padding:4px;gap:2px}
-.seg button{margin:0;background:transparent;color:var(--mute);border:0;padding:7px 14px;border-radius:9px;box-shadow:none}
-.seg button:hover{background:transparent;color:var(--ink);transform:none;box-shadow:none}
-.seg button.on{background:var(--s1);color:var(--navy);box-shadow:0 1px 4px rgba(0,0,0,.14)}
-.mo{display:inline-flex;align-items:center;gap:4px;background:var(--s1);border:1px solid var(--line2);border-radius:12px;padding:3px}
-.mo b{min-width:128px;text-align:center;font:600 15px var(--serif);color:var(--navy)}
-.mo button{margin:0;width:34px;height:34px;padding:0;border-radius:9px;background:transparent;color:var(--ink);border:0;box-shadow:none;font-size:18px}.mo button:hover{background:var(--s3);transform:none;box-shadow:none}
-
-/* ============ client tracker ============ */
-.meters{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin:14px 0}
-.mt{background:var(--s1);border:1px solid var(--line);border-radius:var(--r);padding:14px 16px;box-shadow:var(--shadow)}
-.mt div{display:flex;justify-content:space-between;align-items:baseline;font-size:13px;color:var(--mute);font-weight:600}.mt b{font:600 22px var(--serif);color:var(--navy)}
-.mt .tr2{height:8px;border-radius:6px;background:var(--s3);margin-top:8px;overflow:hidden}.mt .tr2 i{display:block;height:100%;border-radius:6px;background:linear-gradient(90deg,var(--gold),var(--ok));transition:width .5s var(--ease)}
-.tkh,.tkr{display:grid;grid-template-columns:minmax(210px,1.8fr) repeat(3,minmax(96px,.55fr)) minmax(190px,1.6fr) 118px;gap:12px;align-items:center}
-.tkh{padding:0 18px 8px;font:700 11px var(--sans);text-transform:uppercase;letter-spacing:.09em;color:var(--mute)}.tkh span{text-align:center}.tkh span:first-child,.tkh span:nth-child(5){text-align:left}
-.tkr{padding:12px 18px;margin-bottom:10px;background:var(--s1);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);transition:transform .2s var(--ease),border-color .2s,box-shadow .2s;animation:up .4s var(--ease) both}
-.tkr:hover{border-color:var(--gold);box-shadow:var(--shadow2)}
-.tkr.done{background:linear-gradient(90deg,var(--okbg),var(--s1) 45%);border-color:color-mix(in srgb,var(--ok) 40%,var(--line))}
-.tkn b{display:block;font:600 17px/1.25 var(--serif);color:var(--navy)}.tkn small{display:block;line-height:1.35;margin-top:2px}
-.tkc{display:flex;flex-direction:column;align-items:center;gap:4px}.tkc small{display:none;font-size:11.5px;font-weight:600;text-align:center;line-height:1.2}
-button.tkb{margin:0;width:38px;height:38px;padding:0;border-radius:50%;background:var(--s1);border:2px solid var(--line2);color:transparent;display:flex;align-items:center;justify-content:center;box-shadow:none;transition:background .16s,border-color .16s,transform .16s}
-button.tkb:hover{border-color:var(--ok);background:var(--okbg);transform:scale(1.07);box-shadow:none}
-button.tkb svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
-button.tkb.on{background:var(--ok);border-color:var(--ok);color:#fff;animation:pop .32s var(--ease)}
-button.tkb.on:hover{background:var(--ok);filter:brightness(1.08)}
-.tkx input{width:100%;padding:8px 11px;font-size:14px}
-.tks{display:flex;justify-content:flex-end}
-.tks .sw span{font-size:12px}
-.own{display:inline-block;margin-left:6px;padding:0 8px;border-radius:20px;font:700 11px var(--sans);background:var(--infobg);color:var(--info);vertical-align:1px}
-@media(max-width:900px){
- .tkh{display:none}
- .tkr{grid-template-columns:repeat(3,1fr);gap:12px 8px;padding:16px}
- .tkn{grid-column:1/-1}.tkc small{display:block}.tkx,.tks{grid-column:1/-1}.tks{justify-content:flex-start}}
 body.out{background:radial-gradient(ellipse at 50% 35%,#2b2a22 0,#181812 55%,#0e0e0b 100%);background-attachment:fixed;color:#f3efe6}
 body.out #top{background:transparent;border-color:transparent;backdrop-filter:none}
 body.out .bgart>rect{fill:#14130f}
@@ -601,6 +382,11 @@ body.out .bgart>rect{fill:#14130f}
 @media(min-width:901px){body.out main{transition:padding-left .3s var(--ease)}body.out #sb.o~main{padding-left:316px}}
 .intro .sig{white-space:nowrap}
 @media(min-width:901px){body.out #sb.o~main .sig{font-size:clamp(46px,7.2vw,104px)}}
+/* tally import */
+.tld{padding:24px;margin:8px 0}.tll{display:block;font-size:12.5px;color:var(--mute);margin:10px 0}.tll input,.tll select{display:block;width:100%;max-width:360px;margin-top:4px}
+.tlb{display:flex;gap:10px;align-items:flex-start;padding:10px 12px;margin:6px 0;border:1px solid var(--line);border-radius:var(--r);background:var(--s2);cursor:pointer}.tlb:hover{border-color:var(--gold)}
+.tlb input{margin-top:4px}.tlb span{display:block}.tlb small{display:block;color:var(--mute)}
+#md .box{max-height:calc(100vh - 100px);overflow:auto}
 </style></head><body class="out">
 <div id="top"><div class="tl"><button id="mb" class="ib" onclick="tg()" aria-label="Menu">&#9776;</button><div class="brandR" onclick="logo()" title="JK Gupta &amp; Co.">JK<span>&amp;</span>CO.<small>CHARTERED ACCOUNTANTS</small></div></div><div class="tr"><span id="sv"></span><button id="tm" class="ib" onclick="theme()" aria-label="Theme"></button><button id="dm" class="ib" onclick="dm(event)" aria-label="More">&#8942;</button></div></div>
 <div id="dd"></div><div id="md"></div><input type="file" id="lb" accept=".json" onchange="imp(this)" hidden>
@@ -976,6 +762,7 @@ function dash(){CURP='';pgIn('dash');const c=C();
  app.innerHTML=`<button class="g" onclick="home()">← All clients</button> <button onclick="gst()">Sales / Purchase with GST</button><h2>${E(S.c)} <small>(${c.ver})</small></h2><h3>Bank accounts</h3>
  <table><tr><th>Bank account</th><th>Tally ledger</th><th>Last import</th><th>Last transaction</th><th></th></tr>${c.accounts.map((a,i)=>`<tr><td>${E(a.label)}</td><td>${E(a.ledger)}</td><td>${fd(a.lastImport)||'—'}</td><td>${fd(a.lastTxn)||'—'}</td><td><button onclick="start(${i})">Import statement</button><button class="g" onclick="delA(${i})">Delete</button></td></tr>`).join('')||'<tr><td colspan="5">No bank accounts yet — add one below.</td></tr>'}</table>
  <div class="stats"><div><b>${c.accounts.length}</b>Bank accounts</div><div><b>${c.rules.length}</b>Saved rules</div><div><b>${c.ledgers.length}</b>Ledgers loaded<br><small>updated ${fd(c.ledgerUpdated)||'never'}</small></div><div><b>${c.pending||0}</b>Pending last time</div></div>
+ <details open><summary>Import from Tally (Excel or XML)</summary>${tlBox()}</details>
  <details><summary>Add bank account</summary><input id="al" placeholder="Label e.g. HDFC CA 1234"> <input id="at" list="ll" placeholder="Exact bank ledger name in Tally" size="30"> <button onclick="addA()">Add</button></details>
  <details><summary>Ledger names</summary><p>Paste this client's ledger names from Tally, one per line.</p><textarea id="lt" rows="6">${E(c.ledgers.join('\n'))}</textarea><button onclick="saveL()">Save ledger list</button><br><small>Or load names from your template Masters sheet / any Excel (names in column A):</small> <input type="file" id="mf" accept=".xlsx,.xlsm,.xls,.csv" onchange="loadM(this)"></details>
  <details><summary>Rules (narration contains → ledger)</summary><table>${c.rules.map((r,i)=>`<tr><td>${E(r.k)}</td><td>${E(r.l)}</td><td><button class="g" onclick="delR(${i})">Delete</button></td></tr>`).join('')}</table>
@@ -1244,7 +1031,7 @@ function pcEx(f){const p=DB.pc,mo=S.pm;p.cash=v('pc1').trim()||'Petty Cash';p.ex
    JK Gupta & Co. - interface, client tracker, attendance, staff control
    (added on top of the original program; everything above is unchanged)
    ==================================================================== */
-const BUILD='b2610201055';
+const BUILD='b2610201103';
 let CURP='';
 const $id=i=>document.getElementById(i);
 const jkP2=n=>String(n).padStart(2,'0');
@@ -1310,7 +1097,7 @@ function sb(){const el=$id('sb');if(!USER){el.innerHTML=sbLogin();return}
   +(ADM()?A('stf','users','Staff &amp; access','staffF()'):'')
   +'<h3>'+(VIEW?E(VIEW)+'\'s clients':'My clients')+'</h3>'
   +(N.map((n,i)=>'<a class="li cl" onclick="pickI('+i+')"><span>'+E(n)+'</span></a>').join('')||'<small style="padding:0 12px">None yet</small>')
-  +'<h3>Add client</h3><input id="nn" placeholder="Client name" onkeydown="if(event.key==\'Enter\')addC()"><select id="nv"><option>Tally Prime</option><option>Tally ERP 9</option></select><button onclick="addC()">Add client</button>'}
+  +'<h3>Add client</h3><input id="nn" placeholder="Client name" onkeydown="if(event.key==\'Enter\')addC()"><select id="nv"><option>Tally Prime</option><option>Tally ERP 9</option></select><button onclick="addC()">Add client</button><a class="li" style="margin-top:8px" onclick="tlNew();tg(0)"><span>Or create from a Tally file</span></a>'}
 
 /* ---------------- login ---------------- */
 function pwEye(b){const i=$id('lp');const s=i.type==='password';i.type=s?'text':'password';b.textContent=s?'Hide':'Show'}
@@ -1350,7 +1137,7 @@ function home(){CURP='home';S={};window.onscroll=null;sb();dls();document.body.c
   +'<div class="stats hs"><div><b data-n="'+N.length+'">'+N.length+'</b>Clients</div><div><b data-n="'+A+'">'+A+'</b>Bank accounts</div><div><b class="'+(O?'w':'')+'" data-n="'+O+'">'+O+'</b>Need import (30+ days)</div><div><b data-n="'+P+'">'+P+'</b>Pending entries</div></div>'
   +'<div class="ql">'+ql+'</div>'
   +(ADM()&&!VIEW?stfP():'')+kdHtml()
-  +'<h3>'+(VIEW?E(VIEW)+'\'s clients':ADM()?'Admin\'s own clients':'Clients')+'</h3><input id="q" class="sq" placeholder="Search clients..." oninput="clearTimeout(window._qt);window._qt=setTimeout(cards,120)"><div id="cl" class="cg"></div>';
+  +'<div class="toolbar" style="margin-bottom:0"><button onclick="tlNew()">+ Create client from Tally file</button></div><h3>'+(VIEW?E(VIEW)+'\'s clients':ADM()?'Admin\'s own clients':'Clients')+'</h3><input id="q" class="sq" placeholder="Search clients..." oninput="clearTimeout(window._qt);window._qt=setTimeout(cards,120)"><div id="cl" class="cg"></div>';
  cards();if(!same)countUp()}
 
 /* ---------------- top menu ---------------- */
@@ -1761,6 +1548,80 @@ function rcXls(){const X=RCS.R,nm=(RCS.client||'Reco').replace(/[^\w\- ]/g,'')+(
   [['Matched',r=>r.st=='match'],['In books only',r=>r.st=='bOnly'],['In bank only',r=>r.st=='kOnly']].forEach(([n,f])=>sh.push([n,[hd].concat(X.R.filter(f).map(row))]))}
  if(window.XLSX){const wb=XLSX.utils.book_new();sh.forEach(([n,a])=>XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(a),n));XLSX.writeFile(wb,nm+'.xlsx')}
  else{const q=a=>a.map(r=>r.map(x=>'"'+String(x==null?'':x).replace(/"/g,'""')+'"').join(',')).join('\r\n');dl(nm+'.csv',sh.map(([n,a])=>'## '+n+'\r\n'+q(a)).join('\r\n\r\n'),'text/csv')}}
+
+/* ====================================================================
+   IMPORT FROM TALLY  -  ledger names and bank accounts from a Tally
+   export (Excel or XML), so nothing has to be typed by hand
+   ==================================================================== */
+const TLS={P:null,new:false};
+const TL_BANKG=/^(bank\s*accounts?|bank\s*o\/?d.*|bank\s*occ.*|bank\s*od.*|bank\s*overdraft.*|cash\/bank.*|banks?)$/i;
+const TL_BANKN=/\bbank\b|\b(hdfc|sbi|icici|axis|kotak|pnb|bob|canara|idfc|yes|indusind|federal|bandhan|uco|iob|boi|rbl|dcb|baroda|punjab|union|central|indian)\b/i;
+const tlClean=s=>String(s==null?'':s).replace(/[   ]/g,' ').replace(/\s+/g,' ').trim();
+function tlText(buf){const u=new Uint8Array(buf);let t;
+ if(u[0]==0xFF&&u[1]==0xFE)t=new TextDecoder('utf-16le').decode(u.subarray(2));
+ else if(u[0]==0xFE&&u[1]==0xFF)t=new TextDecoder('utf-16be').decode(u.subarray(2));
+ else if(u.length>3&&u[1]==0&&u[3]==0)t=new TextDecoder('utf-16le').decode(u);
+ else t=new TextDecoder('utf-8').decode(u);
+ /* Tally writes control characters as &#4; which XML parsers reject */
+ return t.replace(/^﻿/,'').replace(/&#(\d+);/g,(m,n)=>(+n<32&&n!=9&&n!=10&&n!=13)?'':m).replace(/&#x([0-9a-f]+);/gi,(m,h)=>(parseInt(h,16)<32&&![9,10,13].includes(parseInt(h,16)))?'':m).replace(/[\u0000-\u0008\u000b\u000c\u000e-\u001f]/g,'')}
+function tlXml(t){const d=new DOMParser().parseFromString(t,'text/xml');if(d.getElementsByTagName('parsererror').length)throw new Error('This XML file could not be read. Export again from Tally as XML (Data Interchange) or Excel.');
+ const out=[],first=(el,tags)=>{for(const g of tags){const x=el.getElementsByTagName(g)[0];if(x&&tlClean(x.textContent))return tlClean(x.textContent)}return''};
+ [...d.getElementsByTagName('LEDGER')].forEach(l=>{let name=tlClean(l.getAttribute('NAME'));if(!name){const nl=l.getElementsByTagName('NAME')[0];name=nl?tlClean(nl.textContent):''}if(!name)return;
+  const parent=first(l,['PARENT']),ob=first(l,['OPENINGBALANCE']),ac=first(l,['BANKACCOUNTNUMBER','ACCOUNTNUMBER','ACCOUNTNO']),ifsc=first(l,['IFSCODE','IFSCCODE','IFSC']),bn=first(l,['BANKNAME','BANKINGCONFIGBANK']);
+  out.push({name,group:parent,no:ac,ifsc,bank:bn,ob})});
+ let co='';const c1=d.getElementsByTagName('SVCURRENTCOMPANY')[0]||d.getElementsByTagName('CURRENTCOMPANY')[0];if(c1)co=tlClean(c1.textContent);
+ if(!co){const c2=d.getElementsByTagName('COMPANY')[0];if(c2){const n=c2.getElementsByTagName('NAME')[0];co=tlClean(c2.getAttribute('NAME')||(n&&n.textContent)||'')}}
+ return{ledgers:out,company:co,hasGroup:out.some(x=>x.group)}}
+/* Excel / CSV: either Name + Under columns, or one column with the groups and ledgers indented under them */
+function tlRows(rows){const NAMEH=/^(name|ledger name|ledger|particulars|account name|name of ledger|name of master)$/i,GRPH=/^(under|parent|group|group name|primary group|under group)$/i;
+ let hi=-1,ni=-1,gi=-1,ai=-1,ii=-1,bi=-1;
+ for(let i=0;i<Math.min(rows.length,30);i++){const r=(rows[i]||[]).map(tlClean);const n=r.findIndex(c=>NAMEH.test(c));if(n>=0){hi=i;ni=n;gi=r.findIndex(c=>GRPH.test(c));ai=r.findIndex(c=>/account\s*(no|number)|a\/c\s*no/i.test(c));ii=r.findIndex(c=>/ifsc/i.test(c));bi=r.findIndex(c=>/^bank\s*name$/i.test(c));break}}
+ if(hi<0){/* no heading: use column A below any title rows */hi=0;ni=0;let k=rows.findIndex(r=>tlClean((r||[])[0]));hi=Math.max(0,k-1)}
+ const out=[];
+ if(gi>=0){for(let i=hi+1;i<rows.length;i++){const r=rows[i]||[],name=tlClean(r[ni]);if(!name||/^(grand total|total)$/i.test(name))continue;out.push({name,group:tlClean(r[gi]),no:ai>=0?tlClean(r[ai]):'',ifsc:ii>=0?tlClean(r[ii]):'',bank:bi>=0?tlClean(r[bi]):''})}
+  return{ledgers:out,hasGroup:true}}
+ /* hierarchy by indentation */
+ const raw=[];for(let i=hi+1;i<rows.length;i++){const c=(rows[i]||[])[ni];const s=String(c==null?'':c).replace(/[   ]/g,' ');const name=tlClean(s);if(!name||/^(grand total|total|opening balance|closing balance)$/i.test(name))continue;raw.push({name,ind:s.length-s.replace(/^\s+/,'').length,row:rows[i]||[]})}
+ const inds=[...new Set(raw.map(x=>x.ind))].sort((a,b)=>a-b);
+ if(inds.length>1){const st=[];raw.forEach(x=>{while(st.length&&st[st.length-1].ind>=x.ind)st.pop();const isLeafLike=true;out.push({name:x.name,group:st.length?st[st.length-1].name:'',no:'',ifsc:'',bank:'',ind:x.ind});st.push(x)});
+  /* a row that has children is a group, not a ledger */
+  const par=new Set(out.map(x=>x.group));const led=out.filter(x=>!par.has(x.name));
+  /* the group of a ledger = the nearest ancestor that is a bank-type group, else its direct parent */
+  const byName=new Map(out.map(x=>[x.name,x]));led.forEach(x=>{let g=x.group,n=0;while(g&&!TL_BANKG.test(g)&&byName.get(g)&&byName.get(g).group&&n++<8)g=byName.get(g).group;if(g&&TL_BANKG.test(g))x.group=g});
+  return{ledgers:led,hasGroup:true}}
+ raw.forEach(x=>out.push({name:x.name,group:'',no:'',ifsc:'',bank:''}));return{ledgers:out,hasGroup:false}}
+async function tlRead(file){const nm=file.name,buf=await file.arrayBuffer();
+ if(/\.xml$/i.test(nm)||(()=>{const u=new Uint8Array(buf.slice(0,4));return u[0]==0x3c||(u[0]==0xFF&&u[1]==0xFE)})()&&!/\.xls|\.csv/i.test(nm))return tlXml(tlText(buf));
+ if(/\.csv$|\.txt$/i.test(nm))return tlRows(rcCsv(new TextDecoder('utf-8').decode(buf).replace(/^﻿/,'')));
+ const sh=await xlAll(buf);let best=null;for(const s of sh){const r=tlRows(s.rows);if(r.ledgers.length&&(!best||(r.hasGroup&&!best.hasGroup)||(r.hasGroup==best.hasGroup&&r.ledgers.length>best.ledgers.length)))best=r}
+ if(!best)throw new Error('No ledger names were found in this file.');return best}
+function tlFind(P){const banks=[];P.ledgers.forEach(x=>{let b=false;if(P.hasGroup)b=TL_BANKG.test(x.group||'');else b=TL_BANKN.test(x.name);if(b)banks.push(x)});return banks}
+function tlLabel(x){const last=String(x.no||'').replace(/\D/g,'').slice(-4);return x.name+(last?' ('+last+')':'')}
+function tlLedgerNames(P){const bankSet=new Set();return[...new Set(P.ledgers.map(x=>x.name).filter(Boolean))].sort((a,b)=>a.localeCompare(b))}
+
+/* ---------- screens ---------- */
+function tlBox(){return '<p>Export from Tally and drop the file here: <b>Excel</b> (Masters, Ledgers, Alt+E) or <b>XML</b> (Data Interchange). Bank accounts and all ledger names are picked up for you.</p>'
+ +'<label class="dz tld"><span>Drop the Tally file here or click to choose</span><input type="file" hidden accept=".xlsx,.xlsm,.xls,.csv,.xml" onchange="tlPick(this,0)"></label><div id="tlr"></div>'}
+async function tlPick(inp,isNew){const f=inp.files[0];if(!f)return;const box=$id('tlr');box.innerHTML='<div class="card">Reading '+E(f.name)+'…</div>';
+ try{const P=await tlRead(f);P.file=f.name;P.banks=tlFind(P);P.pick=P.banks.map(()=>1);TLS.P=P;TLS.new=!!isNew;box.innerHTML=tlPrev(P)}
+ catch(e){box.innerHTML='<div class="card bad"><b>Could not read this file.</b><br>'+E(e.message||String(e))+'<br><small>Tip: in Tally press Alt+E (Export), choose Excel or XML, and export the list of ledgers (Masters → Ledgers).</small></div>'}}
+function tlPrev(P){const c=!TLS.new&&S.c?C():null,have=c?new Set(c.accounts.map(a=>lk(a.ledger))):new Set(),nm=P.company||P.file.replace(/\.\w+$/,'').replace(/[_\-]+/g,' ').trim();
+ return '<div class="card ok"><b>'+P.ledgers.length+' ledgers</b> found'+(P.banks.length?' and <b>'+P.banks.length+' bank account'+(P.banks.length>1?'s':'')+'</b>':', but no bank accounts could be told apart')+'.'+(P.hasGroup?'':' <small>(This file has no group column, so banks are guessed from the names. Tick the right ones.)</small>')+'</div>'
+ +(TLS.new?'<label class="tll">Client name<input id="tln" value="'+E(nm)+'"></label><label class="tll">Tally version<select id="tlv"><option>Tally Prime</option><option>Tally ERP 9</option></select></label>':'')
+ +(P.banks.length?'<h4>Bank accounts</h4>'+P.banks.map((b,i)=>'<label class="tlb"><input type="checkbox" '+(P.pick[i]&&!have.has(lk(b.name))?'checked ':'')+(have.has(lk(b.name))?'disabled ':'')+'onchange="TLS.P.pick['+i+']=this.checked?1:0"><span><b>'+E(tlLabel(b))+'</b><small>Tally ledger: '+E(b.name)+(b.ifsc?' · IFSC '+E(b.ifsc):'')+(have.has(lk(b.name))?' · already added':'')+'</small></span></label>').join(''):'<p><small>You can still import the ledger names, and add the bank account by hand afterwards.</small></p>')
+ +(!TLS.new&&c&&c.ledgers.length?'<label class="tll"><input type="checkbox" id="tlrep"> Replace the existing ledger list (otherwise new names are added to it)</label>':'')
+ +'<button onclick="tlApply()">'+(TLS.new?'Create client':'Import')+'</button>'}
+function tlApply(){const P=TLS.P;if(!P)return;let c,name='';
+ if(TLS.new){name=qc(v('tln'));if(!name)return alert('Please type the client name.');if(DB.clients[name])return alert('A client with this name already exists.');DB.clients[name]={ver:v('tlv'),accounts:[],ledgers:[],rules:[],hist:[],pending:0,ledgerUpdated:''};c=DB.clients[name]}else c=C();
+ if(!c)return;const names=tlLedgerNames(P),rep=$id('tlrep')&&$id('tlrep').checked;
+ const bankLedgers=new Set(P.banks.map(b=>b.name));
+ c.ledgers=[...new Set((rep||TLS.new?[]:c.ledgers).concat(names))];c.ledgerUpdated=ymd(new Date());
+ let added=0;const have=new Set(c.accounts.map(a=>lk(a.ledger)));
+ P.banks.forEach((b,i)=>{if(!P.pick[i]||have.has(lk(b.name)))return;c.accounts.push({label:tlLabel(b),ledger:qc(b.name),lastImport:'',lastTxn:'',no:b.no||'',ifsc:b.ifsc||'',bank:b.bank||''});added++});
+ TLS.P=null;save();
+ if(TLS.new){modal();S={c:name};CURP='';sb();dash()}else dash();
+ toast(names.length+' ledgers loaded'+(added?' and '+added+' bank account'+(added>1?'s':'')+' added.':'.'))}
+function tlNew(){TLS.new=true;TLS.P=null;modal('<h3>Create a client from a Tally file</h3><p>Export the list of ledgers from Tally (Excel or XML) and drop it here. The client, its bank accounts and its ledger names are created for you.</p><label class="dz tld"><span>Drop the Tally file here or click to choose</span><input type="file" hidden accept=".xlsx,.xlsm,.xls,.csv,.xml" onchange="tlPick(this,1)"></label><div id="tlr"></div>')}
 
 LS.onSync=onSyncKeys;LS.onExpire=()=>{USER='';VIEW='';DB={clients:{}};sessionStorage.removeItem('jkgu');home();toast('Your session ended. Please sign in again.')};
 (async()=>{const su=sessionStorage.getItem('jkgu');let okr=!LS.on;if(su&&LS.on)okr=!!(await LS.resume()).ok;if(su&&okr&&(LS.on||su==ADMIN||U()[su])){USER=su;try{DB=JSON.parse(LS.getItem('jkg_'+su))||{clients:{}}}catch(e){DB={clients:{}}}if(!DB.clients)DB={clients:{}};afterLogin()}updTm();home()})();
