@@ -1,0 +1,56 @@
+from tcommon import *
+async def main():
+    async with async_playwright() as P:
+        b=await P.chromium.launch();errs=[];res=[]
+        def chk(n,c,extra=''):res.append(bool(c));print(('PASS ' if c else 'FAIL ')+n,extra if not c else '')
+        ctx=await b.new_context(viewport={'width':1280,'height':900});await ctx.add_init_script(MOCK);await ctx.add_init_script("window.showSaveFilePicker=undefined")
+        pg=await ctx.new_page();pg.on('pageerror',lambda e:errs.append(str(e)))
+        await pg.route('**/fonts.g*/**',lambda r:r.abort());await pg.route('**/cdnjs**',lambda r:r.abort())
+        await pg.goto('file:///home/claude/app/out/cloud.html');await pg.wait_for_timeout(800)
+        chk('theme switcher present',await pg.locator('#thb').count()==1)
+        seen=set()
+        for _ in range(6):
+            await pg.click('#thb');await pg.wait_for_timeout(120);seen.add(await pg.evaluate("TH.id"))
+        chk('cycles through all 5 themes',len(seen)==5,seen)
+        await login(pg,'Jkgupta&Co','JKG@2500')
+        await pg.evaluate("reco();rcTab('sale')");await pg.wait_for_timeout(500)
+        chk('help widget shown on Reco',await pg.locator('#mhw .mhb').count()==1)
+        await pg.evaluate("home()");await pg.wait_for_timeout(300);chk('widget gone on other pages',await pg.locator('#mhw').count()==0)
+        await pg.evaluate("reco()");await pg.wait_for_timeout(400)
+        await pg.click('#mhw .mhb');await pg.wait_for_timeout(200)
+        await pg.click('.mhq button >> nth=0');await pg.wait_for_timeout(200)
+        t=await pg.inner_text('.mhm');chk('quick question answered',('merges' in t) or ('merged' in t) or 'Item-wise' in t,t[:80])
+        await pg.fill('#mhi','will totals be counted twice?');await pg.press('#mhi','Enter');await pg.wait_for_timeout(200)
+        chk('typed question answered',await pg.evaluate("document.querySelector('.mhm').innerText.includes('never added on top')"))
+        await pg.fill('#mhi','banana');await pg.press('#mhi','Enter');await pg.wait_for_timeout(200)
+        chk('unknown question gets honest fallback',await pg.evaluate("document.querySelector('.mhm').innerText.includes('I only know about')"))
+        await pg.keyboard.press('Escape');chk('Escape closes',await pg.locator('.mhp').count()==0)
+        # dark mode: every theme must keep buttons readable
+        await pg.click('#tm');await pg.wait_for_timeout(200)
+        for i in range(5):
+            await pg.click('#thb');await pg.wait_for_timeout(120)
+            c=await pg.evaluate("(()=>{const s=getComputedStyle(document.documentElement);return [s.getPropertyValue('--pri').trim(),s.getPropertyValue('--priink').trim(),s.getPropertyValue('--link').trim()]})()")
+            def lum(h):
+                v=[int(h[i:i+2],16)/255 for i in (1,3,5)];v=[x/12.92 if x<=.03928 else ((x+.055)/1.055)**2.4 for x in v];return .2126*v[0]+.7152*v[1]+.0722*v[2]
+            bg=lum('#141c27');cr=(max(lum(c[0]),bg)+.05)/(min(lum(c[0]),bg)+.05)
+            ci=(max(lum(c[0]),lum(c[1]))+.05)/(min(lum(c[0]),lum(c[1]))+.05)
+            chk('dark mode '+await pg.evaluate("TH.name")+': button visible on page (%.1f) and text readable (%.1f)'%(cr,ci),cr>=1.9 and ci>=4,c)
+        await pg.screenshot(path='out/theme_dark.png')
+        await pg.click('#tm');await pg.wait_for_timeout(200)
+        # widget must not cover the upload zone or the last table row
+        await ctx.add_init_script("")
+        await pg.set_viewport_size({'width':390,'height':780});await pg.wait_for_timeout(300)
+        await pg.evaluate("rcTab('sale')");await pg.wait_for_timeout(300)
+        ins=pg.locator('.rcd input[type=file]')
+        await ins.nth(0).set_input_files(TD+'india.xlsx');await ins.nth(1).set_input_files(TD+'gstr1_india_synth.xlsx');await pg.wait_for_timeout(900)
+        await pg.click('text=Run reco');await pg.wait_for_timeout(700)
+        await pg.evaluate("window.scrollTo({top:document.documentElement.scrollHeight,behavior:'instant'})");await pg.wait_for_timeout(300)
+        r=await pg.evaluate("(()=>{const w=document.querySelector('#mhw').getBoundingClientRect();const last=[...document.querySelectorAll('.rctb > tbody > tr:not(.rcbr)')].pop().getBoundingClientRect();return {widgetTop:w.top,lastBottom:last.bottom,vh:innerHeight,pad:document.documentElement.scrollHeight-last.bottom-scrollY}})()");print(r)
+        chk('phone: last table row not hidden by the widget',r['lastBottom']<=r['widgetTop']+1,r)
+        await pg.screenshot(path='out/phone_reco.png')
+        await pg.evaluate("window.scrollTo(0,0)");await pg.wait_for_timeout(200)
+        up=await pg.evaluate("(()=>{const u=document.querySelector('#dzA').getBoundingClientRect(),w=document.querySelector('#mhw').getBoundingClientRect();return u.bottom<w.top||u.top>w.bottom||u.right<w.left||u.left>w.right})()")
+        chk('phone: upload zone not covered at top of page',up)
+        chk('no JS errors',not errs,errs)
+        await b.close();print('ALL OK' if all(res) else 'SOME FAILED')
+asyncio.run(main())

@@ -44,7 +44,7 @@ function toast(msg,btn,fn,ms){let c=$id('toasts');if(!c){c=document.createElemen
  const t=document.createElement('div');t.className='toast';t.innerHTML='<span>'+E(msg)+'</span>'+(btn?'<button>'+E(btn)+'</button>':'');
  if(btn)t.querySelector('button').onclick=()=>{try{fn&&fn()}finally{t.remove()}};c.appendChild(t);if(ms!==0)setTimeout(()=>t.remove(),ms||4500);return t}
 let ATI=0;
-function pgIn(n){clearInterval(ATI);const same=app.dataset.v===n;app.dataset.v=n||'';app.classList.toggle('still',same);
+function pgIn(n){if(typeof mhHide=='function')mhHide(n);clearInterval(ATI);const same=app.dataset.v===n;app.dataset.v=n||'';app.classList.toggle('still',same);
  if(!same){app.classList.remove('pgin');void app.offsetWidth;app.classList.add('pgin')}return same}
 function countUp(root){if(matchMedia('(prefers-reduced-motion:reduce)').matches)return;(root||app).querySelectorAll('[data-n]').forEach(e=>{const to=+e.dataset.n;if(!(to>0))return;const t0=performance.now();
  const f=t=>{const k=Math.min(1,(t-t0)/700);e.textContent=Math.round(to*(1-Math.pow(1-k,3)));if(k<1)requestAnimationFrame(f)};requestAnimationFrame(f)})}
