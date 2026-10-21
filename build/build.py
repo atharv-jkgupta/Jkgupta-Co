@@ -14,7 +14,7 @@ def rep1(a, b, s):
     assert s.count(a) == 1, (a[:70], s.count(a))
     return s.replace(a, b)
 
-feat = open(HERE + '/features.js', encoding='utf-8').read().replace('__BUILD__', BUILD) + open(HERE + '/reco.js', encoding='utf-8').read() + open(HERE + '/reco2.js', encoding='utf-8').read() + open(HERE + '/tally.js', encoding='utf-8').read() + open(HERE + '/help.js', encoding='utf-8').read()
+feat = open(HERE + '/features.js', encoding='utf-8').read().replace('__BUILD__', BUILD) + open(HERE + '/reco.js', encoding='utf-8').read() + open(HERE + '/reco2.js', encoding='utf-8').read() + open(HERE + '/tally.js', encoding='utf-8').read() + open(HERE + '/attx.js', encoding='utf-8').read() + open(HERE + '/help.js', encoding='utf-8').read()
 HEAD = ('<meta name="description" content="JK Gupta &amp; Co. client accounting workspace"><meta name="robots" content="noindex,nofollow">'
         '<meta name="theme-color" content="#0f2742"><meta name="jkg-build" content="' + BUILD + '">'
         '<script>try{var t=localStorage.getItem("jkgtheme")||(matchMedia("(prefers-color-scheme:dark)").matches?"dark":"light");document.documentElement.dataset.theme=t}catch(e){document.documentElement.dataset.theme="light"}</script>'
