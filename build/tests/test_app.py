@@ -45,7 +45,7 @@ async def main():
         await login(pg,'Jkgupta&Co','wrong');chk('wrong pw rejected',await pg.inner_text('#le')!='')
         await login(pg,'Jkgupta&Co','JKG@2500');chk('admin login',await pg.evaluate('USER')=='jkgupta&co')
         # add staff
-        await pg.evaluate('staffF()');await pg.fill('#au','ravi');await pg.fill('#ap','pass1');await pg.click('.addf button');await pg.wait_for_timeout(500)
+        await pg.evaluate('staffF()');await pg.fill('#au','ravi');await pg.fill('#ap','pass1');await pg.click('.addf button:not(.hli)');await pg.wait_for_timeout(500)
         chk('staff added',await pg.evaluate("'ravi' in U()"))
         await pg.evaluate("atTog(0)");await pg.wait_for_timeout(300)
         chk('attendance granted',await pg.evaluate("ATG().includes('ravi')"))
