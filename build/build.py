@@ -14,7 +14,7 @@ def rep1(a, b, s):
     assert s.count(a) == 1, (a[:70], s.count(a))
     return s.replace(a, b)
 
-feat = open(HERE + '/features.js', encoding='utf-8').read().replace('__BUILD__', BUILD) + open(HERE + '/reco.js', encoding='utf-8').read() + open(HERE + '/reco2.js', encoding='utf-8').read() + open(HERE + '/tally.js', encoding='utf-8').read()
+feat = open(HERE + '/features.js', encoding='utf-8').read().replace('__BUILD__', BUILD) + open(HERE + '/reco.js', encoding='utf-8').read() + open(HERE + '/reco2.js', encoding='utf-8').read() + open(HERE + '/tally.js', encoding='utf-8').read() + open(HERE + '/help.js', encoding='utf-8').read()
 HEAD = ('<meta name="description" content="JK Gupta &amp; Co. client accounting workspace"><meta name="robots" content="noindex,nofollow">'
         '<meta name="theme-color" content="#0f2742"><meta name="jkg-build" content="' + BUILD + '">'
         '<script>try{var t=localStorage.getItem("jkgtheme")||(matchMedia("(prefers-color-scheme:dark)").matches?"dark":"light");document.documentElement.dataset.theme=t}catch(e){document.documentElement.dataset.theme="light"}</script>'
@@ -40,6 +40,9 @@ main = sub1(r"const gchk=\(\)=>modal\(.*?\);\n", "", main, re.S)
 main = rep1("catch(e){alert('Could not save data in this browser.')}};", "catch(e){alert('Could not save data in this browser.')}if(typeof tkSyncLater=='function')tkSyncLater()};", main)
 main = rep1("delete DB.clients[S.c];save();home()", "if(typeof tkDrop=='function')tkDrop(S.c);delete DB.clients[S.c];save();home()", main)
 main = rep1("sessionStorage.removeItem('jkgu');home()}", "sessionStorage.removeItem('jkgu');LS.close();home()}", main)
+main = rep1("(S.df||'')+'_'+(S.dt||'')", "(S.df&&S.dt?S.df+'_to_'+S.dt:'all')", main)
+main = sub1(r"else if\(f=='tpl'\)\{const R=.*?\}\n else\{const R=\[\['Date'", "else if(f=='tpl'){lpXlsm(V,mvl().m.map(x=>x.n),nm+'-Tally-Auto-Entry.xlsm').then(ok=>{if(!ok)alert('Could not load the helper library. Please check the internet and try again.')})}\n else{const R=[['Date'", main, re.S)
+main = rep1("function dl(n,t,m){if(/\\.xml$/i.test(n)){sv(", "function dl(n,t,m){if(/\\.xml$/i.test(n)){t=xmlSafe(t);sv(", main)
 main = rep1("choose <b>Staff logins</b> and press", "choose <b>Staff &amp; access</b> and press", main)
 main = rep1("function loop(){tg(0);", "function loop(){CURP='loop';sb();pgIn('loop');tg(0);", main)
 main = rep1("function dash(){const c=C();", "function dash(){CURP='';pgIn('dash');const c=C();", main)

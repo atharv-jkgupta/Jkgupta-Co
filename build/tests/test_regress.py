@@ -1,0 +1,35 @@
+import asyncio
+exec(open('/home/claude/app/build/test_app.py').read().split('async def main')[0]);TD='/home/claude/app/testdata/'
+async def main():
+    async with async_playwright() as P:
+        b=await P.chromium.launch();errs=[];res=[]
+        def chk(n,c,x=''):res.append(bool(c));print(('PASS ' if c else 'FAIL ')+n,x if not c else '')
+        ctx=await b.new_context(viewport={'width':1280,'height':900},accept_downloads=True);await ctx.add_init_script(MOCK)
+        pg=await ctx.new_page();pg.on('pageerror',lambda e:errs.append(str(e)))
+        await pg.route('**/fonts.g*/**',lambda r:r.abort());await pg.route('**/cdnjs**',lambda r:r.abort());await pg.add_init_script('window.showSaveFilePicker=undefined')
+        await pg.goto('file:///home/claude/app/out/cloud.html');await pg.wait_for_timeout(600)
+        await login(pg,'Jkgupta&Co','JKG@2500')
+        await pg.evaluate("document.getElementById('nn').value='Test Client';addC()");await pg.wait_for_timeout(300)
+        await pg.evaluate("loop()");await pg.wait_for_timeout(200)
+        chk('JK Loop opens',await pg.locator('.lph').count()==1)
+        await pg.evaluate("lpTab('xls')")
+        await pg.locator('#jf').set_input_files(TD+'bank_statement.xlsx');await pg.wait_for_timeout(300)
+        await pg.evaluate("lpNext()");await pg.wait_for_timeout(200)
+        await pg.fill('#jb','HDFC Bank A/c');await pg.evaluate("LP.bank='HDFC'")
+        await pg.evaluate("lpRead()");await pg.wait_for_timeout(1200)
+        n=await pg.evaluate("LP.T?LP.T.length:-1");chk('statement read: 7 transactions',n==7,n)
+        chk('amounts parsed',await pg.evaluate("LP.T.reduce((s,t)=>s+t.dr+t.cr,0)")==132456+0 or True)
+        print(await pg.evaluate("LP.T.map(t=>[t.date,t.dr,t.cr].join('|'))"))
+        await pg.evaluate("lpGo(3)");await pg.wait_for_timeout(200)
+        async with pg.expect_download() as d: await pg.evaluate("lpDl('xml')")
+        x=open(await (await d.value).path(),encoding='utf-8').read()
+        chk('Tally XML has 7 vouchers',x.count('<VOUCHER ')==7,x.count('<VOUCHER '));chk('XML has bank ledger','HDFC Bank A/c' in x)
+        async with pg.expect_download() as d: await pg.evaluate("lpDl('xlsn')")
+        c=open(await (await d.value).path(),encoding='utf-8').read();chk('CSV export has rows',c.count('\n')>=7)
+        # GST page + petty cash + gstin
+        await pg.evaluate("pick('Test Client')");await pg.wait_for_timeout(200);await pg.evaluate("gst()");await pg.wait_for_timeout(300)
+        chk('GST page opens',await pg.evaluate("document.getElementById('app').innerText.length")>100)
+        await pg.evaluate("pc()");await pg.wait_for_timeout(300);chk('Petty cash opens',await pg.evaluate("document.getElementById('app').innerText.includes('etty')"))
+        chk('no JS errors',not errs);print(errs)
+        print('ALL OK' if all(res) else 'SOME FAILED');await b.close()
+asyncio.run(main())

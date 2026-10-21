@@ -1,0 +1,30 @@
+exec(open('/home/claude/app/build/test_app.py').read().split('async def main')[0])
+TD='/home/claude/app/testdata/'
+async def main():
+    async with async_playwright() as P:
+        b=await P.chromium.launch();errs=[];res=[]
+        def chk(n,c,extra=''):res.append(bool(c));print(('PASS ' if c else 'FAIL ')+n,extra if not c else '')
+        ctx=await b.new_context(viewport={'width':1280,'height':900});await ctx.add_init_script(MOCK)
+        pg=await ctx.new_page();pg.on('pageerror',lambda e:errs.append(str(e)))
+        await pg.route('**/fonts.g*/**',lambda r:r.abort());await pg.route('**/cdnjs**',lambda r:r.abort())
+        await pg.goto('file:///home/claude/app/out/cloud.html');await pg.wait_for_timeout(600)
+        await login(pg,'Jkgupta&Co','JKG@2500')
+        await pg.evaluate("reco();rcTab('sale')");await pg.wait_for_timeout(300)
+        ins=pg.locator('.rcd input[type=file]')
+        await ins.nth(0).set_input_files(TD+'sales_notaxable.xlsx');await pg.wait_for_timeout(500)
+        await ins.nth(1).set_input_files(TD+'gstr1_small.xlsx');await pg.wait_for_timeout(500)
+        print(await pg.evaluate("[RCS.A.n,RCS.A.err,RCS.A.notes.map(n=>n.msg),RCS.B.n]"))
+        chk('rows read',await pg.evaluate("RCS.A.n==2&&RCS.B.n==2"))
+        chk('note about derived taxable',await pg.evaluate("RCS.A.notes.some(n=>/worked it out/.test(n.msg))"))
+        await pg.click('text=Run reco');await pg.wait_for_timeout(400)
+        S=await pg.evaluate("RCS.R.S");print(S);chk('all matched',S['match']==2,S)
+        # wrong file for bank -> error with fix
+        await pg.evaluate("rcTab('bank')");await pg.wait_for_timeout(300)
+        ins=pg.locator('.rcd input[type=file]')
+        await ins.nth(0).set_input_files(TD+'gstr1_small.xlsx');await pg.wait_for_timeout(500)
+        print(await pg.evaluate("[RCS.A.err,RCS.A.fix]"))
+        chk('bank error shows fix',await pg.evaluate("!!RCS.A.err&&!!RCS.A.fix")); chk('error displayed',await pg.locator('.rcn.bad').count()>=1)
+        chk('no JS errors',not errs,errs);print(errs)
+        await pg.screenshot(path='out/r2.png',full_page=True)
+        await b.close();print('ALL OK' if all(res) else 'SOME FAILED')
+asyncio.run(main())
