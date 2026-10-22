@@ -1,15 +1,15 @@
 <script>
 /* Online storage (Supabase). All PCs share one database. The password is checked once on the server, which hands back a session token; every later call uses only that token. */
 const CLOUD={url:'__URL__',key:'__KEY__'};
-const TRAVELBUILD=__TB__;
+const TRAVELBUILD=__TB__,HYBRID=__HB__;
 const NATIVE=window.localStorage;
 const LS=(()=>{
  const M={},pend={},T={},fail={};
- const on=!!(CLOUD.url&&CLOUD.key);
+ let on=!!(CLOUD.url&&CLOUD.key);
  let trav=null,sess=null,since=null,poll=null,Q=Promise.resolve(),warned=0,busy=0;
  const hdr={apikey:CLOUD.key,'Content-Type':'application/json'};
  if(/^eyJ/.test(CLOUD.key))hdr.Authorization='Bearer '+CLOUD.key;
- const base=CLOUD.url.replace(/\/+$/,'')+'/rest/v1/rpc/';
+ let base=CLOUD.url.replace(/\/+$/,'')+'/rest/v1/rpc/';
  const rpc=(f,b,ka)=>fetch(base+f,{method:'POST',headers:hdr,body:JSON.stringify(b),keepalive:!!ka}).then(r=>{if(!r.ok){const e=new Error('HTTP '+r.status);e.status=r.status;throw e}return r.json()});
  const loc=k=>(!on&&!trav)||k=='jkgpw';
  const el=id=>document.getElementById(id);
@@ -37,7 +37,8 @@ const LS=(()=>{
  const start=async(s,rows)=>{clear();sess=s;apply(rows);try{sessionStorage.setItem('jkgc',JSON.stringify(s))}catch(e){}
   poll=setInterval(tick,6000);status()};
  const L={
-  on,onSync:null,onExpire:null,
+  get on(){return on},onSync:null,onExpire:null,
+  useServer(u){CLOUD.url=u;base=u.replace(/\/+$/,'')+'/rest/v1/rpc/';on=true},
   get user(){return sess&&sess.u},get role(){return sess&&sess.role},
   getItem:k=>loc(k)?NATIVE.getItem(k):(k in M?M[k]:null),
   setItem(k,v){if(loc(k))return NATIVE.setItem(k,v);M[k]=String(v);put(k)},

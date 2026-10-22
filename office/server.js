@@ -41,10 +41,18 @@ async function ai(b){const a=cfg.ai||{};if(!a.baseUrl||!a.model)return{error:'Th
 function backup(){if(!dirty)return;dirty=false;const n=new Date().toISOString().replace(/[:T]/g,'-').slice(0,16);
  [path.join(D,'backups'),cfg.backupDir].filter(Boolean).forEach(root=>{try{fs.mkdirSync(root,{recursive:true});fs.cpSync(KV,path.join(root,n),{recursive:true});
   const all=fs.readdirSync(root).filter(x=>/^\d{4}-/.test(x)).sort();while(all.length>cfg.keepBackups)fs.rmSync(path.join(root,all.shift()),{recursive:true,force:true})}catch(e){console.log('Backup failed for',root,e.message)}})}
+const UPD=cfg.updateUrl||'https://raw.githubusercontent.com/atharv-jkgupta/Jkgupta-Co/main/office/dist/';
+async function update(){if(cfg.autoUpdate===false)return;
+ for(const n of ['index.html','hybrid.html']){try{const r=await fetch(UPD+n+'?t='+Date.now(),{signal:AbortSignal.timeout(30000)});if(!r.ok)continue;const x=await r.text();
+  if(x.length<200000||!/const CLOUD=/.test(x)||!/<\/html>\s*$/.test(x))continue;const f=path.join(D,n);let cur='';try{cur=fs.readFileSync(f,'utf8')}catch(e){}
+  if(cur!==x){fs.writeFileSync(f+'.tmp',x);fs.renameSync(f+'.tmp',f);console.log(new Date().toLocaleString()+'  Updated '+n+' to the newest version')}}catch(e){}}}
+setTimeout(update,3000);setInterval(update,36e5);
 setInterval(backup,36e5);['SIGINT','SIGTERM'].forEach(g=>process.on(g,()=>{backup();process.exit()}));
-const send=(res,c,o,t)=>{res.writeHead(c,{'Content-Type':t||'application/json','Cache-Control':'no-store'});res.end(typeof o=='string'?o:JSON.stringify(o))};
+const CORS={'Access-Control-Allow-Origin':'*','Access-Control-Allow-Headers':'Content-Type, x-token','Access-Control-Allow-Methods':'GET, POST, OPTIONS','Access-Control-Allow-Private-Network':'true'};
+const send=(res,c,o,t)=>{res.writeHead(c,Object.assign({'Content-Type':t||'application/json','Cache-Control':'no-store'},CORS));res.end(typeof o=='string'?o:JSON.stringify(o))};
 http.createServer((q,res)=>{
- if(q.method=='GET'||q.method=='HEAD'){const f=path.join(D,'index.html');return fs.existsSync(f)?send(res,200,fs.readFileSync(f,'utf8'),'text/html; charset=utf-8'):send(res,404,'index.html missing','text/plain')}
+ if(q.method=='OPTIONS')return send(res,204,'','text/plain');
+ if(q.method=='GET'||q.method=='HEAD'){const u=q.url.split('?')[0];if(u=='/ping')return send(res,200,{ok:true,app:'jkg'});const f=path.join(D,u=='/hybrid.html'||u=='/hybrid'?'hybrid.html':'index.html');return fs.existsSync(f)?send(res,200,fs.readFileSync(f,'utf8'),'text/html; charset=utf-8'):send(res,404,'index.html missing','text/plain')}
  if(q.method!='POST')return send(res,405,{});
  let n=0;const ch=[];q.on('data',c=>{n+=c.length;if(n>64e6){q.destroy()}else ch.push(c)});
  q.on('end',async()=>{try{const b=JSON.parse(Buffer.concat(ch).toString()||'{}');

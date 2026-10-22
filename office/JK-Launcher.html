@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>JK Gupta &amp; Co</title></head>
+<body style="font:16px system-ui,sans-serif;padding:40px;color:#222"><p id="m">Starting JK Gupta &amp; Co&hellip;</p>
+<script>
+/* Tiny starter. It never needs replacing: it fetches the newest app every time it can, and keeps a copy for when there is no connection. */
+(async()=>{
+ const m=document.getElementById('m');
+ const idb=(mode,v)=>new Promise((ok,no)=>{try{const q=indexedDB.open('jkglauncher',1);q.onupgradeneeded=()=>q.result.createObjectStore('k');q.onerror=()=>no(q.error);
+  q.onsuccess=()=>{const t=q.result.transaction('k',mode=='get'?'readonly':'readwrite'),s=t.objectStore('k'),r=mode=='get'?s.get('app'):s.put(v,'app');t.oncomplete=()=>ok(r.result);t.onerror=()=>no(t.error)}}catch(e){no(e)}});
+ const get=async(u,ms)=>{const c=new AbortController(),t=setTimeout(()=>c.abort(),ms);try{const r=await fetch(u,{signal:c.signal,cache:'no-store'});if(!r.ok)throw 0;const x=await r.text();if(x.length<200000||!/const CLOUD=/.test(x))throw 0;return x}finally{clearTimeout(t)}};
+ let html=null,srv='';try{srv=localStorage.getItem('jkgsrv')||''}catch(e){}
+ if(srv){try{html=await get(srv.replace(/\/+$/,'')+'/hybrid.html',2500)}catch(e){}}
+ if(!html){try{html=await get('https://jkgupta-co.vercel.app/hybrid',7000)}catch(e){}}
+ if(html){try{await idb('put',html)}catch(e){}}else{try{html=await idb('get')}catch(e){}}
+ if(!html){m.innerHTML='Cannot start yet. Connect to the office network or the internet once, then open this file again. After that it also works without a connection.';return}
+ document.open();document.write(html);document.close();
+})();
+</script></body></html>

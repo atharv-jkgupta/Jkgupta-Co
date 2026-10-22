@@ -17,8 +17,8 @@ LS.travSave=trvSave;
 function trvHelp(){modal('<h3>Travel mode</h3><p>Use this when you are away from the office server. Everything you do is saved in a folder on <b>this laptop</b>.</p><p>When you are back in the office, open the office address, sign in as usual and use <b>Travel data</b> in the menu to send your work to the server. Nothing is lost and the server work is not overwritten.</p><p>Use Chrome or Edge on a laptop.</p>')}
 function trvLoginHtml(){let n='';try{n=NATIVE.getItem('jkgtvn')||''}catch(e){}
  return '<h3>Travel mode</h3><div class="sbl"><p style="font-size:13px;opacity:.8">Works without the office server. Your work is saved in a folder on this laptop.</p><label>Your username<input id="tvn" value="'+E(n)+'" autocapitalize="none" spellcheck="false" onkeydown="if(event.key==\'Enter\')trvOpen()"></label>'
- +'<button class="go" onclick="trvOpen()">Open my travel folder</button><div id="le"></div><div class="fg"><a onclick="trvHelp()">How does this work?</a></div></div>'}
-if(TRAVELBUILD)window.sbLogin=trvLoginHtml;
+ +'<button class="go" onclick="trvOpen()">Open my travel folder</button><div id="le"></div>'+(HYBRID?'<p style="font-size:12px;opacity:.75;margin:8px 0">The office server was not found, so you are in Travel mode. When you are back in the office, open this app again and it connects by itself.</p><div class="fg"><a onclick="location.reload()">Try the office server again</a> · <a onclick="hybChange()">Change server address</a> · ':'<div class="fg">')+'<a onclick="trvHelp()">How does this work?</a></div></div>'}
+(function(){const o=window.sbLogin;window.sbLogin=function(){if(TRAVELBUILD&&!LS.on)return trvLoginHtml();return o.apply(this,arguments)+(HYBRID?'<div class="sbl" style="font-size:12px;opacity:.75;margin-top:6px">● Connected to the office server</div>':'')}})();
 async function trvOpen(){const n=((document.getElementById('tvn')||{}).value||'').trim().toLowerCase(),e=document.getElementById('le');
  if(!n){if(e)e.textContent='Type your username.';return}
  if(n==ADMIN){if(e)e.textContent='Travel mode is for staff logins, not the admin.';return}
@@ -81,4 +81,29 @@ async function trvSend(files){const r=document.getElementById('tvr');files=[...f
  r.innerHTML=done?'<p style="color:#047857"><b>Sent to the office server.</b><br>New clients: '+st.add+' · Updated from travel: '+st.upd+' · Office copy kept (it was newer): '+st.keep+(st.copy?' · Kept both versions: '+st.copy+' (look for "(travel copy)")':'')+' · Attendance days added: '+st.att+'</p><p style="font-size:13px">Tip: use "Download my data file" before your next trip so your laptop starts with the latest office data.</p>':'';
  if(bad.length)r.innerHTML+='<p style="color:#b45309">Skipped: '+bad.map(E).join(', ')+'</p>';
  if(done){try{home()}catch(e){}}}
-(function(){const o=window.sb;if(typeof o!='function')return;window.sb=function(){o.apply(this,arguments);try{if(!USER||TRAVELBUILD||!LS.on||ADM())return;const el=document.getElementById('sb');if(el&&!el.querySelector('.trvl'))el.insertAdjacentHTML('beforeend','<a class="li trvl" onclick="trvSendUI()"><span>Travel data</span></a>')}catch(e){}}})();
+(function(){const o=window.sb;if(typeof o!='function')return;window.sb=function(){o.apply(this,arguments);try{if(!USER||!LS.on||ADM())return;const el=document.getElementById('sb');if(el&&!el.querySelector('.trvl'))el.insertAdjacentHTML('beforeend','<a class="li trvl" onclick="trvSendUI()"><span>Travel data</span></a>')}catch(e){}}})();
+
+/* ---- Hybrid: one app that uses the office server when it can be found, else the travel folder ---- */
+const HYB=typeof HYBRID!='undefined'&&HYBRID;
+async function hybPing(u){try{const c=new AbortController(),t=setTimeout(()=>c.abort(),2500);const r=await fetch(u.replace(/\/+$/,'')+'/ping',{signal:c.signal,cache:'no-store'});clearTimeout(t);const j=await r.json();return !!(j&&j.app=='jkg')}catch(e){return false}}
+function hybNorm(u){u=String(u||'').trim();if(u&&!/^https?:\/\//i.test(u))u='http://'+u;return u.replace(/\/+$/,'')}
+async function hybInit(){if(!HYB)return;let u='';try{u=NATIVE.getItem('jkgsrv')||''}catch(e){}
+ if(!u&&/^https?:$/.test(location.protocol)&&!/vercel\.app$/.test(location.hostname))u=location.origin;
+ if(!u){u=hybNorm(prompt('One-time setup. Type the office server address (your admin has it), for example 192.168.1.25:3000')||'');if(u){try{NATIVE.setItem('jkgsrv',u)}catch(e){}}}
+ if(u&&await hybPing(u))LS.useServer(u)}
+function hybChange(){const u=hybNorm(prompt('Office server address, for example 192.168.1.25:3000')||'');if(u){try{NATIVE.setItem('jkgsrv',u)}catch(e){}location.reload()}}
+function hybBanner(msg,btn,fn){let b=document.getElementById('hybbn');if(!msg){if(b)b.remove();return}
+ if(!b){b=document.createElement('div');b.id='hybbn';b.style.cssText='position:fixed;top:0;left:0;right:0;z-index:70;background:#b45309;color:#fff;padding:8px 14px;font:14px sans-serif;display:flex;gap:12px;align-items:center;justify-content:center';document.body.appendChild(b)}
+ b.innerHTML='<span>'+E(msg)+'</span><button style="padding:4px 12px;border-radius:8px;border:none;cursor:pointer">'+E(btn)+'</button>';b.querySelector('button').onclick=fn}
+const hybKeys=u=>{const o={};LS.keys().forEach(k=>{if(k=='jkg_'+u||k=='att_'+u||k.startsWith(TKP+u+'|'))o[k]={v:LS.getItem(k),t:trvIso()}});return o};
+async function hybMirror(){try{if(!USER||ADM()||!LS.on||!TV.h)return;const u=String(USER).toLowerCase();await trvPut(TV.h,trvFn(u),JSON.stringify(trvFileObj(u,hybKeys(USER))))}catch(e){}}
+async function hybMerge(h){TV.h=h;const u=String(USER).toLowerCase();let msg='';
+ try{const f=await trvRead(h,trvFn(u));if(f&&f.keys&&String(f.user||'').toLowerCase()==u){const st={add:0,upd:0,keep:0,copy:0,att:0};trvApply(f,u,st);
+   if(st.add||st.upd||st.copy||st.att){msg='Your travel work was added to the office server: '+st.add+' new clients, '+st.upd+' updated, '+st.att+' attendance days'+(st.copy?', '+st.copy+' kept as "(travel copy)"':'')+'.';try{home()}catch(e){}}}}catch(e){}
+ await hybMirror();hybBanner('');if(msg)toast(msg,9000);clearInterval(hybMerge.i);hybMerge.i=setInterval(async()=>{if(USER&&LS.on&&TV.h&&await trvPerm(TV.h,false))hybMirror()},60000)}
+async function hybSync(){if(!USER||ADM()||!LS.on||typeof window.showDirectoryPicker!='function')return;TV.name=String(USER).toLowerCase();try{NATIVE.setItem('jkgtvn',TV.name)}catch(e){}let h=null;try{h=await trvIdb('get','h')}catch(e){}
+ if(h&&await trvPerm(h,false))return hybMerge(h);
+ hybBanner(h?'Allow this app to keep a travel copy of your work on this laptop.':'Choose a folder on this laptop to keep a travel copy of your work.',h?'Allow':'Choose folder',async()=>{
+  try{if(h){if(await trvPerm(h,true))return hybMerge(h)}const nh=await window.showDirectoryPicker({mode:'readwrite',id:'jkgtravel'});try{await trvIdb('put','h',nh)}catch(e){}hybMerge(nh)}catch(e){}})}
+(function(){const o=window.afterLogin;window.afterLogin=function(){const r=o&&o.apply(this,arguments);if(HYB&&LS.on&&USER&&!ADM())setTimeout(hybSync,400);return r}})();
+(function(){const o=window.logout;window.logout=function(){hybBanner('');clearInterval(hybMerge.i);return o.apply(this,arguments)}})();

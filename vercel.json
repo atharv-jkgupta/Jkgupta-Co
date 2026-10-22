@@ -39,6 +39,19 @@
           "value": "no-cache"
         }
       ]
+    },
+    {
+      "source": "/(hybrid|hybrid.html)",
+      "headers": [
+        {
+          "key": "Access-Control-Allow-Origin",
+          "value": "*"
+        },
+        {
+          "key": "Cache-Control",
+          "value": "no-cache"
+        }
+      ]
     }
   ]
 }

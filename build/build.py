@@ -2,7 +2,7 @@ import re, sys
 SRC, OUT, URL, KEY, BUILD = sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5]
 h = open(SRC, encoding='utf-8').read()
 css = open('/home/claude/app/build/theme.css', encoding='utf-8').read()
-shim = open('/home/claude/app/build/shim.js', encoding='utf-8').read().replace("'__URL__'", 'location.origin' if URL == 'office' else repr('' if URL == 'travel' else URL)).replace('__KEY__', 'office' if URL == 'office' else KEY).replace('__TB__', 'true' if URL == 'travel' else 'false').replace('get user(){','get token(){return sess&&sess.t},get user(){')
+shim = open('/home/claude/app/build/shim.js', encoding='utf-8').read().replace("'__URL__'", 'location.origin' if URL == 'office' else repr('' if URL in ('travel', 'hybrid') else URL)).replace('__KEY__', 'office' if URL in ('office', 'hybrid') else KEY).replace('__TB__', 'true' if URL in ('travel', 'hybrid') else 'false').replace('__HB__', 'true' if URL == 'hybrid' else 'false').replace('get user(){','get token(){return sess&&sess.t},get user(){')
 
 def sub1(pat, rep, s, flags=0):
     n = len(re.findall(pat, s, flags))
@@ -61,7 +61,7 @@ a = main.index("const su=sessionStorage.getItem('jkgu');")
 end = "home();\n</script>"
 b = main.index(end, a)
 boot = ("LS.onSync=onSyncKeys;LS.onExpire=()=>{USER='';VIEW='';DB={clients:{}};sessionStorage.removeItem('jkgu');home();toast('Your session ended. Please sign in again.')};\n"
-        "(async()=>{const su=sessionStorage.getItem('jkgu');let okr=!LS.on;if(su&&LS.on)okr=!!(await LS.resume()).ok;"
+        "(async()=>{try{if(typeof hybInit=='function')await hybInit()}catch(e){}const su=sessionStorage.getItem('jkgu');let okr=!LS.on;if(su&&LS.on)okr=!!(await LS.resume()).ok;"
         "if(su&&okr&&(LS.on||su==ADMIN||U()[su])){USER=su;try{DB=JSON.parse(LS.getItem('jkg_'+su))||{clients:{}}}catch(e){DB={clients:{}}}if(!DB.clients)DB={clients:{}};afterLogin()}"
         "updTm();home()})();\n</script>")
 main = main[:a] + feat + "\n" + boot + main[b + len(end):]
