@@ -1,9 +1,8 @@
-import re, sys, os
-HERE = os.path.dirname(os.path.abspath(__file__))
+import re, sys
 SRC, OUT, URL, KEY, BUILD = sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5]
 h = open(SRC, encoding='utf-8').read()
-css = open(HERE + '/theme.css', encoding='utf-8').read()
-shim = open(HERE + '/shim.js', encoding='utf-8').read().replace('__URL__', URL).replace('__KEY__', KEY)
+css = open('/home/claude/app/build/theme.css', encoding='utf-8').read()
+shim = open('/home/claude/app/build/shim.js', encoding='utf-8').read().replace("'__URL__'", 'location.origin' if URL == 'office' else repr(URL)).replace('__KEY__', 'office' if URL == 'office' else KEY).replace('get user(){','get token(){return sess&&sess.t},get user(){')
 
 def sub1(pat, rep, s, flags=0):
     n = len(re.findall(pat, s, flags))
@@ -14,7 +13,7 @@ def rep1(a, b, s):
     assert s.count(a) == 1, (a[:70], s.count(a))
     return s.replace(a, b)
 
-feat = open(HERE + '/features.js', encoding='utf-8').read().replace('__BUILD__', BUILD) + open(HERE + '/reco.js', encoding='utf-8').read() + open(HERE + '/reco2.js', encoding='utf-8').read() + open(HERE + '/tally.js', encoding='utf-8').read() + open(HERE + '/attx.js', encoding='utf-8').read() + open(HERE + '/help.js', encoding='utf-8').read() + open(HERE + '/themes.js', encoding='utf-8').read()
+feat = open('/home/claude/app/build/sha.js', encoding='utf-8').read() + open('/home/claude/app/build/features.js', encoding='utf-8').read().replace('__BUILD__', BUILD) + open('/home/claude/app/build/reco.js', encoding='utf-8').read() + open('/home/claude/app/build/reco2.js', encoding='utf-8').read() + open('/home/claude/app/build/tally.js', encoding='utf-8').read() + open('/home/claude/app/build/attx.js', encoding='utf-8').read() + open('/home/claude/app/build/help.js', encoding='utf-8').read() + open('/home/claude/app/build/themes.js', encoding='utf-8').read() + open('/home/claude/app/build/aichat.js', encoding='utf-8').read()
 HEAD = ('<meta name="description" content="JK Gupta &amp; Co. client accounting workspace"><meta name="robots" content="noindex,nofollow">'
         '<meta name="theme-color" content="#0f2742"><meta name="jkg-build" content="' + BUILD + '">'
         '<script>try{var t=localStorage.getItem("jkgtheme")||(matchMedia("(prefers-color-scheme:dark)").matches?"dark":"light");document.documentElement.dataset.theme=t}catch(e){document.documentElement.dataset.theme="light"}</script>'
@@ -53,6 +52,9 @@ main = sub1(r'<table><tr><th>Bank account</th>.*?</table>\n <div class="stats">'
 main = rep1("<details><summary>Add bank account</summary>", "<details open><summary>Import from Tally (Excel or XML)</summary>${tlBox()}</details>\n <details><summary>Add bank account</summary>", main)
 main = rep1("This changes the admin password on this PC only.", "This changes the admin password for every PC.", main)
 main = rep1("This replaces all data on this PC with the backup.", "This replaces all data of this login with the backup.", main)
+main = main.replace("E(ADM()?'Admin':USER)", "E(PNAME(ADM()?'Admin':USER))")
+main = rep1("E(VIEW?'Admin':ADM()?'Admin':USER)", "E(PNAME(VIEW?'Admin':ADM()?'Admin':USER))", main)
+main = rep1("return btoa('jkg2|'+t)}", "return sha256hex('jkg2|'+t)}", main)
 main = main.replace("Their saved clients stay in this browser but cannot be opened.", "Their saved clients stay saved but cannot be opened.")
 
 a = main.index("const su=sessionStorage.getItem('jkgu');")
@@ -63,5 +65,8 @@ boot = ("LS.onSync=onSyncKeys;LS.onExpire=()=>{USER='';VIEW='';DB={clients:{}};s
         "if(su&&okr&&(LS.on||su==ADMIN||U()[su])){USER=su;try{DB=JSON.parse(LS.getItem('jkg_'+su))||{clients:{}}}catch(e){DB={clients:{}}}if(!DB.clients)DB={clients:{}};afterLogin()}"
         "updTm();home()})();\n</script>")
 main = main[:a] + feat + "\n" + boot + main[b + len(end):]
-open(OUT, 'w', encoding='utf-8').write(head + shim + main)
-print('built', len(head + shim + main))
+out = head + shim + main
+if URL == 'office':
+    out = out.replace('the online database', 'the office server').replace('online database', 'office server')
+open(OUT, 'w', encoding='utf-8').write(out)
+print('built', len(out))

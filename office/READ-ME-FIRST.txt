@@ -1,0 +1,32 @@
+JK GUPTA & CO - OFFICE SERVER (simple steps)
+
+STEP 1. Copy ALL files from this folder into  C:\jkserver  on your PC
+        (server.js, index.html, config.json, start.bat, import-old-data.js, import-old-data.bat).
+        Node.js (the portable unzipped one) must be reachable. If start.bat says "node is not recognized",
+        copy the unzipped Node folder contents (node.exe) into C:\jkserver too.
+
+STEP 2. Open config.json in Notepad and change ONLY these:
+        "adminPassword" : type the admin password you want, inside the quotes.
+                          (If you bring old data in Step 3, your OLD admin password keeps working instead.)
+        "masterPassword": optional. Your old "universal" password, if you want to keep that feature. Else leave "".
+        "dataDir"       : already Z:/jkdata  (keep the forward slashes /). Make sure drive Z: opens in File Explorer.
+        AI part (optional, free): go to console.groq.com, sign up, create an "API key",
+        paste it in place of PASTE-YOUR-GROQ-KEY-HERE. Leave the other two AI lines as they are.
+        (If the model name stops working later, ask me for the new one.)
+        Save the file.
+
+STEP 3. Bring in your old data (once): double-click import-old-data.bat, type your OLD admin password, press Enter.
+        It must say "DONE. Copied ... items". (Do this BEFORE staff start using the new server.)
+
+STEP 4. Double-click start.bat. A black window opens. KEEP IT OPEN (minimise it, don't close).
+        It shows addresses like  http://192.168.1.25:3000
+
+STEP 5. On any office PC, open that address in the browser and log in as usual.
+        Tip: bookmark it. On your own PC you can also use http://localhost:3000
+
+IF SOMETHING GOES WRONG
+- "CANNOT USE THE DATA FOLDER": drive Z: is not connected. Open Z: in File Explorer, then run start.bat again.
+- Others cannot open the address: Windows may ask to allow the program through the firewall - click Allow
+  (needs no admin on a private network; if blocked, tell me what the screen says).
+- Staff see "Not saved, retrying": the server window was closed. Run start.bat again.
+- Backups: every hour (only if something changed) a copy goes to C:\jkserver\backups. Keep both copies.

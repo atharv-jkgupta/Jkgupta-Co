@@ -1,3 +1,4 @@
+function PNAME(n){return String(n||'').replace(/[._-]+/g,' ').trim().replace(/(^|\s)(\S)/g,(m,a,b)=>a+b.toUpperCase())}
 
 /* ====================================================================
    JK Gupta & Co. - interface, client tracker, attendance, staff control
@@ -282,7 +283,7 @@ function gchk(){CURP='gx';sb();tg(0);$id('dd').classList.remove('o');pgIn('gx');
   +'<small>This checks the format and the check character only. It cannot tell whether a GSTIN is active, which needs the GST portal.</small></div>';gv()}
 function gSet(x){$id('gg').value=x;gv()}
 function gPortal(g){gCopy(g);window.open('https://services.gst.gov.in/services/searchtp','_blank','noopener')}
-function gCopy(t){try{navigator.clipboard.writeText(t);toast('Copied '+t)}catch(e){toast('Copy not available here')}}
+function gCopy(t){let ok=false;try{if(navigator.clipboard&&window.isSecureContext){navigator.clipboard.writeText(t);ok=true}}catch(e){}if(!ok)ok=gCopyFb(t);toast(ok?'Copied '+t:'Copy not available here')}
 function gv(){const gi=$id('gg'),hi=$id('gh');if(!gi)return;const g=gi.value.trim().toUpperCase().replace(/[^0-9A-Z]/g,'');if(gi.value!==g)gi.value=g;
  const P=[[0,2,'State','s1'],[2,12,'PAN','s2'],[12,13,'Entity','s3'],[13,14,'Z','s4'],[14,15,'Check','s5']];
  $id('gxs').style.gridTemplateColumns='2fr 10fr 1.5fr 1.2fr 1.5fr';
