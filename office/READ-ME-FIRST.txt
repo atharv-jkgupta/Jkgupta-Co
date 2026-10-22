@@ -30,3 +30,15 @@ IF SOMETHING GOES WRONG
   (needs no admin on a private network; if blocked, tell me what the screen says).
 - Staff see "Not saved, retrying": the server window was closed. Run start.bat again.
 - Backups: every hour (only if something changed) a copy goes to C:\jkserver\backups. Keep both copies.
+
+FOR THE TRAVELLING STAFF MEMBER (laptop with Chrome or Edge)
+- Before a trip, at the office: open the office address, sign in, click "Travel data" in the left menu,
+  click "Download my data file". Keep that file.
+- Away from the office: open the Travel website (your test link, later the main site). Type your username,
+  click "Open my travel folder". A pop-up asks where to keep your work - choose a folder on the laptop
+  (e.g. Documents > JK Travel). First time only: pick the data file from the office in the same pop-up.
+  Work as normal. Everything saves into that folder (plus a daily backup file). No internet/server needed after the page has loaded.
+- Back in the office: open the office address, sign in, "Travel data" > choose the travel folder.
+  His work is merged into the server. If someone changed the same client in the office AFTER he did, the office
+  version is kept. If nobody can tell which is newer, both are kept (the travel one is named "... (travel copy)").
+- travel.html in this zip is the same Travel website as a file, in case the internet is down. Open it in Chrome/Edge.
