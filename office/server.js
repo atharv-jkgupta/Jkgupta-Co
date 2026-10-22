@@ -1,10 +1,10 @@
 // JK & Co office server. Run: node server.js  (needs Node.js 18 or newer). No other install needed.
 const http=require('http'),fs=require('fs'),path=require('path'),crypto=require('crypto'),os=require('os');
 const D=__dirname,CF=path.join(D,'config.json');
-const cfg=Object.assign({port:3000,adminPassword:'',masterPassword:'',dataDir:'',backupDir:'',keepBackups:120,ai:{baseUrl:'',apiKey:'',model:''}},fs.existsSync(CF)?JSON.parse(fs.readFileSync(CF,'utf8')):{});
+const cfg=Object.assign({port:3000,dataDir:'',adminPassword:'',masterPassword:'',backupDir:'',keepBackups:120,ai:{baseUrl:'',apiKey:'',model:''}},fs.existsSync(CF)?JSON.parse(fs.readFileSync(CF,'utf8')):{});
 const sha=s=>crypto.createHash('sha256').update(s).digest('hex');
 const ADMIN='jkgupta&co',AH=cfg.adminPassword?sha('jkg2|'+ADMIN+'|'+cfg.adminPassword):'',MH=cfg.masterPassword?sha('jkg2|master|'+cfg.masterPassword):'';
-const KV=cfg.dataDir?path.join(cfg.dataDir,'kv'):path.join(D,'data','kv');
+const DATA=cfg.dataDir?path.resolve(cfg.dataDir):path.join(D,'data'),KV=path.join(DATA,'kv');
 try{fs.mkdirSync(KV,{recursive:true});fs.accessSync(KV,fs.constants.W_OK)}catch(e){console.log('\nCANNOT USE THE DATA FOLDER: '+KV+'\n'+e.message+'\nCheck that the network drive is connected (open it in File Explorer) and that dataDir in config.json is right.\n');process.exit(1)}
 const M=new Map(),S=new Map(),F=new Map();let dirty=false;
 fs.readdirSync(KV).forEach(f=>{try{const o=JSON.parse(fs.readFileSync(path.join(KV,f),'utf8'));M.set(o.k,{v:o.v,t:o.t})}catch(e){}});
@@ -12,7 +12,7 @@ const fn=k=>path.join(KV,sha(k).slice(0,32)+'.json');
 const put=(k,v)=>{const t=new Date().toISOString(),f=fn(k);fs.writeFileSync(f+'.tmp',JSON.stringify({k,v,t}));fs.renameSync(f+'.tmp',f);M.set(k,{v,t});dirty=true};
 const del=k=>{try{fs.unlinkSync(fn(k))}catch(e){if(e.code!='ENOENT')throw e}M.delete(k);dirty=true};
 const users=()=>{try{return JSON.parse((M.get('jkgusers')||{}).v||'{}')}catch(e){return{}}};
-const admHash=()=>(M.get('jkgadm')||{}).v||AH;
+const admHash=()=>AH||(M.get('jkgadm')||{}).v||'';
 const sess=t=>{const s=S.get(t);if(!s||s.exp<Date.now()){S.delete(t);return null}s.exp=Date.now()+12*36e5;return s};
 const can=(s,k)=>s.role=='admin'||(k!='jkgadm'&&!(k.startsWith('jkg_')&&k!='jkg_'+s.u)&&!(k.startsWith('att_')&&k!='att_'+s.u));
 const rpc={
@@ -39,7 +39,7 @@ async function ai(b){const a=cfg.ai||{};if(!a.baseUrl||!a.model)return{error:'Th
  const r=await fetch(a.baseUrl.replace(/\/+$/,'')+'/chat/completions',{method:'POST',headers:Object.assign({'Content-Type':'application/json'},a.apiKey?{Authorization:'Bearer '+a.apiKey}:{}),body:JSON.stringify({model:a.model,messages:[{role:'system',content:SYS}].concat(msgs)}),signal:AbortSignal.timeout(90000)});
  if(!r.ok)return{error:'The AI service returned an error ('+r.status+').'};const j=await r.json();return{reply:(j.choices&&j.choices[0]&&j.choices[0].message&&j.choices[0].message.content)||''}}
 function backup(){if(!dirty)return;dirty=false;const n=new Date().toISOString().replace(/[:T]/g,'-').slice(0,16);
- [path.join(D,'backups'),cfg.backupDir].filter(Boolean).forEach(root=>{try{fs.mkdirSync(root,{recursive:true});fs.cpSync(KV,path.join(root,n),{recursive:true});
+ [path.join(cfg.dataDir?DATA:D,'backups'),cfg.backupDir].filter(Boolean).forEach(root=>{try{fs.mkdirSync(root,{recursive:true});fs.cpSync(KV,path.join(root,n),{recursive:true});
   const all=fs.readdirSync(root).filter(x=>/^\d{4}-/.test(x)).sort();while(all.length>cfg.keepBackups)fs.rmSync(path.join(root,all.shift()),{recursive:true,force:true})}catch(e){console.log('Backup failed for',root,e.message)}})}
 const UPD=cfg.updateUrl||'https://raw.githubusercontent.com/atharv-jkgupta/Jkgupta-Co/main/office/dist/';
 async function update(){if(cfg.autoUpdate===false)return;
@@ -47,18 +47,21 @@ async function update(){if(cfg.autoUpdate===false)return;
   if(x.length<200000||!/const CLOUD=/.test(x)||!/<\/html>\s*$/.test(x))continue;const f=path.join(D,n);let cur='';try{cur=fs.readFileSync(f,'utf8')}catch(e){}
   if(cur!==x){fs.writeFileSync(f+'.tmp',x);fs.renameSync(f+'.tmp',f);console.log(new Date().toLocaleString()+'  Updated '+n+' to the newest version')}}catch(e){}}}
 setTimeout(update,3000);setInterval(update,36e5);
-setInterval(backup,36e5);['SIGINT','SIGTERM'].forEach(g=>process.on(g,()=>{backup();process.exit()}));
+setInterval(backup,36e5);setTimeout(()=>{dirty=true;backup()},5000);['SIGINT','SIGTERM','SIGHUP'].forEach(g=>process.on(g,()=>{backup();process.exit()}));
 const CORS={'Access-Control-Allow-Origin':'*','Access-Control-Allow-Headers':'Content-Type, x-token','Access-Control-Allow-Methods':'GET, POST, OPTIONS','Access-Control-Allow-Private-Network':'true'};
-const send=(res,c,o,t)=>{res.writeHead(c,Object.assign({'Content-Type':t||'application/json','Cache-Control':'no-store'},CORS));res.end(typeof o=='string'?o:JSON.stringify(o))};
-http.createServer((q,res)=>{
+const send=(res,c,o,t)=>{res.writeHead(c,Object.assign({'Content-Type':t||'application/json','Cache-Control':'no-store'},CORS));res.end(Buffer.isBuffer(o)||typeof o=='string'?o:JSON.stringify(o))};
+console.log('Data folder:',DATA);
+const H=(q,res)=>{
  if(q.method=='OPTIONS')return send(res,204,'','text/plain');
- if(q.method=='GET'||q.method=='HEAD'){const u=q.url.split('?')[0];if(u=='/ping')return send(res,200,{ok:true,app:'jkg'});const f=path.join(D,u=='/hybrid.html'||u=='/hybrid'?'hybrid.html':'index.html');return fs.existsSync(f)?send(res,200,fs.readFileSync(f,'utf8'),'text/html; charset=utf-8'):send(res,404,'index.html missing','text/plain')}
+ if(q.method=='GET'||q.method=='HEAD'){const u=q.url.split('?')[0];if(u=='/ping')return send(res,200,{ok:true,app:'jkg'});const f=path.join(D,u=='/hybrid.html'||u=='/hybrid'?'hybrid.html':'index.html');return fs.existsSync(f)?send(res,200,fs.readFileSync(f),'text/html; charset=utf-8'):send(res,404,'index.html missing','text/plain')}
  if(q.method!='POST')return send(res,405,{});
  let n=0;const ch=[];q.on('data',c=>{n+=c.length;if(n>64e6){q.destroy()}else ch.push(c)});
  q.on('end',async()=>{try{const b=JSON.parse(Buffer.concat(ch).toString()||'{}');
   const m=/^\/rest\/v1\/rpc\/(\w+)$/.exec(q.url);if(m&&rpc[m[1]])return send(res,200,rpc[m[1]](b));
   if(q.url=='/api/ai'){const s=sess(q.headers['x-token']);if(!s)return send(res,401,{error:'Please log in again.'});return send(res,200,await ai(b))}
   send(res,404,{})}catch(e){send(res,500,{error:String(e.message||e)})}})
-}).on('error',e=>{console.log('\nCannot start: '+(e.code=='EADDRINUSE'?'the server is already running in another window (or port '+cfg.port+' is used by another program).':e.message)+'\n');process.exit(1)}).listen(cfg.port,'0.0.0.0',()=>{console.log('JK & Co office server is running. Open one of these on any office PC:');
+};
+http.createServer(H).on('error',e=>{console.log('\nCannot start: '+(e.code=='EADDRINUSE'?'the server is already running in another window (or port '+cfg.port+' is used by another program).':e.message)+'\n');process.exit(1)}).listen(cfg.port,'0.0.0.0',()=>{console.log('JK & Co office server is running. Open one of these on any office PC:');
  Object.values(os.networkInterfaces()).flat().filter(i=>i.family=='IPv4'&&!i.internal).forEach(i=>console.log('   http://'+i.address+':'+cfg.port));
  if(!AH&&!MH&&!admHash())console.log('NOTE: set adminPassword in config.json and restart, or nobody can log in as admin.')});
+try{const C=path.join(D,'cert.pem'),K=path.join(D,'key.pem');if(fs.existsSync(C)&&fs.existsSync(K)){const hp=cfg.httpsPort||3443;require('https').createServer({cert:fs.readFileSync(C),key:fs.readFileSync(K)},H).listen(hp,'0.0.0.0',()=>{console.log('SECURE (padlock) address - use this one:');Object.values(os.networkInterfaces()).flat().filter(i=>i.family=='IPv4'&&!i.internal).forEach(i=>console.log('   https://'+i.address+':'+hp))})}}catch(e){console.log('Secure address could not start:',e.message)}
