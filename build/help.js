@@ -161,4 +161,4 @@ function hlpAttach(root){root=root||document;const add=(el,h,after)=>{if(!h||el.
 
 setTimeout(lngInit,0);
 
-function xmlSafe(t){t=String(t).replace(/[\u0000-\u0008\u000b\u000c\u000e-\u001f\ufffe\uffff]/g,'');return /^\s*<\?xml/.test(t)?t:'<?xml version="1.0" encoding="UTF-8"?>\n'+t}
+function xmlSafe(t){t=String(t).replace(/[\u0000-\u0008\u000b\u000c\u000e-\u001f\ufffe\uffff]/g,'');return /^\s*<(\?xml|ENVELOPE)/.test(t)?t:'<?xml version="1.0" encoding="UTF-8"?>\n'+t}
