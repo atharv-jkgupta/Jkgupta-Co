@@ -13,13 +13,25 @@ function rcApplyOv(m,ov,n){Object.keys(ov||{}).forEach(f=>{const v=ov[f];if(v==n
 RCF.gst.hsn=/^hsn|\bhsn\b|\bsac\b/i;RCF.gst.qty=/^qty|quantity/i;RCF.gst.unit=/^unit|^uom/i;
 const rcRate=x=>{let s=String(x==null?'':x).trim(),p=/%/.test(s),v=rcN(s.replace('%',''));if(!p&&v>0&&v<=0.5)v*=100;return rcR(v)};
 const rcRateOf=(rate,amt,t)=>t>0&&amt>0?rcR(amt/t*100):rcRate(rate);
+
+/* GST portal files (2A, 2B, GSTR-1) have the headings in TWO rows: a group row (Invoice Details, Tax Amount)
+   and a detail row (Invoice number, Integrated Tax ...). Join them into one heading row. */
+function rcJoin2(rows,hi){if(hi<0||hi>=rows.length)return rows;const F=RCF.gst,hits=r=>Object.keys(F).filter(k=>(r||[]).some(c=>c!==''&&F[k].test(String(c)))).length,txt=r=>(r||[]).filter(c=>String(c).trim()!=='').length;
+ const num=r=>(r||[]).some(c=>typeof c=='number'||/^-?\d[\d,]*\.?\d*$/.test(String(c).trim())&&String(c).trim().length>1);
+ let a=-1,b=hi;const up=rows[hi-1],dn=rows[hi+1];
+ if(hi>0&&up&&txt(up)>=2&&!num(up)&&hits(up)>=1)a=hi-1;
+ else if(dn&&txt(dn)>=3&&!num(dn)&&hits(dn)>=2&&!/\d{2}[A-Z]{5}\d{4}/.test(dn.join(' ').toUpperCase())){a=hi;b=hi+1}
+ if(a<0)return rows;
+ const A=rows[a].map(x=>String(x==null?'':x).trim()),B=rows[b].map(x=>String(x==null?'':x).trim()),n=Math.max(A.length,B.length),m=[];
+ for(let j=0;j<n;j++){const x=A[j]||'',y=B[j]||'';m.push(x&&y&&x!==y?x+' '+y:(y||x))}
+ const out=rows.slice();out[b]=m;if(a!==b)out[a]=[];return out}
 function rcMapG(h0,ov){const h=h0.map(x=>String(x).replace(/\s+/g,' ').trim()),m=rcMap(h,'gst'),used=new Set(Object.values(m));
  ['igst','cgst','sgst'].forEach(f=>{if(m[f]!=null&&/\brate\b|%/i.test(h[m[f]])){m[f+'R']=m[f];delete m[f];used.delete(m[f+'R']);
    const j=h.findIndex((c,i)=>!used.has(i)&&c!==''&&RCF.gst[f].test(String(c))&&!/\brate\b|%/i.test(String(c)));if(j>=0){m[f]=j;used.add(j)}else used.add(m[f+'R'])}
   else if(m[f]!=null){const j=h.findIndex((c,i)=>!used.has(i)&&/\brate\b|%/i.test(String(c))&&RCF.gst[f].test(String(c)));if(j>=0){m[f+'R']=j;used.add(j)}}});
  ['hsn','qty','unit'].forEach(k=>{const j=h.findIndex((c,i)=>!used.has(i)&&c!==''&&RCF.gst[k].test(String(c).trim()));if(j>=0){m[k]=j;used.add(j)}});
  return rcApplyOv(m,ov,h.length)}
-function rcGstRows(rows,src,sign,ov){const notes=[];let hi=rcHead(rows,'gst');
+function rcGstRows(rows,src,sign,ov){const notes=[];let hi=rcHead(rows,'gst');rows=rcJoin2(rows,hi);
  if(hi<0){hi=rcAnyHead(rows);if(hi<0)return{err:'Could not find a row with column headings.',fix:'Open the file in Excel and make sure one row has headings such as GSTIN, Invoice No, Invoice Date, Taxable Value, CGST, SGST. Then save and upload again.',rows:[],notes}
   notes.push(rcNote('warn','I could not recognise the headings, so I guessed row '+(hi+1)+'.','Check the "Columns I used" box below and choose the right column for each item.'))}
  const h=(rows[hi]||[]).map(c=>String(c==null?'':c)),m=rcMapG(h,ov),out=[];

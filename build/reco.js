@@ -44,7 +44,7 @@ function rcMap(h,kind,side){const F=kind=='gst'?RCF.gst:RCF.book,m={},used=new S
  order.forEach(k=>{let j=h.findIndex((c,i)=>!used.has(i)&&c!==''&&F[k].test(String(c)));if(k=='debit'||k=='credit'){if(side=='bank'&&false)j=j}if(j>=0){m[k]=j;used.add(j)}});
  if(kind=='book'&&side=='bank'){/* bank statement: withdrawal = out, deposit = in */}
  return m}
-function rcPick(sheets,kind){let s=null;if(kind=='gst'){s=sheets.filter(x=>/^b2b(\b|$)/i.test(x.name)&&!/b2ba|cdn/i.test(x.name));if(!s.length)s=[sheets[0]];const cd=sheets.filter(x=>/cdn/i.test(x.name)&&!/cdna/i.test(x.name));return{main:s,cdn:cd}}
+function rcPick(sheets,kind){let s=null;if(kind=='gst'){s=sheets.filter(x=>/^b2b(\b|$)/i.test(x.name)&&!/b2ba|cdn/i.test(x.name));if(!s.length){const ok=sheets.filter(x=>x&&x.rows&&rcHead(rcJoin2(x.rows,rcHead(x.rows,'gst')),'gst')>=0&&!/b2ba|cdn|summary|read|help/i.test(x.name));s=ok.length?ok:[sheets[0]]}const cd=sheets.filter(x=>/cdn/i.test(x.name)&&!/cdna/i.test(x.name));return{main:s,cdn:cd}}
  return{main:[sheets[0]],cdn:[]}}
 
 /* ---------- GST rows ---------- */
