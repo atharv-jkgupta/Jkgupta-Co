@@ -21,7 +21,7 @@ function home(){CURP='home';S={};window.onscroll=null;sb();dls();document.body.c
  const T=tkStats(),first=N.length==0&&!VIEW,same=pgIn('home');
  const chips=[[N.length,'client'+(N.length==1?'':'s'),''],[A,'bank account'+(A==1?'':'s'),''],[O,'need import (30+ days)','w'],[P,'pending entr'+(P==1?'y':'ies'),'w']].filter(x=>x[0]>0).map(x=>'<span class="dc '+x[2]+'"><b>'+x[0]+'</b> '+x[1]+'</span>').join('');
  const grp=[
-  dkGrp('Clients',[dkTile('check','Client tracker',T.t?(T.d+' of '+T.t+' done this month'):'Track the work client by client','trk()'),dkTile('search','Find a client','Jump to the client list','var q=$id(\'q\');if(q){q.scrollIntoView({behavior:\'smooth\',block:\'center\'});q.focus()}')].concat(atOK()?[dkTile('clock','Attendance',attLine(),'att()')]:[])),
+  dkGrp('Clients',[dkTile('check','Client tracker',T.t?(T.d+' of '+T.t+' done this month'):'Track the work client by client','trk()'),dkTile('search','Find a client','Jump to the client list','var q=$id(\'q\');if(q){q.scrollIntoView({behavior:\'smooth\',block:\'center\'});q.focus()}')].concat(arcOK()?[dkTile('folder','Saved clients (folder)','Find a saved client and bring him back','arcFind()')]:[]).concat(atOK()?[dkTile('clock','Attendance',attLine(),'att()')]:[])),
   dkGrp('Entries and imports',[].concat(pcOK()?[dkTile('wallet','Petty cash book','Record and export expenses','pc()')]:[]).concat(typeof bx=='function'?[dkTile('sheet','Bills to Excel','Turn bills into the India layout sheet','bx()')]:[])),
   dkGrp('Checks',[dkTile('scale','Reco','GSTR-2B and bank reconciliation','reco()'),dkTile('shield','GSTIN / HSN check','Check a number in one tap','gchk()')]),
   dkGrp(ADM()&&!VIEW?'Admin':'Help and backup',[].concat(ADM()&&!VIEW?[dkTile('users','Staff &amp; access','Add staff, set permissions','staffF()')]:[]).concat([dkTile('down','Download backup','Save a copy of your data',"dl('JK-backup-'+USER+'.json',JSON.stringify(DB),'application/json')"),dkTile('help','Help','How to use each part','help()')]))].join('');
@@ -30,3 +30,15 @@ function home(){CURP='home';S={};window.onscroll=null;sb();dls();document.body.c
   +(ADM()&&!VIEW?stfP():'')+kdHtml()
   +(first?'':'<h2 class="dsec">'+(VIEW?E(VIEW)+'\'s clients':ADM()?'Admin\'s own clients':'Clients')+'</h2><input id="q" class="sq" aria-label="Search clients" placeholder="Search clients..." oninput="clearTimeout(window._qt);window._qt=setTimeout(cards,120)"><div id="cl" class="cg"></div>');
  if(!first)cards()}
+
+/* ===== match typed names to the client's ledger names ===== */
+function lgNorm(s){return String(s||'').toLowerCase().replace(/&/g,' and ').replace(/\b(debtors?|creditors?)\b/g,' ').replace(/\b(pvt|private|ltd|limited|co|company|m\/s|ms)\b/g,' ').replace(/[^a-z0-9]+/g,' ').trim().replace(/\s+/g,' ')}
+function lgDice(a,b){if(a==b)return 1;if(a.length<2||b.length<2)return 0;const g=s=>{const m=new Map();for(let i=0;i<s.length-1;i++){const k=s.slice(i,i+2);m.set(k,(m.get(k)||0)+1)}return m},A=g(a),B=g(b);let n=0;A.forEach((v,k)=>{if(B.has(k))n+=Math.min(v,B.get(k))});return 2*n/(a.length+b.length-2)}
+function lgMatch(name,L){name=String(name||'').trim();if(!name||!L||!L.length)return{n:name,how:''};
+ if(L.includes(name))return{n:name,how:''};
+ const low=name.toLowerCase().replace(/\s+/g,' '),e1=L.filter(x=>x.toLowerCase().replace(/\s+/g,' ')==low);if(e1.length==1)return{n:e1[0],how:'same name, different capitals or spaces'};
+ const nn=lgNorm(name);if(!nn)return{n:name,how:''};
+ const e2=L.filter(x=>lgNorm(x)==nn);if(e2.length==1)return{n:e2[0],how:'same name, different dots, commas or Ltd/Pvt'};if(e2.length>1)return{n:name,how:'',amb:e2};
+ const sc=L.map(x=>[x,lgDice(nn,lgNorm(x))]).sort((a,b)=>b[1]-a[1]);
+ if(sc[0]&&sc[0][1]>=.9&&(!sc[1]||sc[0][1]-sc[1][1]>=.05))return{n:sc[0][0],how:'very close spelling ('+Math.round(sc[0][1]*100)+'%)'};
+ return{n:name,how:''}}
