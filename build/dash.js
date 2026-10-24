@@ -42,3 +42,18 @@ function lgMatch(name,L){name=String(name||'').trim();if(!name||!L||!L.length)re
  const sc=L.map(x=>[x,lgDice(nn,lgNorm(x))]).sort((a,b)=>b[1]-a[1]);
  if(sc[0]&&sc[0][1]>=.9&&(!sc[1]||sc[0][1]-sc[1][1]>=.05))return{n:sc[0][0],how:'very close spelling ('+Math.round(sc[0][1]*100)+'%)'};
  return{n:name,how:''}}
+function lgFix(n,L){try{const m=lgMatch(n,L);return m.how?m.n:n}catch(e){return n}}
+
+/* ===== new party ledgers: state + GSTIN (+ registration type) for Tally Prime ===== */
+const GSTATE={'01':'Jammu & Kashmir','02':'Himachal Pradesh','03':'Punjab','04':'Chandigarh','05':'Uttarakhand','06':'Haryana','07':'Delhi','08':'Rajasthan','09':'Uttar Pradesh','10':'Bihar','11':'Sikkim','12':'Arunachal Pradesh','13':'Nagaland','14':'Manipur','15':'Mizoram','16':'Tripura','17':'Meghalaya','18':'Assam','19':'West Bengal','20':'Jharkhand','21':'Odisha','22':'Chhattisgarh','23':'Madhya Pradesh','24':'Gujarat','26':'Dadra & Nagar Haveli and Daman & Diu','27':'Maharashtra','29':'Karnataka','30':'Goa','31':'Lakshadweep','32':'Kerala','33':'Tamil Nadu','34':'Puducherry','35':'Andaman & Nicobar Islands','36':'Telangana','37':'Andhra Pradesh','38':'Ladakh','97':'Other Territory'};
+const gStateOf=g=>GSTATE[String(g||'').slice(0,2)]||'';
+function gMasterXml(m){const nm=E(m.n),par=m.parent,gs=m.gs?E(m.gs):'';
+ const old='<TALLYMESSAGE xmlns:UDF="TallyUDF"><LEDGER NAME="'+nm+'" ACTION="Create"><NAME.LIST><NAME>'+nm+'</NAME></NAME.LIST><PARENT>'+par+'</PARENT><ISBILLWISEON>Yes</ISBILLWISEON>'+(gs?'<PARTYGSTIN>'+gs+'</PARTYGSTIN>':'')+'</LEDGER></TALLYMESSAGE>';
+ let prime=false;try{prime=/prime/i.test(C().ver||'')}catch(e){}
+ if(!prime)return old;
+ const st=gStateOf(m.gs),stx=st?E(st):'',rt=gs?'Regular':(st?'Unregistered/Consumer':'');
+ return '<TALLYMESSAGE xmlns:UDF="TallyUDF"><LEDGER NAME="'+nm+'" ACTION="Create"><NAME.LIST><NAME>'+nm+'</NAME></NAME.LIST><PARENT>'+par+'</PARENT><ISBILLWISEON>Yes</ISBILLWISEON>'
+  +'<COUNTRYOFRESIDENCE>India</COUNTRYOFRESIDENCE>'+(stx?'<LEDSTATENAME>'+stx+'</LEDSTATENAME>':'')+(rt?'<GSTREGISTRATIONTYPE>'+rt+'</GSTREGISTRATIONTYPE>':'')+(gs?'<PARTYGSTIN>'+gs+'</PARTYGSTIN>':'')
+  +'<LEDMAILINGDETAILS.LIST><APPLICABLEFROM>20170701</APPLICABLEFROM><MAILINGNAME>'+nm+'</MAILINGNAME>'+(stx?'<STATE>'+stx+'</STATE>':'')+'<COUNTRY>India</COUNTRY></LEDMAILINGDETAILS.LIST>'
+  +(rt?'<LEDGSTREGDETAILS.LIST><APPLICABLEFROM>20170701</APPLICABLEFROM><GSTREGISTRATIONTYPE>'+rt+'</GSTREGISTRATIONTYPE>'+(stx?'<PLACEOFSUPPLY>'+stx+'</PLACEOFSUPPLY>':'')+(gs?'<GSTIN>'+gs+'</GSTIN>':'')+'</LEDGSTREGDETAILS.LIST>':'')
+  +'</LEDGER></TALLYMESSAGE>'}
