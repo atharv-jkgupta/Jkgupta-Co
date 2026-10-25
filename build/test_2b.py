@@ -41,7 +41,7 @@ async def main():
                 chk('no noisy notes',all('NOTE IN YOUR FILE' not in x[9] for x in v))
             if ver!='Tally Prime':await pg.evaluate("gNext()");await pg.wait_for_timeout(300)
             await pg.evaluate("document.querySelectorAll('.gsl').forEach(e=>{if(!e.value)e.value='PURCHASE 18%'})")
-            xml=await dlx("gExport('xml')")
+            xml=await dlx("(S.addrOK=1,gExport('xml'))")
             if ver=='Tally Prime':
                 chk('Prime ledger master has state + GSTIN + type','<LEDSTATENAME>Maharashtra</LEDSTATENAME>' in xml and '<GSTIN>27AAGCE5476M1Z1</GSTIN>' in xml and '<GSTREGISTRATIONTYPE>Regular</GSTREGISTRATIONTYPE>' in xml and '<PARTYGSTIN>27AAGCE5476M1Z1</PARTYGSTIN>' in xml)
                 chk('state from GSTIN code (29 = Karnataka)','<LEDSTATENAME>Karnataka</LEDSTATENAME>' in xml)

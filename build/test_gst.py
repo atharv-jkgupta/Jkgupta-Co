@@ -26,7 +26,7 @@ async def main():
             async with pg.expect_download(timeout=8000) as d: await pg.evaluate(js)
             x=await d.value;p=await x.path();return x.suggested_filename,open(p,'rb').read()
         await pg.evaluate("document.querySelectorAll('.gsl').forEach(e=>{if(!e.value)e.value='Sales 18%'});document.querySelectorAll('.gpl').forEach(e=>{if(!e.value)e.value='Cash'})")
-        fn,xml=await dlx("gExport('xml')")
+        fn,xml=await dlx("(S.addrOK=1,gExport('xml'))")
         try:
             root=ET.fromstring(xml);vs=root.findall('.//VOUCHER');chk('GST XML well-formed',len(vs)>0,len(vs))
             ok=True

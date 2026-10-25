@@ -51,9 +51,10 @@ function gMasterXml(m){const nm=E(m.n),par=m.parent,gs=m.gs?E(m.gs):'';
  const old='<TALLYMESSAGE xmlns:UDF="TallyUDF"><LEDGER NAME="'+nm+'" ACTION="Create"><NAME.LIST><NAME>'+nm+'</NAME></NAME.LIST><PARENT>'+par+'</PARENT><ISBILLWISEON>Yes</ISBILLWISEON>'+(gs?'<PARTYGSTIN>'+gs+'</PARTYGSTIN>':'')+'</LEDGER></TALLYMESSAGE>';
  let prime=false;try{prime=/prime/i.test(C().ver||'')}catch(e){}
  if(!prime)return old;
+ let pa=null;try{pa=(C().paddr||{})[m.gs||lk(m.n)]||null}catch(e){}
  const st=gStateOf(m.gs),stx=st?E(st):'',rt=gs?'Regular':(st?'Unregistered/Consumer':'');
  return '<TALLYMESSAGE xmlns:UDF="TallyUDF"><LEDGER NAME="'+nm+'" ACTION="Create"><NAME.LIST><NAME>'+nm+'</NAME></NAME.LIST><PARENT>'+par+'</PARENT><ISBILLWISEON>Yes</ISBILLWISEON>'
   +'<COUNTRYOFRESIDENCE>India</COUNTRYOFRESIDENCE>'+(stx?'<LEDSTATENAME>'+stx+'</LEDSTATENAME>':'')+(rt?'<GSTREGISTRATIONTYPE>'+rt+'</GSTREGISTRATIONTYPE>':'')+(gs?'<PARTYGSTIN>'+gs+'</PARTYGSTIN>':'')
-  +'<LEDMAILINGDETAILS.LIST><APPLICABLEFROM>20170701</APPLICABLEFROM><MAILINGNAME>'+nm+'</MAILINGNAME>'+(stx?'<STATE>'+stx+'</STATE>':'')+'<COUNTRY>India</COUNTRY></LEDMAILINGDETAILS.LIST>'
+  +'<LEDMAILINGDETAILS.LIST><APPLICABLEFROM>20170701</APPLICABLEFROM>'+(pa&&pa.p?'<PINCODE>'+E(pa.p)+'</PINCODE>':'')+'<MAILINGNAME>'+nm+'</MAILINGNAME>'+(pa&&pa.a?'<ADDRESS.LIST TYPE="String">'+pa.a.split(/\s*[\r\n]+\s*/).filter(Boolean).slice(0,4).map(x=>'<ADDRESS>'+E(x)+'</ADDRESS>').join('')+'</ADDRESS.LIST>':'')+(stx?'<STATE>'+stx+'</STATE>':'')+'<COUNTRY>India</COUNTRY></LEDMAILINGDETAILS.LIST>'
   +(rt?'<LEDGSTREGDETAILS.LIST><APPLICABLEFROM>20170701</APPLICABLEFROM><GSTREGISTRATIONTYPE>'+rt+'</GSTREGISTRATIONTYPE>'+(stx?'<PLACEOFSUPPLY>'+stx+'</PLACEOFSUPPLY>':'')+(gs?'<GSTIN>'+gs+'</GSTIN>':'')+'</LEDGSTREGDETAILS.LIST>':'')
   +'</LEDGER></TALLYMESSAGE>'}
