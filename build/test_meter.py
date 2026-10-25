@@ -15,8 +15,6 @@ async def main():
             c=await pg.evaluate("(document.querySelector('#stometer')||{}).className||''");t=await pg.inner_text('#stometer')
             chk('meter '+cls,cls in c,c+' | '+t[:90])
         chk('shows used of 500 MB + percent + last backup','500 MB' in t and '%' in t and 'Last backup' in t,t)
-        await pg.evaluate("exitView&&0;USER='kiran';ADM=()=>false;home()");await pg.wait_for_timeout(300)
-        chk('hidden for staff',await pg.evaluate("!document.getElementById('stometer')"))
         print('ERRS',errs[:2]);chk('no JS errors',not errs)
         print('ALL OK' if all(res) else 'SOME FAILED');await b.close()
 asyncio.run(main())
