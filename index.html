@@ -1,5 +1,5 @@
 <!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>JK Gupta &amp; Co</title>
-<meta name="description" content="JK Gupta &amp; Co. client accounting workspace"><meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#0f2742"><meta name="jkg-build" content="b2610241405"><script>try{var t=localStorage.getItem("jkgtheme")||(matchMedia("(prefers-color-scheme:dark)").matches?"dark":"light");document.documentElement.dataset.theme=t}catch(e){document.documentElement.dataset.theme="light"}</script><link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27%3E%3Crect width=%2764%27 height=%2764%27 rx=%2714%27 fill=%27%230f2742%27/%3E%3Ctext x=%2732%27 y=%2742%27 font-size=%2734%27 font-family=%27Georgia,serif%27 font-weight=%27700%27 text-anchor=%27middle%27 fill=%27%23e9d9ae%27%3EJK%3C/text%3E%3C/svg%3E"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:wght@500;600;700&display=swap"><style>
+<meta name="description" content="JK Gupta &amp; Co. client accounting workspace"><meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#0f2742"><meta name="jkg-build" content="b2610250700"><script>try{var t=localStorage.getItem("jkgtheme")||(matchMedia("(prefers-color-scheme:dark)").matches?"dark":"light");document.documentElement.dataset.theme=t}catch(e){document.documentElement.dataset.theme="light"}</script><link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27%3E%3Crect width=%2764%27 height=%2764%27 rx=%2714%27 fill=%27%230f2742%27/%3E%3Ctext x=%2732%27 y=%2742%27 font-size=%2734%27 font-family=%27Georgia,serif%27 font-weight=%27700%27 text-anchor=%27middle%27 fill=%27%23e9d9ae%27%3EJK%3C/text%3E%3C/svg%3E"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:wght@500;600;700&display=swap"><style>
 /* ============ tokens ============ */
 :root{--serif:'Source Serif 4',Georgia,'Times New Roman',serif;--sans:'Inter','Segoe UI',system-ui,-apple-system,Arial,sans-serif;--r:12px;--ease:cubic-bezier(.2,.7,.2,1)}
 :root,:root[data-theme=light]{color-scheme:light;
@@ -502,6 +502,7 @@ body{background-image:none!important;font-size:16px;line-height:1.6}
 .dh{background:var(--pri);position:relative}
 .dbar{background:var(--s1);border:1px solid var(--line2);border-radius:16px;padding:14px 16px}
 @media(max-width:600px){.dtg{grid-template-columns:repeat(2,1fr);padding:10px}.dt{min-height:140px}}
+
 /* ===== storage meter (admin only) ===== */
 .sto{background:var(--s1);border:1px solid var(--line2);border-left:6px solid var(--ok);border-radius:18px;padding:16px 20px;margin:0 0 22px;color:var(--ink)}
 .sto.sto-warn{border-left-color:var(--warn)}.sto.sto-bad{border-left-color:var(--bad)}.sto.sto-err{border-left-color:var(--line2)}
@@ -1187,7 +1188,7 @@ function PNAME(n){return String(n||'').replace(/[._-]+/g,' ').trim().replace(/(^
    JK Gupta & Co. - interface, client tracker, attendance, staff control
    (added on top of the original program; everything above is unchanged)
    ==================================================================== */
-const BUILD='b2610241405';
+const BUILD='b2610250700';
 let CURP='';
 const $id=i=>document.getElementById(i);
 const jkP2=n=>String(n).padStart(2,'0');
@@ -2730,6 +2731,7 @@ async function mtLoad(force){const m=window._mt;if(!(typeof LS!='undefined'&&LS.
   try{if(typeof USER!='undefined'&&USER&&ADM()&&!VIEW&&CURP=='home'&&LS.on&&LS.role=='admin'&&!LS.trav){
     const a=document.getElementById('app');if(a&&!document.getElementById('stometer')){const t=document.createElement('div');t.innerHTML=mtBox();const ref=a.querySelector('.dgs')||a.querySelector('.dfirst');if(ref)ref.parentNode.insertBefore(t.firstChild,ref);else a.appendChild(t.firstChild);mtLoad()}}}catch(e){}
   return r}})();
+
 
 LS.onSync=onSyncKeys;LS.onExpire=()=>{USER='';VIEW='';DB={clients:{}};sessionStorage.removeItem('jkgu');home();toast('Your session ended. Please sign in again.')};
 (async()=>{try{if(typeof hybInit=='function')await hybInit()}catch(e){}const su=sessionStorage.getItem('jkgu');let okr=!LS.on;if(su&&LS.on)okr=!!(await LS.resume()).ok;if(su&&okr&&(LS.on||su==ADMIN||U()[su])){USER=su;try{DB=JSON.parse(LS.getItem('jkg_'+su))||{clients:{}}}catch(e){DB={clients:{}}}if(!DB.clients)DB={clients:{}};afterLogin()}updTm();home()})();

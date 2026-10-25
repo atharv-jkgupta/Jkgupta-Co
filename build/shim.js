@@ -56,6 +56,7 @@ const LS=(()=>{
    if(!s||!s.t)return{ok:false};
    try{const o=await rpc('kv_open',{p_t:s.t,p_since:null});if(!o.ok){try{sessionStorage.removeItem('jkgc')}catch(e){}return{ok:false}}
     await start(s,o.rows);return{ok:true,role:s.role,user:s.u}}catch(e){return{ok:false,err:'net'}}},
+  stats(){return sess?rpc('storage_stats',{p_t:sess.t}):Promise.resolve(null)},
   async pwcheck(h){try{return !!(await rpc('kv_pwcheck',{p_t:sess.t,p_h:h}))}catch(e){return false}},
   sync(){tick()},
   get trav(){return !!trav},

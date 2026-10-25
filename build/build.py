@@ -1,7 +1,7 @@
 import re, sys
 SRC, OUT, URL, KEY, BUILD = sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5]
 h = open(SRC, encoding='utf-8').read()
-css = open('/home/claude/app/build/theme.css', encoding='utf-8').read() + open('/home/claude/app/build/dash.css', encoding='utf-8').read()
+css = open('/home/claude/app/build/theme.css', encoding='utf-8').read() + open('/home/claude/app/build/dash.css', encoding='utf-8').read() + open('/home/claude/app/build/meter.css', encoding='utf-8').read()
 shim = open('/home/claude/app/build/shim.js', encoding='utf-8').read().replace("'__URL__'", 'location.origin' if URL == 'office' else repr('' if URL in ('travel', 'hybrid') else URL)).replace('__KEY__', 'office' if URL in ('office', 'hybrid') else KEY).replace('__TB__', 'true' if URL in ('travel', 'hybrid') else 'false').replace('__HB__', 'true' if URL == 'hybrid' else 'false').replace('get user(){','get token(){return sess&&sess.t},get user(){')
 
 def sub1(pat, rep, s, flags=0):
@@ -13,7 +13,7 @@ def rep1(a, b, s):
     assert s.count(a) == 1, (a[:70], s.count(a))
     return s.replace(a, b)
 
-feat = open('/home/claude/app/build/sha.js', encoding='utf-8').read() + open('/home/claude/app/build/features.js', encoding='utf-8').read().replace('__BUILD__', BUILD) + open('/home/claude/app/build/reco.js', encoding='utf-8').read() + open('/home/claude/app/build/reco2.js', encoding='utf-8').read() + open('/home/claude/app/build/tally.js', encoding='utf-8').read() + open('/home/claude/app/build/attx.js', encoding='utf-8').read() + open('/home/claude/app/build/help.js', encoding='utf-8').read() + open('/home/claude/app/build/themes.js', encoding='utf-8').read() + open('/home/claude/app/build/aichat.js', encoding='utf-8').read() + open('/home/claude/app/build/travel.js', encoding='utf-8').read() + open('/home/claude/app/build/bills.js', encoding='utf-8').read() + open('/home/claude/app/build/dash.js', encoding='utf-8').read() + open('/home/claude/app/build/arc.js', encoding='utf-8').read()
+feat = open('/home/claude/app/build/sha.js', encoding='utf-8').read() + open('/home/claude/app/build/features.js', encoding='utf-8').read().replace('__BUILD__', BUILD) + open('/home/claude/app/build/reco.js', encoding='utf-8').read() + open('/home/claude/app/build/reco2.js', encoding='utf-8').read() + open('/home/claude/app/build/tally.js', encoding='utf-8').read() + open('/home/claude/app/build/attx.js', encoding='utf-8').read() + open('/home/claude/app/build/help.js', encoding='utf-8').read() + open('/home/claude/app/build/themes.js', encoding='utf-8').read() + open('/home/claude/app/build/aichat.js', encoding='utf-8').read() + open('/home/claude/app/build/travel.js', encoding='utf-8').read() + open('/home/claude/app/build/bills.js', encoding='utf-8').read() + open('/home/claude/app/build/dash.js', encoding='utf-8').read() + open('/home/claude/app/build/arc.js', encoding='utf-8').read() + open('/home/claude/app/build/meter.js', encoding='utf-8').read()
 HEAD = ('<meta name="description" content="JK Gupta &amp; Co. client accounting workspace"><meta name="robots" content="noindex,nofollow">'
         '<meta name="theme-color" content="#0f2742"><meta name="jkg-build" content="' + BUILD + '">'
         '<script>try{var t=localStorage.getItem("jkgtheme")||(matchMedia("(prefers-color-scheme:dark)").matches?"dark":"light");document.documentElement.dataset.theme=t}catch(e){document.documentElement.dataset.theme="light"}</script>'

@@ -1,5 +1,5 @@
 <!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>JK Gupta &amp; Co</title>
-<meta name="description" content="JK Gupta &amp; Co. client accounting workspace"><meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#0f2742"><meta name="jkg-build" content="t1"><script>try{var t=localStorage.getItem("jkgtheme")||(matchMedia("(prefers-color-scheme:dark)").matches?"dark":"light");document.documentElement.dataset.theme=t}catch(e){document.documentElement.dataset.theme="light"}</script><link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27%3E%3Crect width=%2764%27 height=%2764%27 rx=%2714%27 fill=%27%230f2742%27/%3E%3Ctext x=%2732%27 y=%2742%27 font-size=%2734%27 font-family=%27Georgia,serif%27 font-weight=%27700%27 text-anchor=%27middle%27 fill=%27%23e9d9ae%27%3EJK%3C/text%3E%3C/svg%3E"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:wght@500;600;700&display=swap"><style>
+<meta name="description" content="JK Gupta &amp; Co. client accounting workspace"><meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#0f2742"><meta name="jkg-build" content="b2610250700"><script>try{var t=localStorage.getItem("jkgtheme")||(matchMedia("(prefers-color-scheme:dark)").matches?"dark":"light");document.documentElement.dataset.theme=t}catch(e){document.documentElement.dataset.theme="light"}</script><link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27%3E%3Crect width=%2764%27 height=%2764%27 rx=%2714%27 fill=%27%230f2742%27/%3E%3Ctext x=%2732%27 y=%2742%27 font-size=%2734%27 font-family=%27Georgia,serif%27 font-weight=%27700%27 text-anchor=%27middle%27 fill=%27%23e9d9ae%27%3EJK%3C/text%3E%3C/svg%3E"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:wght@500;600;700&display=swap"><style>
 /* ============ tokens ============ */
 :root{--serif:'Source Serif 4',Georgia,'Times New Roman',serif;--sans:'Inter','Segoe UI',system-ui,-apple-system,Arial,sans-serif;--r:12px;--ease:cubic-bezier(.2,.7,.2,1)}
 :root,:root[data-theme=light]{color-scheme:light;
@@ -502,6 +502,22 @@ body{background-image:none!important;font-size:16px;line-height:1.6}
 .dh{background:var(--pri);position:relative}
 .dbar{background:var(--s1);border:1px solid var(--line2);border-radius:16px;padding:14px 16px}
 @media(max-width:600px){.dtg{grid-template-columns:repeat(2,1fr);padding:10px}.dt{min-height:140px}}
+
+/* ===== storage meter (admin only) ===== */
+.sto{background:var(--s1);border:1px solid var(--line2);border-left:6px solid var(--ok);border-radius:18px;padding:16px 20px;margin:0 0 22px;color:var(--ink)}
+.sto.sto-warn{border-left-color:var(--warn)}.sto.sto-bad{border-left-color:var(--bad)}.sto.sto-err{border-left-color:var(--line2)}
+.stoh{display:flex;justify-content:space-between;align-items:center;gap:12px;margin:0 0 8px}.stoh h2{margin:0;font:700 20px/1.3 var(--sans);color:var(--ink)}
+.stoh .g{min-height:44px;font-size:15px}
+.sto p{margin:0;font-size:16px;color:var(--ink)}
+.ston{font-size:17px;color:var(--ink);margin:0 0 8px}.ston b{font-weight:700}.stop{display:inline-block;margin-left:6px;font-weight:700;font-size:17px}
+.sto-ok .stop{color:var(--ok)}.sto-warn .stop{color:var(--warn)}.sto-bad .stop{color:var(--bad)}
+.stobar{height:16px;border-radius:999px;background:var(--line2);overflow:hidden}
+.stobar i{display:block;height:100%;border-radius:999px;background:var(--ok)}
+.sto-warn .stobar i{background:var(--warn)}.sto-bad .stobar i{background:var(--bad)}
+.stos{margin:8px 0 12px;font-size:16px;font-weight:600;color:var(--ink)}
+.stor{display:flex;flex-wrap:wrap;gap:10px 32px}.stor div{min-width:0}.stor span{display:block;font-size:15px;color:var(--mute)}
+.stor b{font-size:17px;font-weight:700;color:var(--ink);overflow-wrap:anywhere}.stor em{font-style:normal;font-size:15px;color:var(--mute);margin-left:8px}
+@media(max-width:600px){.sto{padding:14px 16px}.stoh .g{width:auto}}
 </style></head><body class="out">
 <div id="top"><div class="tl"><button id="mb" class="ib" onclick="tg()" aria-label="Menu">&#9776;</button><div class="brandR" onclick="logo()" title="JK Gupta &amp; Co.">JK<span>&amp;</span>CO.<small>CHARTERED ACCOUNTANTS</small></div></div><div class="tr"><span id="sv"></span><button id="tm" class="ib" onclick="theme()" aria-label="Theme"></button><button id="dm" class="ib" onclick="dm(event)" aria-label="More">&#8942;</button></div></div>
 <div id="dd"></div><div id="md"></div><input type="file" id="lb" accept=".json,application/json,text/plain,*/*" onchange="imp(this)" hidden>
@@ -565,6 +581,7 @@ const LS=(()=>{
    if(!s||!s.t)return{ok:false};
    try{const o=await rpc('kv_open',{p_t:s.t,p_since:null});if(!o.ok){try{sessionStorage.removeItem('jkgc')}catch(e){}return{ok:false}}
     await start(s,o.rows);return{ok:true,role:s.role,user:s.u}}catch(e){return{ok:false,err:'net'}}},
+  stats(){return sess?rpc('storage_stats',{p_t:sess.t}):Promise.resolve(null)},
   async pwcheck(h){try{return !!(await rpc('kv_pwcheck',{p_t:sess.t,p_h:h}))}catch(e){return false}},
   sync(){tick()},
   get trav(){return !!trav},
@@ -1171,7 +1188,7 @@ function PNAME(n){return String(n||'').replace(/[._-]+/g,' ').trim().replace(/(^
    JK Gupta & Co. - interface, client tracker, attendance, staff control
    (added on top of the original program; everything above is unchanged)
    ==================================================================== */
-const BUILD='t1';
+const BUILD='b2610250700';
 let CURP='';
 const $id=i=>document.getElementById(i);
 const jkP2=n=>String(n).padStart(2,'0');
@@ -2686,6 +2703,35 @@ async function arcBack(i){const x=ARCL[i],h=ARC.h;if(!x||!h)return;let j;try{j=J
  let nm=j.name;if(DB.clients[nm]){if(!confirm('"'+nm+'" is already on the site. Bring the saved copy back as "'+nm+' (restored)"? Nothing will be overwritten.'))return;nm=nm+' (restored)'}
  DB.clients[nm]=j.client;if(j.tracker){const t=Object.assign({},j.tracker,{o:me,n:nm,del:false,at:Date.now()});try{LS.setItem(tkKey(me,nm),JSON.stringify(t))}catch(e){}}
  save();try{tkSync()}catch(e){}modal();home();toast('Brought back: '+nm)}
+
+/* ===== Storage meter (admin only) ===== */
+const mtBytes=b=>{b=+b||0;return b>=1073741824?(b/1073741824).toFixed(2)+' GB':b>=10485760?Math.round(b/1048576)+' MB':(b/1048576).toFixed(1)+' MB'};
+const mtWhen=t=>{if(!t)return 'No backup yet';const d=new Date(t);if(isNaN(d))return 'No backup yet';
+ try{return d.toLocaleString('en-IN',{timeZone:'Asia/Kolkata',day:'numeric',month:'short',year:'numeric',hour:'numeric',minute:'2-digit',hour12:true})}catch(e){return d.toISOString().slice(0,16).replace('T',' ')}};
+window._mt={t:0,d:null,err:'',busy:0};
+function mtBox(){const m=window._mt;
+ if(m.err&&!m.d)return '<section class="sto sto-err" id="stometer" aria-live="polite"><div class="stoh"><h2>Storage</h2><button type="button" class="g" onclick="mtLoad(1)">Try again</button></div><p>Could not read the storage figures. '+E(m.err)+'</p></section>';
+ if(!m.d)return '<section class="sto" id="stometer" aria-live="polite"><div class="stoh"><h2>Storage</h2></div><p>Reading storage figures...</p></section>';
+ const d=m.d,used=+d.db_bytes||0,lim=+d.limit_bytes||0,pct=lim>0?used/lim*100:0,pr=pct>=10?Math.round(pct):Math.round(pct*10)/10,
+  k=pct<60?'ok':pct<=85?'warn':'bad',
+  msg=k=='ok'?'Plenty of space':k=='warn'?'Getting full. Please plan for more space.':'Almost full. Please act soon.';
+ return '<section class="sto sto-'+k+'" id="stometer" aria-live="polite"><div class="stoh"><h2>Storage</h2><button type="button" class="g" onclick="mtLoad(1)">Refresh</button></div>'
+  +'<div class="ston"><b>'+mtBytes(used)+'</b> used of <b>'+mtBytes(lim)+'</b> <span class="stop">'+pr+'%</span></div>'
+  +'<div class="stobar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="'+Math.min(100,Math.round(pct))+'" aria-label="Storage used"><i style="width:'+Math.min(100,Math.max(pct>0?1:0,pct))+'%"></i></div>'
+  +'<div class="stos">'+msg+'</div>'
+  +'<div class="stor"><div><span>Last backup</span><b>'+E(mtWhen(d.last_backup))+'</b></div><div><span>Backups take</span><b>'+mtBytes(d.backup_table_bytes)+'</b><em>'+(+d.backups_kept||0)+' kept</em></div></div></section>'}
+function mtPaint(){const e=document.getElementById('stometer');if(!e)return;const t=document.createElement('div');t.innerHTML=mtBox();e.replaceWith(t.firstChild)}
+async function mtLoad(force){const m=window._mt;if(!(typeof LS!='undefined'&&LS.on&&LS.role=='admin'&&LS.stats))return;
+ if(m.busy)return;if(!force&&m.d&&Date.now()-m.t<60000)return;m.busy=1;
+ try{const r=await LS.stats();if(r&&r.ok){m.d=r;m.t=Date.now();m.err=''}else{m.err=r&&r.err=='denied'?'Only the admin can see this.':'Please sign in again and try again.';if(r&&r.err=='denied')m.d=null}}
+ catch(e){m.err='The network or database did not answer.'}
+ m.busy=0;mtPaint()}
+(()=>{const h0=home;
+ home=function(){const r=h0.apply(this,arguments);
+  try{if(typeof USER!='undefined'&&USER&&ADM()&&!VIEW&&CURP=='home'&&LS.on&&LS.role=='admin'&&!LS.trav){
+    const a=document.getElementById('app');if(a&&!document.getElementById('stometer')){const t=document.createElement('div');t.innerHTML=mtBox();const ref=a.querySelector('.dgs')||a.querySelector('.dfirst');if(ref)ref.parentNode.insertBefore(t.firstChild,ref);else a.appendChild(t.firstChild);mtLoad()}}}catch(e){}
+  return r}})();
+
 
 LS.onSync=onSyncKeys;LS.onExpire=()=>{USER='';VIEW='';DB={clients:{}};sessionStorage.removeItem('jkgu');home();toast('Your session ended. Please sign in again.')};
 (async()=>{try{if(typeof hybInit=='function')await hybInit()}catch(e){}const su=sessionStorage.getItem('jkgu');let okr=!LS.on;if(su&&LS.on)okr=!!(await LS.resume()).ok;if(su&&okr&&(LS.on||su==ADMIN||U()[su])){USER=su;try{DB=JSON.parse(LS.getItem('jkg_'+su))||{clients:{}}}catch(e){DB={clients:{}}}if(!DB.clients)DB={clients:{}};afterLogin()}updTm();home()})();
