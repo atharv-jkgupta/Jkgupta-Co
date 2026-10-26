@@ -1,5 +1,5 @@
 <!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>JK Gupta &amp; Co</title>
-<meta name="description" content="JK Gupta &amp; Co. client accounting workspace"><meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#0f2742"><meta name="jkg-build" content="b2610261330"><script>try{var t=localStorage.getItem("jkgtheme")||(matchMedia("(prefers-color-scheme:dark)").matches?"dark":"light");document.documentElement.dataset.theme=t}catch(e){document.documentElement.dataset.theme="light"}</script><link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27%3E%3Crect width=%2764%27 height=%2764%27 rx=%2714%27 fill=%27%230f2742%27/%3E%3Ctext x=%2732%27 y=%2742%27 font-size=%2734%27 font-family=%27Georgia,serif%27 font-weight=%27700%27 text-anchor=%27middle%27 fill=%27%23e9d9ae%27%3EJK%3C/text%3E%3C/svg%3E"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:wght@500;600;700&display=swap"><style>
+<meta name="description" content="JK Gupta &amp; Co. client accounting workspace"><meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#0f2742"><meta name="jkg-build" content="b2610261430"><script>try{var t=localStorage.getItem("jkgtheme")||(matchMedia("(prefers-color-scheme:dark)").matches?"dark":"light");document.documentElement.dataset.theme=t}catch(e){document.documentElement.dataset.theme="light"}</script><link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27%3E%3Crect width=%2764%27 height=%2764%27 rx=%2714%27 fill=%27%230f2742%27/%3E%3Ctext x=%2732%27 y=%2742%27 font-size=%2734%27 font-family=%27Georgia,serif%27 font-weight=%27700%27 text-anchor=%27middle%27 fill=%27%23e9d9ae%27%3EJK%3C/text%3E%3C/svg%3E"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:wght@500;600;700&display=swap"><style>
 /* ============ tokens ============ */
 :root{--serif:'Source Serif 4',Georgia,'Times New Roman',serif;--sans:'Inter','Segoe UI',system-ui,-apple-system,Arial,sans-serif;--r:12px;--ease:cubic-bezier(.2,.7,.2,1)}
 :root,:root[data-theme=light]{color-scheme:light;
@@ -1193,7 +1193,7 @@ function PNAME(n){return String(n||'').replace(/[._-]+/g,' ').trim().replace(/(^
    JK Gupta & Co. - interface, client tracker, attendance, staff control
    (added on top of the original program; everything above is unchanged)
    ==================================================================== */
-const BUILD='b2610261330';
+const BUILD='b2610261430';
 let CURP='';
 const $id=i=>document.getElementById(i);
 const jkP2=n=>String(n).padStart(2,'0');
@@ -2632,7 +2632,8 @@ function bxEdI(i,j,k,v){BXP[i].items[j][k]=(k=='qty'||k=='taxable')?(v===''?'':b
 function bxEdR(i,j,k,v){BXP[i].items[j][k]=bxN(v)/100}
 function bxNew(){modal('<h3>New sheet</h3><label>Company name<input id="bxc" value=""></label><label>GSTIN of the company<input id="bxg" maxlength="15" style="text-transform:uppercase"></label><label>Month<input id="bxm" type="month" value="'+new Date().toISOString().slice(0,7)+'"></label><br><button onclick="bxMake()">Create</button><div id="bxe" style="color:#b45309"></div>')}
 function bxMake(){const c=bxC($id('bxc').value),g=bxC($id('bxg').value).toUpperCase(),m=$id('bxm').value;if(!c)return $id('bxe').textContent='Type the company name.';if(g&&!bxGstOk(g))return $id('bxe').textContent='That GSTIN is not valid. Please check it.';
- const s={id:'s'+Date.now().toString(36),company:c,gstin:g,month:(m||new Date().toISOString().slice(0,7))+'-01',bills:[]};const d=bxDb();d.sheets.push(s);d.cur=s.id;save();modal();bxDraw()}
+ const mo=(m||new Date().toISOString().slice(0,7))+'-01',d=bxDb(),nk=x=>String(x||'').toLowerCase().replace(/\s+/g,' ').trim();const ex=d.sheets.find(x=>nk(x.company)==nk(c)&&String(x.month||'').slice(0,7)==mo.slice(0,7)&&(!x.gstin||!g||x.gstin==g));if(ex){if(!ex.gstin&&g)ex.gstin=g;d.cur=ex.id;save();modal();bxDraw();return toast('This company and month already has a sheet, so I opened it. Sales and purchase bills go to their own sheet by themselves.')}
+ const s={id:'s'+Date.now().toString(36),company:c,gstin:g,month:mo,bills:[]};d.sheets.push(s);d.cur=s.id;save();modal();bxDraw()}
 function bxSet(){const s=bxCur();if(!s)return;modal('<h3>Change sheet details</h3><label>Company name<input id="bxc" value="'+E(s.company)+'"></label><label>GSTIN<input id="bxg" maxlength="15" value="'+E(s.gstin)+'"></label><label>Month<input id="bxm" type="month" value="'+E((s.month||'').slice(0,7))+'"></label><br><button onclick="bxSet2()">Save</button><div id="bxe" style="color:#b45309"></div>')}
 function bxSet2(){const s=bxCur(),g=bxC($id('bxg').value).toUpperCase();if(g&&!bxGstOk(g))return $id('bxe').textContent='That GSTIN is not valid.';s.company=bxC($id('bxc').value)||s.company;s.gstin=g;s.month=($id('bxm').value||(s.month||'').slice(0,7))+'-01';save();modal();bxDraw()}
 function bxPick(v){bxDb().cur=v;BXP=[];BXW=[];save();bxDraw()}
@@ -2650,7 +2651,7 @@ async function bxAi1(i){const s=bxCur(),b=BXP[i];if(!b.rows)return alert('There 
 function bxClean(b){return{kind:b.kind=='purchase'?'purchase':'sales',date:bxDate(b.date)||b.date||'',no:bxC(b.no),party:bxC(b.party),gstin:bxC(b.gstin).toUpperCase(),printed_total:b.printed_total==null?null:b.printed_total,flag:!!b.flag,
  items:b.items.map(i=>({hsn:String(i.hsn||'').trim(),qty:i.qty===''?'':+i.qty,unit:bxC(i.unit),taxable:bxR2(+i.taxable||0),igst:+i.igst||0,cgst:+i.cgst||0,sgst:+i.sgst||0}))}}
 function bxPush(idx){const s0=bxCur(),L=idx.map(i=>bxClean(BXP[i])),d=bxDb(),mine=s0.kind=='purchase'?'purchase':'sales';BXW=[];let ns=0,np=0;
- const want=k=>{if(k==mine)return s0;let t=d.sheets.find(x=>(x.kind=='purchase'?'purchase':'sales')==k&&x.company==s0.company&&x.gstin==s0.gstin&&x.month==s0.month);if(!t){t={id:'s'+Date.now().toString(36)+k[0],company:s0.company,gstin:s0.gstin,month:s0.month,bills:[]};if(k=='purchase')t.kind='purchase';d.sheets.push(t)}return t};
+ const want=k=>{if(k==mine)return s0;let t=d.sheets.find(x=>(x.kind=='purchase'?'purchase':'sales')==k&&String(x.company||'').toLowerCase().replace(/\s+/g,' ').trim()==String(s0.company||'').toLowerCase().replace(/\s+/g,' ').trim()&&x.gstin==s0.gstin&&String(x.month||'').slice(0,7)==String(s0.month||'').slice(0,7));if(!t){t={id:'s'+Date.now().toString(36)+k[0],company:s0.company,gstin:s0.gstin,month:s0.month,bills:[]};if(k=='purchase')t.kind='purchase';d.sheets.push(t)}return t};
  ['sales','purchase'].forEach(k=>{const G=L.filter(b=>b.kind==k);if(!G.length)return;const t=want(k);BXW=BXW.concat(bxCheck(t,G));G.forEach(b=>t.bills.push(b));t.updated=new Date().toISOString();if(k=='sales')ns=G.length;else np=G.length});
  BXP=BXP.filter((_,i)=>!idx.includes(i));save();bxDraw();toast('Added '+L.length+' bill'+(L.length>1?'s':'')+(np&&ns?' ('+ns+' sales, '+np+' purchase)':np?' to the Purchase sheet':' to the sheet')+'.')}
 function bxOne(i){bxPush([i])}
@@ -2659,6 +2660,32 @@ function bxList(){const s=bxCur();modal('<h3>Bills in this sheet</h3><div style=
 function bxRm(i){const s=bxCur();if(!confirm('Remove bill '+s.bills[i].no+' from the sheet?'))return;s.bills.splice(i,1);save();bxList();bxDraw()}
 async function bxDown(){const s=bxCur();if(!s)return;try{const u=await bxXlsx(s),nm=(s.company||'Sheet').replace(/[^A-Za-z0-9]+/g,'_')+(s.kind=='purchase'?'_Purchase':'')+'_'+(s.month||'').slice(0,7)+'.xlsx',a=document.createElement('a');
   a.href=URL.createObjectURL(new Blob([u],{type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'}));a.download=nm;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},800)}catch(e){alert('Could not make the Excel file: '+(e&&e.message||e))}}
+/* Quick message: ready client messages (Hinglish / English), no AI needed */
+const QM={t:'docs',l:'hi',c:'',m:'',x:''};
+const QMT=[['docs','Ask for bills / documents'],['bank','Ask for bank statement'],['gst','GST data pending'],['pay','Fees reminder'],['done','Return filed']];
+function qmMonth(){const d=new Date();d.setMonth(d.getMonth()-1);return d.toLocaleString('en-IN',{month:'long',year:'numeric'})}
+function qmText(){const n=(QM.c||'').trim()||'Sir/Madam',mo=(QM.m||'').trim()||qmMonth(),x=(QM.x||'').trim(),hi=QM.l=='hi',T=QM.t;let b='';
+ if(T=='docs')b=hi?'Namaste '+n+', '+mo+' ke accounts/GST ka kaam shuru karna hai. Kripya '+mo+' ke sales aur purchase bills bhej dijiye.'+(x?' '+x:'')+' Dhanyavaad.':'Hello '+n+', we are starting your accounts/GST work for '+mo+'. Please send your sales and purchase bills for '+mo+'.'+(x?' '+x:'')+' Thank you.';
+ else if(T=='bank')b=hi?'Namaste '+n+', '+mo+' ka bank statement bhej dijiye'+(x?' ('+x+')':' (sabhi accounts ka)')+'. Dhanyavaad.':'Hello '+n+', please send the bank statement for '+mo+(x?' ('+x+')':' (all accounts)')+'. Thank you.';
+ else if(T=='gst')b=hi?'Namaste '+n+', '+mo+' ka GST return abhi pending hai'+(x?' (last date '+x+')':'')+'. Aapka data abhi tak nahi mila. Kripya aaj hi bills aur statement bhej dijiye.':'Hello '+n+', your GST return for '+mo+' is pending'+(x?' (due date '+x+')':'')+'. We have not received your data yet. Please send the bills and statements today.';
+ else if(T=='pay')b=hi?'Namaste '+n+', '+mo+' ki fees'+(x?' Rs '+x:'')+' pending hai. Kripya jaldi payment kar dijiye. Dhanyavaad.':'Hello '+n+', the fees for '+mo+(x?' of Rs '+x:'')+' are pending. Kindly make the payment at the earliest. Thank you.';
+ else b=hi?'Namaste '+n+', '+mo+' ka GST return file ho gaya hai.'+(x?' '+x:'')+' Dhanyavaad.':'Hello '+n+', your GST return for '+mo+' has been filed.'+(x?' '+x:'')+' Thank you.';
+ return b+'\n- JK Gupta & Co.'}
+function qm(){CURP='qm';sb();tg(0);const dd=$id('dd');if(dd)dd.classList.remove('o');pgIn('qm');qmDraw()}
+function qmDraw(){if(CURP!='qm')return;const names=Object.keys((DB&&DB.clients)||{});
+ app.innerHTML='<i data-pg="qm" hidden></i><div class="bx"><div class="gxh"><h2>Quick message</h2><p>Pick a message, fill the client, then copy it or send it on WhatsApp.</p></div>'
+ +'<div class="card"><div class="bxr"><select id="qmt" onchange="qmUp()">'+QMT.map(t=>'<option value="'+t[0]+'"'+(QM.t==t[0]?' selected':'')+'>'+t[1]+'</option>').join('')+'</select>'
+ +'<select id="qml" onchange="qmUp()"><option value="hi"'+(QM.l=='hi'?' selected':'')+'>Hinglish</option><option value="en"'+(QM.l=='en'?' selected':'')+'>English</option></select></div>'
+ +'<div class="bxr"><input id="qmc" list="qmcl" placeholder="Client name" value="'+E(QM.c)+'" oninput="qmUp()"><datalist id="qmcl">'+names.map(n=>'<option value="'+E(n)+'">').join('')+'</datalist>'
+ +'<input id="qmm" placeholder="Month ('+E(qmMonth())+')" value="'+E(QM.m)+'" oninput="qmUp()"><input id="qmx" placeholder="Extra: amount / date / note (optional)" value="'+E(QM.x)+'" oninput="qmUp()"></div>'
+ +'<textarea id="qmo" rows="7" style="width:100%;margin-top:8px"></textarea>'
+ +'<div class="bxr"><button onclick="qmCopy()">Copy</button><button class="g" onclick="qmWa()">Send on WhatsApp</button></div></div></div>';
+ $id('qmo').value=qmText()}
+function qmUp(){QM.t=$id('qmt').value;QM.l=$id('qml').value;QM.c=$id('qmc').value;QM.m=$id('qmm').value;QM.x=$id('qmx').value;$id('qmo').value=qmText()}
+async function qmCopy(){const t=$id('qmo').value;try{await navigator.clipboard.writeText(t)}catch(e){$id('qmo').select();document.execCommand('copy')}toast('Message copied.')}
+function qmWa(){window.open('https://wa.me/?text='+encodeURIComponent($id('qmo').value),'_blank')}
+(function(){const o=window.sb;if(typeof o!='function')return;window.sb=function(){o.apply(this,arguments);try{if(!USER)return;const el=document.getElementById('sb');if(!el||el.querySelector('.qml'))return;const a=el.querySelector('a.bxl');
+ const h='<a class="li qml'+(CURP=='qm'?' act':'')+'" onclick="qm()"><span>Quick message</span></a>';if(a)a.insertAdjacentHTML('afterend',h);else el.insertAdjacentHTML('beforeend',h)}catch(e){}}})();
 (function(){const o=window.sb;if(typeof o!='function')return;window.sb=function(){o.apply(this,arguments);try{if(!USER)return;const el=document.getElementById('sb');if(!el||el.querySelector('.bxl'))return;const a=[...el.querySelectorAll('a.li')].find(x=>/Reco/.test(x.textContent));
  const h='<a class="li bxl'+(CURP=='bx'?' act':'')+'" onclick="bx()"><span>Bills → Excel</span></a>';if(a)a.insertAdjacentHTML('afterend',h);else el.insertAdjacentHTML('beforeend',h)}catch(e){}}})();
 /* ===== New dashboard (clear, grouped, AA contrast) ===== */
@@ -2685,7 +2712,7 @@ function home(){CURP='home';S={};window.onscroll=null;sb();dls();document.body.c
  const chips=[[N.length,'client'+(N.length==1?'':'s'),''],[A,'bank account'+(A==1?'':'s'),''],[O,'need import (30+ days)','w'],[P,'pending entr'+(P==1?'y':'ies'),'w']].filter(x=>x[0]>0).map(x=>'<span class="dc '+x[2]+'"><b>'+x[0]+'</b> '+x[1]+'</span>').join('');
  const grp=[
   dkGrp('Clients',[dkTile('check','Client tracker',T.t?(T.d+' of '+T.t+' done this month'):'Track the work client by client','trk()'),dkTile('search','Find a client','Jump to the client list','var q=$id(\'q\');if(q){q.scrollIntoView({behavior:\'smooth\',block:\'center\'});q.focus()}')].concat(arcOK()?[dkTile('folder','Saved clients (folder)','Find a saved client and bring him back','arcFind()')]:[]).concat(atOK()?[dkTile('clock','Attendance',attLine(),'att()')]:[])),
-  dkGrp('Entries and imports',[].concat(pcOK()?[dkTile('wallet','Petty cash book','Record and export expenses','pc()')]:[]).concat(typeof bx=='function'?[dkTile('sheet','Bills to Excel','Turn bills into the India layout sheet','bx()')]:[])),
+  dkGrp('Entries and imports',[].concat(pcOK()?[dkTile('wallet','Petty cash book','Record and export expenses','pc()')]:[]).concat(typeof bx=='function'?[dkTile('sheet','Bills to Excel','Turn bills into the India layout sheet','bx()')]:[]).concat(typeof qm=='function'?[dkTile('sheet','Quick message','Ready messages for clients','qm()')]:[])),
   dkGrp('Checks',[dkTile('scale','Reco','GSTR-2B and bank reconciliation','reco()'),dkTile('shield','GSTIN / HSN check','Check a number in one tap','gchk()')]),
   dkGrp(ADM()&&!VIEW?'Admin':'Help and backup',[].concat(ADM()&&!VIEW?[dkTile('users','Staff &amp; access','Add staff, set permissions','staffF()')]:[]).concat([dkTile('down','Download backup','Save a copy of your data',"dl('JK-backup-'+USER+'.json',JSON.stringify(DB),'application/json')"),dkTile('help','Help','How to use each part','help()')]))].join('');
  const firstBox='<div class="dfirst"><h2>Welcome! Let\'s add your first client</h2><p>Drop a Tally export and the client, bank accounts and ledgers are set up for you.</p><div class="dfb"><button type="button" class="dprim" onclick="tlNew()">'+IC.plus+' Create client from Tally file</button><button type="button" class="g" onclick="tg(1)">Add by hand</button></div></div>';
