@@ -1,5 +1,5 @@
 <!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>JK Gupta &amp; Co</title>
-<meta name="description" content="JK Gupta &amp; Co. client accounting workspace"><meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#0f2742"><meta name="jkg-build" content="b2610261430"><script>try{var t=localStorage.getItem("jkgtheme")||(matchMedia("(prefers-color-scheme:dark)").matches?"dark":"light");document.documentElement.dataset.theme=t}catch(e){document.documentElement.dataset.theme="light"}</script><link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27%3E%3Crect width=%2764%27 height=%2764%27 rx=%2714%27 fill=%27%230f2742%27/%3E%3Ctext x=%2732%27 y=%2742%27 font-size=%2734%27 font-family=%27Georgia,serif%27 font-weight=%27700%27 text-anchor=%27middle%27 fill=%27%23e9d9ae%27%3EJK%3C/text%3E%3C/svg%3E"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:wght@500;600;700&display=swap"><style>
+<meta name="description" content="JK Gupta &amp; Co. client accounting workspace"><meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#0f2742"><meta name="jkg-build" content="b2610261630"><script>try{var t=localStorage.getItem("jkgtheme")||(matchMedia("(prefers-color-scheme:dark)").matches?"dark":"light");document.documentElement.dataset.theme=t}catch(e){document.documentElement.dataset.theme="light"}</script><link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27%3E%3Crect width=%2764%27 height=%2764%27 rx=%2714%27 fill=%27%230f2742%27/%3E%3Ctext x=%2732%27 y=%2742%27 font-size=%2734%27 font-family=%27Georgia,serif%27 font-weight=%27700%27 text-anchor=%27middle%27 fill=%27%23e9d9ae%27%3EJK%3C/text%3E%3C/svg%3E"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:wght@500;600;700&display=swap"><style>
 /* ============ tokens ============ */
 :root{--serif:'Source Serif 4',Georgia,'Times New Roman',serif;--sans:'Inter','Segoe UI',system-ui,-apple-system,Arial,sans-serif;--r:12px;--ease:cubic-bezier(.2,.7,.2,1)}
 :root,:root[data-theme=light]{color-scheme:light;
@@ -79,7 +79,7 @@ body.out #mb,body.out #dm{display:none}
 #dd{display:none;position:fixed;top:66px;right:12px;width:260px;background:var(--s1);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow2);z-index:30;padding:6px;transform-origin:top right}
 #dd.o{display:block;animation:pop .18s var(--ease)}
 #dd a{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:9px;cursor:pointer;color:var(--ink);font-size:14px}#dd a:hover{background:var(--s3)}
-#dd a.dg{color:var(--bad)}#dd hr{margin:5px 8px}
+.jkback{margin:0 0 10px}#dd a.dg{color:var(--bad)}#dd hr{margin:5px 8px}#dd{max-height:calc(100vh - 80px);overflow-y:auto;overscroll-behavior:contain}#dd a svg,#dd a i{width:18px;height:18px;flex:none}
 #md{display:none;position:fixed;inset:0;background:rgba(5,12,22,.55);backdrop-filter:blur(3px);z-index:40;overflow:auto;padding:64px 14px;animation:fade .18s}#md.o{display:block}
 #md .box{background:var(--s1);color:var(--ink);max-width:620px;margin:0 auto;border-radius:18px;padding:24px;box-shadow:var(--shadow2);border:1px solid var(--line);animation:up .28s var(--ease)}
 #md .box h3{margin-top:0}#md input,#md select{width:100%;margin:4px 0}#md li{margin:6px 0}
@@ -1193,7 +1193,7 @@ function PNAME(n){return String(n||'').replace(/[._-]+/g,' ').trim().replace(/(^
    JK Gupta & Co. - interface, client tracker, attendance, staff control
    (added on top of the original program; everything above is unchanged)
    ==================================================================== */
-const BUILD='b2610261430';
+const BUILD='b2610261630';
 let CURP='';
 const $id=i=>document.getElementById(i);
 const jkP2=n=>String(n).padStart(2,'0');
@@ -2660,6 +2660,14 @@ function bxList(){const s=bxCur();modal('<h3>Bills in this sheet</h3><div style=
 function bxRm(i){const s=bxCur();if(!confirm('Remove bill '+s.bills[i].no+' from the sheet?'))return;s.bills.splice(i,1);save();bxList();bxDraw()}
 async function bxDown(){const s=bxCur();if(!s)return;try{const u=await bxXlsx(s),nm=(s.company||'Sheet').replace(/[^A-Za-z0-9]+/g,'_')+(s.kind=='purchase'?'_Purchase':'')+'_'+(s.month||'').slice(0,7)+'.xlsx',a=document.createElement('a');
   a.href=URL.createObjectURL(new Blob([u],{type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'}));a.download=nm;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},800)}catch(e){alert('Could not make the Excel file: '+(e&&e.message||e))}}
+/* Back button on every tool page */
+(function(){const SKIP={home:1,login:1,'':1};let busy=0;
+ const fix=()=>{if(busy)return;const v=app.dataset.v||'';if(SKIP[v]||!app.firstElementChild)return;
+  if(app.firstElementChild.classList&&app.firstElementChild.classList.contains('jkback'))return;
+  busy=1;try{const inC=!!(S&&S.c)&&v!='dash';const b=document.createElement('button');b.type='button';b.className='g jkback';
+   b.textContent=v=='dash'?'← All clients':inC?'← Back to client':'← Back to home';
+   b.onclick=()=>{try{inC?dash():home()}catch(e){home()}};app.insertBefore(b,app.firstChild)}finally{busy=0}};
+ new MutationObserver(fix).observe(app,{childList:true});fix()})();
 /* Quick message: ready client messages (Hinglish / English), no AI needed */
 const QM={t:'docs',l:'hi',c:'',m:'',x:''};
 const QMT=[['docs','Ask for bills / documents'],['bank','Ask for bank statement'],['gst','GST data pending'],['pay','Fees reminder'],['done','Return filed']];
@@ -2714,7 +2722,7 @@ function home(){CURP='home';S={};window.onscroll=null;sb();dls();document.body.c
   dkGrp('Clients',[dkTile('check','Client tracker',T.t?(T.d+' of '+T.t+' done this month'):'Track the work client by client','trk()'),dkTile('search','Find a client','Jump to the client list','var q=$id(\'q\');if(q){q.scrollIntoView({behavior:\'smooth\',block:\'center\'});q.focus()}')].concat(arcOK()?[dkTile('folder','Saved clients (folder)','Find a saved client and bring him back','arcFind()')]:[]).concat(atOK()?[dkTile('clock','Attendance',attLine(),'att()')]:[])),
   dkGrp('Entries and imports',[].concat(pcOK()?[dkTile('wallet','Petty cash book','Record and export expenses','pc()')]:[]).concat(typeof bx=='function'?[dkTile('sheet','Bills to Excel','Turn bills into the India layout sheet','bx()')]:[]).concat(typeof qm=='function'?[dkTile('sheet','Quick message','Ready messages for clients','qm()')]:[])),
   dkGrp('Checks',[dkTile('scale','Reco','GSTR-2B and bank reconciliation','reco()'),dkTile('shield','GSTIN / HSN check','Check a number in one tap','gchk()')]),
-  dkGrp(ADM()&&!VIEW?'Admin':'Help and backup',[].concat(ADM()&&!VIEW?[dkTile('users','Staff &amp; access','Add staff, set permissions','staffF()')]:[]).concat([dkTile('down','Download backup','Save a copy of your data',"dl('JK-backup-'+USER+'.json',JSON.stringify(DB),'application/json')"),dkTile('help','Help','How to use each part','help()')]))].join('');
+  dkGrp(ADM()&&!VIEW?'Admin':'Help and backup',[].concat(ADM()&&!VIEW?[dkTile('users','Staff &amp; access','Add staff, set permissions','staffF()')]:[]).concat([dkTile('key','Change password','Set a new login password','chpw()'),dkTile('down','Download backup','Save a copy of your data',"dl('JK-backup-'+USER+'.json',JSON.stringify(DB),'application/json')"),dkTile('help','Help','How to use each part','help()')]))].join('');
  const firstBox='<div class="dfirst"><h2>Welcome! Let\'s add your first client</h2><p>Drop a Tally export and the client, bank accounts and ledgers are set up for you.</p><div class="dfb"><button type="button" class="dprim" onclick="tlNew()">'+IC.plus+' Create client from Tally file</button><button type="button" class="g" onclick="tg(1)">Add by hand</button></div></div>';
  app.innerHTML='<i data-pg="home" hidden></i>'+(VIEW?vbar():'')+dkHero()+(first?firstBox:'<div class="dbar"><button type="button" class="dprim" onclick="tlNew()">'+IC.plus+' Create client from Tally file</button><div class="dcs">'+chips+'</div></div>')+'<div class="dgs">'+grp+'</div>'
   +(ADM()&&!VIEW?stfP():'')+kdHtml()
