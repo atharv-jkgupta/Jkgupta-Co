@@ -1193,7 +1193,7 @@ function PNAME(n){return String(n||'').replace(/[._-]+/g,' ').trim().replace(/(^
    JK Gupta & Co. - interface, client tracker, attendance, staff control
    (added on top of the original program; everything above is unchanged)
    ==================================================================== */
-const BUILD='b2610261610';
+const BUILD='b2610261655';
 let CURP='';
 const $id=i=>document.getElementById(i);
 const jkP2=n=>String(n).padStart(2,'0');
@@ -1791,19 +1791,30 @@ function rcGstRows(rows,src,sign,ov){const notes=[];let hi=rcHead(rows,'gst');ro
  if(hi<0){hi=rcAnyHead(rows);if(hi<0)return{err:'Could not find a row with column headings.',fix:'Open the file in Excel and make sure one row has headings such as GSTIN, Invoice No, Invoice Date, Taxable Value, CGST, SGST. Then save and upload again.',rows:[],notes}
   notes.push(rcNote('warn','I could not recognise the headings, so I guessed row '+(hi+1)+'.','Check the "Columns I used" box below and choose the right column for each item.'))}
  const h=(rows[hi]||[]).map(c=>String(c==null?'':c)),m=rcMapG(h,ov),out=[];
+ if(m.inv!=null&&!(ov&&ov.inv!=null)){const si=h.findIndex(c=>/supplier\s*inv/i.test(c));if(si>=0&&si!==m.inv){m.invF=m.inv;m.inv=si}}
  if(m.inv==null)return{err:'No "Invoice number" column found in this file.',fix:'Open "Columns I used" below and pick the column that has the invoice / bill numbers.',rows:[],notes,h,m,hi}
+ let LG=null;
+ if(m.taxable==null&&!(ov&&(ov.taxable!=null||ov.igst!=null||ov.cgst!=null||ov.sgst!=null))&&h.some(c=>/\b(input|output)\b.*(igst|cgst|sgst|utgst)|(igst|cgst|sgst|utgst)\s*@/i.test(c))){
+  const skip=new Set([m.inv,m.invF,m.gstin,m.date,m.party,m.val,m.note].filter(x=>x!=null)),D={tx:[],ig:[],cg:[],sg:[],cs:[],out:[]};
+  h.forEach((c,j)=>{const t=c.trim();if(skip.has(j)||!t)return;let tax=1;
+   if(/igst|integrated/i.test(t))D.ig.push(j);else if(/cgst|central/i.test(t))D.cg.push(j);else if(/sgst|utgst|state\s*tax/i.test(t))D.sg.push(j);else if(/cess/i.test(t))D.cs.push(j);
+   else{tax=0;if(/purchase|sales?\b|^value$/i.test(t)&&!/round|total|voucher|register|return|tax|input|output/i.test(t)){if(rows.slice(hi+1).some(q=>rcN((q||[])[j])!==0))D.tx.push(j)}}
+   if(tax&&/\boutput\b/i.test(t))D.out.push(j)});
+  if(D.ig.length+D.cg.length+D.sg.length){LG=D;['igst','cgst','sgst','igstR','cgstR','sgstR','rate'].forEach(k=>delete m[k]);
+   if(D.tx.length)m.taxable=D.tx[0];if(D.ig.length)m.igst=D.ig[0];if(D.cg.length)m.cgst=D.cg[0];if(D.sg.length)m.sgst=D.sg[0];if(D.cs.length)m.cess=D.cs[0]}}
  const noTax=m.igst==null&&m.cgst==null&&m.sgst==null&&m.rate==null&&m.igstR==null&&m.cgstR==null,deriveT=m.taxable==null&&m.val!=null,noT=m.taxable==null&&m.val==null;
  if(m.gstin==null)notes.push(rcNote('warn','No GSTIN column found. Invoices can only be matched by number, so results may be wrong.','In "Columns I used" choose the GSTIN column. In Tally, add the party GSTIN column in the register (F12 Configure) before exporting.'));
  if(m.date==null)notes.push(rcNote('info','No invoice date column found.','Matching still works. Choose a date column under "Columns I used" if there is one.'));
  if(noTax)notes.push(rcNote('bad','No tax columns found (IGST, CGST, SGST).','In "Columns I used" choose the tax columns. In Tally, show the tax ledger columns in the register before exporting.'));
  if(deriveT)notes.push(rcNote('info','No taxable value column, so I worked it out as invoice total minus tax.','If the numbers look wrong, choose the Taxable value column under "Columns I used".'));
  if(noT)notes.push(rcNote('warn','No taxable value or invoice total column found. Only the tax amount is compared.','Choose the Taxable value column under "Columns I used" for a stricter check.'));
- let skipNoInv=0,noG=0,lines=0,merged=0,buf=[];const wsum=[],foot=[];
+ let skipNoInv=0,noG=0,lines=0,merged=0,outRows=0,buf=[];const wsum=[],foot=[];
  const cell=(r,k)=>m[k]==null?'':r[m[k]];
- for(let i=hi+1;i<rows.length;i++){const r=rows[i]||[];if(!r.length)continue;const inv=String(r[m.inv]==null?'':r[m.inv]).trim();let g=m.gstin!=null?String(r[m.gstin]||'').toUpperCase().replace(/\s/g,''):'';
+ for(let i=hi+1;i<rows.length;i++){const r=rows[i]||[];if(!r.length)continue;const inv=(String(r[m.inv]==null?'':r[m.inv]).trim()||(m.invF!=null?String(r[m.invF]==null?'':r[m.invF]).trim():''));let g=m.gstin!=null?String(r[m.gstin]||'').toUpperCase().replace(/\s/g,''):'';
   if(!g){const f=r.map(String).join(' ').toUpperCase().match(GSTINRX);if(f)g=f[0]}
   let sg=sign;if(m.note!=null&&/credit/i.test(String(r[m.note])))sg=-1;
-  const ns=m.igst==null&&m.cgst==null&&m.sgst==null&&m.rate!=null;let t=m.taxable!=null?rcN(r[m.taxable])*sg:0;let ig=rcN(r[m.igst])*sg,cg=rcN(r[m.cgst])*sg,sc=rcN(r[m.sgst])*sg;const ce=rcN(r[m.cess])*sg;
+  const ns=m.igst==null&&m.cgst==null&&m.sgst==null&&m.rate!=null;let t=m.taxable!=null?rcN(r[m.taxable])*sg:0;let ig=rcN(r[m.igst])*sg,cg=rcN(r[m.cgst])*sg,sc=rcN(r[m.sgst])*sg;let ce=rcN(r[m.cess])*sg;
+  if(LG){const sm=a=>rcR(a.reduce((q,j)=>q+rcN(r[j]),0))*sg;t=LG.tx.length?sm(LG.tx):0;ig=sm(LG.ig);cg=sm(LG.cg);sc=sm(LG.sg);ce=sm(LG.cs);if(inv&&!/^total|^grand/i.test(inv)&&LG.out.some(j=>rcN(r[j])!==0))outRows++}
   const rI0=rcRate(cell(r,'igstR')),rC0=rcRate(cell(r,'cgstR')),rS0=rcRate(cell(r,'sgstR'));
   if(m.igst==null&&m.igstR!=null)ig=rcR(t*rI0/100);if(m.cgst==null&&m.cgstR!=null)cg=rcR(t*rC0/100);if(m.sgst==null&&m.sgstR!=null)sc=rcR(t*rS0/100);
   const rI=rcRateOf(rI0,ig*sg,t*sg),rC=rcRateOf(rC0,cg*sg,t*sg),rS=rcRateOf(rS0,sc*sg,t*sg);
@@ -1819,6 +1830,8 @@ function rcGstRows(rows,src,sign,ov){const notes=[];let hi=rcHead(rows,'gst');ro
    if(!ig&&!cg&&!sc&&(sI||sC||sS)){ig=sI;cg=sC;sc=sS}}
   else if(hs&&t)items=[{hsn:hs,qty:String(cell(r,'qty')==null?'':cell(r,'qty')).trim(),unit:String(cell(r,'unit')==null?'':cell(r,'unit')).trim(),taxable:t,igstR:rI,cgstR:rC,sgstR:rS,igst:ig,cgst:cg,sgst:sc}];
   out.push({src,ns,nt:noT,row:i+1,gstin:g,party:m.party!=null?String(r[m.party]||'').replace(/\s+/g,' ').trim():'',inv,date:rcDate(r[m.date]),taxable:t,igst:ig,cgst:cg,sgst:sc,cess:ce,items,itc:m.itc!=null?String(r[m.itc]||''):'',vc:m.note!=null?String(r[m.note]||''):''})}
+ if(LG){const nm=a=>a.map(j=>h[j].replace(/\s+/g,' ').trim()).join(' + ');notes.push(rcNote('info','Tally ledger-column register read. Taxable value = '+(LG.tx.length?nm(LG.tx):'invoice total minus tax')+'.','IGST: '+(nm(LG.ig)||'none')+'. CGST: '+(nm(LG.cg)||'none')+'. SGST: '+(nm(LG.sg)||'none')+'. All tax columns of every rate are added.'));
+  if(outRows)notes.push(rcNote('warn',outRows+' bill(s) have an OUTPUT GST ledger inside a purchase register. I counted it as input tax.','Check the ledger used for these bills in Tally.'))}
  if(foot.length&&out.length){const sT=rcR(out.reduce((q,x)=>q+x.taxable,0)),fT=foot[foot.length-1];notes.push(Math.abs(sT-fT)<=1?rcNote('okk','The total line at the bottom of the sheet ('+rcMoney(fT)+') matches the invoices read.',''):rcNote('warn','The total line at the bottom of the sheet shows '+rcMoney(fT)+' but the invoices add up to '+rcMoney(sT)+'.','Some bills may be missing or counted twice. Check the file against Tally.'))}
  if(merged)notes.unshift(rcNote('okk','Detected item-wise format: '+out.length+' invoices from '+lines+' lines ('+merged+' HSN item lines merged).','Each bill is counted once, using the taxable value on its total row.'));
  else if(out.length)notes.unshift(rcNote('okk','Detected one-line-per-bill format: '+out.length+' invoices.',''));
@@ -1874,10 +1887,11 @@ function rcParse(key){const o=RCS[key],sh=o.sh,ov=o.ov||{},bank=RCS.tab=='bank';
  else{for(const s of sh){const r=rcBankRows(s.rows,key=='A'?'books':'bank',ov);if(r.rows.length){rows=r.rows;err='';fix='';notes=r.notes||[];h=r.h;m=r.m;break}err=r.err||err;fix=r.fix||fix;if(r.h&&!h){h=r.h;m=r.m}notes=notes.concat(r.notes||[])}}
  o.rows=rows;o.n=rows.length;o.h=h;o.m=m;o.notes=notes;o.err=rows.length?'':(err||'No rows could be read from this file.');o.fix=rows.length?'':(fix||'Open "Columns I used" below to pick the right columns, or check that you chose the right file.');RCS.R=null}
 async function rcFile(inp,key){const f=inp.files[0];if(!f)return;const o={name:f.name,n:0,ov:{},sh:[],notes:[]};RCS[key]=o;RCS.R=null;RCS.mapOpen=RCS.mapOpen||{};
- try{o.sh=await rcRead(f);o.info=rcInfo(o.sh);rcParse(key)}catch(e){const fr=rcFriendly(e);o.err=fr[0];o.fix=fr[1]}
+ try{o.sh=await rcRead(f);o.info=rcInfo(o.sh);rcParse(key);try{const g=rcSig(o.h),sv=g&&DB.rcmaps&&DB.rcmaps[g];if(sv&&!Object.keys(o.ov||{}).length){o.ov=Object.assign({},sv);rcParse(key);o.notes=[rcNote('info','I remembered your column choices for this file layout.','Open "Columns I used" if you want to change them.')].concat(o.notes||[])}}catch(e2){}}catch(e){const fr=rcFriendly(e);o.err=fr[0];o.fix=fr[1]}
  if(o.n&&o.notes.some(n=>n.lvl!='info'&&n.lvl!='okk'))RCS.mapOpen[key]=true;
  recoPage(true)}
-function rcRemap(key,f,v){const o=RCS[key];if(!o)return;o.ov=o.ov||{};o.ov[f]=+v;RCS.mapOpen[key]=true;rcParse(key);recoPage(true)}
+const rcSig=h=>(h||[]).map(x=>String(x==null?'':x).toLowerCase().replace(/\s+/g,' ').trim()).filter(Boolean).join('|');
+function rcRemap(key,f,v){const o=RCS[key];if(!o)return;o.ov=o.ov||{};o.ov[f]=+v;RCS.mapOpen[key]=true;rcParse(key);try{const g=rcSig(o.h);if(g){DB.rcmaps=DB.rcmaps||{};DB.rcmaps[g]=Object.assign({},o.ov);save()}}catch(e){}recoPage(true)}
 function rcMapReset(key){const o=RCS[key];if(!o)return;o.ov={};rcParse(key);recoPage(true)}
 
 function rcNotesHtml(L){return L.map(n=>'<div class="rcn '+n.lvl+'"><i>'+(n.lvl=='bad'?'!':n.lvl=='warn'?'!':'i')+'</i><div><b>'+E(n.msg)+'</b>'+(n.fix?'<span>What to do: '+E(n.fix)+'</span>':'')+'</div></div>').join('')}
@@ -2790,8 +2804,8 @@ let ARCL=[];
 async function arcFind(){const h=await arcFolder(true);if(!h)return;modal('<h3>Looking in the folder…</h3>');
  try{ARCL=await arcList(h)}catch(e){modal('<h3>Could not read the folder</h3><p>'+E(e.message||String(e))+'</p>');return}
  modal('<h3>Saved clients in "'+E(h.name||'folder')+'"</h3><input id="arq" class="sq" placeholder="Type part of the client name..." oninput="arcShow()" style="width:100%"><div id="arl" style="max-height:50vh;overflow:auto;margin:10px 0"></div><button class="g" onclick="arcChange().then(arcFind)">Use a different folder</button>');arcShow()}
-function arcShow(){const q=(($id('arq')||{}).value||'').toLowerCase(),e=$id('arl');if(!e)return;const L=ARCL.map((x,i)=>[x,i]).filter(([x])=>!q||x.name.toLowerCase().includes(q)||String(x.owner).toLowerCase().includes(q));
- e.innerHTML=L.length?L.map(([x,i])=>'<div class="card" style="margin:6px 0"><b>'+E(x.name)+'</b> <small>(login: '+E(x.owner)+')</small><br><small>Saved '+E(String(x.saved||'').slice(0,10))+' · '+x.banks+' bank account(s) · '+x.ledgers+' ledger name(s)</small><br><button onclick="arcBack('+i+')">Bring back to the site</button></div>').join(''):'<p>'+(ARCL.length?'No client matches that name.':'No saved clients in this folder yet.')+'</p>'}
+function arcShow(){const q=(($id('arq')||{}).value||'').toLowerCase(),e=$id('arl');if(!e)return;const me=String(VIEW||USER||'').toLowerCase(),L=ARCL.map((x,i)=>[x,i]).filter(([x])=>String(x.owner).toLowerCase()==me&&(!q||x.name.toLowerCase().includes(q)));
+ e.innerHTML=L.length?L.map(([x,i])=>'<div class="card" style="margin:6px 0"><b>'+E(x.name)+'</b> <small>(login: '+E(x.owner)+')</small><br><small>Saved '+E(String(x.saved||'').slice(0,10))+' · '+x.banks+' bank account(s) · '+x.ledgers+' ledger name(s)</small><br><button onclick="arcBack('+i+')">Bring back to the site</button></div>').join(''):'<p>'+(ARCL.some(x=>String(x.owner).toLowerCase()==me)?'No client matches that name.':'No saved clients of yours in this folder yet.')+'</p>'}
 async function arcBack(i){const x=ARCL[i],h=ARC.h;if(!x||!h)return;let j;try{j=JSON.parse(await(await(await h.getFileHandle(x.file)).getFile()).text())}catch(e){modal('<h3>Could not read that file</h3>');return}
  const me=VIEW||USER;if(String(j.owner).toLowerCase()!=String(me).toLowerCase()&&!confirm('This client was saved from the login "'+j.owner+'". Bring it back into "'+me+'" instead?'))return;
  let nm=j.name;if(DB.clients[nm]){if(!confirm('"'+nm+'" is already on the site. Bring the saved copy back as "'+nm+' (restored)"? Nothing will be overwritten.'))return;nm=nm+' (restored)'}
