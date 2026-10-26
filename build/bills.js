@@ -11,10 +11,12 @@ const BXU={SQM:'SQM',SFT:'SFT',SQFT:'SFT',LTR:'LTR',LTRS:'LTR',LITRE:'LTR',LITRE
 function bxUnit(u){u=bxC(u);if(!u)return'';const k=u.toUpperCase().replace(/[^A-Z]/g,'');if(BXU[k])return BXU[k];const s=u.replace(/s$/i,'');return s.charAt(0).toUpperCase()+s.slice(1).toLowerCase()}
 
 /* ---------- reading a bill from rows of text (works for Excel cells, PDF lines and scanned text) ---------- */
+const GSP=/\b\d\s?\d\s?[A-Z]\s?[A-Z]\s?[A-Z]\s?[A-Z]\s?[A-Z]\s?\d\s?\d\s?\d\s?\d\s?[A-Z]\s?[1-9A-Z]\s?Z\s?[0-9A-Z]\b/g;
+const bxLx=w=>w.replace(/\s/g,'').split('').join('\\s*');
 function bxFromRows(rows,ownG,ownN){
- const R=rows.map(r=>(Array.isArray(r)?r:[r]).map(x=>bxC(String(x==null?'':x).replace(/\r?\n/g,'\u0001'))).filter(x=>x!==''&&x!=='\u0001')).filter(r=>r.length),L=R.map(r=>r.join('  ').replace(/\u0001/g,' ')),B={no:'',date:'',party:'',gstin:'',items:[],printed_total:null,warn:[]};
+ const R=rows.map(r=>(Array.isArray(r)?r:[r]).map(x=>bxC(String(x==null?'':x).replace(/\r?\n/g,'\u0001')).replace(GSP,m=>m.replace(/\s+/g,''))).filter(x=>x!==''&&x!=='\u0001')).filter(r=>r.length),L=R.map(r=>r.join('  ').replace(/\u0001/g,' ')),B={no:'',date:'',party:'',gstin:'',items:[],printed_total:null,warn:[]};
  const own=String(ownG||'').toUpperCase();
- const NOL=/\b(?:tax\s*invoice|invoice|inv\.?|bill|voucher)\s*(?:no|number|num)\b\.?|\b(?:invoice|bill|inv)\s*#/i,WAY=/e[\s\-]*way\s*bill\s*(?:no|number)?\.?/ig;let li=-1;
+ const NOL=new RegExp('\\b(?:'+[bxLx('taxinvoice'),bxLx('invoice'),bxLx('inv')+'\\.?',bxLx('bill'),bxLx('voucher')].join('|')+')\\s*(?:'+[bxLx('no'),bxLx('number'),bxLx('num')].join('|')+')(?![A-Za-z])\\.?|\\b(?:invoice|bill|inv)\\s*#','i'),WAY=new RegExp(bxLx('eway')+'[\\s\\-]*'+bxLx('bill')+'\\s*(?:'+bxLx('no')+'|'+bxLx('number')+')?\\.?','ig');let li=-1;
  for(let k=0;k<L.length&&!B.no;k++){const ln=L[k].replace(WAY,' '),mm=NOL.exec(ln);if(!mm)continue;
   const tail=ln.slice(mm.index+mm[0].length).replace(/^[\s:;\-\.#]+/,''),m=tail.match(/^([A-Za-z0-9][A-Za-z0-9\/\-\.]*)/);let v=m?m[1].replace(/[\.\-]+$/,''):'';
   if(!/\d/.test(v)&&L[k+1]){const m3=L[k+1].replace(/^[\s:;\-\.#]+/,'').match(/^([A-Za-z0-9][A-Za-z0-9\/\-\.]*\d[A-Za-z0-9\/\-\.]*)/);v=m3?m3[1].replace(/[\.\-]+$/,''):''}
@@ -33,9 +35,9 @@ function bxFromRows(rows,ownG,ownN){
  const ba=(()=>{const i=L.findIndex(l=>/^\s*billing\s*address/i.test(l));if(i>=0)return i;if(bi<0)return L.findIndex(l=>/^\s*tax\s*invoice\s*$/i.test(l));return -1})();
  if(!B.party&&ba>=0&&R[ba+1]&&/[A-Za-z]{3}/.test(R[ba+1][0])&&!/^\s*(pan|gst|mob|tel|date|invoice)/i.test(R[ba+1][0])){let nm=bxC(R[ba+1][0].split('\u0001')[0]);const w=nm.split(' ').slice(0,2).join(' '),i2=w?nm.indexOf(w,1):-1;if(i2>0)nm=nm.slice(0,i2).trim();B.party=nm}
  const from=bi>=0?bi:(ba>=0?ba:0);let g=(L.slice(from,from+8).join(' ').match(BXGS)||[]).filter(x=>x!=own);if(!g.length)g=(L.join(' ').match(BXGS)||[]).filter(x=>x!=own);B.gstin=g[0]||'';B.kind='sales';
- if(own){const all=L.join(' ').toUpperCase();
+ if(own){const all=L.join(' ').toUpperCase().replace(/\s+/g,'');
   if(!all.includes(own))B.warn.push('Your client\'s GSTIN ('+own+') is not on this bill. Check that you picked the right client sheet.');
-  else if((bi>=0||ba>=0)&&L.slice(from,from+14).join(' ').toUpperCase().includes(own)&&!(()=>{try{const tk=lgNorm(ownN||'').split(' ').filter(t=>t.length>=3),top=lgNorm(R.slice(0,3).map(r=>r[0]).join(' '));return tk.length>0&&tk.every(t=>top.includes(t))}catch(e){return false}})()){B.kind='purchase';let sup='';
+  else if((bi>=0||ba>=0)&&L.slice(from,from+14).join(' ').toUpperCase().replace(/\s+/g,'').includes(own)&&!(()=>{try{const tk=lgNorm(ownN||'').split(' ').filter(t=>t.length>=3),top=lgNorm(R.slice(0,3).map(r=>r[0]).join(' '));return tk.length>0&&tk.every(t=>top.includes(t))}catch(e){return false}})()){B.kind='purchase';let sup='';
    for(let k=0;k<Math.min(L.length,12);k++){if(/tax\s*invoice|invoice\s*no|bill\s*of\s*supply/i.test(L[k]))break;const c=R[k][0].split('\u0001')[0];if(/[A-Za-z]{3}/.test(c)&&!/mob|tel|phone|e-?mail|gstin|gst\s*no|original|duplicate|triplicate|www\.|@|^\s*(office|godown)/i.test(c)){sup=bxC(c);break}}
    if(sup)B.party=sup;B.warn.push('This is a PURCHASE bill (your client is the buyer). The supplier name '+(sup?'was taken from the top of the bill':'could not be found')+' - please check it.')}}
  const hi=L.findIndex(l=>/hsn|\bsac\b/i.test(l)&&/(qty|quantity)/i.test(l));let ti=-1;
@@ -79,7 +81,7 @@ function bxFromRows(rows,ownG,ownN){
 /* ---------- reading files ---------- */
 async function bxZip(){if(!window.JSZip)await loadJs('https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js');return window.JSZip}
 async function bxXlsxLib(){if(!window.XLSX)await loadJs('https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js');return window.XLSX}
-async function bxLines(P){const L=[];P.forEach(pg=>{const ln=[];pg.forEach(i=>{let l=ln.find(o=>Math.abs(o.y-i.y)<=3);if(!l)ln.push(l={y:i.y,it:[]});l.it.push(i)});ln.sort((a,b)=>b.y-a.y).forEach(l=>{l.it.sort((a,b)=>a.x-b.x);const out=[];l.it.forEach(i=>{const q=out[out.length-1];if(q&&i.x-q.r<6){q.t+=' '+i.t;q.r=i.x+i.w}else out.push({t:i.t,r:i.x+i.w})});L.push(out.map(o=>o.t))})});return L}
+async function bxLines(P){const L=[];P.forEach(pg=>{const ln=[];pg.forEach(i=>{let l=ln.find(o=>Math.abs(o.y-i.y)<=3);if(!l)ln.push(l={y:i.y,it:[]});l.it.push(i)});ln.sort((a,b)=>b.y-a.y).forEach(l=>{l.it.sort((a,b)=>a.x-b.x);const out=[];l.it.forEach(i=>{const q=out[out.length-1];if(q&&i.x-q.r<6){q.t+=(i.x-q.r<0.6?'':' ')+i.t;q.r=i.x+i.w}else out.push({t:i.t,r:i.x+i.w})});L.push(out.map(o=>o.t))})});return L}
 async function bxPdfPages(buf){const B='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/';
  if(!window.pdfjsLib){await loadJs(B+'pdf.min.js');const w=await(await fetch(B+'pdf.worker.min.js')).text();pdfjsLib.GlobalWorkerOptions.workerSrc=URL.createObjectURL(new Blob([w],{type:'text/javascript'}))}
  const pdf=await pdfjsLib.getDocument({data:new Uint8Array(buf)}).promise,P=[];
