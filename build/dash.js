@@ -49,8 +49,9 @@ const GSTATE={'01':'Jammu & Kashmir','02':'Himachal Pradesh','03':'Punjab','04':
 const gStateOf=g=>GSTATE[String(g||'').slice(0,2)]||'';
 function gMasterXml(m){const nm=E(m.n),par=m.parent,gs=m.gs?E(m.gs):'';
  const old='<TALLYMESSAGE xmlns:UDF="TallyUDF"><LEDGER NAME="'+nm+'" ACTION="Create"><NAME.LIST><NAME>'+nm+'</NAME></NAME.LIST><PARENT>'+par+'</PARENT><ISBILLWISEON>Yes</ISBILLWISEON>'+(gs?'<PARTYGSTIN>'+gs+'</PARTYGSTIN>':'')+'</LEDGER></TALLYMESSAGE>';
- let prime=false;try{prime=/prime/i.test(C().ver||'')}catch(e){}
+ let prime=false,no=false;try{prime=/prime/i.test(C().ver||'');no=!!C().nameOnly}catch(e){}
  if(!prime)return old;
+ if(no)return '<TALLYMESSAGE xmlns:UDF="TallyUDF"><LEDGER NAME="'+nm+'" ACTION="Create"><NAME.LIST><NAME>'+nm+'</NAME></NAME.LIST><PARENT>'+par+'</PARENT><ISBILLWISEON>Yes</ISBILLWISEON></LEDGER></TALLYMESSAGE>';
  let pa=null;try{pa=(C().paddr||{})[m.gs||lk(m.n)]||null}catch(e){}
  const st=gStateOf(m.gs),stx=st?E(st):'',rt=gs?'Regular':(st?'Unregistered/Consumer':'');
  return '<TALLYMESSAGE xmlns:UDF="TallyUDF"><LEDGER NAME="'+nm+'" ACTION="Create"><NAME.LIST><NAME>'+nm+'</NAME></NAME.LIST><PARENT>'+par+'</PARENT><ISBILLWISEON>Yes</ISBILLWISEON>'
