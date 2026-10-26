@@ -26,7 +26,12 @@ function bxFromRows(rows,ownG){
   B.party=bxC(name.replace(/\u0001/g,' '))}
  const ba=L.findIndex(l=>/^\s*billing\s*address/i.test(l));
  if(!B.party&&ba>=0&&R[ba+1]){let nm=bxC(R[ba+1][0].split('\u0001')[0]);const w=nm.split(' ').slice(0,2).join(' '),i2=w?nm.indexOf(w,1):-1;if(i2>0)nm=nm.slice(0,i2).trim();B.party=nm}
- const from=bi>=0?bi:(ba>=0?ba:0);let g=(L.slice(from,from+8).join(' ').match(BXGS)||[]).filter(x=>x!=own);if(!g.length)g=(L.join(' ').match(BXGS)||[]).filter(x=>x!=own);B.gstin=g[0]||'';
+ const from=bi>=0?bi:(ba>=0?ba:0);let g=(L.slice(from,from+8).join(' ').match(BXGS)||[]).filter(x=>x!=own);if(!g.length)g=(L.join(' ').match(BXGS)||[]).filter(x=>x!=own);B.gstin=g[0]||'';B.kind='sales';
+ if(own){const all=L.join(' ').toUpperCase();
+  if(!all.includes(own))B.warn.push('Your client\'s GSTIN ('+own+') is not on this bill. Check that you picked the right client sheet.');
+  else if((bi>=0||ba>=0)&&L.slice(from,from+8).join(' ').toUpperCase().includes(own)){B.kind='purchase';let sup='';
+   for(let k=0;k<Math.min(L.length,12);k++){if(/tax\s*invoice|invoice\s*no|bill\s*of\s*supply/i.test(L[k]))break;const c=R[k][0].split('\u0001')[0];if(/[A-Za-z]{3}/.test(c)&&!/mob|tel|phone|e-?mail|gstin|gst\s*no|original|duplicate|triplicate|www\.|@|^\s*(office|godown)/i.test(c)){sup=bxC(c);break}}
+   if(sup)B.party=sup;B.warn.push('This is a PURCHASE bill (your client is the buyer). The supplier name '+(sup?'was taken from the top of the bill':'could not be found')+' - please check it.')}}
  const hi=L.findIndex(l=>/hsn/i.test(l)&&/(qty|quantity)/i.test(l));let ti=-1;
  if(hi>=0){ti=L.findIndex((l,k)=>k>hi&&/^\s*total\b/i.test(l));if(ti<0)ti=L.length}
  if(hi>=0){let last=null;
@@ -119,7 +124,7 @@ function bxSheetXml(sh){
  const mrg=['A1:O1','A2:O2','A3:O3'];
  // title rows
  const tr=(r,v,font,sz,nfm,topB,botB)=>{let x='';for(let c=1;c<=15;c++){const st=S({f:'Times New Roman',sz,b:1,bd:[c==1,c==15,topB,botB],nf:c==1?nfm:'General',v:'bottom'});x+=cell(r,c,c==1?v:null,st)}rows.push('<row r="'+r+'"'+(r==1?' ht="22.5" customHeight="1"':' ht="15.75" customHeight="1"')+'>'+x+'</row>')};
- tr(1,sh.company||'',  'x',18,'General',1,0);tr(2,sh.gstin||'','x',12,'General',0,0);
+ tr(1,(sh.company||'')+(sh.kind=='purchase'?' - PURCHASE':''),  'x',18,'General',1,0);tr(2,sh.gstin||'','x',12,'General',0,0);
  {let x='';const ms=bxSerial(sh.month);for(let c=1;c<=15;c++){const st=S({f:'Times New Roman',sz:12,b:1,bd:[c==1,c==15,0,1],nf:c==1?'mmm-yy':'General',v:'bottom'});x+=cell(3,c,c==1?ms:null,st)}rows.push('<row r="3" ht="15.75" customHeight="1">'+x+'</row>')}
  {let x='';BXH.forEach((h,i)=>{x+=cell(4,i+1,h,S({b:(i==10||i==12)?0:1}))});rows.push('<row r="4">'+x+'</row>')}
  const sACC=S({nf:ACC,h:'right'}),sP=S({nf:'0%'}),sG=S({}),sD=S({nf:'mm-dd-yy'});
@@ -156,7 +161,7 @@ async function bxXlsx(sh){const Z=await bxZip(),z=new Z(),{sheet,styles}=bxSheet
 /* ---------- reading a sheet made in this layout (to continue it) ---------- */
 async function bxReadSheet(f){const X=await bxXlsxLib(),wb=X.read(new Uint8Array(await f.arrayBuffer()),{type:'array',cellDates:true}),ws=wb.Sheets[wb.SheetNames[0]],
  g=X.utils.sheet_to_json(ws,{header:1,raw:true,defval:'',blankrows:true}),iso=x=>x instanceof Date?bxLoc(x):(typeof x=='number'&&x>20000?new Date(Date.UTC(1899,11,30)+x*864e5).toISOString().slice(0,10):bxDate(x));
- const sh={id:'s'+Date.now().toString(36),company:bxC(g[0]&&g[0][0]),gstin:bxC(g[1]&&g[1][0]).toUpperCase(),month:(iso(g[2]&&g[2][0])||'').slice(0,7)+'-01',bills:[]};let items=[];
+ const sh={id:'s'+Date.now().toString(36),company:bxC(g[0]&&g[0][0]),gstin:bxC(g[1]&&g[1][0]).toUpperCase(),month:(iso(g[2]&&g[2][0])||'').slice(0,7)+'-01',bills:[]};if(/\s-\s*PURCHASE$/i.test(sh.company)){sh.company=sh.company.replace(/\s-\s*PURCHASE$/i,'');sh.kind='purchase'}let items=[];
  for(let i=4;i<g.length;i++){const r=g[i],a=r[0],b=r[1];if(typeof a=='string'&&/^total$/i.test(a.trim()))continue;
   if(b!==''&&b!=null){sh.bills.push({date:iso(a),no:bxC(b),party:bxC(r[2]),gstin:bxC(r[3]).toUpperCase(),items,flag:false,note:bxC(r[16])});items=[]}
   else if(r[7]!==''&&r[4]!==''&&typeof r[7]=='number'){const rt=c=>typeof r[c]=='number'?r[c]:0;items.push({hsn:String(r[4]).trim(),qty:r[5],unit:bxC(r[6]),taxable:r[7],igst:rt(8),cgst:rt(10),sgst:rt(12)})}}
@@ -171,7 +176,7 @@ function bx(){CURP='bx';sb();tg(0);const dd=$id('dd');if(dd)dd.classList.remove(
 function bxMoney(x){return x.toLocaleString('en-IN',{minimumFractionDigits:2,maximumFractionDigits:2})}
 function bxDraw(){if(CURP!='bx')return;const d=bxDb(),s=bxCur();
  let h='<i data-pg="bx" hidden></i><div class="bx"><div class="gxh"><h2>Bills to Excel</h2><p>Upload your bills (Excel, PDF or a photo). Check what was read, then download the Excel register in your INDIA TRADING layout.</p></div>';
- h+='<div class="card"><b>Sheet</b><div class="bxr"><select id="bxs" onchange="bxPick(this.value)">'+(d.sheets.length?'':'<option value="">No sheet yet</option>')+d.sheets.map(x=>'<option value="'+E(x.id)+'"'+(x.id==d.cur?' selected':'')+'>'+E(x.company)+' · '+E((x.month||'').slice(0,7))+' ('+x.bills.length+' bills)</option>').join('')+'</select><button onclick="bxNew()">New sheet</button><label class="bxf">Continue from an Excel I made earlier<input type="file" accept=".xlsx,.xls" onchange="bxCont(this.files[0]);this.value=\'\'"></label>'+(s?'<button class="g" onclick="bxDelSheet()">Delete sheet</button>':'')+'</div></div>';
+ h+='<div class="card"><b>Sheet</b><div class="bxr"><select id="bxs" onchange="bxPick(this.value)">'+(d.sheets.length?'':'<option value="">No sheet yet</option>')+d.sheets.map(x=>'<option value="'+E(x.id)+'"'+(x.id==d.cur?' selected':'')+'>'+E(x.company)+(x.kind=='purchase'?' · PURCHASE':'')+' · '+E((x.month||'').slice(0,7))+' ('+x.bills.length+' bills)</option>').join('')+'</select><button onclick="bxNew()">New sheet</button><label class="bxf">Continue from an Excel I made earlier<input type="file" accept=".xlsx,.xls" onchange="bxCont(this.files[0]);this.value=\'\'"></label>'+(s?'<button class="g" onclick="bxDelSheet()">Delete sheet</button>':'')+'</div></div>';
  if(!s)h+='<div class="card">Start with <b>New sheet</b> (company name, GSTIN and month), or continue a sheet from an Excel file you made earlier.</div>';
  else{const f=s.bills.reduce((a,b)=>{const z=bxFig(b);return[a[0]+z[0],a[1]+z[1]+z[2]+z[3],a[2]+z[4]]},[0,0,0]);
   h+='<div class="card"><b>'+E(s.company)+'</b> · '+E(s.gstin)+' · '+E((s.month||'').slice(0,7))+'<div class="bxs"><span>Bills <b>'+s.bills.length+'</b></span><span>Taxable <b>₹'+bxMoney(f[0])+'</b></span><span>GST <b>₹'+bxMoney(f[1])+'</b></span><span>Total <b>₹'+bxMoney(f[2])+'</b></span></div><div class="bxr"><button onclick="bxDown()"'+(s.bills.length?'':' disabled')+'>Download Excel</button><button class="g" onclick="bxList()">See bills in this sheet</button><button class="g" onclick="bxSet()">Change company / month</button></div></div>';
@@ -182,7 +187,7 @@ function bxDraw(){if(CURP!='bx')return;const d=bxDb(),s=bxCur();
  h+='</div>';app.innerHTML=h}
 function bxCard(b,i){const f=bxFig(b);
  const inp=(k,v,w,ph)=>'<input value="'+E(v==null?'':v)+'" style="width:'+w+'" placeholder="'+(ph||'')+'" oninput="bxEd('+i+',\''+k+'\',this.value)">';
- let h='<div class="card bxc"><div class="bxh"><b>'+E(b.src||'Bill')+'</b>'+(b.warn&&b.warn.length?'<span class="bxbad">'+b.warn.length+' to check</span>':'<span class="bxok">Read</span>')+'<span class="sp"></span><button class="g sm" onclick="bxAi1('+i+')">Read with AI</button><button class="g sm" onclick="BXP.splice('+i+',1);bxDraw()">Remove</button></div>';
+ let h='<div class="card bxc"><div class="bxh"><b>'+E(b.src||'Bill')+'</b>'+(b.warn&&b.warn.length?'<span class="bxbad">'+b.warn.length+' to check</span>':'<span class="bxok">Read</span>')+'<select title="Sales or purchase bill" onchange="BXP['+i+'].kind=this.value;bxDraw()"><option value="sales"'+(b.kind=='purchase'?'':' selected')+'>Sales bill</option><option value="purchase"'+(b.kind=='purchase'?' selected':'')+'>Purchase bill</option></select><span class="sp"></span><button class="g sm" onclick="bxAi1('+i+')">Read with AI</button><button class="g sm" onclick="BXP.splice('+i+',1);bxDraw()">Remove</button></div>';
  if(b.warn&&b.warn.length)h+='<div class="bxwn">'+b.warn.map(E).join('<br>')+'</div>';
  h+='<div class="bxg"><label>Date'+inp('date',b.date,'9.5em','YYYY-MM-DD')+'</label><label>Bill no'+inp('no',b.no,'8em')+'</label><label>Party'+inp('party',b.party,'18em')+'</label><label>GSTIN'+inp('gstin',b.gstin,'12em')+'</label></div>';
  h+='<table class="bxt"><tr><th>HSN</th><th>Qty</th><th>Unit</th><th>Taxable ₹</th><th>CGST %</th><th>SGST %</th><th>IGST %</th><th></th></tr>'+b.items.map((it,j)=>'<tr>'+['hsn','qty','unit','taxable'].map(k=>'<td><input value="'+E(it[k]==null?'':it[k])+'" size="'+(k=='taxable'?9:k=='hsn'?9:5)+'" oninput="bxEdI('+i+','+j+',\''+k+'\',this.value)"></td>').join('')+['cgst','sgst','igst'].map(k=>'<td><input value="'+(+(((it[k]||0)*100).toFixed(2)))+'" size="4" oninput="bxEdR('+i+','+j+',\''+k+'\',this.value)"></td>').join('')+'<td><button class="g sm" onclick="BXP['+i+'].items.splice('+j+',1);bxDraw()">×</button></td></tr>').join('')+'</table>';
@@ -207,15 +212,17 @@ async function bxAdd(files){const s=bxCur();if(!s||!files.length)return;files=[.
  BXBUSY=0;bxDraw()}
 async function bxAi1(i){const s=bxCur(),b=BXP[i];if(!b.rows)return alert('There is no text to read for this bill.');if(!(LS.on&&LS.token))return alert('The AI works only when you are signed in on the office server, and the admin has set it up.');
  const a=await bxAi(b.rows,s);if(!a)return alert('The AI could not read this bill (it may not be set up yet). Please type the details in.');a.src=b.src;a.rows=b.rows;BXP[i]=a;bxDraw()}
-function bxClean(b){return{date:bxDate(b.date)||b.date||'',no:bxC(b.no),party:bxC(b.party),gstin:bxC(b.gstin).toUpperCase(),printed_total:b.printed_total==null?null:b.printed_total,flag:!!b.flag,
+function bxClean(b){return{kind:b.kind=='purchase'?'purchase':'sales',date:bxDate(b.date)||b.date||'',no:bxC(b.no),party:bxC(b.party),gstin:bxC(b.gstin).toUpperCase(),printed_total:b.printed_total==null?null:b.printed_total,flag:!!b.flag,
  items:b.items.map(i=>({hsn:String(i.hsn||'').trim(),qty:i.qty===''?'':+i.qty,unit:bxC(i.unit),taxable:bxR2(+i.taxable||0),igst:+i.igst||0,cgst:+i.cgst||0,sgst:+i.sgst||0}))}}
-function bxPush(idx){const s=bxCur(),L=idx.map(i=>bxClean(BXP[i]));BXW=bxCheck(s,L);L.forEach(b=>{s.bills.push(b)});s.updated=new Date().toISOString();
- BXP=BXP.filter((_,i)=>!idx.includes(i));save();bxDraw();toast('Added '+L.length+' bill'+(L.length>1?'s':'')+' to the sheet.')}
+function bxPush(idx){const s0=bxCur(),L=idx.map(i=>bxClean(BXP[i])),d=bxDb(),mine=s0.kind=='purchase'?'purchase':'sales';BXW=[];let ns=0,np=0;
+ const want=k=>{if(k==mine)return s0;let t=d.sheets.find(x=>(x.kind=='purchase'?'purchase':'sales')==k&&x.company==s0.company&&x.gstin==s0.gstin&&x.month==s0.month);if(!t){t={id:'s'+Date.now().toString(36)+k[0],company:s0.company,gstin:s0.gstin,month:s0.month,bills:[]};if(k=='purchase')t.kind='purchase';d.sheets.push(t)}return t};
+ ['sales','purchase'].forEach(k=>{const G=L.filter(b=>b.kind==k);if(!G.length)return;const t=want(k);BXW=BXW.concat(bxCheck(t,G));G.forEach(b=>t.bills.push(b));t.updated=new Date().toISOString();if(k=='sales')ns=G.length;else np=G.length});
+ BXP=BXP.filter((_,i)=>!idx.includes(i));save();bxDraw();toast('Added '+L.length+' bill'+(L.length>1?'s':'')+(np&&ns?' ('+ns+' sales, '+np+' purchase)':np?' to the Purchase sheet':' to the sheet')+'.')}
 function bxOne(i){bxPush([i])}
 function bxAll(){bxPush(BXP.map((_,i)=>i))}
 function bxList(){const s=bxCur();modal('<h3>Bills in this sheet</h3><div style="max-height:60vh;overflow:auto"><table class="bxt"><tr><th>Date</th><th>No</th><th>Party</th><th>Taxable</th><th>Total</th><th></th></tr>'+s.bills.map((b,i)=>{const f=bxFig(b);return'<tr><td>'+E(b.date)+'</td><td>'+E(b.no)+'</td><td>'+E(b.party)+'</td><td>'+bxMoney(f[0])+'</td><td>'+bxMoney(f[4])+(b.flag?' ⚠':'')+'</td><td><button class="g sm" onclick="bxRm('+i+')">Remove</button></td></tr>'}).join('')+'</table></div>')}
 function bxRm(i){const s=bxCur();if(!confirm('Remove bill '+s.bills[i].no+' from the sheet?'))return;s.bills.splice(i,1);save();bxList();bxDraw()}
-async function bxDown(){const s=bxCur();if(!s)return;try{const u=await bxXlsx(s),nm=(s.company||'Sheet').replace(/[^A-Za-z0-9]+/g,'_')+'_'+(s.month||'').slice(0,7)+'.xlsx',a=document.createElement('a');
+async function bxDown(){const s=bxCur();if(!s)return;try{const u=await bxXlsx(s),nm=(s.company||'Sheet').replace(/[^A-Za-z0-9]+/g,'_')+(s.kind=='purchase'?'_Purchase':'')+'_'+(s.month||'').slice(0,7)+'.xlsx',a=document.createElement('a');
   a.href=URL.createObjectURL(new Blob([u],{type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'}));a.download=nm;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},800)}catch(e){alert('Could not make the Excel file: '+(e&&e.message||e))}}
 (function(){const o=window.sb;if(typeof o!='function')return;window.sb=function(){o.apply(this,arguments);try{if(!USER)return;const el=document.getElementById('sb');if(!el||el.querySelector('.bxl'))return;const a=[...el.querySelectorAll('a.li')].find(x=>/Reco/.test(x.textContent));
  const h='<a class="li bxl'+(CURP=='bx'?' act':'')+'" onclick="bx()"><span>Bills → Excel</span></a>';if(a)a.insertAdjacentHTML('afterend',h);else el.insertAdjacentHTML('beforeend',h)}catch(e){}}})();
