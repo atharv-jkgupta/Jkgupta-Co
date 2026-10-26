@@ -11,25 +11,27 @@ const BXU={SQM:'SQM',SFT:'SFT',SQFT:'SFT',LTR:'LTR',LTRS:'LTR',LITRE:'LTR',LITRE
 function bxUnit(u){u=bxC(u);if(!u)return'';const k=u.toUpperCase().replace(/[^A-Z]/g,'');if(BXU[k])return BXU[k];const s=u.replace(/s$/i,'');return s.charAt(0).toUpperCase()+s.slice(1).toLowerCase()}
 
 /* ---------- reading a bill from rows of text (works for Excel cells, PDF lines and scanned text) ---------- */
-function bxFromRows(rows,ownG){
+function bxFromRows(rows,ownG,ownN){
  const R=rows.map(r=>(Array.isArray(r)?r:[r]).map(x=>bxC(String(x==null?'':x).replace(/\r?\n/g,'\u0001'))).filter(x=>x!==''&&x!=='\u0001')).filter(r=>r.length),L=R.map(r=>r.join('  ').replace(/\u0001/g,' ')),B={no:'',date:'',party:'',gstin:'',items:[],printed_total:null,warn:[]};
  const own=String(ownG||'').toUpperCase();
  const li=L.findIndex(l=>/invoice\s*no/i.test(l));
  if(li>=0){const m=L[li].match(/invoice\s*no\.?\s*[:;\-\s]*([A-Za-z0-9][A-Za-z0-9\/\-]*)/i);if(m)B.no=m[1];
   for(let k=li;k<=li+1&&k<L.length&&!B.date;k++){const m2=L[k].match(/date\s*[:;]?\s*(\d{1,2}[\/\-.]\d{1,2}[\/\-.]\d{2,4})/i);if(m2)B.date=bxDate(m2[1])}}
  if(!B.date){for(let k=0;k<Math.min(L.length,14)&&!B.date;k++){const m=L[k].match(/(\d{1,2}[\/\-.]\d{1,2}[\/\-.]\d{2,4})/);if(m)B.date=bxDate(m[1])}}
+ if(!B.date){const MN={jan:1,feb:2,mar:3,apr:4,may:5,jun:6,jul:7,aug:8,sep:9,oct:10,nov:11,dec:12};
+  for(let k=0;k<Math.min(L.length,16)&&!B.date;k++){const m=L[k].match(/(\d{1,2})\s*(?:st|nd|rd|th)?\s+(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*\.?,?\s+(\d{4})/i);if(m)B.date=m[3]+'-'+String(MN[m[2].toLowerCase()]).padStart(2,'0')+'-'+String(+m[1]).padStart(2,'0')}}
  const bi=L.findIndex(l=>/^\s*(buyer|bill(ed)?\s*to|customer|party|m\/s)\b/i.test(l));
  if(bi>=0){let t=R[bi];let name='';const ix=t.findIndex(c=>/^(buyer|bill(ed)?\s*to|customer|party|m\/s)\s*[:;\-]*$/i.test(c));
   if(ix>=0&&t[ix+1])name=t[ix+1];else name=t.join(' ').replace(/^\s*(buyer|bill(ed)?\s*to|customer|party|m\/s)\s*[:;\-]*\s*/i,'');
   name=name.split('\u0001')[0];name=name.split(/ship\s*to/i)[0];name=name.split(/\bgstin\b/i)[0];
   if(!name||/^\d+[\/,\-\s]|\b(estate|road|marg|nagar|naka|plot|flat|floor|street|society|building|chs|apartment)\b/i.test(name)){let j=bi-1,top=-1;while(j>=0&&!/mame|udyam|e\s*way|tax\s*invoice|original|duplicate|triplicate|invoice\s*no|challan|order\s*no|despatch|vehicle|l\.r\.|^\s*gstin\s+\d|e-mail|office|godown/i.test(L[j])){top=j;j--}if(top>=0)name=R[top][0].split('\u0001')[0];else if(!name&&R[bi+1])name=R[bi+1][0]}
   B.party=bxC(name.replace(/\u0001/g,' '))}
- const ba=L.findIndex(l=>/^\s*billing\s*address/i.test(l));
- if(!B.party&&ba>=0&&R[ba+1]){let nm=bxC(R[ba+1][0].split('\u0001')[0]);const w=nm.split(' ').slice(0,2).join(' '),i2=w?nm.indexOf(w,1):-1;if(i2>0)nm=nm.slice(0,i2).trim();B.party=nm}
+ const ba=(()=>{const i=L.findIndex(l=>/^\s*billing\s*address/i.test(l));if(i>=0)return i;if(bi<0)return L.findIndex(l=>/^\s*tax\s*invoice\s*$/i.test(l));return -1})();
+ if(!B.party&&ba>=0&&R[ba+1]&&/[A-Za-z]{3}/.test(R[ba+1][0])&&!/^\s*(pan|gst|mob|tel|date|invoice)/i.test(R[ba+1][0])){let nm=bxC(R[ba+1][0].split('\u0001')[0]);const w=nm.split(' ').slice(0,2).join(' '),i2=w?nm.indexOf(w,1):-1;if(i2>0)nm=nm.slice(0,i2).trim();B.party=nm}
  const from=bi>=0?bi:(ba>=0?ba:0);let g=(L.slice(from,from+8).join(' ').match(BXGS)||[]).filter(x=>x!=own);if(!g.length)g=(L.join(' ').match(BXGS)||[]).filter(x=>x!=own);B.gstin=g[0]||'';B.kind='sales';
  if(own){const all=L.join(' ').toUpperCase();
   if(!all.includes(own))B.warn.push('Your client\'s GSTIN ('+own+') is not on this bill. Check that you picked the right client sheet.');
-  else if((bi>=0||ba>=0)&&L.slice(from,from+8).join(' ').toUpperCase().includes(own)){B.kind='purchase';let sup='';
+  else if((bi>=0||ba>=0)&&L.slice(from,from+14).join(' ').toUpperCase().includes(own)&&!(()=>{try{const tk=lgNorm(ownN||'').split(' ').filter(t=>t.length>=3),top=lgNorm(R.slice(0,3).map(r=>r[0]).join(' '));return tk.length>0&&tk.every(t=>top.includes(t))}catch(e){return false}})()){B.kind='purchase';let sup='';
    for(let k=0;k<Math.min(L.length,12);k++){if(/tax\s*invoice|invoice\s*no|bill\s*of\s*supply/i.test(L[k]))break;const c=R[k][0].split('\u0001')[0];if(/[A-Za-z]{3}/.test(c)&&!/mob|tel|phone|e-?mail|gstin|gst\s*no|original|duplicate|triplicate|www\.|@|^\s*(office|godown)/i.test(c)){sup=bxC(c);break}}
    if(sup)B.party=sup;B.warn.push('This is a PURCHASE bill (your client is the buyer). The supplier name '+(sup?'was taken from the top of the bill':'could not be found')+' - please check it.')}}
  const hi=L.findIndex(l=>/hsn/i.test(l)&&/(qty|quantity)/i.test(l));let ti=-1;
@@ -51,12 +53,22 @@ function bxFromRows(rows,ownG){
     if(qi>=0){const nums=tok.slice(qi+2).filter(t=>/^[\d,]+(\.\d+)?$/.test(t)).map(bxN);B.items.push({hsn:'',qty:bxN(tok[qi]),unit:bxUnit(tok[qi+1]),taxable:bxR2(nums[nums.length-1]),igst:0,cgst:0,sgst:0,desc:names.join(', ')});names.length=0}
     else{const nm=tok.join(' ').replace(/^\d+\s+/,'');if(nm&&/[A-Za-z]/.test(nm))names.push(nm)}}
    if(B.items.length)B.warn.push('This bill has no HSN / SAC code. Please type it for each item.')}}
- const rt={};L.forEach(l=>{const re=/(CGST|SGST|IGST|UTGST)[^\d%\n]{0,24}?(\d+(?:\.\d+)?)\s*%/gi;let m;while((m=re.exec(l))){const k=m[1].toUpperCase()=='UTGST'?'SGST':m[1].toUpperCase();(rt[k]=rt[k]||new Set()).add(+m[2]/100)}});
+ if(!B.items.length){const h3=L.findIndex(l=>/\b(particulars|description)\b/i.test(l)&&/\bamount\b/i.test(l));
+  if(h3>=0){let e3=L.findIndex((l,k)=>k>h3&&(/^\s*(add\b|less\b|total\b)/i.test(l)||/\b(cgst|sgst|igst)\b/i.test(l)));if(e3<0)e3=L.length;ti=e3;
+   const sm=L.join(' ').match(/\b(?:SAC|HSN)(?:\s*code)?\s*[:\-]?\s*(\d{4,8})\b/i),hs=sm?sm[1]:'';let names=[],last=null;
+   for(let k=h3+1;k<e3;k++){const cells=R[k].map(c=>c.replace(/\u0001/g,' ')),ai=cells.map(c=>/^[\d,]+(\.\d+)?\s*\/?-?$/.test(c)).lastIndexOf(true);
+    if(ai>=0&&cells.slice(0,ai).some(c=>/[A-Za-z]/.test(c))||(ai>=0&&names.length)){const amt=bxN(cells[ai].replace(/\/?-$/,''));names=names.concat(cells.slice(0,ai).filter(c=>/[A-Za-z]/.test(c)));
+     last={hsn:hs,qty:1,unit:'LS',taxable:bxR2(amt),igst:0,cgst:0,sgst:0,desc:names.join(' ')};B.items.push(last);names=[]}
+    else{const t=cells.filter(c=>/[A-Za-z]/.test(c)).join(' ');if(!t)continue;if(last&&!/^project\b/i.test(t))last.desc=(last.desc+' '+t).trim();else if(!last)names.push(t)}}
+   if(B.items.length&&!hs)B.warn.push('No SAC / HSN code found on this bill. Please type it.')}}
+ const rt={};L.forEach(l=>{const re2=/(\d+(?:\.\d+)?)\s*%\s*(CGST|SGST|IGST|UTGST)/gi;let m2;while((m2=re2.exec(l))){const k=m2[2].toUpperCase()=='UTGST'?'SGST':m2[2].toUpperCase();(rt[k]=rt[k]||new Set()).add(+m2[1]/100)}});
+ L.forEach(l=>{const re=/(CGST|SGST|IGST|UTGST)[^\d%\n]{0,24}?(\d+(?:\.\d+)?)\s*%/gi;let m;while((m=re.exec(l))){const k=m[1].toUpperCase()=='UTGST'?'SGST':m[1].toUpperCase();(rt[k]=rt[k]||new Set()).add(+m[2]/100)}});
  const one=k=>rt[k]&&rt[k].size==1?[...rt[k]][0]:(rt[k]&&rt[k].size>1?-1:0);
  const c=one('CGST'),s=one('SGST'),ig=one('IGST');
  if(c<0||s<0||ig<0)B.warn.push('This bill has more than one tax rate. Please set the rate on each item.');
  B.items.forEach(it=>{it.cgst=Math.max(c,0);it.sgst=Math.max(s,0);it.igst=Math.max(ig,0)});
  for(let k=L.length-1;k>=0;k--){const m=L[k].match(/^\s*(?:grand\s*)?total\s*(?:amount)?\s*[:\-]?\s*₹?\s*([\d,]+(?:\.\d+)?)\s*$/i);if(m&&k>ti){B.printed_total=bxN(m[1]);break}}
+ if(B.printed_total==null){const tk=L.findIndex((l,k)=>k>=(ti>=0?ti:0)&&/^\s*total\b/i.test(l));if(tk>=0)for(let k=tk;k<Math.min(tk+4,L.length);k++){const m=L[k].match(/([\d,]+(?:\.\d+)?)\s*\/?-?\s*$/);if(m&&bxN(m[1])>0){B.printed_total=bxN(m[1]);break}}}
  if(!B.no)B.warn.push('Bill number not found.');if(!B.date)B.warn.push('Date not found.');if(!B.party)B.warn.push('Party name not found.');if(!B.items.length)B.warn.push('No item lines found.');
  return B}
 
@@ -205,7 +217,7 @@ function bxDelSheet(){const s=bxCur();if(!s||!confirm('Delete the sheet "'+s.com
 async function bxCont(f){if(!f)return;try{const s=await bxReadSheet(f);if(!s.bills.length&&!s.company)throw new Error('empty');const d=bxDb();d.sheets.push(s);d.cur=s.id;save();toast('Loaded '+s.bills.length+' bills from '+f.name);bxDraw()}catch(e){alert('I could not read that file as a sheet in this layout. Please pick the Excel file that this page made (or your INDIA TRADING sample).')}}
 async function bxAdd(files){const s=bxCur();if(!s||!files.length)return;files=[...files];BXBUSY=1;const me=$id('bxmsg');
  for(let k=0;k<files.length;k++){const f=files[k];if(me)me.textContent='Reading '+(k+1)+' of '+files.length+': '+f.name;
-  try{const rows=await bxFileRows(f);let b=bxFromRows(rows,s.gstin);b.src=f.name;b.rows=rows;
+  try{const rows=await bxFileRows(f);let b=bxFromRows(rows,s.gstin,s.company);b.src=f.name;b.rows=rows;
    if(!b.items.length||!b.party){const a=await bxAi(rows,s);if(a){a.src=f.name;a.rows=rows;b=a}}
    BXP.push(b)}
   catch(e){BXP.push({src:f.name,no:'',date:'',party:'',gstin:'',items:[],warn:['Could not read this file: '+(e&&e.message||e)+' You can type the bill in below.']})}}
