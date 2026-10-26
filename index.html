@@ -1,5 +1,5 @@
 <!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>JK Gupta &amp; Co</title>
-<meta name="description" content="JK Gupta &amp; Co. client accounting workspace"><meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#0f2742"><meta name="jkg-build" content="b2610261310"><script>try{var t=localStorage.getItem("jkgtheme")||(matchMedia("(prefers-color-scheme:dark)").matches?"dark":"light");document.documentElement.dataset.theme=t}catch(e){document.documentElement.dataset.theme="light"}</script><link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27%3E%3Crect width=%2764%27 height=%2764%27 rx=%2714%27 fill=%27%230f2742%27/%3E%3Ctext x=%2732%27 y=%2742%27 font-size=%2734%27 font-family=%27Georgia,serif%27 font-weight=%27700%27 text-anchor=%27middle%27 fill=%27%23e9d9ae%27%3EJK%3C/text%3E%3C/svg%3E"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:wght@500;600;700&display=swap"><style>
+<meta name="description" content="JK Gupta &amp; Co. client accounting workspace"><meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#0f2742"><meta name="jkg-build" content="b2610261330"><script>try{var t=localStorage.getItem("jkgtheme")||(matchMedia("(prefers-color-scheme:dark)").matches?"dark":"light");document.documentElement.dataset.theme=t}catch(e){document.documentElement.dataset.theme="light"}</script><link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27%3E%3Crect width=%2764%27 height=%2764%27 rx=%2714%27 fill=%27%230f2742%27/%3E%3Ctext x=%2732%27 y=%2742%27 font-size=%2734%27 font-family=%27Georgia,serif%27 font-weight=%27700%27 text-anchor=%27middle%27 fill=%27%23e9d9ae%27%3EJK%3C/text%3E%3C/svg%3E"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:wght@500;600;700&display=swap"><style>
 /* ============ tokens ============ */
 :root{--serif:'Source Serif 4',Georgia,'Times New Roman',serif;--sans:'Inter','Segoe UI',system-ui,-apple-system,Arial,sans-serif;--r:12px;--ease:cubic-bezier(.2,.7,.2,1)}
 :root,:root[data-theme=light]{color-scheme:light;
@@ -1193,7 +1193,7 @@ function PNAME(n){return String(n||'').replace(/[._-]+/g,' ').trim().replace(/(^
    JK Gupta & Co. - interface, client tracker, attendance, staff control
    (added on top of the original program; everything above is unchanged)
    ==================================================================== */
-const BUILD='b2610261310';
+const BUILD='b2610261330';
 let CURP='';
 const $id=i=>document.getElementById(i);
 const jkP2=n=>String(n).padStart(2,'0');
@@ -2575,11 +2575,12 @@ function bxSheetXml(sh){
   x+=cell(r,8,sm('H'),a,'f',bxR2(T))+cell(r,9,null,bP)+cell(r,10,sm('J'),a,'f',bxR2(IG))+cell(r,11,null,bP)+cell(r,12,sm('L'),a,'f',bxR2(CG))+cell(r,13,null,bP)+cell(r,14,sm('N'),a,'f',bxR2(SG))+cell(r,15,'H'+r+'+J'+r+'+L'+r+'+N'+r,a,'f',bxR2(T+IG+CG+SG));
   rows.push('<row r="'+r+'">'+x+'</row>');billRows.push(r);r++});
  // grand total
- {let x='';const tl=S({f:'Times New Roman',sz:12,b:1,h:'left',v:'bottom'});x+=cell(r,1,'TOTAL',tl)+cell(r,2,null,tl)+cell(r,3,null,tl)+cell(r,4,null,tl);[5,6,7,9,11,13].forEach(c=>x+=cell(r,c,null,bB));
+ {let x='';const tl=S({f:'Times New Roman',sz:12,b:1,h:'left',v:'bottom'});const tc={};tc[1]=cell(r,1,'TOTAL',tl);tc[2]=cell(r,2,null,tl);tc[3]=cell(r,3,null,tl);tc[4]=cell(r,4,null,tl);[5,6,7,9,11,13].forEach(c=>tc[c]=cell(r,c,null,bB));
   const tot={8:0,10:0,12:0,14:0,15:0};(sh.bills||[]).forEach(b=>{const f=bxFig(b);tot[8]+=f[0];tot[10]+=f[1];tot[12]+=f[2];tot[14]+=f[3];tot[15]+=f[4]});
-  [[8,'H'],[10,'J'],[12,'L'],[14,'N'],[15,'O']].forEach(([c,Lt])=>x+=cell(r,c,'SUMIF($B$5:$B$'+(r-1)+',"<>",'+Lt+'5:'+Lt+(r-1)+')',bA,'f',bxR2(tot[c])));
+  [[8,'H'],[10,'J'],[12,'L'],[14,'N'],[15,'O']].forEach(([c,Lt])=>tc[c]=cell(r,c,'SUMIF($B$5:$B$'+(r-1)+',"<>",'+Lt+'5:'+Lt+(r-1)+')',bA,'f',bxR2(tot[c])));
+  for(let c=1;c<=15;c++)x+=tc[c];
   rows.push('<row r="'+r+'">'+x+'</row>');mrg.push('A'+r+':D'+r)}
- const W=[14.43,12.71,36.71,20,10.14,6.71,8.14,13.43,9.86,11,10.43,11.71,10.29,11.57,12.57];
+ const W=[14.43,19,36.71,20,10.14,6.71,8.14,13.43,9.86,11,10.43,11.71,10.29,11.57,12.57];
  const sheet='<?xml version="1.0" encoding="UTF-8" standalone="yes"?><worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><sheetPr><pageSetUpPr fitToPage="1"/></sheetPr><dimension ref="A1:O'+r+'"/><sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane ySplit="4" topLeftCell="A5" activePane="bottomLeft" state="frozen"/><selection pane="bottomLeft" activeCell="A5" sqref="A5"/></sheetView></sheetViews><sheetFormatPr defaultRowHeight="15"/><cols>'+W.map((w,i)=>'<col min="'+(i+1)+'" max="'+(i+1)+'" width="'+w+'" customWidth="1"/>').join('')+'</cols><sheetData>'+rows.join('')+'</sheetData><mergeCells count="'+mrg.length+'">'+mrg.map(m=>'<mergeCell ref="'+m+'"/>').join('')+'</mergeCells><pageMargins left="0.7" right="0.7" top="0.75" bottom="0.75" header="0.3" footer="0.3"/><pageSetup orientation="landscape" fitToHeight="0"/></worksheet>';
  const numFmts=Object.keys(fmts).map(k=>'<numFmt numFmtId="'+fmts[k]+'" formatCode="'+bxX(k)+'"/>').join('');
  const styles='<?xml version="1.0" encoding="UTF-8" standalone="yes"?><styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">'+(numFmts?'<numFmts count="'+Object.keys(fmts).length+'">'+numFmts+'</numFmts>':'')+'<fonts count="'+fonts.length+'">'+fonts.join('')+'</fonts><fills count="'+fills.length+'">'+fills.join('')+'</fills><borders count="'+borders.length+'">'+borders.join('')+'</borders><cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs><cellXfs count="'+xfs.length+'">'+xfs.join('')+'</cellXfs><cellStyles count="1"><cellStyle name="Normal" xfId="0" builtinId="0"/></cellStyles></styleSheet>';
