@@ -22,6 +22,11 @@ async def main():
         chk('accutech sales',r['kind']=='sales' and r['no']=='151/26-27' and r['gstin']=='27AANCA0418J1ZO' and len(r['items'])==2 and r['printed_total']==14993 and not r['warn'],str(r))
         r=await rd('accutech','27AANCA0418J1ZO','ACCU-TECH AIRCOOL Pvt Ltd')
         chk('accutech as purchase',r['kind']=='purchase',str(r))
+        V=[("Invoice No: 12/26-27","12/26-27"),("Invoice Number : INV-0045","INV-0045"),("Bill No. 778","778"),("Bill Number: B/9/2026","B/9/2026"),("Inv. No. 55-A","55-A"),("Tax Invoice No :- 301","301"),("Invoice # 88","88"),("E Way Bill No. 991234 Bill No: 17","17"),("Invoice No. Date: 05/09/2026","")]
+        for t,w in V:
+            r=await pg.evaluate("([r])=>bxFromRows(r,'','')",[[[t],["Date: 05/09/2026"],["Buyer: ABC Traders"]]])
+            chk('number label: '+t,r['no']==w,str(r['no']))
+        r=await pg.evaluate("([r])=>bxFromRows(r,'','')",[[["Invoice No."],["4455/26"],["Date: 05/09/2026"]]]);chk('number on next line',r['no']=='4455/26',str(r['no']))
         chk('no JS errors',not errs)
         print('ALL OK' if all(res) else 'SOME FAILED');await b.close()
 asyncio.run(main())

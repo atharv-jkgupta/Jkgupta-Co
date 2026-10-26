@@ -14,15 +14,19 @@ function bxUnit(u){u=bxC(u);if(!u)return'';const k=u.toUpperCase().replace(/[^A-
 function bxFromRows(rows,ownG,ownN){
  const R=rows.map(r=>(Array.isArray(r)?r:[r]).map(x=>bxC(String(x==null?'':x).replace(/\r?\n/g,'\u0001'))).filter(x=>x!==''&&x!=='\u0001')).filter(r=>r.length),L=R.map(r=>r.join('  ').replace(/\u0001/g,' ')),B={no:'',date:'',party:'',gstin:'',items:[],printed_total:null,warn:[]};
  const own=String(ownG||'').toUpperCase();
- const li=L.findIndex(l=>/invoice\s*no/i.test(l));
- if(li>=0){const m=L[li].match(/invoice\s*no\.?\s*[:;\-\s]*([A-Za-z0-9][A-Za-z0-9\/\-]*)/i);if(m)B.no=m[1];
+ const NOL=/\b(?:tax\s*invoice|invoice|inv\.?|bill|voucher)\s*(?:no|number|num)\b\.?|\b(?:invoice|bill|inv)\s*#/i,WAY=/e[\s\-]*way\s*bill\s*(?:no|number)?\.?/ig;let li=-1;
+ for(let k=0;k<L.length&&!B.no;k++){const ln=L[k].replace(WAY,' '),mm=NOL.exec(ln);if(!mm)continue;
+  const tail=ln.slice(mm.index+mm[0].length).replace(/^[\s:;\-\.#]+/,''),m=tail.match(/^([A-Za-z0-9][A-Za-z0-9\/\-\.]*)/);let v=m?m[1].replace(/[\.\-]+$/,''):'';
+  if(!/\d/.test(v)&&L[k+1]){const m3=L[k+1].replace(/^[\s:;\-\.#]+/,'').match(/^([A-Za-z0-9][A-Za-z0-9\/\-\.]*\d[A-Za-z0-9\/\-\.]*)/);v=m3?m3[1].replace(/[\.\-]+$/,''):''}
+  if(/\d/.test(v)){B.no=v;li=k}}
+ if(li>=0){
   for(let k=li;k<=li+1&&k<L.length&&!B.date;k++){const m2=L[k].match(/date\s*[:;]?\s*(\d{1,2}[\/\-.]\d{1,2}[\/\-.]\d{2,4})/i);if(m2)B.date=bxDate(m2[1])}}
  if(!B.date){for(let k=0;k<Math.min(L.length,14)&&!B.date;k++){const m=L[k].match(/(\d{1,2}[\/\-.]\d{1,2}[\/\-.]\d{2,4})/);if(m)B.date=bxDate(m[1])}}
  if(!B.date){const MN={jan:1,feb:2,mar:3,apr:4,may:5,jun:6,jul:7,aug:8,sep:9,oct:10,nov:11,dec:12};
   for(let k=0;k<Math.min(L.length,16)&&!B.date;k++){const m=L[k].match(/(\d{1,2})\s*(?:st|nd|rd|th)?\s+(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*\.?,?\s+(\d{4})/i);if(m)B.date=m[3]+'-'+String(MN[m[2].toLowerCase()]).padStart(2,'0')+'-'+String(+m[1]).padStart(2,'0')}}
- const bi=L.findIndex(l=>/^\s*(buyer|bill(ed)?\s*to|customer|party|m\/s)\b/i.test(l));
- if(bi>=0){let t=R[bi];let name='';const ix=t.findIndex(c=>/^(buyer|bill(ed)?\s*to|customer|party|m\/s)\s*[:;\-]*$/i.test(c));
-  if(ix>=0&&t[ix+1])name=t[ix+1];else name=t.join(' ').replace(/^\s*(buyer|bill(ed)?\s*to|customer|party|m\/s)\s*[:;\-]*\s*/i,'');
+ const bi=L.findIndex(l=>/^\s*(buyer|bill(ed)?\s*to|customer|party|m\/s|sold\s*to|consignee|name\s*of\s*(?:buyer|customer|party))\b/i.test(l));
+ if(bi>=0){let t=R[bi];let name='';const ix=t.findIndex(c=>/^(buyer|bill(ed)?\s*to|customer|party|m\/s|sold\s*to|consignee|name\s*of\s*(?:buyer|customer|party))\s*[:;\-]*$/i.test(c));
+  if(ix>=0&&t[ix+1])name=t[ix+1];else name=t.join(' ').replace(/^\s*(buyer|bill(ed)?\s*to|customer|party|m\/s|sold\s*to|consignee|name\s*of\s*(?:buyer|customer|party))\s*[:;\-]*\s*/i,'');
   name=name.split('\u0001')[0];name=name.split(/ship\s*to/i)[0];name=name.split(/\bgstin\b/i)[0];
   if(!name||/^\d+[\/,\-\s]|\b(estate|road|marg|nagar|naka|plot|flat|floor|street|society|building|chs|apartment)\b/i.test(name)){let j=bi-1,top=-1;while(j>=0&&!/mame|udyam|e\s*way|tax\s*invoice|original|duplicate|triplicate|invoice\s*no|challan|order\s*no|despatch|vehicle|l\.r\.|^\s*gstin\s+\d|e-mail|office|godown/i.test(L[j])){top=j;j--}if(top>=0)name=R[top][0].split('\u0001')[0];else if(!name&&R[bi+1])name=R[bi+1][0]}
   B.party=bxC(name.replace(/\u0001/g,' '))}
@@ -34,7 +38,7 @@ function bxFromRows(rows,ownG,ownN){
   else if((bi>=0||ba>=0)&&L.slice(from,from+14).join(' ').toUpperCase().includes(own)&&!(()=>{try{const tk=lgNorm(ownN||'').split(' ').filter(t=>t.length>=3),top=lgNorm(R.slice(0,3).map(r=>r[0]).join(' '));return tk.length>0&&tk.every(t=>top.includes(t))}catch(e){return false}})()){B.kind='purchase';let sup='';
    for(let k=0;k<Math.min(L.length,12);k++){if(/tax\s*invoice|invoice\s*no|bill\s*of\s*supply/i.test(L[k]))break;const c=R[k][0].split('\u0001')[0];if(/[A-Za-z]{3}/.test(c)&&!/mob|tel|phone|e-?mail|gstin|gst\s*no|original|duplicate|triplicate|www\.|@|^\s*(office|godown)/i.test(c)){sup=bxC(c);break}}
    if(sup)B.party=sup;B.warn.push('This is a PURCHASE bill (your client is the buyer). The supplier name '+(sup?'was taken from the top of the bill':'could not be found')+' - please check it.')}}
- const hi=L.findIndex(l=>/hsn/i.test(l)&&/(qty|quantity)/i.test(l));let ti=-1;
+ const hi=L.findIndex(l=>/hsn|\bsac\b/i.test(l)&&/(qty|quantity)/i.test(l));let ti=-1;
  if(hi>=0){ti=L.findIndex((l,k)=>k>hi&&/^\s*total\b/i.test(l));if(ti<0)ti=L.length}
  if(hi>=0){let last=null;
   for(let k=hi+1;k<ti;k++){const tok=R[k].join(' ').replace(/\u0001/g,' ').split(/\s+/).filter(Boolean);
