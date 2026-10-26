@@ -1,5 +1,5 @@
 <!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>JK Gupta &amp; Co</title>
-<meta name="description" content="JK Gupta &amp; Co. client accounting workspace"><meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#0f2742"><meta name="jkg-build" content="b2610261235"><script>try{var t=localStorage.getItem("jkgtheme")||(matchMedia("(prefers-color-scheme:dark)").matches?"dark":"light");document.documentElement.dataset.theme=t}catch(e){document.documentElement.dataset.theme="light"}</script><link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27%3E%3Crect width=%2764%27 height=%2764%27 rx=%2714%27 fill=%27%230f2742%27/%3E%3Ctext x=%2732%27 y=%2742%27 font-size=%2734%27 font-family=%27Georgia,serif%27 font-weight=%27700%27 text-anchor=%27middle%27 fill=%27%23e9d9ae%27%3EJK%3C/text%3E%3C/svg%3E"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:wght@500;600;700&display=swap"><style>
+<meta name="description" content="JK Gupta &amp; Co. client accounting workspace"><meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#0f2742"><meta name="jkg-build" content="b2610261310"><script>try{var t=localStorage.getItem("jkgtheme")||(matchMedia("(prefers-color-scheme:dark)").matches?"dark":"light");document.documentElement.dataset.theme=t}catch(e){document.documentElement.dataset.theme="light"}</script><link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27%3E%3Crect width=%2764%27 height=%2764%27 rx=%2714%27 fill=%27%230f2742%27/%3E%3Ctext x=%2732%27 y=%2742%27 font-size=%2734%27 font-family=%27Georgia,serif%27 font-weight=%27700%27 text-anchor=%27middle%27 fill=%27%23e9d9ae%27%3EJK%3C/text%3E%3C/svg%3E"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:wght@500;600;700&display=swap"><style>
 /* ============ tokens ============ */
 :root{--serif:'Source Serif 4',Georgia,'Times New Roman',serif;--sans:'Inter','Segoe UI',system-ui,-apple-system,Arial,sans-serif;--r:12px;--ease:cubic-bezier(.2,.7,.2,1)}
 :root,:root[data-theme=light]{color-scheme:light;
@@ -1193,7 +1193,7 @@ function PNAME(n){return String(n||'').replace(/[._-]+/g,' ').trim().replace(/(^
    JK Gupta & Co. - interface, client tracker, attendance, staff control
    (added on top of the original program; everything above is unchanged)
    ==================================================================== */
-const BUILD='b2610261235';
+const BUILD='b2610261310';
 let CURP='';
 const $id=i=>document.getElementById(i);
 const jkP2=n=>String(n).padStart(2,'0');
@@ -2405,7 +2405,8 @@ const bxC=s=>String(s==null?'':s).replace(/\s+/g,' ').trim();
 const bxR2=x=>Math.round(x*100)/100;
 function bxGstOk(g){g=String(g||'').trim().toUpperCase();if(!/^\d{2}[A-Z]{5}\d{4}[A-Z][1-9A-Z]Z[0-9A-Z]$/.test(g))return false;const C='0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';let s=0;for(let i=0;i<14;i++){const q=C.indexOf(g[i])*(i%2?2:1);s+=Math.floor(q/36)+q%36}return C[(36-s%36)%36]==g[14]}
 const bxLoc=d=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
-function bxDate(s){s=bxC(s);let m=s.match(/^(\d{1,2})[\/\-.](\d{1,2})[\/\-.](\d{2,4})$/);if(m){let y=+m[3];if(y<100)y+=2000;return y+'-'+String(+m[2]).padStart(2,'0')+'-'+String(+m[1]).padStart(2,'0')}return /^\d{4}-\d\d-\d\d$/.test(s)?s:''}
+const BXMN={jan:1,feb:2,mar:3,apr:4,may:5,jun:6,jul:7,aug:8,sep:9,oct:10,nov:11,dec:12};
+function bxDate(s){s=bxC(s);let mn=s.match(/^(\d{1,2})[\/\-. ]([A-Za-z]{3})[a-z]*[\/\-. ,]+(\d{2,4})$/);if(mn&&BXMN[mn[2].toLowerCase()]){let y=+mn[3];if(y<100)y+=2000;return y+'-'+String(BXMN[mn[2].toLowerCase()]).padStart(2,'0')+'-'+String(+mn[1]).padStart(2,'0')}let m=s.match(/^(\d{1,2})[\/\-.](\d{1,2})[\/\-.](\d{2,4})$/);if(m){let y=+m[3];if(y<100)y+=2000;return y+'-'+String(+m[2]).padStart(2,'0')+'-'+String(+m[1]).padStart(2,'0')}return /^\d{4}-\d\d-\d\d$/.test(s)?s:''}
 const BXU={SQM:'SQM',SFT:'SFT',SQFT:'SFT',LTR:'LTR',LTRS:'LTR',LITRE:'LTR',LITRES:'LTR',ROLL:'ROLL',ROLLS:'ROLL',BAG:'BAG',BAGS:'BAG',BOX:'BOX',BOXES:'BOX',NOS:'NOS',NO:'NOS',PCS:'NOS',PC:'NOS',MTR:'MTR',MTRS:'MTR',KG:'KG',KGS:'KG',OTH:'OTH',LS:'LS',LUMPSUM:'LS',SET:'SET',SETS:'SET',JOB:'JOB'};
 function bxUnit(u){u=bxC(u);if(!u)return'';const k=u.toUpperCase().replace(/[^A-Z]/g,'');if(BXU[k])return BXU[k];const s=u.replace(/s$/i,'');return s.charAt(0).toUpperCase()+s.slice(1).toLowerCase()}
 
@@ -2418,16 +2419,20 @@ function bxFromRows(rows,ownG,ownN){
  const NOL=new RegExp('\\b(?:'+[bxLx('taxinvoice'),bxLx('invoice'),bxLx('inv')+'\\.?',bxLx('bill'),bxLx('voucher')].join('|')+')\\s*(?:'+[bxLx('no'),bxLx('number'),bxLx('num')].join('|')+')(?![A-Za-z])\\.?|\\b(?:invoice|bill|inv)\\s*#','i'),WAY=new RegExp(bxLx('eway')+'[\\s\\-]*'+bxLx('bill')+'\\s*(?:'+bxLx('no')+'|'+bxLx('number')+')?\\.?','ig');let li=-1;
  for(let k=0;k<L.length&&!B.no;k++){const ln=L[k].replace(WAY,' '),mm=NOL.exec(ln);if(!mm)continue;
   const tail=ln.slice(mm.index+mm[0].length).replace(/^[\s:;\-\.#]+/,''),m=tail.match(/^([A-Za-z0-9][A-Za-z0-9\/\-\.]*)/);let v=m?m[1].replace(/[\.\-]+$/,''):'';
+  if(!/\d/.test(v)&&R[k+1]){const ci=R[k].findIndex(c=>NOL.test(c.replace(WAY,' ')));const ok=c=>/^[A-Za-z0-9][A-Za-z0-9\/\-\.]*\d[A-Za-z0-9\/\-\.]*$/.test(c)&&!/^\d{1,2}[\/\-.][A-Za-z0-9]{1,3}[\/\-.]\d{2,4}$/.test(c)&&!/^\d{2}[A-Z]{5}\d{4}/.test(c);
+   const cand=(ci>=0&&R[k+1][ci]&&ok(R[k+1][ci]))?R[k+1][ci]:'';if(cand)v=cand.replace(/[\.\-]+$/,'')}
   if(!/\d/.test(v)&&L[k+1]){const m3=L[k+1].replace(/^[\s:;\-\.#]+/,'').match(/^([A-Za-z0-9][A-Za-z0-9\/\-\.]*\d[A-Za-z0-9\/\-\.]*)/);v=m3?m3[1].replace(/[\.\-]+$/,''):''}
   if(/\d/.test(v)){B.no=v;li=k}}
+ for(let k=0;k<Math.min(R.length-1,30)&&!B.date;k++){const ci=R[k].findIndex(c=>/^dated?\s*:?$/i.test(c));if(ci>=0&&R[k+1]&&R[k+1][ci]){const d=bxDate(R[k+1][ci].replace(/\s+\d{1,2}:\d\d.*$/,''));if(d)B.date=d}}
  if(li>=0){
   for(let k=li;k<=li+1&&k<L.length&&!B.date;k++){const m2=L[k].match(/date\s*[:;]?\s*(\d{1,2}[\/\-.]\d{1,2}[\/\-.]\d{2,4})/i);if(m2)B.date=bxDate(m2[1])}}
- if(!B.date){for(let k=0;k<Math.min(L.length,14)&&!B.date;k++){const m=L[k].match(/(\d{1,2}[\/\-.]\d{1,2}[\/\-.]\d{2,4})/);if(m)B.date=bxDate(m[1])}}
+ if(!B.date){for(let k=0;k<Math.min(L.length,14)&&!B.date;k++){const m=(B.no?L[k].split(B.no).join(' '):L[k]).match(/(\d{1,2}[\/\-.]\d{1,2}[\/\-.]\d{2,4})/);if(m)B.date=bxDate(m[1])}}
  if(!B.date){const MN={jan:1,feb:2,mar:3,apr:4,may:5,jun:6,jul:7,aug:8,sep:9,oct:10,nov:11,dec:12};
   for(let k=0;k<Math.min(L.length,16)&&!B.date;k++){const m=L[k].match(/(\d{1,2})\s*(?:st|nd|rd|th)?\s+(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*\.?,?\s+(\d{4})/i);if(m)B.date=m[3]+'-'+String(MN[m[2].toLowerCase()]).padStart(2,'0')+'-'+String(+m[1]).padStart(2,'0')}}
- const bi=L.findIndex(l=>/^\s*(buyer|bill(ed)?\s*to|customer|party|m\/s|sold\s*to|consignee|name\s*of\s*(?:buyer|customer|party))\b/i.test(l));
+ const bi=(i=>i>=0?i:L.findIndex(l=>/^\s*(buyer|bill(ed)?\s*to|customer|party|m\/s|sold\s*to|consignee|name\s*of\s*(?:buyer|customer|party))\b/i.test(l)))(L.findIndex(l=>/^\s*buyer\s*\(\s*bill\s*to\s*\)/i.test(l)));
  if(bi>=0){let t=R[bi];let name='';const ix=t.findIndex(c=>/^(buyer|bill(ed)?\s*to|customer|party|m\/s|sold\s*to|consignee|name\s*of\s*(?:buyer|customer|party))\s*[:;\-]*$/i.test(c));
   if(ix>=0&&t[ix+1])name=t[ix+1];else name=t.join(' ').replace(/^\s*(buyer|bill(ed)?\s*to|customer|party|m\/s|sold\s*to|consignee|name\s*of\s*(?:buyer|customer|party))\s*[:;\-]*\s*/i,'');
+  name=name.replace(/^\s*\(?\s*(bill(ed)?\s*to|ship\s*to)\s*\)?\s*[:;\-]*\s*/i,'');if(!name&&R[bi+1])name=R[bi+1][0];
   name=name.split('\u0001')[0];name=name.split(/ship\s*to/i)[0];name=name.split(/\bgstin\b/i)[0];
   if(!name||/^\d+[\/,\-\s]|\b(estate|road|marg|nagar|naka|plot|flat|floor|street|society|building|chs|apartment)\b/i.test(name)){let j=bi-1,top=-1;while(j>=0&&!/mame|udyam|e\s*way|tax\s*invoice|original|duplicate|triplicate|invoice\s*no|challan|order\s*no|despatch|vehicle|l\.r\.|^\s*gstin\s+\d|e-mail|office|godown/i.test(L[j])){top=j;j--}if(top>=0)name=R[top][0].split('\u0001')[0];else if(!name&&R[bi+1])name=R[bi+1][0]}
   B.party=bxC(name.replace(/\u0001/g,' '))}
@@ -2438,13 +2443,15 @@ function bxFromRows(rows,ownG,ownN){
   if(!all.includes(own))B.warn.push('Your client\'s GSTIN ('+own+') is not on this bill. Check that you picked the right client sheet.');
   else if((bi>=0||ba>=0)&&L.slice(from,from+14).join(' ').toUpperCase().replace(/\s+/g,'').includes(own)&&!(()=>{try{const tk=lgNorm(ownN||'').split(' ').filter(t=>t.length>=3),top=lgNorm(R.slice(0,3).map(r=>r[0]).join(' '));return tk.length>0&&tk.every(t=>top.includes(t))}catch(e){return false}})()){B.kind='purchase';let sup='';
    for(let k=0;k<Math.min(L.length,12);k++){if(/tax\s*invoice|invoice\s*no|bill\s*of\s*supply/i.test(L[k]))break;const c=R[k][0].split('\u0001')[0];if(/[A-Za-z]{3}/.test(c)&&!/mob|tel|phone|e-?mail|gstin|gst\s*no|original|duplicate|triplicate|www\.|@|^\s*(office|godown)/i.test(c)){sup=bxC(c);break}}
+   if(!sup){for(let k=L.length-1;k>=0&&!sup;k--){for(const c of R[k]){const m=c.replace(/\u0001/g,' ').match(/^(?:.*\.\s*)?for\s+([A-Za-z0-9][A-Za-z0-9 &.,'\-\/()]{2,60})$/i);if(m&&!/^(authori|and on behalf)/i.test(m[1])){sup=bxC(m[1]);break}}}
+    if(!sup){const k=L.findIndex(l=>/a\/c\s*holder/i.test(l));if(k>=0){const m=L[k].match(/holder.{0,3}s?\s*name\s*:?\s*(.+)$/i);if(m)sup=bxC(m[1].replace(/^[:\s]+/,''))}}}
    if(sup)B.party=sup;B.warn.push('This is a PURCHASE bill (your client is the buyer). The supplier name '+(sup?'was taken from the top of the bill':'could not be found')+' - please check it.')}}
  const hi=L.findIndex(l=>/hsn|\bsac\b/i.test(l)&&/(qty|quantity)/i.test(l));let ti=-1;
  if(hi>=0){ti=L.findIndex((l,k)=>k>hi&&/^\s*total\b/i.test(l));if(ti<0)ti=L.length}
  if(hi>=0){let last=null;
   for(let k=hi+1;k<ti;k++){const tok=R[k].join(' ').replace(/\u0001/g,' ').split(/\s+/).filter(Boolean);
    let hx=tok.findIndex(t=>/^\d{6}$|^\d{8}$/.test(t));if(hx<0){hx=tok.findIndex((t,j)=>/^\d{4}$/.test(t)&&j>0&&tok.slice(0,j).some(x=>/[A-Za-z]/.test(x)))}
-   if(hx>=0){const rest=tok.slice(hx+1);let qi=rest.findIndex(t=>/^[\d,]+(\.\d+)?$/.test(t));let qty=0,unit='',nums=[];
+   if(hx>=0){let rest=tok.slice(hx+1);if(rest.length&&/^\d+(\.\d+)?%$/.test(rest[0]))rest=rest.slice(1);else if(rest.length>1&&/^\d+(\.\d+)?$/.test(rest[0])&&rest[1]==='%')rest=rest.slice(2);let qi=rest.findIndex(t=>/^[\d,]+(\.\d+)?$/.test(t));let qty=0,unit='',nums=[];
     if(qi>=0){qty=bxN(rest[qi]);const after=rest.slice(qi+1);const ui=after.findIndex(t=>/^[A-Za-z]+\.?$/.test(t));if(ui>=0)unit=after[ui];nums=after.filter(t=>/^[\d,]+(\.\d+)?$/.test(t)).map(bxN)}
     let amt=nums.length?nums[nums.length-1]:0,rate=nums.length>1?nums[nums.length-2]:(nums.length?nums[0]:0);if(!amt&&qty&&rate)amt=bxR2(qty*rate);
     last={hsn:tok[hx],qty,unit:bxUnit(unit),taxable:bxR2(amt),igst:0,cgst:0,sgst:0,desc:tok.slice(0,hx).join(' ').replace(/^\d+\s+/,'')};B.items.push(last)}
@@ -2458,6 +2465,12 @@ function bxFromRows(rows,ownG,ownN){
     if(qi>=0){const nums=tok.slice(qi+2).filter(t=>/^[\d,]+(\.\d+)?$/.test(t)).map(bxN);B.items.push({hsn:'',qty:bxN(tok[qi]),unit:bxUnit(tok[qi+1]),taxable:bxR2(nums[nums.length-1]),igst:0,cgst:0,sgst:0,desc:names.join(', ')});names.length=0}
     else{const nm=tok.join(' ').replace(/^\d+\s+/,'');if(nm&&/[A-Za-z]/.test(nm))names.push(nm)}}
    if(B.items.length)B.warn.push('This bill has no HSN / SAC code. Please type it for each item.')}}
+ if(!B.items.length){const h4=R.findIndex(r=>{const j=r.join(' ');return /description/i.test(j)&&/\brate\b/i.test(j)&&/\bqty\b/i.test(j)&&/excl/i.test(j)});
+  if(h4>=0){const H=R[h4],qx=H.findIndex(c=>/^qty/i.test(c));ti=L.findIndex((l,k)=>k>h4&&/^\s*(sub\s*total|total)\b/i.test(l));if(ti<0)ti=L.length;let last=null;
+   for(let k=h4+1;k<ti;k++){const cells=R[k].map(c=>c.replace(/\u0001/g,' ')),isN=c=>/^[\d,]+(\.\d+)?$/.test(c);
+    if(/^\d+$/.test(cells[0])&&cells.length>=5&&isN(cells[cells.length-1])){let n=cells.length,qty=cells.length==H.length&&qx>=0?bxN(cells[qx]):bxN(cells[n-4]);
+     last={hsn:'',qty:qty||1,unit:'NOS',taxable:bxR2(bxN(cells[n-1])),igst:0,cgst:0,sgst:0,desc:cells.slice(1,Math.max(2,n-5)).join(' ')};B.items.push(last)}
+    else if(last&&cells.every(c=>!isN(c)))last.desc=(last.desc+' '+cells.join(' ')).trim()}}}
  if(!B.items.length){const h3=L.findIndex(l=>/\b(particulars|description)\b/i.test(l)&&/\bamount\b/i.test(l));
   if(h3>=0){let e3=L.findIndex((l,k)=>k>h3&&(/^\s*(add\b|less\b|total\b)/i.test(l)||/\b(cgst|sgst|igst)\b/i.test(l)));if(e3<0)e3=L.length;ti=e3;
    const sm=L.join(' ').match(/\b(?:SAC|HSN)(?:\s*code)?\s*[:\-]?\s*(\d{4,8})\b/i),hs=sm?sm[1]:'';let names=[],last=null;
@@ -2466,12 +2479,16 @@ function bxFromRows(rows,ownG,ownN){
      last={hsn:hs,qty:1,unit:'LS',taxable:bxR2(amt),igst:0,cgst:0,sgst:0,desc:names.join(' ')};B.items.push(last);names=[]}
     else{const t=cells.filter(c=>/[A-Za-z]/.test(c)).join(' ');if(!t)continue;if(last&&!/^project\b/i.test(t))last.desc=(last.desc+' '+t).trim();else if(!last)names.push(t)}}
    if(B.items.length&&!hs)B.warn.push('No SAC / HSN code found on this bill. Please type it.')}}
+ const ht={};R.forEach(r=>{const m=r.join(' ').match(/^(\d{4}|\d{6}|\d{8})\s+([\d,]+(?:\.\d+)?)\s+(\d+(?:\.\d+)?)\s*%\s+([\d,]+(?:\.\d+)?)(?:\s+(\d+(?:\.\d+)?)\s*%\s+([\d,]+(?:\.\d+)?))?/);if(m)ht[m[1]]={taxable:bxN(m[2]),r1:+m[3]/100,r2:m[5]!=null?+m[5]/100:null}});
+ const hk=Object.keys(ht);
+ B.items.forEach(it=>{if(!it.hsn&&hk.length){const hit=hk.length==1?hk[0]:hk.find(h=>Math.abs(ht[h].taxable-it.taxable)<0.02);if(hit)it.hsn=hit}});
+ const own2=new Set();B.items.forEach(it=>{const t=ht[String(it.hsn)];if(t){if(t.r2!=null){it.cgst=t.r1;it.sgst=t.r2;it.igst=0}else{it.igst=t.r1;it.cgst=0;it.sgst=0}own2.add(it)}});
  const rt={};L.forEach(l=>{const re2=/(\d+(?:\.\d+)?)\s*%\s*(CGST|SGST|IGST|UTGST)/gi;let m2;while((m2=re2.exec(l))){const k=m2[2].toUpperCase()=='UTGST'?'SGST':m2[2].toUpperCase();(rt[k]=rt[k]||new Set()).add(+m2[1]/100)}});
  L.forEach(l=>{const re=/(CGST|SGST|IGST|UTGST)[^\d%\n]{0,24}?(\d+(?:\.\d+)?)\s*%/gi;let m;while((m=re.exec(l))){const k=m[1].toUpperCase()=='UTGST'?'SGST':m[1].toUpperCase();(rt[k]=rt[k]||new Set()).add(+m[2]/100)}});
  const one=k=>rt[k]&&rt[k].size==1?[...rt[k]][0]:(rt[k]&&rt[k].size>1?-1:0);
  const c=one('CGST'),s=one('SGST'),ig=one('IGST');
- if(c<0||s<0||ig<0)B.warn.push('This bill has more than one tax rate. Please set the rate on each item.');
- B.items.forEach(it=>{it.cgst=Math.max(c,0);it.sgst=Math.max(s,0);it.igst=Math.max(ig,0)});
+ if((c<0||s<0||ig<0)&&B.items.some(it=>!own2.has(it)))B.warn.push('This bill has more than one tax rate. Please set the rate on each item.');
+ B.items.forEach(it=>{if(own2.has(it))return;it.cgst=Math.max(c,0);it.sgst=Math.max(s,0);it.igst=Math.max(ig,0)});
  for(let k=L.length-1;k>=0;k--){const m=L[k].match(/^\s*(?:grand\s*)?total\s*(?:amount)?\s*[:\-]?\s*₹?\s*([\d,]+(?:\.\d+)?)\s*$/i);if(m&&k>ti){B.printed_total=bxN(m[1]);break}}
  if(B.printed_total==null){const tk=L.findIndex((l,k)=>k>=(ti>=0?ti:0)&&/^\s*total\b/i.test(l));if(tk>=0)for(let k=tk;k<Math.min(tk+4,L.length);k++){const m=L[k].match(/([\d,]+(?:\.\d+)?)\s*\/?-?\s*$/);if(m&&bxN(m[1])>0){B.printed_total=bxN(m[1]);break}}}
  if(!B.no)B.warn.push('Bill number not found.');if(!B.date)B.warn.push('Date not found.');if(!B.party)B.warn.push('Party name not found.');if(!B.items.length)B.warn.push('No item lines found.');
@@ -2508,7 +2525,7 @@ async function bxAi(rows,sheet){if(!(window.LS&&LS.on&&LS.token))return null;
 /* ---------- checks (same rules as the sheet kit) ---------- */
 function bxFig(b){let t=0,ig=0,cg=0,sg=0;b.items.forEach(i=>{t+=i.taxable;ig+=i.taxable*(i.igst||0);cg+=i.taxable*(i.cgst||0);sg+=i.taxable*(i.sgst||0)});return[t,ig,cg,sg,t+ig+cg+sg]}
 function bxCheck(sheet,bills){const W=[],seen={};(sheet.bills||[]).forEach(b=>seen[b.no]=1);const own=String(sheet.gstin||'').slice(0,2);
- bills.forEach(b=>{const add=(p,f)=>W.push({bill:b.no||'(no number)',party:b.party,problem:p,fix:f});
+ bills.forEach(b=>{const add=(p,f)=>{if(!W.some(w=>w.bill==(b.no||b.src||'(no number)')&&w.problem==p))W.push({bill:b.no||b.src||'(no number)',party:b.party,problem:p,fix:f})};
   if(b.no&&seen[b.no])add('This bill number is already in the sheet.','Check whether it is a repeat. Remove it, or correct the number.');if(b.no)seen[b.no]=1;
   const g=b.gstin;if(g&&!bxGstOk(g))add('GSTIN '+g+' is not valid (format or check character).','Re-read the GSTIN from the bill. A letter O and a zero 0 are often mixed up.');
   if(!g)add('No GSTIN.','Fine for a customer without registration. Otherwise add it from the bill.');
