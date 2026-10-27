@@ -1259,7 +1259,7 @@ function PNAME(n){return String(n||'').replace(/[._-]+/g,' ').trim().replace(/(^
    JK Gupta & Co. - interface, client tracker, attendance, staff control
    (added on top of the original program; everything above is unchanged)
    ==================================================================== */
-const BUILD='b2610271345';
+const BUILD='b2610271600';
 let CURP='';
 const $id=i=>document.getElementById(i);
 const jkP2=n=>String(n).padStart(2,'0');
@@ -2683,11 +2683,15 @@ async function bxReadSheet(f){const X=await bxXlsxLib(),wb=X.read(new Uint8Array
  return sh}
 
 /* ---------- storage ---------- */
+function bxKd(x){return x&&x.kind=='purchase'?'purchase':'sales'}
+function bxNm(v){return String(v||'').toLowerCase().replace(/\s+/g,' ').trim()}
+function bxSame(a,b,k){const g1=String(a.gstin||'').trim().toUpperCase(),g2=String(b.gstin||'').trim().toUpperCase();return bxKd(a)==(k||bxKd(b))&&bxNm(a.company)==bxNm(b.company)&&String(a.month||'').slice(0,7)==String(b.month||'').slice(0,7)&&(!g1||!g2||g1==g2)}
+function bxMerge(){const d=bxDb();let n=0;const out=[];d.sheets.forEach(x=>{const t=out.find(o=>bxSame(o,x,bxKd(x)));if(!t){out.push(x);return}const have=new Set((t.bills||[]).filter(b=>b.no).map(bxDk));(x.bills||[]).forEach(b=>{if(b.no&&have.has(bxDk(b)))return;if(b.no)have.add(bxDk(b));t.bills.push(b)});if(!t.gstin&&x.gstin)t.gstin=x.gstin;if(d.cur==x.id)d.cur=t.id;n++});if(n){d.sheets=out;if(!d.sheets.find(x=>x.id==d.cur))d.cur=(d.sheets[0]||{}).id||'';save()}return n}
 function bxDb(){DB.bx=DB.bx||{sheets:[],cur:''};return DB.bx}
 function bxCur(){const d=bxDb();return d.sheets.find(s=>s.id==d.cur)||null}
 let BXP=[],BXW=[],BXBUSY=0;
 /* ---------- page ---------- */
-function bx(){CURP='bx';sb();tg(0);const dd=$id('dd');if(dd)dd.classList.remove('o');pgIn('bx');bxDraw()}
+function bx(){CURP='bx';bxMerge();sb();tg(0);const dd=$id('dd');if(dd)dd.classList.remove('o');pgIn('bx');bxDraw()}
 function bxMoney(x){return x.toLocaleString('en-IN',{minimumFractionDigits:2,maximumFractionDigits:2})}
 function bxDraw(){if(CURP!='bx')return;const d=bxDb(),s=bxCur();
  let h='<i data-pg="bx" hidden></i><div class="bx"><div class="gxh"><h2>Bills to Excel</h2><p>Upload your bills (Excel, PDF or a photo). Check what was read, then download the Excel register in your INDIA TRADING layout.</p></div>';
@@ -2718,7 +2722,7 @@ function bxSet(){const s=bxCur();if(!s)return;modal('<h3>Change sheet details</h
 function bxSet2(){const s=bxCur(),g=bxC($id('bxg').value).toUpperCase();if(g&&!bxGstOk(g))return $id('bxe').textContent='That GSTIN is not valid.';s.company=bxC($id('bxc').value)||s.company;s.gstin=g;s.month=($id('bxm').value||(s.month||'').slice(0,7))+'-01';save();modal();bxDraw()}
 function bxPick(v){bxDb().cur=v;BXP=[];BXW=[];save();bxDraw()}
 function bxDelSheet(){const s=bxCur();if(!s||!confirm('Delete the sheet "'+s.company+'" with its '+s.bills.length+' bills? Download it first if you need it.'))return;const d=bxDb();d.sheets=d.sheets.filter(x=>x.id!=s.id);d.cur=d.sheets[0]?d.sheets[0].id:'';save();bxDraw()}
-async function bxCont(f){if(!f)return;try{const s=await bxReadSheet(f);if(!s.bills.length&&!s.company)throw new Error('empty');const d=bxDb();d.sheets.push(s);d.cur=s.id;save();toast('Loaded '+s.bills.length+' bills from '+f.name);bxDraw()}catch(e){alert('I could not read that file as a sheet in this layout. Please pick the Excel file that this page made (or your INDIA TRADING sample).')}}
+async function bxCont(f){if(!f)return;try{const s=await bxReadSheet(f);if(!s.bills.length&&!s.company)throw new Error('empty');const d=bxDb();const ex=d.sheets.find(x=>bxSame(x,s,bxKd(s)));if(ex){const have=new Set((ex.bills||[]).filter(b=>b.no).map(bxDk));let n=0;s.bills.forEach(b=>{if(b.no&&have.has(bxDk(b)))return;if(b.no)have.add(bxDk(b));ex.bills.push(b);n++});if(!ex.gstin&&s.gstin)ex.gstin=s.gstin;d.cur=ex.id;save();toast('This sheet already exists, so I added '+n+' new bill'+(n==1?'':'s')+' to it (no new sheet made).');return bxDraw()}d.sheets.push(s);d.cur=s.id;save();toast('Loaded '+s.bills.length+' bills from '+f.name);bxDraw()}catch(e){alert('I could not read that file as a sheet in this layout. Please pick the Excel file that this page made (or your INDIA TRADING sample).')}}
 async function bxAdd(files){const s=bxCur();if(!s||!files.length)return;files=[...files];BXBUSY=1;const me=$id('bxmsg');
  for(let k=0;k<files.length;k++){const f=files[k];if(me)me.textContent='Reading '+(k+1)+' of '+files.length+': '+f.name;
   try{const rows=await bxFileRows(f);let b=bxFromRows(rows,s.gstin,s.company);b.src=f.name;b.rows=rows;
@@ -2733,8 +2737,8 @@ function bxClean(b){return{kind:b.kind=='purchase'?'purchase':'sales',date:bxDat
 function bxDk(b){const n=s=>String(s||'').toLowerCase().replace(/[^a-z0-9]/g,'');return[n(b.no),b.gstin?n(b.gstin):n(b.party),String(b.date||'')].join('|')}
 function bxDedupe(){const s=bxCur();if(!s)return;const seen=new Set();let n=0;s.bills=s.bills.filter(b=>{if(!b.no)return true;const k=bxDk(b);if(seen.has(k)){n++;return false}seen.add(k);return true});if(!n)return toast('No repeat bills found.');save();bxDraw();toast('Removed '+n+' repeat bill'+(n>1?'s':'')+'. Bills now: '+s.bills.length+'.')}
 function bxPush(idx){const s0=bxCur(),L=idx.map(i=>bxClean(BXP[i])),d=bxDb(),mine=s0.kind=='purchase'?'purchase':'sales';BXW=[];let ns=0,np=0,nr=0;
- const want=k=>{if(k==mine)return s0;let t=d.sheets.find(x=>(x.kind=='purchase'?'purchase':'sales')==k&&String(x.company||'').toLowerCase().replace(/\s+/g,' ').trim()==String(s0.company||'').toLowerCase().replace(/\s+/g,' ').trim()&&x.gstin==s0.gstin&&String(x.month||'').slice(0,7)==String(s0.month||'').slice(0,7));if(!t){t={id:'s'+Date.now().toString(36)+k[0],company:s0.company,gstin:s0.gstin,month:s0.month,bills:[]};if(k=='purchase')t.kind='purchase';d.sheets.push(t)}return t};
- ['sales','purchase'].forEach(k=>{const G0=L.filter(b=>b.kind==k);if(!G0.length)return;const t=want(k),have=new Set((t.bills||[]).filter(b=>b.no).map(bxDk)),G=[];G0.forEach(b=>{const key=bxDk(b);if(b.no&&have.has(key)){nr++}else{if(b.no)have.add(key);G.push(b)}});if(!G.length)return;BXW=BXW.concat(bxCheck(t,G));G.forEach(b=>t.bills.push(b));t.updated=new Date().toISOString();if(k=='sales')ns=G.length;else np=G.length});
+ const want=k=>{if(k==mine)return s0;let t=d.sheets.find(x=>bxSame(x,s0,k));if(!t){if(!confirm('These look like '+k+' bills, but the open sheet is a '+mine+' sheet and there is no '+k+' sheet for this company and month.\n\nOK = add them to the open sheet anyway.\nCancel = add nothing.'))return null;t=s0}return t};
+ ['sales','purchase'].forEach(k=>{const G0=L.filter(b=>b.kind==k);if(!G0.length)return;const t=want(k);if(!t)return;const have=new Set((t.bills||[]).filter(b=>b.no).map(bxDk)),G=[];G0.forEach(b=>{const key=bxDk(b);if(b.no&&have.has(key)){nr++}else{if(b.no)have.add(key);G.push(b)}});if(!G.length)return;BXW=BXW.concat(bxCheck(t,G));G.forEach(b=>t.bills.push(b));t.updated=new Date().toISOString();if(k=='sales')ns=G.length;else np=G.length});
  BXP=BXP.filter((_,i)=>!idx.includes(i));save();bxDraw();const na=ns+np;toast((na?'Added '+na+' bill'+(na>1?'s':'')+(np&&ns?' ('+ns+' sales, '+np+' purchase)':np?' to the Purchase sheet':' to the sheet')+'.':'Nothing added.')+(nr?' '+nr+' repeat bill'+(nr>1?'s were':' was')+' skipped (already in the sheet).':''))}
 function bxOne(i){bxPush([i])}
 function bxAll(){bxPush(BXP.map((_,i)=>i))}
