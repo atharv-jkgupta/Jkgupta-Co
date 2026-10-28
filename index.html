@@ -47,7 +47,7 @@ hr{border:0;border-top:1px solid var(--line);margin:18px 0}
 #app.pgin>*:nth-child(5){animation-delay:.2s}#app.pgin>*:nth-child(6){animation-delay:.25s}#app.pgin>*:nth-child(n+7){animation-delay:.3s}
 
 /* ============ top bar ============ */
-#top{display:flex;align-items:center;justify-content:space-between;height:62px;padding:0 18px;background:color-mix(in srgb,var(--s1) 88%,transparent);backdrop-filter:saturate(1.4) blur(12px);-webkit-backdrop-filter:saturate(1.4) blur(12px);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:20}
+#top{display:flex;align-items:center;justify-content:space-between;height:62px;padding:0 18px;background:color-mix(in srgb,var(--s1) 97%,transparent);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:20}
 #top:after{content:'';position:absolute;left:0;right:0;bottom:-1px;height:2px;background:linear-gradient(90deg,transparent,var(--gold),transparent);opacity:.7}
 .tl,.tr{display:flex;align-items:center;gap:12px}
 .brandR{text-align:left;line-height:1;font:700 25px var(--serif);color:var(--navy);cursor:pointer;letter-spacing:.5px;user-select:none}
@@ -66,7 +66,7 @@ body.out #mb,body.out #dm{display:none}
 #sb{position:fixed;top:62px;left:0;bottom:0;width:300px;max-width:88vw;background:var(--s1);border-right:1px solid var(--line);padding:16px 14px 28px;overflow:auto;transform:translateX(-102%);transition:transform .22s var(--ease),box-shadow .22s;z-index:15}
 #sb.o{transform:none;box-shadow:var(--shadow2)}
 #sb input,#sb select{width:100%;margin:3px 0 8px}
-#ov{display:none;position:fixed;inset:62px 0 0 0;background:rgba(5,12,22,.45);backdrop-filter:blur(2px);z-index:14;animation:fade .2s}#ov.o{display:block}
+#ov{display:none;position:fixed;inset:62px 0 0 0;background:rgba(5,12,22,.55);z-index:14;animation:fade .2s}#ov.o{display:block}
 .me{display:flex;align-items:center;gap:12px;padding:10px 12px;margin-bottom:12px;border-radius:14px;background:linear-gradient(135deg,var(--hero1),var(--hero2));color:var(--heroink)}
 .me .av{flex:none;width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font:700 16px var(--serif);background:var(--gold);color:#1a1305}
 .me b{display:block;line-height:1.2}.me small{color:var(--herosub)}
@@ -80,7 +80,7 @@ body.out #mb,body.out #dm{display:none}
 #dd.o{display:block;animation:pop .18s var(--ease)}
 #dd a{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:9px;cursor:pointer;color:var(--ink);font-size:14px}#dd a:hover{background:var(--s3)}
 .jkback{margin:0 0 10px}#dd a.dg{color:var(--bad)}#dd hr{margin:5px 8px}#dd{max-height:calc(100vh - 80px);overflow-y:auto;overscroll-behavior:contain}#dd a svg,#dd a i{width:18px;height:18px;flex:none}
-#md{display:none;position:fixed;inset:0;background:rgba(5,12,22,.55);backdrop-filter:blur(3px);z-index:40;overflow:auto;padding:64px 14px;animation:fade .18s}#md.o{display:block}
+#md{display:none;position:fixed;inset:0;background:rgba(5,12,22,.62);z-index:40;overflow:auto;padding:64px 14px;animation:fade .18s}#md.o{display:block}
 #md .box{background:var(--s1);color:var(--ink);max-width:620px;margin:0 auto;border-radius:18px;padding:24px;box-shadow:var(--shadow2);border:1px solid var(--line);animation:up .28s var(--ease)}
 #md .box h3{margin-top:0}#md input,#md select{width:100%;margin:4px 0}#md li{margin:6px 0}
 
@@ -138,7 +138,7 @@ summary{cursor:pointer;font-weight:600;color:var(--navy)}
 .hero small{letter-spacing:.2em;font-size:11px;color:var(--herosub);text-transform:uppercase}
 .hero h1{font:600 clamp(26px,4vw,38px)/1.15 var(--serif);margin:6px 0 4px;color:var(--heroink)}.hero h1 span{color:var(--gold2)}
 .hero p{margin:0;color:var(--herosub)}
-.nxt{background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.2);backdrop-filter:blur(6px);border-radius:16px;padding:14px 24px;text-align:center;min-width:220px}
+.nxt{background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.2);border-radius:16px;padding:14px 24px;text-align:center;min-width:220px}
 .nxt small{color:var(--herosub)}.nxt b{font:600 48px/1 var(--serif);color:var(--gold2);display:block}.nxt div{font-size:13px;margin-top:4px;color:var(--heroink)}
 .ql{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin:14px 0}
 .qa{display:flex;align-items:center;gap:14px;padding:14px 16px;background:var(--s1);border:1px solid var(--line);border-radius:var(--r);cursor:pointer;box-shadow:var(--shadow);transition:transform .2s var(--ease),border-color .2s,box-shadow .2s}
@@ -315,7 +315,7 @@ body.out .bgart{opacity:1}
 .lg{min-height:calc(100vh - 150px);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:10px 0 30px}
 .sig{font:400 clamp(50px,10vw,120px)/1.25 'Segoe Script','Lucida Handwriting','Brush Script MT','Apple Chancery','Snell Roundhand','Great Vibes',cursive;color:var(--sigink);padding:.1em .3em;text-shadow:0 0 24px var(--sigglow);-webkit-mask:linear-gradient(90deg,#000 70%,transparent) no-repeat;mask:linear-gradient(90deg,#000 70%,transparent) no-repeat;-webkit-mask-size:0% 100%;mask-size:0% 100%;animation:wr 3.4s .4s cubic-bezier(.45,.05,.3,1) forwards;cursor:pointer;user-select:none}
 .loc{margin-top:8px;letter-spacing:.5em;font-size:12px;color:var(--gold);font-weight:600;opacity:0;animation:fin 1.2s 2.8s forwards}
-.lgc{width:min(400px,100%);margin-top:34px;text-align:left;background:color-mix(in srgb,var(--s1) 86%,transparent);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid var(--line);border-top:3px solid var(--gold);border-radius:20px;padding:26px 26px 22px;box-shadow:var(--shadow2);opacity:0;animation:up .8s 1.6s var(--ease) forwards}
+.lgc{width:min(400px,100%);margin-top:34px;text-align:left;background:color-mix(in srgb,var(--s1) 96%,transparent);border:1px solid var(--line);border-top:3px solid var(--gold);border-radius:20px;padding:26px 26px 22px;box-shadow:var(--shadow2);opacity:0;animation:up .8s 1.6s var(--ease) forwards}
 .lgc h2{font-size:22px;margin:0 0 2px}.lgc .sub{margin:0 0 6px;color:var(--mute);font-size:14px}
 .lgc label{display:block;font-size:12.5px;color:var(--mute);margin-top:14px;letter-spacing:.02em}
 .lgc input{display:block;width:100%;margin-top:5px;padding:12px 14px;font-size:16px;font-weight:400}
@@ -545,7 +545,7 @@ body{background-image:none!important;font-size:16px;line-height:1.6}
 <div id="top"><div class="tl"><button id="mb" class="ib" onclick="tg()" aria-label="Menu">&#9776;</button><div class="brandR" onclick="logo()" title="JK Gupta &amp; Co.">JK<span>&amp;</span>CO.<small>CHARTERED ACCOUNTANTS</small></div></div><div class="tr"><span id="sv"></span><button id="tm" class="ib" onclick="theme()" aria-label="Theme"></button><button id="dm" class="ib" onclick="dm(event)" aria-label="More">&#8942;</button></div></div>
 <div id="dd"></div><div id="md"></div><input type="file" id="lb" accept=".json,application/json,text/plain,*/*" onchange="imp(this)" hidden>
 <aside id="sb"></aside><div id="ov" onclick="tg(0)"></div><main id="app"><div class="boot">Loading...</div></main><datalist id="ll"></datalist>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <script>
 /* Online storage (Supabase). All PCs share one database. The password is checked once on the server, which hands back a session token; every later call uses only that token. */
 const CLOUD={url:'https://mengenwaiutfamrqksxw.supabase.co',key:'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1lbmdlbndhaXV0ZmFtcnFrc3h3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTIzMzA3MTUsImV4cCI6MjEwNzkwNjcxNX0.0KZ0oloeEiFW7hO330o1zWhESEvBlH8BXOTzbKLPQYk'};
@@ -763,7 +763,35 @@ function dec(i,yes){const t=S.T[i],c=C(),L=(yes?t.g.l:v('in'+i)).trim();if(!L)re
 function pend(i){S.T[i].pend=1;S.T[i].l='';document.getElementById('q'+i).className='card';document.getElementById('q'+i).innerHTML='Left pending: '+E(S.T[i].narr);sum()}
 
 async function sv(name,data,mime){const ext=name.split('.').pop();if(!window.showSaveFilePicker)return 0;try{const h=await showSaveFilePicker({suggestedName:name,types:[{description:ext.toUpperCase()+' file',accept:{[mime.split(';')[0]]:['.'+ext]}}]}),w=await h.createWritable();await w.write(data);await w.close();return 1}catch(e){return e&&e.name=='AbortError'?1:0}}
-function dl(n,t,m){if(/\.xml$/i.test(n)){t=xmlSafe(t);sv(n,t,m).then(r=>{if(!r)dl2(n,t,m)});return}dl2(n,t,m)}
+function dlRaw(n,t,m){sv(n,t,m).then(r=>{if(!r)dl2(n,t,m)})}
+function dl(n,t,m){if(/\.xml$/i.test(n)){t=xmlSafe(t);let g=null;try{g=xmlGate(t)}catch(e){g=null}if(g){xgAsk(g,n,t,m);return}dlRaw(n,t,m);return}dl2(n,t,m)}
+/* ===== pre-import check: catches what Tally's Import Exceptions screen would show ===== */
+function xgUn(s){return String(s).replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&quot;/g,'"').replace(/&apos;/g,"'").replace(/&amp;/g,'&')}
+function xgD8(d){return d.slice(6,8)+'-'+d.slice(4,6)+'-'+d.slice(0,4)}
+function xmlGate(t){
+ if(!/<VOUCHER\b/.test(t))return null;
+ let c;try{c=C()}catch(e){return null}if(!c)return null;
+ const g={early:[],miss:[],ask:0,from:c.booksFrom||''},fy=/^\d{4}-\d{2}-\d{2}$/.test(g.from)?g.from.replace(/-/g,''):'';
+ if(!g.from)g.ask=1;
+ const have=new Set((c.ledgers||[]).map(lk)),useL=have.size>0,made=new Set(),M={};
+ (c.accounts||[]).forEach(a=>have.add(lk(a.ledger)));
+ t.replace(/<LEDGER NAME="([^"]*)" ACTION="Create"/g,(m,n)=>{made.add(lk(xgUn(n)));return m});
+ const re=/<VOUCHER\b[\s\S]*?<\/VOUCHER>/g;let x;
+ while((x=re.exec(t))){const v=x[0],d=(v.match(/<DATE>(\d{8})<\/DATE>/)||[])[1]||'';
+  if(fy&&d&&d<fy)g.early.push({d,no:xgUn((v.match(/<VOUCHERNUMBER>([^<]*)</)||[])[1]||''),nr:xgUn((v.match(/<NARRATION>([^<]*)</)||[])[1]||'').slice(0,40)});
+  if(useL)(v.match(/<(?:LEDGERNAME|PARTYLEDGERNAME)>[^<]*</g)||[]).forEach(s=>{const n=xgUn(s.replace(/^<[^>]*>/,'').replace(/<$/,'')),k=lk(n);if(k&&!have.has(k)&&!made.has(k)){const o=M[k]=M[k]||{n,c:0};o.c++}})}
+ g.miss=Object.values(M).sort((a,b)=>a.n.localeCompare(b.n));
+ return(g.early.length||g.miss.length||g.ask)?g:null}
+function xgAsk(g,n,t,m){window.XG={n,t,m,g};let h='<h3>Check before importing into Tally</h3>',bad=g.early.length||g.miss.length;
+ if(g.early.length)h+='<div class="card bad"><b>'+g.early.length+' voucher(s) are dated before your books begin ('+E(g.from.split('-').reverse().join('-'))+').</b> Tally refuses these with "Voucher Date is earlier than Financial year beginning from date".<br>'+g.early.slice(0,10).map(x=>E(xgD8(x.d))+' &nbsp; '+E(x.no||x.nr)).join('<br>')+(g.early.length>10?'<br>and '+(g.early.length-10)+' more':'')+'<br><small>Fix: correct those dates in your file (check the year), or in Tally open the company, Alter, and set Books beginning from to an earlier date. Then export again.</small></div>';
+ if(g.miss.length)h+='<div class="card bad"><b>'+g.miss.length+' ledger(s) used in this file are not in this client\'s ledger list.</b> Tally refuses these with "Referenced master is missing".<br>'+g.miss.slice(0,25).map(x=>E(x.n)+' <small>('+x.c+' entr'+(x.c>1?'ies':'y')+')</small>').join('<br>')+(g.miss.length>25?'<br>and '+(g.miss.length-25)+' more':'')+'<br><small>Fix: create each ledger in Tally first with exactly this spelling (same spaces and capitals), or correct the name in your file. If it already exists in Tally, reload the latest ledger names into the client page (Ledger names), then export again.</small></div>';
+ if(g.ask)h+='<div class="card ask"><b>Books beginning date (asked once per client)</b><br>In Tally the company title shows "from 1-Apr-2020" or similar. Pick that date so I can check every voucher against it.<br><input type="date" id="xgd"> <button onclick="xgSave()">Save and check</button> <button class="g" onclick="xgSkip()">Skip date check</button></div>';
+ if(bad)h+='<button onclick="xgAnyway()">Download anyway</button> ';
+ modal(h)}
+function xgAgain(){const X=window.XG;let g=null;try{g=xmlGate(X.t)}catch(e){}if(g)xgAsk(g,X.n,X.t,X.m);else{modal();dlRaw(X.n,X.t,X.m)}}
+function xgSave(){const d=(document.getElementById('xgd')||{}).value;if(!d)return alert('Pick the date first.');C().booksFrom=d;save();xgAgain()}
+function xgSkip(){C().booksFrom='skip';save();xgAgain()}
+function xgAnyway(){const X=window.XG;modal();dlRaw(X.n,X.t,X.m)}
 function dl2(n,t,m){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([t],{type:m}));a.download=n;a.click()}
 const le=(n,d,a)=>'<ALLLEDGERENTRIES.LIST><LEDGERNAME>'+E(n)+'</LEDGERNAME><ISDEEMEDPOSITIVE>'+(d?'Yes':'No')+'</ISDEEMEDPOSITIVE><AMOUNT>'+(d?'-':'')+a.toFixed(2)+'</AMOUNT></ALLLEDGERENTRIES.LIST>';
 function ex(f){const a=C().accounts[S.a],b=a.ledger;
@@ -1133,7 +1161,7 @@ function gBuild(){gSave();const c=C(),g=c.gs,L=c.ledgers,X=S.gx,out=[],bad=[],ne
  c.gmap=c.gmap||{};Object.keys(X.pm).forEach(k=>{if(X.pm[k]&&k!='(none)'&&(!L.length||L.includes(X.pm[k])))c.gmap[k]=X.pm[k]});c.grl=c.grl||{};Object.keys(X.rm).forEach(k=>{if(X.rm[k]&&(!L.length||L.includes(X.rm[k])))c.grl[k]=X.rm[k]});c.gtl=c.gtl||{};Object.keys(X.tm||{}).forEach(k=>{if(X.tm[k]&&(!L.length||L.includes(X.tm[k])))c.gtl[k]=X.tm[k]});save();return{out,bad,need,ms}}
 function gNoList(){const L=(S.gm||[]).map(m=>[m.n,m.gs||'']);dl('JK-new-party-GSTIN-'+S.c+'.csv',[['Party name','GSTIN']].concat(L).map(r=>r.map(x=>'"'+String(x).replace(/"/g,'""')+'"').join(',')).join('\r\n'),'text/csv')}
 function gAdSave(skip){try{const c=C();c.paddr=c.paddr||{};const nb=document.getElementById('gno');if(nb)c.nameOnly=!!nb.checked;if(!skip)(S.gaL||[]).forEach((x,i)=>{const ad=(document.getElementById('gad'+i)||{}).value||'',pn=(document.getElementById('gpn'+i)||{}).value||'';if(ad.trim()||pn.trim())c.paddr[x.k]={a:ad.trim(),p:pn.trim()}});save()}catch(e){}S.addrOK=1;try{gExport('xml')}finally{S.addrOK=0}}
-function gExport(kind){const r=gExport0(kind);setTimeout(()=>{try{const o=document.getElementById('gout'),pend=o&&/New party ledgers/.test(o.innerHTML),done=o&&/no voucher is ready/i.test(o.textContent);if(pend||done)return;if(kind=='tpl'){if(confirm('Do you also want to download the Tally XML for this file?'))gExport0('xml')}else if(kind=='xml'){if(confirm('Do you also want to download the Excel (filled Tally template) for this file?'))gExport0('tpl')}}catch(e){}},900);return r}
+function gExport(kind){return gExport0(kind)}
 function gExport0(kind){const{out,bad,need,ms}=gBuild(),o=document.getElementById('gout'),X=S.gx;
  if(kind=='xml'&&!S.addrOK&&out.length&&ms.size&&/prime/i.test(C().ver||'')){const pa=C().paddr||{},ls=[...ms].map(([n,m])=>({n,k:m.gs||lk(n)})).filter(x=>!pa[x.k]);
   {S.gaL=ls;o.innerHTML='<div class="card ask"><b>New party ledgers for Tally Prime</b><br><label style="display:block;margin:8px 0"><input type="checkbox" id="gno"'+(C().nameOnly?' checked':'')+'> <b>Make new ledgers with the name only</b> (no GSTIN, no state). Then in Tally you open each ledger, press <b>Alt+L</b> and paste its GSTIN. You get a list of names and GSTINs below.</label>'+(ls.length?'<b>Address (optional)</b><br>Type the address once. It is saved, so next time it is filled in by itself. Leave a box empty to skip it.':'')+ls.slice(0,40).map((x,i)=>'<div style="margin:8px 0"><b>'+E(x.n)+'</b><br><textarea id="gad'+i+'" rows="2" placeholder="Address (new line for a second line)" style="width:100%;max-width:520px"></textarea> <input id="gpn'+i+'" placeholder="Pincode" inputmode="numeric" maxlength="6" style="width:110px"></div>').join('')+(ls.length>40?'<div>'+(ls.length-40)+' more parties will be made without an address.</div>':'')+'<button onclick="gAdSave(false)">Save addresses and make the XML</button> <button class="g" onclick="gAdSave(true)">Skip, make the XML without address</button></div>';return}}
@@ -2220,7 +2248,7 @@ function trAttrs(root){root.querySelectorAll('['+TRA.join('],[')+']').forEach(e=
  if(isHi()){if(o==null){const h=HI[v.trim()];if(h){e.setAttribute(k,v);e.setAttribute(a,h)}}}else if(o!=null){e.setAttribute(a,o);e.removeAttribute(k)}}))}
 let TRB=0;
 function trAll(root){root=root||document.body;if(TRB)return;TRB=1;try{const w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT);let n;const L=[];while(n=w.nextNode())L.push(n);L.forEach(trNode);trAttrs(root);hlpAttach(root)}finally{TRB=0}}
-let TRT=0;const TRO2=new MutationObserver(()=>{if(TRB)return;if(TRT)return;TRT=setTimeout(()=>{TRT=0;trAll()},60)});
+let TRT=0;const TRO2=new MutationObserver(rs=>{if(TRB||TRT)return;if(!rs.some(r=>r.type=='childList'?(r.addedNodes.length||r.removedNodes.length):!(r.target.parentNode&&r.target.parentNode.id=='clk')))return;TRT=setTimeout(()=>{TRT=0;trAll()},150)});
 function lngSet(v){LNG.set(v);document.documentElement.lang=v;lngBtn();trAll();toast(v=='hi'?'भाषा: हिन्दी':'Language: English')}
 function lngBtn(){const b=document.getElementById('lgb');if(b){b.textContent=isHi()?'EN':'हिं';b.title=isHi()?'Switch to English':'हिन्दी में बदलें';b.setAttribute('aria-label',b.title)}}
 function lngInit(){const tr=document.querySelector('#top .tr');if(tr&&!document.getElementById('lgb')){const b=document.createElement('button');b.id='lgb';b.className='ib lgb';b.type='button';b.onclick=()=>lngSet(isHi()?'en':'hi');tr.insertBefore(b,document.getElementById('tm'))}
