@@ -721,7 +721,7 @@ function build(rows,a,df,dt){
   const key2=[t.date,t.narr,t.dr,t.cr].join('|');if(hm.get(key2)>0){hm.set(key2,hm.get(key2)-1);t.dup=1}
   T.push(t)});
  if(T.length>1&&T.every(t=>t.bal!=null&&!isNaN(t.bal))){const asc=T[0].date<=T[T.length-1].date;
-  for(let i=1;i<T.length;i++){const[p,q]=asc?[T[i-1],T[i]]:[T[i],T[i-1]];if(Math.abs(p.bal+q.cr-q.dr-q.bal)>0.01)T[i].warn=1}}
+  for(let i=1;i<T.length;i++){const[p,q]=asc?[T[i-1],T[i]]:[T[i],T[i-1]];if(Math.abs(p.bal+q.cr-q.dr-q.bal)>1)T[i].warn=1}}
  T.forEach(t=>{if(t.out||t.dup)return;const g=guess(t,a);t.g=g;if(g.conf=='high'&&!t.warn)t.l=g.l});
  S.T=T;S.bad=bad;S.done=0;scanRep()}
 
@@ -771,19 +771,23 @@ function xgD8(d){return d.slice(6,8)+'-'+d.slice(4,6)+'-'+d.slice(0,4)}
 function xmlGate(t){
  if(!/<VOUCHER\b/.test(t))return null;
  let c;try{c=C()}catch(e){return null}if(!c)return null;
- const g={early:[],miss:[],ask:0,from:c.booksFrom||''},fy=/^\d{4}-\d{2}-\d{2}$/.test(g.from)?g.from.replace(/-/g,''):'';
+ const g={early:[],miss:[],odd:[],amt:[],ask:0,from:c.booksFrom||''},all=[],fy=/^\d{4}-\d{2}-\d{2}$/.test(g.from)?g.from.replace(/-/g,''):'';
  if(!g.from)g.ask=1;
  const have=new Set((c.ledgers||[]).map(lk)),useL=have.size>0,made=new Set(),M={};
  (c.accounts||[]).forEach(a=>have.add(lk(a.ledger)));
  t.replace(/<LEDGER NAME="([^"]*)" ACTION="Create"/g,(m,n)=>{made.add(lk(xgUn(n)));return m});
  const re=/<VOUCHER\b[\s\S]*?<\/VOUCHER>/g;let x;
  while((x=re.exec(t))){const v=x[0],d=(v.match(/<DATE>(\d{8})<\/DATE>/)||[])[1]||'';
-  if(fy&&d&&d<fy)g.early.push({d,no:xgUn((v.match(/<VOUCHERNUMBER>([^<]*)</)||[])[1]||''),nr:xgUn((v.match(/<NARRATION>([^<]*)</)||[])[1]||'').slice(0,40)});
+  const it={d,no:xgUn((v.match(/<VOUCHERNUMBER>([^<]*)</)||[])[1]||''),nr:xgUn((v.match(/<NARRATION>([^<]*)</)||[])[1]||'').slice(0,40)};if(d)all.push(it);if(fy&&d&&d<fy)g.early.push(it);
+  {const am=(v.match(/<AMOUNT>[^<]*</g)||[]).map(z=>parseFloat(z.replace(/^<AMOUNT>/,'').replace(/<$/,'').replace(/\s/g,''))),sm=am.reduce((a,b)=>a+b,0),w=am.some(isNaN)?'an amount is not a number':(am.length&&am.every(z=>z===0))?'every amount in it is zero':(am.length&&Math.abs(sm)>0.009)?'debit and credit differ by '+(Math.round(Math.abs(sm)*100)/100).toFixed(2):'';if(w)g.amt.push({d,no:it.no,nr:it.nr,why:w})}
   if(useL)(v.match(/<(?:LEDGERNAME|PARTYLEDGERNAME)>[^<]*</g)||[]).forEach(s=>{const n=xgUn(s.replace(/^<[^>]*>/,'').replace(/<$/,'')),k=lk(n);if(k&&!have.has(k)&&!made.has(k)){const o=M[k]=M[k]||{n,c:0};o.c++}})}
  g.miss=Object.values(M).sort((a,b)=>a.n.localeCompare(b.n));
- return(g.early.length||g.miss.length||g.ask)?g:null}
-function xgAsk(g,n,t,m){window.XG={n,t,m,g};let h='<h3>Check before importing into Tally</h3>',bad=g.early.length||g.miss.length;
+ if(all.length>=5){const dn=q=>Date.UTC(+q.slice(0,4),+q.slice(4,6)-1,+q.slice(6,8))/864e5,ds=all.map(z=>dn(z.d)).sort((a,b)=>a-b),med=ds[Math.floor(ds.length/2)],o=all.filter(z=>Math.abs(dn(z.d)-med)>366&&!(fy&&z.d<fy));if(o.length&&o.length<=all.length*0.2)g.odd=o}
+ return(g.early.length||g.miss.length||g.odd.length||g.amt.length||g.ask)?g:null}
+function xgAsk(g,n,t,m){window.XG={n,t,m,g};let h='<h3>Check before importing into Tally</h3>',bad=g.early.length||g.miss.length||g.odd.length||g.amt.length;
  if(g.early.length)h+='<div class="card bad"><b>'+g.early.length+' voucher(s) are dated before your books begin ('+E(g.from.split('-').reverse().join('-'))+').</b> Tally refuses these with "Voucher Date is earlier than Financial year beginning from date".<br>'+g.early.slice(0,10).map(x=>E(xgD8(x.d))+' &nbsp; '+E(x.no||x.nr)).join('<br>')+(g.early.length>10?'<br>and '+(g.early.length-10)+' more':'')+'<br><small>Fix: correct those dates in your file (check the year), or in Tally open the company, Alter, and set Books beginning from to an earlier date. Then export again.</small></div>';
+ if(g.odd.length)h+='<div class="card bad"><b>'+g.odd.length+' voucher(s) have a date more than a year away from the rest of the file.</b> This often means a wrong year, for example 2006 instead of 2026, or a year misread from a PDF or photo.<br>'+g.odd.slice(0,10).map(x=>E(xgD8(x.d))+' &nbsp; '+E(x.no||x.nr)).join('<br>')+(g.odd.length>10?'<br>and '+(g.odd.length-10)+' more':'')+'<br><small>Nothing was changed. Fix: correct those dates in your source file, then export again. If they are really correct, press Download anyway.</small></div>';
+ if(g.amt.length)h+='<div class="card bad"><b>'+g.amt.length+' voucher(s) have an amount problem.</b> Tally cannot take a voucher whose debit and credit are not exactly equal.<br>'+g.amt.slice(0,10).map(x=>E(xgD8(x.d))+' &nbsp; '+E(x.no||x.nr)+' <small>('+E(x.why)+')</small>').join('<br>')+(g.amt.length>10?'<br>and '+(g.amt.length-10)+' more':'')+'<br><small>Small rounding differences in your source file are fine. This only flags a voucher whose own lines do not add up. Fix those amounts and export again.</small></div>';
  if(g.miss.length)h+='<div class="card bad"><b>'+g.miss.length+' ledger(s) used in this file are not in this client\'s ledger list.</b> Tally refuses these with "Referenced master is missing".<br>'+g.miss.slice(0,25).map(x=>E(x.n)+' <small>('+x.c+' entr'+(x.c>1?'ies':'y')+')</small>').join('<br>')+(g.miss.length>25?'<br>and '+(g.miss.length-25)+' more':'')+'<br><small>Fix: create each ledger in Tally first with exactly this spelling (same spaces and capitals), or correct the name in your file. If it already exists in Tally, reload the latest ledger names into the client page (Ledger names), then export again.</small></div>';
  if(g.ask)h+='<div class="card ask"><b>Books beginning date (asked once per client)</b><br>In Tally the company title shows "from 1-Apr-2020" or similar. Pick that date so I can check every voucher against it.<br><input type="date" id="xgd"> <button onclick="xgSave()">Save and check</button> <button class="g" onclick="xgSkip()">Skip date check</button></div>';
  if(bad)h+='<button onclick="xgAnyway()">Download anyway</button> ';
@@ -967,7 +971,7 @@ function info(){const F=[['Bank statement import','Excel or CSV statements are r
  return BG+'<section class="sc rv"><h2 class="st">What you can do</h2><div class="gd">'+F.map(f=>'<div class="fc"><b>'+f[0]+'</b><p>'+f[1]+'</p></div>').join('')+'</div></section><section class="sc rv"><h2 class="st">Built around your templates</h2><div class="gd"><div class="fc"><b>Tally Auto Entry</b><p>Date, By/Dr, To/Cr, Amount, Narration, Voucher Type. Bank entries are exported in exactly this layout.</p></div><div class="fc"><b>GST Voucher Template</b><p>Sales, Purchase, Credit Note and Debit Note with CGST, SGST and IGST, using your ledger naming.</p></div></div></section><div class="sc rv" style="text-align:center"><button class="cta" onclick="tg(1)">STAFF LOGIN</button></div>'}
 function scanRep(){const T=S.T,b=S.bad,n=T.length+b.length,ds=T.map(t=>t.date).sort(),W=T.filter(t=>t.warn).length,D=T.filter(t=>t.dup).length,O=T.filter(t=>t.out).length,Z=T.filter(t=>!t.out&&!t.dup).length;
  let bl='<br>Balance check: not possible (no running balance column in the file).',mis=0;
- if(T.length&&T.every(t=>t.bal!=null&&!isNaN(t.bal))){const asc=T[0].date<=T[T.length-1].date,fi=asc?T[0]:T[T.length-1],la=asc?T[T.length-1]:T[0],so=r2(fi.bal+fi.dr-fi.cr),sc=la.bal,mv=r2(T.reduce((x,t)=>x+t.cr-t.dr,0)),ob=S.ob?+S.ob:null,cb=S.cb?+S.cb:null,ck=(x,y)=>Math.abs(x-y)<.01?'<span class="g2">✔ matches</span>':(mis=1,'<span class="w">✖ differs by '+M(Math.abs(x-y))+'</span>');
+ if(T.length&&T.every(t=>t.bal!=null&&!isNaN(t.bal))){const asc=T[0].date<=T[T.length-1].date,fi=asc?T[0]:T[T.length-1],la=asc?T[T.length-1]:T[0],so=r2(fi.bal+fi.dr-fi.cr),sc=la.bal,mv=r2(T.reduce((x,t)=>x+t.cr-t.dr,0)),ob=S.ob?+S.ob:null,cb=S.cb?+S.cb:null,ck=(x,y)=>{const dd=Math.abs(x-y);return dd<.01?'<span class="g2">✔ matches</span>':dd<1?'<span class="g2">✔ matches <small>(rounding '+M(dd)+')</small></span>':(mis=1,'<span class="w">✖ differs by '+M(dd)+'</span>')};
   bl='<br><b>Balance check</b><br>Statement opening: <b>'+M(so)+'</b> · Statement closing: <b>'+M(sc)+'</b> · Movement in file: <b>'+M(mv)+'</b>'+(ob!=null?'<br>Opening as per Tally <b>'+M(ob)+'</b> vs statement '+ck(ob,so)+'<br>Tally opening + movement = <b>'+M(r2(ob+mv))+'</b> vs statement closing '+ck(r2(ob+mv),sc):'<br><span class="w">Opening balance as per Tally was not entered, so it was not compared.</span>')+(cb!=null?'<br>Closing as per Tally <b>'+M(cb)+'</b> vs statement closing '+ck(cb,sc):'')}
  S.mis=mis;const dir=S.direct;S.direct=0;const vd=!T.length?['bad','NOT SUITABLE','No readable transactions were found.']:b.length>n*.1?['bad','NOT SUITABLE','More than 10% of rows are unreadable. Please fix the file first.']:(b.length||W||mis)?['ask','USABLE — CHECK FIRST',(b.length?b.length+' unreadable row(s) will be skipped. ':'')+(W?W+' row(s) where the running balance does not tally. ':'')+(mis?'The balances do not match Tally.':'')]:['ok','SUITABLE','The file is clean and ready to convert.'];
  if(dir&&vd[0]=='ok'){S.auto=dir;return review()}
@@ -1836,7 +1840,7 @@ function rcResHtml0(){const X=RCS.R;if(!X)return'';if(X.t=='gst'){const S=X.S;co
   +'<tr><td>Add: credited by bank, not yet in books</td><td class="n">'+rcMoney(S.knIn)+'</td></tr><tr><td>Less: debited by bank, not yet in books</td><td class="n">- '+rcMoney(S.knOut)+'</td></tr>'
   +'<tr><td>Add: cheques issued, not yet cleared</td><td class="n">'+rcMoney(S.bkOut)+'</td></tr><tr><td>Less: deposits in books, not yet credited by bank</td><td class="n">- '+rcMoney(S.bkIn)+'</td></tr>'
   +'<tr class="t"><td>Balance as per bank (calculated)</td><td class="n">'+(S.calc==null?'<small>enter books balance</small>':rcMoney(S.calc))+'</td></tr>'
-  +(S.bank!=null?'<tr><td>Balance as per bank statement</td><td class="n">'+rcMoney(S.bank)+'</td></tr><tr class="'+(gap==null?'':Math.abs(gap)<0.01?'okr':'badr2')+'"><td>Difference</td><td class="n">'+(gap==null?'':Math.abs(gap)<0.01?'Reconciled ✓':rcMoney(gap))+'</td></tr>':'')+'</table></div>'
+  +(S.bank!=null?'<tr><td>Balance as per bank statement</td><td class="n">'+rcMoney(S.bank)+'</td></tr><tr class="'+(gap==null?'':Math.abs(gap)<1?'okr':'badr2')+'"><td>Difference</td><td class="n">'+(gap==null?'':Math.abs(gap)<0.01?'Reconciled ✓':Math.abs(gap)<1?'Reconciled ✓ (rounding '+rcMoney(gap)+')':rcMoney(gap))+'</td></tr>':'')+'</table></div>'
   +'<div class="toolbar"><input class="sq" style="flex:1;min-width:200px;margin:0" placeholder="Search narration, reference or amount..." value="'+E(RCS.q)+'" oninput="rcQ(this.value)"><button onclick="rcXls()">Download Excel</button></div><div id="rcl">'+rcTable()+'</div>'}
 function rcTable(){const X=RCS.R,q=RCS.q.toLowerCase();if(X.t=='gst'){
   const L=X.R.map((r,i)=>[r,i]).filter(([r,i])=>{const st=r.acc&&r.st=='probable'?'match':r.st;if(RCS.fl!='all'&&st!=RCS.fl&&r.st!=RCS.fl)return false;if(!q)return true;const o=r.b||r.g;return(o.inv+' '+o.gstin+' '+o.party+' '+(r.g?r.g.party:'')).toLowerCase().includes(q)});
@@ -2035,7 +2039,7 @@ function rcDiag(){const X=RCS.R;if(!X)return;const N=[];
   if(sA&&sB&&(sA[1]<sB[0]||sB[1]<sA[0]))N.push(rcNote('bad','The ledger and the statement cover different dates: ledger '+fd(sA[0])+' to '+fd(sA[1])+', statement '+fd(sB[0])+' to '+fd(sB[1])+'.','Export both for the same period.'));
   if(S.nM===0&&(S.nB||S.nK))N.push(rcNote('warn','Nothing matched.','Check that the Debit / Credit columns are not swapped, and that the files are for the same bank account and period. In the ledger, Debit means money received; in the statement, Deposit means money received.'));
   else if((S.nB+S.nK)>S.nM&&S.nM>0)N.push(rcNote('info','Many entries are unmatched.','Try a larger date window (for example 7 to 10 days) if cheques clear slowly.'));
-  if(S.gap!=null&&Math.abs(S.gap)>=0.01)N.push(rcNote('warn','The reconciliation statement is out by '+rcMoney(S.gap)+'.','Check the two closing balances you typed, and look for entries that appear twice or are missing in the unmatched lists below.'))}
+  if(S.gap!=null&&Math.abs(S.gap)>=1)N.push(rcNote('warn','The reconciliation statement is out by '+rcMoney(S.gap)+'.','Check the two closing balances you typed, and look for entries that appear twice or are missing in the unmatched lists below.'))}
  X.diag=N}
 const rcCN=()=>{const A=RCS.A&&RCS.A.info||{},B=RCS.B&&RCS.B.info||{};const sel=RCS.client||'';
  return{name:sel||(rcSl()?(B.name||A.name):(RCS.tab=='bank'?(A.title||B.title):(B.name||A.name)))||'',gstin:(B.gstin||A.gstin)||''}}
