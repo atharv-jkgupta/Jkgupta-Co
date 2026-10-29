@@ -1,5 +1,5 @@
 <!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>JK Gupta &amp; Co</title>
-<meta name="description" content="JK Gupta &amp; Co. client accounting workspace"><meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#0f2742"><meta name="jkg-build" content="b2610261700"><script>try{var t=localStorage.getItem("jkgtheme")||(matchMedia("(prefers-color-scheme:dark)").matches?"dark":"light");document.documentElement.dataset.theme=t}catch(e){document.documentElement.dataset.theme="light"}</script><link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27%3E%3Crect width=%2764%27 height=%2764%27 rx=%2714%27 fill=%27%230f2742%27/%3E%3Ctext x=%2732%27 y=%2742%27 font-size=%2734%27 font-family=%27Georgia,serif%27 font-weight=%27700%27 text-anchor=%27middle%27 fill=%27%23e9d9ae%27%3EJK%3C/text%3E%3C/svg%3E"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:wght@500;600;700&display=swap"><style>
+<meta name="description" content="JK Gupta &amp; Co. client accounting workspace"><meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#0f2742"><meta name="jkg-build" content="b2610291400"><script>try{var t=localStorage.getItem("jkgtheme")||(matchMedia("(prefers-color-scheme:dark)").matches?"dark":"light");document.documentElement.dataset.theme=t}catch(e){document.documentElement.dataset.theme="light"}</script><link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27%3E%3Crect width=%2764%27 height=%2764%27 rx=%2714%27 fill=%27%230f2742%27/%3E%3Ctext x=%2732%27 y=%2742%27 font-size=%2734%27 font-family=%27Georgia,serif%27 font-weight=%27700%27 text-anchor=%27middle%27 fill=%27%23e9d9ae%27%3EJK%3C/text%3E%3C/svg%3E"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:wght@500;600;700&display=swap"><style>
 /* ============ tokens ============ */
 :root{--serif:'Source Serif 4',Georgia,'Times New Roman',serif;--sans:'Inter','Segoe UI',system-ui,-apple-system,Arial,sans-serif;--r:12px;--ease:cubic-bezier(.2,.7,.2,1)}
 :root,:root[data-theme=light]{color-scheme:light;
@@ -949,6 +949,20 @@ function lpDl(k){const V=LP.T.map(t=>{const l=t.l||LP.sus;return t.dr?{d:t.date,
  dl(nm+'.csv',(tp?R:N).map(r=>r.map(x=>'"'+String(x).replace(/"/g,'""')+'"').join(',')).join('\r\n'),'text/csv')}
 function delA(i){if(confirm('Delete this bank account from the list? Its stored history is kept.')){C().accounts.splice(i,1);save();dash()}}
 function delC(){if(confirm('Delete client "'+S.c+'" with all its accounts, rules and history? This cannot be undone.')){if(typeof tkDrop=='function')tkDrop(S.c);delete DB.clients[S.c];save();home()}}
+function rsF(v){const q=String(v||'').toLowerCase().trim(),rs=[...document.querySelectorAll('#rtb tr')];let n=0;rs.forEach(r=>{const ok=!q||r.textContent.toLowerCase().includes(q);r.style.display=ok?'':'none';if(ok)n++});const m=document.getElementById('rsc');if(m)m.textContent=q?('Showing '+n+' of '+rs.length+' rules'):(rs.length+' rules')}
+function loadR(i){const f=i.files[0];if(!f)return;(async()=>{try{const nm=f.name,buf=await f.arrayBuffer();let rows;
+ if(/\.csv$/i.test(nm))rows=rcCsv(new TextDecoder('utf-8').decode(buf).replace(/^\uFEFF/,''));
+ else if(/\.txt$/i.test(nm))rows=new TextDecoder('utf-8').decode(buf).split(/\r?\n/).map(l=>l.split(/\s*(?:=|\t|,)\s*/));
+ else{const sh=await xlAll(buf);rows=(sh[0]&&sh[0].rows)||[]}
+ const c=C(),L=c.ledgers||[],have=new Set(c.rules.map(r=>r.k));let add=0,dup=0,skip=0,nl=0;
+ rows.forEach(r=>{const k=String(r[0]==null?'':r[0]).trim().toLowerCase();let l=qc(String(r[1]==null?'':r[1]));
+  if(!k||!l||/^(keyword|narration|particulars|contains|rule)$/i.test(k)){if(k||l)skip++;return}
+  if(have.has(k)){dup++;return}
+  if(L.length){l=lgFix(l,L);if(!L.includes(l))nl++}
+  have.add(k);c.rules.push({k,l});add++});
+ save();dash();
+ alert(rows.length+' rows read. '+add+' new rule(s) added, '+dup+' already there (kept as they are), '+skip+' row(s) ignored.'+(nl?' '+nl+' of the new rules use a ledger that is not in this client\'s ledger list, please check them.':'')+' Nothing was removed.')}
+ catch(e){alert('Could not read file: '+e.message)}finally{try{i.value=''}catch(e){}}})()}
 function bulkR(){const c=C();v('br').split('\n').forEach(l=>{const m=l.split(/=|,|\t/);const k=(m[0]||'').trim().toLowerCase(),x=(m[1]||'').trim();if(k&&x&&!c.rules.some(r=>r.k==k))c.rules.push({k,l:x})});save();dash()}
 function dash(){CURP='';pgIn('dash');const c=C();
  app.innerHTML=`<button class="g" onclick="home()">← All clients</button> <button onclick="gst()">Sales / Purchase with GST</button> <button class="g" onclick="arcOpen()">Save to folder</button><h2>${E(S.c)} <small>(${c.ver})</small></h2><h3>Bank accounts</h3>
@@ -957,9 +971,10 @@ function dash(){CURP='';pgIn('dash');const c=C();
  <details open><summary>Import from Tally (Excel or XML)</summary>${tlBox()}</details>
  <details><summary>Add bank account</summary><input id="al" placeholder="Label e.g. HDFC CA 1234"> <input id="at" list="ll" placeholder="Exact bank ledger name in Tally" size="30"> <button onclick="addA()">Add</button></details>
  <details${BRO?' open':''}><summary>Ledger names</summary>${brBar()}<p>Paste the ledger names of the branch selected above, from Tally, one per line.</p><textarea id="lt" rows="6">${E(c.ledgers.join('\n'))}</textarea><button onclick="saveL()">Save ledger list</button><br><small>Or load names from your template Masters sheet / any Excel (names in column A):</small> <input type="file" id="mf" accept=".xlsx,.xlsm,.xls,.csv,.xml,.txt" onchange="loadM(this)"></details>
- <details><summary>Rules (narration contains → ledger)</summary><table>${c.rules.map((r,i)=>`<tr><td>${E(r.k)}</td><td>${E(r.l)}</td><td><button class="g" onclick="delR(${i})">Delete</button></td></tr>`).join('')}</table>
+ <details><summary>Rules (narration contains → ledger)</summary><div class="gsb"><input id="rsq" type="search" placeholder="🔎 Search rules (keyword or ledger)..." oninput="rsF(this.value)"><span id="rsc" class="gqc">${c.rules.length} rules</span></div><table id="rtb">${c.rules.map((r,i)=>`<tr><td>${E(r.k)}</td><td>${E(r.l)}</td><td><button class="g" onclick="delR(${i})">Delete</button></td></tr>`).join('')}</table>
  <input id="rk" placeholder="keyword"> <input id="rl" list="ll" placeholder="ledger"> <button onclick="addR()">Add rule</button>
- <p><small>Add many at once, one per line as <b>keyword = ledger</b>:</small></p><textarea id="br" rows="4" placeholder="swiggy = Staff Welfare&#10;gift = Drawings"></textarea><button onclick="bulkR()">Add all rules</button></details>
+ <p><small>Add many at once, one per line as <b>keyword = ledger</b>:</small></p><textarea id="br" rows="4" placeholder="swiggy = Staff Welfare&#10;gift = Drawings"></textarea><button onclick="bulkR()">Add all rules</button>
+ <p><small>Or load rules from a file (Excel, CSV or text; column 1 = keyword, column 2 = ledger). Only <b>new</b> keywords are added. Rules you already have stay exactly as they are.</small></p><input type="file" id="rfi" accept=".xlsx,.xlsm,.xls,.csv,.txt" onchange="loadR(this)"></details>
  <details><summary>Delete client</summary><button class="g" onclick="delC()">Delete this client</button></details>`}
 
 
@@ -1310,7 +1325,7 @@ function PNAME(n){return String(n||'').replace(/[._-]+/g,' ').trim().replace(/(^
    JK Gupta & Co. - interface, client tracker, attendance, staff control
    (added on top of the original program; everything above is unchanged)
    ==================================================================== */
-const BUILD='b2610281300';
+const BUILD='b2610291400';
 let CURP='';
 const $id=i=>document.getElementById(i);
 const jkP2=n=>String(n).padStart(2,'0');
