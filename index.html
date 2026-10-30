@@ -541,6 +541,34 @@ body{background-image:none!important;font-size:16px;line-height:1.6}
 .gsb input[type=search]:focus{outline:none;box-shadow:0 0 0 4px rgba(47,214,160,.25)}
 .gsb .gqc{font-size:14px;font-weight:600;color:#2fd6a0}
 .gsb button.sm{border-radius:999px;padding:8px 16px;font-size:14px}
+#gtb tr.gmix td{background:rgba(245,165,36,.20)!important}.gbd{display:inline-block;font-size:12px;font-weight:700;padding:2px 8px;border-radius:999px;background:#f5a524;color:#1a1200;margin-left:6px;white-space:nowrap}</style><style id="gpolish">
+/* UI polish: sizes, spacing, buttons, cards, focus, motion. Uses the site's own theme colours. */
+body{font-size:16px;line-height:1.6}
+h2{font-size:clamp(26px,4vw,34px);letter-spacing:-.3px}
+h3{font-size:14.5px;letter-spacing:.01em;text-transform:none;color:var(--ink);display:flex;align-items:center;gap:10px;margin:1.9em 0 .8em}
+h3:before{content:'';flex:none;width:5px;height:18px;border-radius:3px;background:var(--gold,var(--pri))}
+th{font-size:12.5px;letter-spacing:.04em;padding:10px 12px}
+td{padding:9px 12px}
+button{min-height:42px;border-radius:12px;font-size:15px;font-weight:600;padding:9px 18px;cursor:pointer;transition:transform .15s var(--ease),box-shadow .15s,background .15s,border-color .15s}
+button:hover:not(:disabled){transform:translateY(-1px);box-shadow:var(--shadow)}
+button:active:not(:disabled){transform:translateY(0);box-shadow:none}
+button.sm,.g.sm{min-height:34px;padding:6px 14px;font-size:14px;border-radius:10px}
+button.ib{min-height:40px;padding:0}
+button:disabled{opacity:.55;cursor:not-allowed}
+input,select,textarea{min-height:42px;font-size:15px;border-radius:12px}
+input[type=checkbox],input[type=radio]{min-height:0;accent-color:var(--gold,var(--pri))}
+:is(button,input,select,textarea,a,summary):focus-visible{outline:3px solid color-mix(in srgb,var(--gold,var(--pri)) 65%,transparent);outline-offset:2px}
+.card,.kc,.cc,.stp{padding:18px 22px;border-radius:16px;transition:box-shadow .2s,transform .2s,border-color .2s}
+.card{animation:jrise .4s var(--ease) both}
+.kc:hover,.cc:hover,.stp:hover{transform:translateY(-2px);box-shadow:var(--shadow2);border-color:color-mix(in srgb,var(--gold,var(--pri)) 55%,var(--line))}
+.li{padding:11px 12px;font-size:15px;border-radius:12px}
+.dh{border-radius:22px;padding:28px 32px}
+tr:nth-child(even) td{background:color-mix(in srgb,var(--s2) 45%,transparent)}
+tr:hover td{background:color-mix(in srgb,var(--gold,var(--pri)) 12%,var(--s2))}
+small{font-size:13.5px}
+@keyframes jrise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@media(max-width:640px){.card,.kc,.cc,.stp{padding:14px 16px}.dh{padding:20px}input,select,textarea{font-size:16px}h2{font-size:26px}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style></head><body class="out">
 <div id="top"><div class="tl"><button id="mb" class="ib" onclick="tg()" aria-label="Menu">&#9776;</button><div class="brandR" onclick="logo()" title="JK Gupta &amp; Co.">JK<span>&amp;</span>CO.<small>CHARTERED ACCOUNTANTS</small></div></div><div class="tr"><span id="sv"></span><button id="tm" class="ib" onclick="theme()" aria-label="Theme"></button><button id="dm" class="ib" onclick="dm(event)" aria-label="More">&#8942;</button></div></div>
 <div id="dd"></div><div id="md"></div><input type="file" id="lb" accept=".json,application/json,text/plain,*/*" onchange="imp(this)" hidden>
@@ -1062,7 +1090,7 @@ function gread(sh,type){const{rows,hd}=sh,c=hd.c,V=[],mx=Math.max(...Object.valu
   const ia=z0(num(g('ia'))),ca=z0(num(g('ca'))),sa=z0(num(g('sa'))),tg=ia+ca+sa,ir=prt(g('ir')),cr=prt(g('cr')),sr=prt(g('sr')),rr=prt(g('r')),ft=num(g('tot'));let q=NaN;
   if(tg>0&&tx>0)q=snap(tg/tx);else if(ir>0)q=ir;else if(cr>0||sr>0)q=z0(cr)+z0(sr);else if(rr>=0)q=rr;else if(ft>tx)q=snap((ft-tx)/tx);else if(c.ir!=null||c.cr!=null||c.ca!=null)q=0;
   const gs=String(g('gs')).trim().toUpperCase().replace(/\s/g,''),inter=ia>0||(ir>0&&!(cr>0||sr>0)),o={row:rn,sheet:sh.name,date,t:type,no:bill,pf:party,gs,a:tx,q,inter,w,err:'',after};
-  if(!date)o.err='BAD DATE';else if(!bill)o.err='NO BILL NUMBER';else if(!(tx>0))o.err='NO TAXABLE AMOUNT';else if(isNaN(q)||q<0||q>1)o.err='NO GST RATE FOUND';
+  if(!date)o.err='BAD DATE';else if(!bill)o.err='NO BILL NUMBER';else if(!(tx>0))o.err='NO TAXABLE AMOUNT';else if(isNaN(q)||q<0||q>1)o.err='NO GST RATE FOUND';else if(gOdd(q)&&!o.sp&&!o.ok1)o.err='ODD GST RATE '+r2(q*100)+'% - SPLIT IT';
   if(!o.err){o.cg=o.sg=o.ig=0;if(inter)o.ig=r2(tx*q);else o.cg=o.sg=r2(tx*q/2);o.tot=r2(tx+o.cg+o.sg+o.ig);
    if(!isNaN(ft)&&ft>0&&Math.abs(o.tot-ft)>1)w.push('TOTAL IN FILE IS '+M(ft)+', I GET '+M(o.tot));
    if(Math.abs(q*1000-Math.round(q*1000))>.01)w.push('UNUSUAL GST RATE '+r2(q*100)+'%');}
@@ -1137,23 +1165,39 @@ function gNext(){const X=S.gx;X.V=[];X.info=[];X.sheets.forEach((s,i)=>{if(!s.hd
  const c=C(),L=c.ledgers,sv=c.gmap||{};X.mm={};X.V.forEach(o=>{if(o.err)return;const k=gn(o.pf)||'(none)';if(!X.mm[k]){{const cl=L.find(x=>/^cash( sales| a\/c| account)?$/i.test(x.trim()))||'';X.mm[k]=o.pf?gmatch(o.pf,L,sv):[cl,cl?'check':'new',0]}X.pm[k]=X.mm[k][0]}});
  X.V.forEach(o=>{if(o.err)return;const k=o.t+'|'+o.q;if(!(k in X.rm))X.rm[k]=gsl(o.t,o.q,L)});gS2()}
 function gSave(){const X=S.gx;document.querySelectorAll('.gpl').forEach(e=>X.pm[e.dataset.k]=e.value);document.querySelectorAll('.gsl').forEach(e=>X.rm[e.dataset.k]=e.value);X.jv=X.jv||{};document.querySelectorAll('.gjv').forEach(e=>X.jv[e.dataset.k]=e.value);X.tm=X.tm||{};document.querySelectorAll('.gtl').forEach(e=>X.tm[e.dataset.k]=e.value);const m=document.getElementById('gmk'),i=document.getElementById('ginc');if(m)X.mk=m.checked;if(i)X.inc=i.checked}
+const GSTD=[0,.0025,.01,.015,.03,.05,.12,.18,.28,.4],gOdd=q=>!isNaN(q)&&!GSTD.some(s=>Math.abs(q-s)<1e-6);
 function gRecalc(o){o.err='';const tx=o.a,q=o.q;
- if(!o.date)o.err='BAD DATE';else if(!o.no)o.err='NO BILL NUMBER';else if(!(tx>0))o.err='NO TAXABLE AMOUNT';else if(isNaN(q)||q<0||q>1)o.err='NO GST RATE FOUND';
+ if(!o.date)o.err='BAD DATE';else if(!o.no)o.err='NO BILL NUMBER';else if(!(tx>0))o.err='NO TAXABLE AMOUNT';else if(isNaN(q)||q<0||q>1)o.err='NO GST RATE FOUND';else if(gOdd(q)&&!o.sp&&!o.ok1)o.err='ODD GST RATE '+r2(q*100)+'% - SPLIT IT';
  o.w=(o.w||[]).filter(x=>!/^(TOTAL IN FILE|UNUSUAL GST RATE|GSTIN LOOKS WRONG)/.test(x));
- if(!o.err){o.cg=o.sg=o.ig=0;if(o.inter)o.ig=r2(tx*q);else o.cg=o.sg=r2(tx*q/2);o.tot=r2(tx+o.cg+o.sg+o.ig);if(Math.abs(q*1000-Math.round(q*1000))>.01)o.w.push('UNUSUAL GST RATE '+r2(q*100)+'%')}
+ if(!o.err){o.cg=o.sg=o.ig=0;if(o.sp){o.sp.forEach(p=>{p.cg=p.sg=p.ig=0;if(o.inter)p.ig=r2(p.a*p.q);else p.cg=p.sg=r2(p.a*p.q/2);o.cg+=p.cg;o.sg+=p.sg;o.ig+=p.ig});o.cg=r2(o.cg);o.sg=r2(o.sg);o.ig=r2(o.ig)}else if(o.inter)o.ig=r2(tx*q);else o.cg=o.sg=r2(tx*q/2);o.tot=r2(tx+o.cg+o.sg+o.ig);if(Math.abs(q*1000-Math.round(q*1000))>.01)o.w.push('UNUSUAL GST RATE '+r2(q*100)+'%')}
  if(o.gs&&!gok(o.gs))o.w.push('GSTIN LOOKS WRONG')}
 function gEd(i,f,v){const X=S.gx,o=X.V[i];if(!o)return;gSave();
  if(f=='jh'){o.jh=String(v).trim();gS2();return}
  if(f=='sk')o.skip=!v;
  else{if(f=='d')o.date=/^\d{4}-\d\d-\d\d$/.test(v)?v:'';else if(f=='no')o.no=String(v).trim();else if(f=='pf')o.pf=String(v).trim().replace(/\s+/g,' ');else if(f=='gs')o.gs=String(v).toUpperCase().replace(/\s/g,'');
   else if(f=='a')o.a=z0(num(v));else if(f=='q'){const n=num(v)/100;o.q=isNaN(n)||String(v).trim()===''?NaN:snap(n)}
+  if(f=='a'||f=='q'){delete o.sp;delete o.ok1}
   gRecalc(o);
   const c=C(),L=c.ledgers,sv=c.gmap||{},k=gn(o.pf)||'(none)';
   if(!X.mm[k]){const cl=L.find(x=>/^cash( sales| a\/c| account)?$/i.test(x.trim()))||'';X.mm[k]=o.pf?gmatch(o.pf,L,sv):[cl,cl?'check':'new',0];X.pm[k]=X.mm[k][0]}
   if(!o.err){const rk=o.t+'|'+o.q;if(!(rk in X.rm))X.rm[rk]=gsl(o.t,o.q,L)}}
  gS2()}
+function gSugg(o){const T=[.05,.12,.18,.28,.4],q=o.q,r=[];T.forEach(a=>T.forEach(b=>{if(a<q-1e-9&&b>q+1e-9){const a1=r2(o.a*(b-q)/(b-a));if(a1>0&&a1<o.a)r.push([a,b,a1])}}));return r.slice(0,4)}
+function gSplit(i){const X=S.gx,o=X.V[i];if(!o)return;gSave();S.gsp=i;const sg=gSugg(o),op=v=>[.05,.12,.18,.28,.4,0].map(x=>'<option value="'+x+'"'+(x==v?' selected':'')+'>'+r2(x*100)+'%</option>').join('');
+ modal('<h3>⚠ Odd GST rate: '+r2(o.q*100)+'%</h3><p>Bill <b>'+E(o.no)+'</b> ('+E(o.pf||'')+'), taxable <b>'+M(o.a)+'</b>. '+r2(o.q*100)+'% is not a normal GST rate. It usually means <b>two rates were combined</b> in this bill. Tell me the split.</p>'+(sg.length?'<p>Possible splits (tap one, then check the amounts):<br>'+sg.map(s=>'<button class="g sm" onclick="gSpFill('+s[0]+','+s[1]+','+s[2]+')">'+r2(s[0]*100)+'% on '+M(s[2])+' + '+r2(s[1]*100)+'% on '+M(r2(o.a-s[2]))+'</button>').join(' ')+'</p>':'')+
+ '<p>Rate 1 <select id="sp1">'+op(sg[0]?sg[0][0]:.05)+'</select> on taxable <input id="spa" type="number" step="0.01" value="'+(sg[0]?sg[0][2]:'')+'" oninput="gSpRest()"><br>Rate 2 <select id="sp2">'+op(sg[0]?sg[0][1]:.18)+'</select> on taxable <b id="spb"></b></p><button onclick="gSpOk()">Save the split</button> <button class="g" onclick="gSpOne()">No, this is one single rate</button>');gSpRest()}
+function gSpFill(a,b,a1){document.getElementById('sp1').value=a;document.getElementById('sp2').value=b;document.getElementById('spa').value=a1;gSpRest()}
+function gSpRest(){const o=S.gx.V[S.gsp],a=parseFloat(document.getElementById('spa').value),b=document.getElementById('spb');if(b)b.textContent=isNaN(a)?'':M(r2(o.a-a))}
+function gSpOk(){const o=S.gx.V[S.gsp],r1=parseFloat(document.getElementById('sp1').value),q2=parseFloat(document.getElementById('sp2').value),a1=r2(parseFloat(document.getElementById('spa').value));
+ if(!(a1>0&&a1<o.a))return alert('Rate 1 taxable must be more than 0 and less than '+M(o.a)+'.');if(r1==q2)return alert('Pick two different rates.');
+ o.sp=[{q:r1,a:a1},{q:q2,a:r2(o.a-a1)}];delete o.ok1;gRecalc(o);modal();gS2()}
+function gSpOne(){const o=S.gx.V[S.gsp];if(!confirm('Keep '+r2(o.q*100)+'% as one single rate for this bill?'))return;o.ok1=true;delete o.sp;gRecalc(o);modal();gS2()}
+function gMixMark(){const X=S.gx;if(!X||!X.V)return;const mx=o=>o.sp||(o.err&&/^ODD GST RATE/.test(o.err)),odd=X.V.map((o,i)=>[o,i]).filter(([o])=>mx(o)),gr=document.getElementById('gr');if(!gr)return;
+ const old=document.getElementById('gmx');if(old)old.remove();
+ if(odd.length){const n=odd.filter(([o])=>!o.sp).length;gr.insertAdjacentHTML('afterbegin','<div id="gmx" class="card '+(n?'ask':'ok')+'"><b>'+(n?'⚠ '+n+' bill(s) have an odd GST rate and need your answer':'✅ Split bills')+'</b><br><small>An odd % (like 23%) means two GST rates were combined in one bill. I never guess the split: tell me, or these bills are left out.</small>'+odd.map(([o,i])=>'<div style="margin:6px 0;padding:6px 10px;border-left:4px solid '+(o.sp?'#2fd6a0':'#f5a524')+'">Bill <b>'+E(o.no)+'</b> '+E(o.pf||'')+' · taxable '+M(o.a)+' · '+(o.sp?o.sp.map(p=>r2(p.q*100)+'% on '+M(p.a)).join(' + ')+' ✅':'<b>'+r2(o.q*100)+'%</b>')+' <button class="g sm" onclick="gSplit('+i+')">'+(o.sp?'Change split':'Split the rates')+'</button></div>').join('')+'</div>')}
+ document.querySelectorAll('#gtb tr').forEach((r,k)=>{if(!k)return;const cb=r.querySelector('input[type=checkbox]'),m=cb&&(cb.getAttribute('onchange')||'').match(/gEd\((\d+),/);if(!m)return;const o=X.V[+m[1]],on=!!(o&&mx(o));r.classList.toggle('gmix',on);const c=r.cells[1];if(on&&c&&!c.querySelector('.gbd'))c.insertAdjacentHTML('beforeend',' <span class="gbd">'+(o.sp?'🔀 split':'⚠ mixed '+r2(o.q*100)+'%')+'</span>')})}
 function gFind(v){const X=S.gx;if(!X)return;v=String(v==null?(X.q||''):v);X.q=v;const q=v.toLowerCase().trim(),rs=[...document.querySelectorAll('#gtb tr')].slice(1);let n=0;rs.forEach(r=>{const t=r.textContent+' '+[...r.querySelectorAll('input')].map(i=>i.type=='checkbox'?'':(i.type=='date'?i.value+' '+i.value.split('-').reverse().join('-'):i.value)).join(' ');const ok=!q||t.toLowerCase().includes(q);r.style.display=ok?'':'none';if(ok)n++});const c=document.getElementById('gqc');if(c)c.textContent=q?('Showing '+n+' of '+rs.length+' bills'):''}
-{const _o=gS2;gS2=function(){const r=_o.apply(this,arguments);try{gFind()}catch(e){}return r}}
+{const _o=gS2;gS2=function(){const r=_o.apply(this,arguments);try{gMixMark()}catch(e){}try{gFind()}catch(e){}return r}}
 function gBulkJ(on){const X=S.gx;if(!X)return;gSave();const h=((document.getElementById('gbj')||{}).value||'').trim();if(on&&!h)return alert('Type or pick the journal head ledger first.');
  const rs=[...document.querySelectorAll('#gtb tr')].slice(1);let n=0;rs.forEach((r,i)=>{if(r.style.display==='none')return;const o=X.V[i];if(!o||o.err||o.after)return;o.jh=on?h:'';n++});X.bj=h;gS2();alert(n+' bill(s) '+(on?'set to Journal':'cleared')+'.')}
 async function gBlankTpl(k){const b=atob(k?TPLB64:GSTB64),u=new Uint8Array(b.length);for(let i=0;i<b.length;i++)u[i]=b.charCodeAt(i);const fn=k?'Tally-Auto-Entry-blank.xlsm':'Tally-GST-Voucher-Template-blank.xlsm',mt='application/vnd.ms-excel.sheet.macroEnabled.12';if(!(await sv(fn,u,mt)))dl2(fn,u,mt)}
@@ -1161,7 +1205,7 @@ function gTick(on){const X=S.gx;gSave();X.V.forEach(o=>{if(!o.err&&!o.after)o.sk
 function gS2(){const c=C(),L=c.ledgers,X=S.gx,V=X.V,use=V.filter(o=>!o.err&&!o.skip&&(!o.after||X.inc)),bad=V.filter(o=>o.err),aft=V.filter(o=>!o.err&&o.after);
  const P=new Map();use.forEach(o=>{const k=gn(o.pf)||'(none)';if(!P.has(k))P.set(k,{n:o.pf||'(no party name)',gs:'',c:0,a:0,l:[]});const p=P.get(k);p.c++;p.l.push(o);p.a+=o.a;if(!p.gs)p.gs=o.gs});
  const ord={check:0,new:1,nolist:1,auto:2,saved:3,exact:4},PL=[...P].sort((a,b)=>ord[X.mm[a[0]][1]]-ord[X.mm[b[0]][1]]),st={exact:'<span class="g2">✔ same name in Tally</span>',saved:'<span class="g2">✔ remembered from last time</span>',auto:'<span class="g2">✔ matched on its own</span>',check:'<span class="w">⚠ please check this one</span>',new:'<span class="w">＋ no similar ledger, new ledger</span>',nolist:'<span class="w">no ledger list</span>'};
- const R=new Map();use.forEach(o=>{const k=o.t+'|'+o.q;if(!R.has(k))R.set(k,[o.t,o.q,0,[]]);R.get(k)[2]++;R.get(k)[3].push(o)});
+ const R=new Map();use.forEach(o=>{(o.sp?o.sp.map(p=>p.q):[o.q]).forEach(qq=>{const k=o.t+'|'+qq;if(!R.has(k))R.set(k,[o.t,qq,0,[]]);R.get(k)[2]++;R.get(k)[3].push(o)})});R.forEach((v,k)=>{if(!(k in X.rm))X.rm[k]=gsl(v[0],v[1],L)});
  const cnt=k=>PL.filter(p=>X.mm[p[0]][1]==k).length,
  sm=X.info.map(i=>{const r=i.r,ok=r.V.filter(o=>!o.err&&!o.after&&!o.skip),sk=r.V.filter(o=>!o.err&&!o.after&&o.skip).length,sum=r2(ok.reduce((q,o)=>q+o.a,0)),ft=r.tot?r.tot.tx:null;return'<div><b>'+E(i.t)+'</b> ('+E(i.n)+'): '+ok.length+' bills, taxable <b>'+M(sum)+'</b>'+(sk?' · '+sk+' left out by you':'')+(ft==null?'':Math.abs(ft-sum)<1?' · matches the TOTAL line of your file ✔':' · <span class="w">your file TOTAL line says '+M(ft)+', difference '+M(r2(ft-sum))+'</span>')+'</div>'}).join('');
  document.getElementById('gr').innerHTML=`<div class="card ${bad.length||aft.length?'ask':'ok'}"><b>Step 2 of 2: check the ledgers</b>${brNames(c).length>1?' · branch: <b>'+E(brAct(c))+'</b>':''}<br>${sm}${bad.length?'<br><span class="w">'+bad.length+' row(s) cannot be used and are left out, never guessed.</span>':''}${aft.length?'<br><label><input type="checkbox" id="ginc" onchange="gSave();gS2()" '+(X.inc?'checked':'')+'> Also include <b>'+aft.length+'</b> bill(s) found below the TOTAL line of the sheet (they are not in the file total)</label>':''}</div>
@@ -1177,9 +1221,12 @@ function gS2(){const c=C(),L=c.ledgers,X=S.gx,V=X.V,use=V.filter(o=>!o.err&&!o.s
 function gBuild(){gSave();const c=C(),g=c.gs,L=c.ledgers,X=S.gx,out=[],bad=[],need=new Set(),ms=new Map();
  X.V.filter(o=>!o.err&&!o.skip&&(!o.after||X.inc)).forEach(o=>{const k=gn(o.pf)||'(none)',pl=lgFix(qc(X.pm[k]),L),jh=lgFix(qc(o.jh==='-'?'':(o.jh||(X.jv||{})[k])),L),sl=jh||lgFix(qc(X.rm[o.t+'|'+o.q]),L),isO=o.t=='Sales'||o.t=='Credit Note',pre=isO?g.out:g.inp;
   if(!pl||!sl){bad.push([o,!pl?'party ledger is empty':'sales / purchase ledger is empty']);return}
-  const z=Object.assign({},o,{p:pl,l:sl,jv:!!jh,m:'Bill No. '+o.no,cgL:gtv(o,'CGST',isO,pre,L),sgL:gtv(o,'SGST',isO,pre,L),igL:gtv(o,'IGST',isO,pre,L)});out.push(z);
+  const z=Object.assign({},o,{p:pl,l:sl,jv:!!jh,m:'Bill No. '+o.no,cgL:gtv(o,'CGST',isO,pre,L),sgL:gtv(o,'SGST',isO,pre,L),igL:gtv(o,'IGST',isO,pre,L)});
+  if(o.sp){const sl2=[],xg=[];let miss=false;o.sp.forEach(p=>{const l2=jh||lgFix(qc(X.rm[o.t+'|'+p.q]),L);if(!l2)miss=true;sl2.push([l2,p.a]);const f={t:o.t,q:p.q};[['CGST',p.cg],['SGST',p.sg],['IGST',p.ig]].forEach(([kd,v])=>{if(v)xg.push([gtv(f,kd,isO,pre,L),v])})});
+   if(miss){bad.push([o,'sales / purchase ledger for one of the split rates is empty']);return}z.sl=sl2;z.xg=xg}
+  out.push(z);
   if(L.length){if(!L.includes(pl)){if(X.mk)ms.set(pl,{parent:isO?'Sundry Debtors':'Sundry Creditors',gs:gok(o.gs)&&!o.w.some(x=>/^NOTE IN YOUR FILE/.test(x))?o.gs:''});else need.add(pl)}
-   [sl].concat(z.cg?[z.cgL,z.sgL]:[]).concat(z.ig?[z.igL]:[]).forEach(x=>{if(!L.includes(x))need.add(x)})}});
+   (z.sl?z.sl.map(x=>x[0]).concat(z.xg.map(x=>x[0])):[sl].concat(z.cg?[z.cgL,z.sgL]:[]).concat(z.ig?[z.igL]:[])).forEach(x=>{if(!L.includes(x))need.add(x)})}});
  c.jvmap=c.jvmap||{};Object.keys(X.jv||{}).forEach(k=>{if(X.jv[k]&&String(X.jv[k]).trim()){c.jvmap[k]=lgFix(qc(X.jv[k]),L);X.jv[k]=c.jvmap[k]}else delete c.jvmap[k]});
  c.gmap=c.gmap||{};Object.keys(X.pm).forEach(k=>{if(X.pm[k]&&k!='(none)'&&(!L.length||L.includes(X.pm[k])))c.gmap[k]=X.pm[k]});c.grl=c.grl||{};Object.keys(X.rm).forEach(k=>{if(X.rm[k]&&(!L.length||L.includes(X.rm[k])))c.grl[k]=X.rm[k]});c.gtl=c.gtl||{};Object.keys(X.tm||{}).forEach(k=>{if(X.tm[k]&&(!L.length||L.includes(X.tm[k])))c.gtl[k]=X.tm[k]});save();return{out,bad,need,ms}}
 function gNoList(){const L=(S.gm||[]).map(m=>[m.n,m.gs||'']);dl('JK-new-party-GSTIN-'+S.c+'.csv',[['Party name','GSTIN']].concat(L).map(r=>r.map(x=>'"'+String(x).replace(/"/g,'""')+'"').join(',')).join('\r\n'),'text/csv')}
@@ -1249,7 +1296,7 @@ function gProcT(rows,g){const c=C(),gr=document.getElementById('gr'),hi=rows.fin
 const en=(n,d,a)=>'<ALLLEDGERENTRIES.LIST><REMOVEZEROENTRIES>No</REMOVEZEROENTRIES><ISDEEMEDPOSITIVE>'+(d?'Yes':'No')+'</ISDEEMEDPOSITIVE><LEDGERFROMITEM>No</LEDGERFROMITEM><LEDGERNAME>'+E(n)+'</LEDGERNAME><AMOUNT>'+(d?'- ':' ')+Math.abs(a).toFixed(2)+'</AMOUNT></ALLLEDGERENTRIES.LIST>';
 function gXml(){const g=C().gs,X=S.gv.filter(o=>!o.err);if(!X.length)return alert('No valid rows to export.');
  const MS=(S.gm||[]).map(gMasterXml).join('');
- dl('JK-GST-'+S.c+'.xml','<ENVELOPE><HEADER><TALLYREQUEST>Import Data</TALLYREQUEST></HEADER><BODY><IMPORTDATA><REQUESTDESC><REPORTNAME>All Masters</REPORTNAME>'+(g.co?'<STATICVARIABLES><SVCURRENTCOMPANY>'+E(g.co)+'</SVCURRENTCOMPANY></STATICVARIABLES>':'')+'</REQUESTDESC><REQUESTDATA>'+MS+'<TALLYMESSAGE xmlns:UDF="TallyUDF">'+X.map(o=>{const P=o.t=='Sales'||o.t=='Debit Note',D=o.date.replace(/-/g,'');return '<VOUCHER VCHTYPE="'+(o.jv?'Journal':o.t)+'" ACTION="Create"><VOUCHERTYPENAME>'+(o.jv?'Journal':o.t)+'</VOUCHERTYPENAME><DATE>'+D+'</DATE><VOUCHERNUMBER>'+E(o.no)+'</VOUCHERNUMBER>'+(o.jv?'':'<PARTYLEDGERNAME>'+E(o.p)+'</PARTYLEDGERNAME>')+'<REFERENCE>'+E(o.no)+'</REFERENCE>'+(o.m?'<NARRATION>'+E(o.m)+'</NARRATION>':'')+'<EFFECTIVEDATE>'+D+'</EFFECTIVEDATE>'+en(o.p,P,o.tot)+en(o.l,!P,o.a)+[[o.cgL,o.cg],[o.sgL,o.sg],[o.igL,o.ig]].filter(x=>x[1]).map(x=>en(x[0],!P,x[1])).join('')+'</VOUCHER>'}).join('')+'</TALLYMESSAGE></REQUESTDATA></IMPORTDATA></BODY></ENVELOPE>','application/xml');}
+ dl('JK-GST-'+S.c+'.xml','<ENVELOPE><HEADER><TALLYREQUEST>Import Data</TALLYREQUEST></HEADER><BODY><IMPORTDATA><REQUESTDESC><REPORTNAME>All Masters</REPORTNAME>'+(g.co?'<STATICVARIABLES><SVCURRENTCOMPANY>'+E(g.co)+'</SVCURRENTCOMPANY></STATICVARIABLES>':'')+'</REQUESTDESC><REQUESTDATA>'+MS+'<TALLYMESSAGE xmlns:UDF="TallyUDF">'+X.map(o=>{const P=o.t=='Sales'||o.t=='Debit Note',D=o.date.replace(/-/g,'');return '<VOUCHER VCHTYPE="'+(o.jv?'Journal':o.t)+'" ACTION="Create"><VOUCHERTYPENAME>'+(o.jv?'Journal':o.t)+'</VOUCHERTYPENAME><DATE>'+D+'</DATE><VOUCHERNUMBER>'+E(o.no)+'</VOUCHERNUMBER>'+(o.jv?'':'<PARTYLEDGERNAME>'+E(o.p)+'</PARTYLEDGERNAME>')+'<REFERENCE>'+E(o.no)+'</REFERENCE>'+(o.m?'<NARRATION>'+E(o.m)+'</NARRATION>':'')+'<EFFECTIVEDATE>'+D+'</EFFECTIVEDATE>'+en(o.p,P,o.tot)+(o.sl?o.sl.map(x=>en(x[0],!P,x[1])).join(''):en(o.l,!P,o.a))+(o.xg||[[o.cgL,o.cg],[o.sgL,o.sg],[o.igL,o.ig]]).filter(x=>x[1]).map(x=>en(x[0],!P,x[1])).join('')+'</VOUCHER>'}).join('')+'</TALLYMESSAGE></REQUESTDATA></IMPORTDATA></BODY></ENVELOPE>','application/xml');}
 function gCsv(){dl('JK-GST-results-'+S.c+'.csv',[['Row','Date','Type','No','Party','Ledger','Taxable','CGST','SGST','IGST','Total','Status']].concat(S.gv.map(o=>[o.row,fd(o.date),o.t||'',o.no,o.p,o.l,o.a,o.cg||0,o.sg||0,o.ig||0,o.tot||'',o.err||'OK'])).map(r=>r.map(x=>'"'+String(x).replace(/"/g,'""')+'"').join(',')).join('\r\n'),'text/csv')}
 
 const modal=h=>{const m=document.getElementById('md');m.innerHTML=h?'<div class="box">'+h+'<br><br><button class="g" onclick="modal()">Close</button></div>':'';m.classList.toggle('o',!!h)};
