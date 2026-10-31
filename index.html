@@ -1,5 +1,5 @@
 <!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>JK Gupta &amp; Co</title>
-<meta name="description" content="JK Gupta &amp; Co. client accounting workspace"><meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#0f2742"><meta name="jkg-build" content="b2610311300"><script>try{var t=localStorage.getItem("jkgtheme")||(matchMedia("(prefers-color-scheme:dark)").matches?"dark":"light");document.documentElement.dataset.theme=t}catch(e){document.documentElement.dataset.theme="light"}</script><link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27%3E%3Crect width=%2764%27 height=%2764%27 rx=%2714%27 fill=%27%230f2742%27/%3E%3Ctext x=%2732%27 y=%2742%27 font-size=%2734%27 font-family=%27Georgia,serif%27 font-weight=%27700%27 text-anchor=%27middle%27 fill=%27%23e9d9ae%27%3EJK%3C/text%3E%3C/svg%3E"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:wght@500;600;700&display=swap"><style>
+<meta name="description" content="JK Gupta &amp; Co. client accounting workspace"><meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#0f2742"><meta name="jkg-build" content="b2610311430"><script>try{var t=localStorage.getItem("jkgtheme")||(matchMedia("(prefers-color-scheme:dark)").matches?"dark":"light");document.documentElement.dataset.theme=t}catch(e){document.documentElement.dataset.theme="light"}</script><link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27%3E%3Crect width=%2764%27 height=%2764%27 rx=%2714%27 fill=%27%230f2742%27/%3E%3Ctext x=%2732%27 y=%2742%27 font-size=%2734%27 font-family=%27Georgia,serif%27 font-weight=%27700%27 text-anchor=%27middle%27 fill=%27%23e9d9ae%27%3EJK%3C/text%3E%3C/svg%3E"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:wght@500;600;700&display=swap"><style>
 /* ============ tokens ============ */
 :root{--serif:'Source Serif 4',Georgia,'Times New Roman',serif;--sans:'Inter','Segoe UI',system-ui,-apple-system,Arial,sans-serif;--r:12px;--ease:cubic-bezier(.2,.7,.2,1)}
 :root,:root[data-theme=light]{color-scheme:light;
@@ -1379,7 +1379,7 @@ function PNAME(n){return String(n||'').replace(/[._-]+/g,' ').trim().replace(/(^
    JK Gupta & Co. - interface, client tracker, attendance, staff control
    (added on top of the original program; everything above is unchanged)
    ==================================================================== */
-const BUILD='b2610311300';
+const BUILD='b2610311430';
 let CURP='';
 const $id=i=>document.getElementById(i);
 const jkP2=n=>String(n).padStart(2,'0');
@@ -2632,6 +2632,7 @@ function bxFromRows(rows,ownG,ownN){
  const bi=(i=>i>=0?i:L.findIndex(l=>/^\s*(buyer|bill(ed)?\s*to|customer|party|m\/s|sold\s*to|consignee|name\s*of\s*(?:buyer|customer|party))\b/i.test(l)))(L.findIndex(l=>/^\s*buyer\s*\(\s*bill\s*to\s*\)/i.test(l)));
  if(bi>=0){let t=R[bi];let name='';const ix=t.findIndex(c=>/^(buyer|bill(ed)?\s*to|customer|party|m\/s|sold\s*to|consignee|name\s*of\s*(?:buyer|customer|party))\s*[:;\-]*$/i.test(c));
   if(ix>=0&&t[ix+1])name=t[ix+1];else name=t.join(' ').replace(/^\s*(buyer|bill(ed)?\s*to|customer|party|m\/s|sold\s*to|consignee|name\s*of\s*(?:buyer|customer|party))\s*[:;\-]*\s*/i,'');
+  if(t.length&&t.every(c=>/^(bill(ed)?\s*to(\s*party)?|ship(ped)?\s*to|consignee|buyer|customer)\s*[:;\-]*$/i.test(c))&&R[bi+1])name=R[bi+1][0];
   name=name.replace(/^\s*\(?\s*(bill(ed)?\s*to|ship\s*to)\s*\)?\s*[:;\-]*\s*/i,'');if(!name&&R[bi+1])name=R[bi+1][0];
   name=name.split('\u0001')[0];name=name.split(/ship\s*to/i)[0];name=name.split(/\bgstin\b/i)[0];
   if(!name||/^\d+[\/,\-\s]|\b(estate|road|marg|nagar|naka|plot|flat|floor|street|society|building|chs|apartment)\b/i.test(name)){let j=bi-1,top=-1;while(j>=0&&!/mame|udyam|e\s*way|tax\s*invoice|original|duplicate|triplicate|invoice\s*no|challan|order\s*no|despatch|vehicle|l\.r\.|^\s*gstin\s+\d|e-mail|office|godown/i.test(L[j])){top=j;j--}if(top>=0)name=R[top][0].split('\u0001')[0];else if(!name&&R[bi+1])name=R[bi+1][0]}
@@ -2651,10 +2652,12 @@ function bxFromRows(rows,ownG,ownN){
  if(hi>=0){let last=null;
   for(let k=hi+1;k<ti;k++){const tok=R[k].join(' ').replace(/\u0001/g,' ').split(/\s+/).filter(Boolean);
    let hx=tok.findIndex(t=>/^\d{6}$|^\d{8}$/.test(t));if(hx<0){hx=tok.findIndex((t,j)=>/^\d{4}$/.test(t)&&j>0&&tok.slice(0,j).some(x=>/[A-Za-z]/.test(x)))}
+   const NU=t=>/^[\d,]+(\.\d+)?$/.test(t),ux=hx<0?tok.findIndex((t,j)=>/^(nos?|pcs|pc|kgs?|mtrs?|mtr|sets?|ltrs?|box|boxes|unt|units?|sqm|sqft|rolls?|pairs?|bags?)$/i.test(t)&&NU(tok[j+1]||'')&&tok.slice(j+2).filter(NU).length>=2):-1;
    if(hx>=0){let rest=tok.slice(hx+1);if(rest.length&&/^\d+(\.\d+)?%$/.test(rest[0]))rest=rest.slice(1);else if(rest.length>1&&/^\d+(\.\d+)?$/.test(rest[0])&&rest[1]==='%')rest=rest.slice(2);let qi=rest.findIndex(t=>/^[\d,]+(\.\d+)?$/.test(t));let qty=0,unit='',nums=[];
-    if(qi>=0){qty=bxN(rest[qi]);const after=rest.slice(qi+1);const ui=after.findIndex(t=>/^[A-Za-z]+\.?$/.test(t));if(ui>=0)unit=after[ui];nums=after.filter(t=>/^[\d,]+(\.\d+)?$/.test(t)).map(bxN)}
+    if(qi>=0){qty=bxN(rest[qi]);const after=rest.slice(qi+1);const ui=after.findIndex(t=>/^[A-Za-z]+\.?$/.test(t));if(ui>=0)unit=after[ui];else if(qi>0&&/^[A-Za-z]+\.?$/.test(rest[qi-1]))unit=rest[qi-1];nums=after.filter(t=>/^[\d,]+(\.\d+)?$/.test(t)).map(bxN)}
     let amt=nums.length?nums[nums.length-1]:0,rate=nums.length>1?nums[nums.length-2]:(nums.length?nums[0]:0);if(!amt&&qty&&rate)amt=bxR2(qty*rate);
     last={hsn:tok[hx],qty,unit:bxUnit(unit),taxable:bxR2(amt),igst:0,cgst:0,sgst:0,desc:tok.slice(0,hx).join(' ').replace(/^\d+\s+/,'')};B.items.push(last)}
+   else if(ux>=0){const nums=tok.slice(ux+2).filter(NU).map(bxN),dsc=tok.slice(0,ux).join(' ').replace(/^(\d+|[A-Za-z])\s+/,'');last={hsn:'',qty:bxN(tok[ux+1]),unit:bxUnit(tok[ux]),taxable:bxR2(nums[nums.length-1]),igst:0,cgst:0,sgst:0,desc:dsc};B.items.push(last);B.warn.push('The item "'+dsc+'" has no HSN on the bill. Please type its HSN.')}
    else if(last&&!last.pack){const cs=R[k].map(c=>c.replace(/\u0001/g,' ').match(/^(\d+(?:\.\d+)?)\s*([A-Za-z]+)\.?$/)).filter(Boolean);if(cs.length)last.pack={qty:+cs[cs.length-1][1],unit:cs[cs.length-1][2]}}
   }
   B.items.forEach(it=>{if(it.pack){it.qty=it.pack.qty;it.unit=bxUnit(it.pack.unit);delete it.pack}})}
@@ -2683,8 +2686,8 @@ function bxFromRows(rows,ownG,ownN){
  const hk=Object.keys(ht);
  B.items.forEach(it=>{if(!it.hsn&&hk.length){const hit=hk.length==1?hk[0]:hk.find(h=>Math.abs(ht[h].taxable-it.taxable)<0.02);if(hit)it.hsn=hit}});
  const own2=new Set();B.items.forEach(it=>{const t=ht[String(it.hsn)];if(t){if(t.r2!=null){it.cgst=t.r1;it.sgst=t.r2;it.igst=0}else{it.igst=t.r1;it.cgst=0;it.sgst=0}own2.add(it)}});
- const rt={};L.forEach(l=>{const re2=/(\d+(?:\.\d+)?)\s*%\s*(CGST|SGST|IGST|UTGST)/gi;let m2;while((m2=re2.exec(l))){const k=m2[2].toUpperCase()=='UTGST'?'SGST':m2[2].toUpperCase();(rt[k]=rt[k]||new Set()).add(+m2[1]/100)}});
- L.forEach(l=>{const re=/(CGST|SGST|IGST|UTGST)[^\d%\n]{0,24}?(\d+(?:\.\d+)?)\s*%/gi;let m;while((m=re.exec(l))){const k=m[1].toUpperCase()=='UTGST'?'SGST':m[1].toUpperCase();(rt[k]=rt[k]||new Set()).add(+m[2]/100)}});
+ const rt={};L.forEach(l=>{const re2=/(\d+(?:\.\d+)?)\s*%\s*(CGST|SGST|IGST|UTGST)/gi;let m2;while((m2=re2.exec(l))){if(/^\s*(?:[-–]|0+(?:\.0+)?)\s*$/.test(l.slice(re2.lastIndex)))continue;const k=m2[2].toUpperCase()=='UTGST'?'SGST':m2[2].toUpperCase();(rt[k]=rt[k]||new Set()).add(+m2[1]/100)}});
+ L.forEach(l=>{const re=/(CGST|SGST|IGST|UTGST)[^\d%\n]{0,24}?(\d+(?:\.\d+)?)\s*%/gi;let m;while((m=re.exec(l))){if(/^\s*(?:[-–]|0+(?:\.0+)?)\s*$/.test(l.slice(re.lastIndex)))continue;const k=m[1].toUpperCase()=='UTGST'?'SGST':m[1].toUpperCase();(rt[k]=rt[k]||new Set()).add(+m[2]/100)}});
  const one=k=>rt[k]&&rt[k].size==1?[...rt[k]][0]:(rt[k]&&rt[k].size>1?-1:0);
  const c=one('CGST'),s=one('SGST'),ig=one('IGST');
  if((c<0||s<0||ig<0)&&B.items.some(it=>!own2.has(it)))B.warn.push('This bill has more than one tax rate. Please set the rate on each item.');
@@ -2710,6 +2713,11 @@ async function bxFileRows(f){const nm=f.name.toLowerCase();
   return bxOcr(Array.from({length:pdf.numPages},(_,k)=>async()=>{const pg=await pdf.getPage(k+1),vp=pg.getViewport({scale:2.5}),c=document.createElement('canvas');c.width=vp.width;c.height=vp.height;await pg.render({canvasContext:c.getContext('2d'),viewport:vp}).promise;return c}))}
  if(/\.(png|jpe?g|webp|bmp)$/.test(nm))return bxOcr([()=>imgCanvas(f)]);
  throw new Error('This file type is not supported. Use Excel, PDF or an image.')}
+async function bxFileBills(f){if(!/\.pdf$/i.test(f.name))return null;
+ const {P}=await bxPdfPages(await f.arrayBuffer());if(P.length<2||!P.some(x=>x.length))return null;
+ const G=[];for(let k=0;k<P.length;k++){const rows=await bxLines([P[k]]),b=bxFromRows(rows,'','');const prev=G[G.length-1];
+  if(prev&&(!b.no||(b.no==prev.no&&b.date==prev.date))){prev.rows=prev.rows.concat(rows);prev.pg.push(k+1)}else G.push({rows:rows,pg:[k+1],no:b.no,date:b.date})}
+ return G.length>1?G:null}
 async function bxOcr(cvs){if(!window.Tesseract)await loadJs('https://cdn.jsdelivr.net/npm/tesseract.js@5.1.1/dist/tesseract.min.js');
  const me=document.getElementById('bxmsg'),w=await Tesseract.createWorker('eng'),P=[];await w.setParameters({tessedit_pageseg_mode:'6',preserve_interword_spaces:'1'});
  try{for(let n=0;n<cvs.length;n++){if(me)me.textContent='Scanned file: reading page '+(n+1)+' of '+cvs.length+' (5 to 10 seconds a page)…';const c=await cvs[n]();if(typeof cleanCv=='function')cleanCv(c);const r=await w.recognize(c);P.push(ocrItems(r.data.words,595/c.width))}}finally{await w.terminate()}
@@ -2845,9 +2853,11 @@ function bxDelSheet(){const s=bxCur();if(!s||!confirm('Delete the sheet "'+s.com
 async function bxCont(f){if(!f)return;try{const s=await bxReadSheet(f);if(!s.bills.length&&!s.company)throw new Error('empty');const d=bxDb();const ex=d.sheets.find(x=>bxSame(x,s,bxKd(s)));if(ex){const have=new Set((ex.bills||[]).filter(b=>b.no).map(bxDk));let n=0;s.bills.forEach(b=>{if(b.no&&have.has(bxDk(b)))return;if(b.no)have.add(bxDk(b));ex.bills.push(b);n++});if(!ex.gstin&&s.gstin)ex.gstin=s.gstin;d.cur=ex.id;save();toast('This sheet already exists, so I added '+n+' new bill'+(n==1?'':'s')+' to it (no new sheet made).');return bxDraw()}d.sheets.push(s);d.cur=s.id;save();toast('Loaded '+s.bills.length+' bills from '+f.name);bxDraw()}catch(e){alert('I could not read that file as a sheet in this layout. Please pick the Excel file that this page made (or your INDIA TRADING sample).')}}
 async function bxAdd(files){const s=bxCur();if(!s||!files.length)return;files=[...files];BXBUSY=1;const me=$id('bxmsg');
  for(let k=0;k<files.length;k++){const f=files[k];if(me)me.textContent='Reading '+(k+1)+' of '+files.length+': '+f.name;
-  try{const rows=await bxFileRows(f);let b=bxFromRows(rows,s.gstin,s.company);b.src=f.name;b.rows=rows;
-   if(!b.items.length||!b.party){const a=await bxAi(rows,s);if(a){a.src=f.name;a.rows=rows;b=a}}
-   BXP.push(b)}
+  try{const grp=await bxFileBills(f),list=grp||[{rows:await bxFileRows(f),pg:null}];
+   for(const gi of list){const rows=gi.rows,sr=f.name+(gi.pg?' (page '+gi.pg.join('-')+')':'');let b=bxFromRows(rows,s.gstin,s.company);b.src=sr;b.rows=rows;
+    if(!b.items.length||!b.party){const a=await bxAi(rows,s);if(a){a.src=sr;a.rows=rows;b=a}}
+    BXP.push(b)}
+   if(grp&&me)me.textContent='This file has '+grp.length+' bills (one per page group).'}
   catch(e){BXP.push({src:f.name,no:'',date:'',party:'',gstin:'',items:[],warn:['Could not read this file: '+(e&&e.message||e)+' You can type the bill in below.']})}}
  BXBUSY=0;bxDraw()}
 async function bxAi1(i){const s=bxCur(),b=BXP[i];if(!b.rows)return alert('There is no text to read for this bill.');if(!(LS.on&&LS.token))return alert('The AI works only when you are signed in on the office server, and the admin has set it up.');
