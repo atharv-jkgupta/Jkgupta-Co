@@ -1,5 +1,5 @@
 <!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>JK Gupta &amp; Co</title>
-<meta name="description" content="JK Gupta &amp; Co. client accounting workspace"><meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#0f2742"><meta name="jkg-build" content="b2610301230"><script>try{var t=localStorage.getItem("jkgtheme")||(matchMedia("(prefers-color-scheme:dark)").matches?"dark":"light");document.documentElement.dataset.theme=t}catch(e){document.documentElement.dataset.theme="light"}</script><link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27%3E%3Crect width=%2764%27 height=%2764%27 rx=%2714%27 fill=%27%230f2742%27/%3E%3Ctext x=%2732%27 y=%2742%27 font-size=%2734%27 font-family=%27Georgia,serif%27 font-weight=%27700%27 text-anchor=%27middle%27 fill=%27%23e9d9ae%27%3EJK%3C/text%3E%3C/svg%3E"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:wght@500;600;700&display=swap"><style>
+<meta name="description" content="JK Gupta &amp; Co. client accounting workspace"><meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#0f2742"><meta name="jkg-build" content="b2610311300"><script>try{var t=localStorage.getItem("jkgtheme")||(matchMedia("(prefers-color-scheme:dark)").matches?"dark":"light");document.documentElement.dataset.theme=t}catch(e){document.documentElement.dataset.theme="light"}</script><link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27%3E%3Crect width=%2764%27 height=%2764%27 rx=%2714%27 fill=%27%230f2742%27/%3E%3Ctext x=%2732%27 y=%2742%27 font-size=%2734%27 font-family=%27Georgia,serif%27 font-weight=%27700%27 text-anchor=%27middle%27 fill=%27%23e9d9ae%27%3EJK%3C/text%3E%3C/svg%3E"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:wght@500;600;700&display=swap"><style>
 /* ============ tokens ============ */
 :root{--serif:'Source Serif 4',Georgia,'Times New Roman',serif;--sans:'Inter','Segoe UI',system-ui,-apple-system,Arial,sans-serif;--r:12px;--ease:cubic-bezier(.2,.7,.2,1)}
 :root,:root[data-theme=light]{color-scheme:light;
@@ -1082,8 +1082,8 @@ async function xlAll(buf){try{const F=await unz(buf),wb=new DOMParser().parseFro
 /* read the bills of one sheet */
 function gread(sh,type){const{rows,hd}=sh,c=hd.c,V=[],mx=Math.max(...Object.values(c));let last='',tot=null,after=false;
  rows.slice(hd.hi+1).forEach((r,i)=>{r=r||[];const rn=hd.hi+i+2;if(!r.some(x=>String(x).trim()!==''))return;
-  const g=k=>c[k]==null?'':r[c[k]],bill=String(g('no')).trim(),party=String(g('p')).trim().replace(/\s+/g,' '),tx=num(g('tx')),T=/^(grand |sub )?total/i;
-  if(T.test(party)||T.test(bill)){if(!tot)tot={row:rn,tx:z0(tx)};after=true;return}
+  const g=k=>c[k]==null?'':r[c[k]],bill=String(g('no')).trim(),party=String(g('p')).trim().replace(/\s+/g,' '),tx=num(g('tx')),T=/^(grand[\s-]*|sub[\s-]*)?total(s)?\s*([:.\-(]|$|\d)/i;
+  if(T.test(party)||T.test(bill)){if(/^sub/i.test(party)||/^sub/i.test(bill))return;if(!tot)tot={row:rn,tx:z0(tx)};after=true;return}
   if(!bill&&!party){const run=V.filter(o=>!o.err&&!o.after).reduce((q,o)=>q+o.a,0);if(tx>0&&!tot&&V.length&&Math.abs(tx-run)<=Math.max(1,run*.001)){tot={row:rn,tx};after=true}return}
   if(!(tx>0)&&after)return;
   const d0=pd(g('d'));if(d0)last=d0;const w=[];let date=d0;if(!date&&c.d!=null&&String(g('d')).trim()===''&&last){date=last;w.push('DATE TAKEN FROM THE ROW ABOVE')}
@@ -1098,6 +1098,7 @@ function gread(sh,type){const{rows,hd}=sh,c=hd.c,V=[],mx=Math.max(...Object.valu
   if(sh.portal){if(sh.itcCol>=0&&/^no$/i.test(String(r[sh.itcCol]).trim()))w.push('ITC NOT AVAILABLE AS PER GSTR-2B');if(sh.rcCol>=0&&/^yes$/i.test(String(r[sh.rcCol]).trim()))w.push('REVERSE CHARGE BILL: CHECK BEFORE POSTING')}else{const nt=r.slice(mx+1).map(x=>String(x).trim()).filter(Boolean).join(' ');if(nt)w.push('NOTE IN YOUR FILE: '+nt)}
   if(after)w.push('LISTED BELOW THE TOTAL LINE (not counted in the file total)');
   V.push(o)});
+ {const nb=V.filter(o=>!o.after).length,na=V.length-nb;if(na&&(na>=10||na>nb/2)){V.forEach(o=>{if(o.after){o.after=false;o.w=o.w.filter(x=>!/^LISTED BELOW THE TOTAL/.test(x));o.w.push('A TOTAL LINE WAS FOUND ABOVE THIS BILL, SO I TREATED IT AS A SUBTOTAL AND INCLUDED THE BILL')}});tot=null}}
  const ok=V.filter(o=>!o.err&&!o.after);return{V,tot,sum:r2(ok.reduce((s,o)=>s+o.a,0))}}
 const GMON=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],gmo=d=>GMON[+d.slice(5,7)-1]+' '+d.slice(2,4);
 /* ledger guesses from the client ledger list */
@@ -1163,7 +1164,9 @@ function gNext(){const X=S.gx;X.V=[];X.info=[];X.sheets.forEach((s,i)=>{if(!s.hd
   const ms=Object.keys(mon).filter(k=>k.startsWith(o.sheet)).sort((a,b)=>mon[b]-mon[a]);if(ms.length&&!o.after&&o.date.slice(0,7)!=ms[0].slice(o.sheet.length))o.w.push('DATE IS IN '+gmo(o.date)+', MOST BILLS ARE IN '+gmo(ms[0].slice(o.sheet.length)+'-01'))});
  {const st={};X.V.forEach(o=>{if(!o.err&&o.gs)st[o.gs.slice(0,2)]=(st[o.gs.slice(0,2)]||0)+1});const mj=Object.keys(st).sort((a,b)=>st[b]-st[a])[0];if(mj)X.V.forEach(o=>{if(o.err||!o.gs)return;const s=o.gs.slice(0,2);if(s!=mj&&!o.inter)o.w.push('PARTY STATE CODE '+s+' DIFFERS FROM MOST PARTIES ('+mj+'): CHECK CGST/SGST VERSUS IGST');if(s==mj&&o.inter)o.w.push('IGST CHARGED BUT PARTY STATE CODE IS THE SAME AS MOST PARTIES ('+mj+')')})}
  const c=C(),L=c.ledgers,sv=c.gmap||{};X.mm={};X.V.forEach(o=>{if(o.err)return;const k=gn(o.pf)||'(none)';if(!X.mm[k]){{const cl=L.find(x=>/^cash( sales| a\/c| account)?$/i.test(x.trim()))||'';X.mm[k]=o.pf?gmatch(o.pf,L,sv):[cl,cl?'check':'new',0]}X.pm[k]=X.mm[k][0]}});
- X.V.forEach(o=>{if(o.err)return;const k=o.t+'|'+o.q;if(!(k in X.rm))X.rm[k]=gsl(o.t,o.q,L)});gS2()}
+ X.V.forEach(o=>{if(o.err)return;const k=o.t+'|'+o.q;if(!(k in X.rm))X.rm[k]=gsl(o.t,o.q,L)});gS2();try{gWarn()}catch(e){}}
+function gWarn(){const V=S.gx.V,bad=V.filter(o=>o.err),aft=V.filter(o=>!o.err&&o.after&&!S.gx.inc);if(!bad.length&&!aft.length)return;const by={};bad.forEach(o=>by[o.err.replace(/ - SPLIT IT/,'')]=(by[o.err.replace(/ - SPLIT IT/,'')]||0)+1);
+ modal('<h3>⚠ Some bills are NOT in the XML</h3><p>I read '+V.length+' bills. <b>'+(V.length-bad.length-aft.length)+'</b> can go into the Tally XML.'+(bad.length?'<br><br><b>'+bad.length+' are left out</b> because:<br>'+Object.keys(by).map(k=>'• '+E(k)+': '+by[k]).join('<br>')+'<br>(see the rows marked in the table at the bottom; fix the box and they come back)':'')+(aft.length?'<br><br><b>'+aft.length+' are below a TOTAL line</b> and are not included. Tick the box at the top of step 2 to include them.':'')+'</p>')}
 function gSave(){const X=S.gx;document.querySelectorAll('.gpl').forEach(e=>X.pm[e.dataset.k]=e.value);document.querySelectorAll('.gsl').forEach(e=>X.rm[e.dataset.k]=e.value);X.jv=X.jv||{};document.querySelectorAll('.gjv').forEach(e=>X.jv[e.dataset.k]=e.value);X.tm=X.tm||{};document.querySelectorAll('.gtl').forEach(e=>X.tm[e.dataset.k]=e.value);const m=document.getElementById('gmk'),i=document.getElementById('ginc');if(m)X.mk=m.checked;if(i)X.inc=i.checked}
 const GSTD=[0,.0025,.01,.015,.03,.05,.12,.18,.28,.4],gOdd=q=>!isNaN(q)&&!GSTD.some(s=>Math.abs(q-s)<1e-6);
 function gRecalc(o){o.err='';const tx=o.a,q=o.q;
@@ -1376,7 +1379,7 @@ function PNAME(n){return String(n||'').replace(/[._-]+/g,' ').trim().replace(/(^
    JK Gupta & Co. - interface, client tracker, attendance, staff control
    (added on top of the original program; everything above is unchanged)
    ==================================================================== */
-const BUILD='b2610301230';
+const BUILD='b2610311300';
 let CURP='';
 const $id=i=>document.getElementById(i);
 const jkP2=n=>String(n).padStart(2,'0');
