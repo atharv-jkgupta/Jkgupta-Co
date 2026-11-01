@@ -1,5 +1,5 @@
 <!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>JK Gupta &amp; Co</title>
-<meta name="description" content="JK Gupta &amp; Co. client accounting workspace"><meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#0f2742"><meta name="jkg-build" content="b2610312505"><script>try{var t=localStorage.getItem("jkgtheme")||(matchMedia("(prefers-color-scheme:dark)").matches?"dark":"light");document.documentElement.dataset.theme=t}catch(e){document.documentElement.dataset.theme="light"}</script><link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27%3E%3Crect width=%2764%27 height=%2764%27 rx=%2714%27 fill=%27%230f2742%27/%3E%3Ctext x=%2732%27 y=%2742%27 font-size=%2734%27 font-family=%27Georgia,serif%27 font-weight=%27700%27 text-anchor=%27middle%27 fill=%27%23e9d9ae%27%3EJK%3C/text%3E%3C/svg%3E"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:wght@500;600;700&display=swap"><style>
+<meta name="description" content="JK Gupta &amp; Co. client accounting workspace"><meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#0f2742"><meta name="jkg-build" content="b2611011100"><script>try{var t=localStorage.getItem("jkgtheme")||(matchMedia("(prefers-color-scheme:dark)").matches?"dark":"light");document.documentElement.dataset.theme=t}catch(e){document.documentElement.dataset.theme="light"}</script><link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27%3E%3Crect width=%2764%27 height=%2764%27 rx=%2714%27 fill=%27%230f2742%27/%3E%3Ctext x=%2732%27 y=%2742%27 font-size=%2734%27 font-family=%27Georgia,serif%27 font-weight=%27700%27 text-anchor=%27middle%27 fill=%27%23e9d9ae%27%3EJK%3C/text%3E%3C/svg%3E"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:wght@500;600;700&display=swap"><style>
 /* ============ tokens ============ */
 :root{--serif:'Source Serif 4',Georgia,'Times New Roman',serif;--sans:'Inter','Segoe UI',system-ui,-apple-system,Arial,sans-serif;--r:12px;--ease:cubic-bezier(.2,.7,.2,1)}
 :root,:root[data-theme=light]{color-scheme:light;
@@ -1149,7 +1149,7 @@ function gRead(){const f=document.getElementById('gf').files[0];if(!f)return gFa
  {const c0=C();if(brNames(c0).length>1&&!confirm('This file will use the ledgers of branch "'+brAct(c0)+'". Is that right?\n\nPress Cancel to pick another branch first.'))return}
  const g=C().gs={out:v('g1').trim()||'OUTPUT',inp:v('g2').trim()||'INPUT',co:v('g3').trim()};save();const isC=/\.csv$/i.test(f.name),rd=new FileReader();
  rd.onload=async()=>{try{const sh=isC?[{name:f.name.replace(/\.csv$/i,''),rows:csv(rd.result)}]:await xlAll(rd.result);gStart(sh,g)}catch(e){gFail('The file could not be opened: '+e.message,FIX.xls)}};isC?rd.readAsText(f):rd.readAsArrayBuffer(f)}
-/* PATCH b2610312505: some 2B files have a Rate column inserted in the DATA without a heading, so every heading sits one column
+/* PATCH b2611011100: some 2B files have a Rate column inserted in the DATA without a heading, so every heading sits one column
    to the left of its numbers (Taxable Value then holds 18, Tax holds the taxable value ...). Every bill then fails with NO GST RATE FOUND.
    Detect it from the VALUES (rate-like, and tax / taxable = that rate on the next columns) and insert the missing 'Rate' heading. */
 function jkRealign(rows){try{
@@ -1406,7 +1406,7 @@ function PNAME(n){return String(n||'').replace(/[._-]+/g,' ').trim().replace(/(^
    JK Gupta & Co. - interface, client tracker, attendance, staff control
    (added on top of the original program; everything above is unchanged)
    ==================================================================== */
-const BUILD='b2610312505';
+const BUILD='b2611011100';
 let CURP='';
 const $id=i=>document.getElementById(i);
 const jkP2=n=>String(n).padStart(2,'0');
@@ -1828,11 +1828,16 @@ function rcAgg(L){const M=new Map();L.forEach(x=>{const k=(x.gstin||'?')+'|'+rcI
 
 /* ---------- GST matching ---------- */
 function rcDiff(b,g,tol){const d=[];if(b.ns||g.ns){const x=rcR(b.taxable-g.taxable),y=rcR(b.tax-g.tax);if(Math.abs(x)>tol)d.push({f:'taxable',l:'Taxable',x});if(Math.abs(y)>tol)d.push({f:'tax',l:'Tax',x:y});return d}[['taxable','Taxable'],['igst','IGST'],['cgst','CGST'],['sgst','SGST']].forEach(([f,l])=>{const x=rcR(b[f]-g[f]);if(Math.abs(x)>tol)d.push({f,l,x})});return d}
-function rcGst(books,gstr,tol){const B=rcAgg(books),G=rcAgg(gstr),res=[],gmap=new Map(),usedB=new Set(),usedG=new Set();
+function rcFillG(Bk,Gs){const byN=new Map(),all=[];
+ Gs.forEach(g=>{if(!g.gstin||!g.party)return;const k=gn(g.party);if(!k)return;let m=byN.get(k);if(!m){m=new Map();byN.set(k,m);all.push([g.party,m])}m.set(g.gstin,1)});
+ Bk.forEach(b=>{if(b.gstin||!b.party)return;let hit=byN.get(gn(b.party));
+  if(!hit){let best=null,bs=0,s2=0;all.forEach(([nm,m])=>{const sc=gsim(b.party,nm);if(sc>bs){s2=bs;bs=sc;best=m}else if(sc>s2)s2=sc});if(best&&bs>=.85&&bs-s2>=.08)hit=best}
+  if(hit&&hit.size==1){b.gstin=[...hit.keys()][0];b.gfrom='name'}})}
+function rcGst(books,gstr,tol){try{rcFillG(books,gstr)}catch(e){}const B=rcAgg(books),G=rcAgg(gstr),res=[],gmap=new Map(),usedB=new Set(),usedG=new Set();
  G.forEach((g,i)=>gmap.set((g.gstin||'?')+'|'+g.keyInv,i));
  const pair=(bi,gi,kind,why)=>{usedB.add(bi);usedG.add(gi);const b=B[bi],g=G[gi],d=rcDiff(b,g,tol);
   let st=kind;if(kind=='exact')st=d.length?'mismatch':'match';else st=d.length?'mismatch':'probable';
-  res.push({st,why:why||'',b,g,diff:d,acc:0})};
+  res.push({st,why:why||(b.gfrom&&!d.length?'GSTIN taken from the supplier name (your books have no GSTIN)':''),b,g,diff:d,acc:0})};
  B.forEach((b,bi)=>{const gi=gmap.get((b.gstin||'?')+'|'+b.keyInv);if(gi!=null&&!usedG.has(gi))pair(bi,gi,'exact','')});
  const byG=new Map();G.forEach((g,gi)=>{if(usedG.has(gi))return;const k=g.gstin||'?';(byG.get(k)||byG.set(k,[]).get(k)).push(gi)});
  const close=(b,g)=>Math.abs(b.taxable-g.taxable)<=tol&&Math.abs(b.tax-g.tax)<=tol;
@@ -1845,7 +1850,9 @@ function rcGst(books,gstr,tol){const B=rcAgg(books),G=rcAgg(gstr),res=[],gmap=ne
   if(hit>=0)pair(bi,hit,'prob',why)});
  /* same invoice number and amount but a different GSTIN */
  const byInv=new Map();G.forEach((g,gi)=>{if(usedG.has(gi)||g.keyInv.length<3)return;(byInv.get(g.keyInv)||byInv.set(g.keyInv,[]).get(g.keyInv)).push(gi)});
- B.forEach((b,bi)=>{if(usedB.has(bi))return;const c=(byInv.get(b.keyInv)||[]).filter(gi=>!usedG.has(gi)&&close(b,G[gi]));if(c.length)pair(bi,c[0],'prob','GSTIN differs, check the supplier GSTIN in books')});
+ B.forEach((b,bi)=>{if(usedB.has(bi))return;const c=(byInv.get(b.keyInv)||[]).filter(gi=>!usedG.has(gi)&&close(b,G[gi]));if(!c.length)return;let pick=c[0];
+  if(c.length>1){const sc=c.map(gi=>[gi,gsim(b.party||'',G[gi].party||'')]).sort((x,y)=>y[1]-x[1]);if(sc[0][1]<.6||sc[0][1]-sc[1][1]<.05)return;pick=sc[0][0]}
+  pair(bi,pick,'prob','GSTIN differs, check the supplier GSTIN in books')});
  B.forEach((b,bi)=>{if(!usedB.has(bi))res.push({st:'missG',why:'',b,g:null,diff:[],acc:0})});
  G.forEach((g,gi)=>{if(!usedG.has(gi))res.push({st:'missB',why:'',b:null,g,diff:[],acc:0})});
  return res}
@@ -1866,16 +1873,22 @@ function rcBankRows(rows,src){const hi=rcHead(rows,'book');if(hi<0)return{err:'C
   if(!amt)continue;const desc=m.desc!=null?String(r[m.desc]||'').trim():'',ref=m.ref!=null?String(r[m.ref]||'').trim():'';
   out.push({src,row:i+1,date:d,day:rcDayN(d),desc,ref,amt:rcR(amt),toks:rcToks(ref+' '+desc),bal:m.bal!=null?rcN(r[m.bal]):null})}
  return{rows:out}}
-function rcToks(s){return[...new Set((String(s).match(/\d{4,}/g)||[]).map(x=>x.replace(/^0+/,'')).filter(x=>x.length>=1))]}
+function rcToks(s){return[...new Set((String(s).match(/\d{4,}/g)||[]).map(x=>x.replace(/^0+/,'')).filter(x=>x.length>=1&&!/^(19|20)\d\d$/.test(x)))]}
+const RCNOISE=/^(NEFT|RTGS|IMPS|UPI|CHQ|CHEQUE|CLG|CLEARING|TRANSFER|TRF|PAYMENT|PAID|FROM|PVT|LTD|LIMITED|PRIVATE|COMPANY|BANK|ACCOUNT|REF|INB|BIL|ONL|FOR|THE|AND|DEBIT|CREDIT|CASH|DEP|DEPOSIT|CHARGES)$/;
+const rcWords=s=>[...new Set(String(s||'').toUpperCase().replace(/[^A-Z ]+/g,' ').split(/\s+/).filter(w=>w.length>=3&&!RCNOISE.test(w)))];
+const rcNameShare=(a,b)=>{let n=0;a.forEach(x=>{if(b.some(y=>x==y||(Math.min(x.length,y.length)>=4&&(x.startsWith(y)||y.startsWith(x)))))n++});return n}
 
 /* ---------- bank matching ---------- */
 function rcBank(books,bank,win){const used=new Set(),usedK=new Set(),res=[];const B=books.map((x,i)=>Object.assign({i},x)),K=bank.map((x,i)=>Object.assign({i},x));
  const add=(bs,ks,how)=>{bs.forEach(b=>used.add(b.i));ks.forEach(k=>usedK.add(k.i));res.push({st:'match',how,books:bs,bank:ks})};
  const share=(a,b)=>a.toks.some(t=>b.toks.includes(t));
- /* pass 1 reference + amount, pass 2 amount + nearest date, within the window */
- [1,2].forEach(pass=>{K.forEach(k=>{if(usedK.has(k.i))return;let best=null,bd=1e9;B.forEach(b=>{if(used.has(b.i)||Math.abs(b.amt-k.amt)>0.005)return;const dd=Math.abs(b.day-k.day);
-   if(pass==1){if(!share(b,k)||dd>60)return}else if(dd>win)return;if(dd<bd){bd=dd;best=b}});
-  if(best)add([best],[k],pass==1?'Reference and amount':'Amount and date')})});
+ /* every possible pair with the same amount, then the best pairs first (not the order of the file) */
+ B.forEach(x=>x.w=rcWords(x.desc));K.forEach(x=>x.w=rcWords(x.desc));
+ const P=[];B.forEach(b=>K.forEach(k=>{if(Math.abs(b.amt-k.amt)>0.005)return;P.push({b,k,dd:Math.abs(b.day-k.day),ref:share(b,k),nm:rcNameShare(b.w,k.w)})}));
+ const altB=new Map(),altK=new Map();P.forEach(p=>{if(p.dd<=win){altB.set(p.b.i,(altB.get(p.b.i)||0)+1);altK.set(p.k.i,(altK.get(p.k.i)||0)+1)}});
+ P.filter(p=>p.ref&&p.dd<=60).sort((x,y)=>x.dd-y.dd||y.nm-x.nm).forEach(p=>{if(used.has(p.b.i)||usedK.has(p.k.i))return;add([p.b],[p.k],'Reference and amount')});
+ P.filter(p=>p.dd<=win).sort((x,y)=>(y.nm-x.nm)||(x.dd-y.dd)).forEach(p=>{if(used.has(p.b.i)||usedK.has(p.k.i))return;
+  const guess=!p.nm&&((altB.get(p.b.i)||0)>1||(altK.get(p.k.i)||0)>1);add([p.b],[p.k],guess?'⚠ Please check: several entries have this same amount and the names do not match':(p.nm?'Amount, date and name':'Amount and date'));if(guess)res[res.length-1].chk=1});
  /* pass 3 many to one: several entries add up to one line on the other side (same sign, within the window) */
  const grp=(A,Bx,flip)=>{Bx.forEach(x=>{if(flip?used.has(x.i):usedK.has(x.i))return;
    const c=A.filter(a=>!(flip?usedK.has(a.i):used.has(a.i))&&Math.sign(a.amt)==Math.sign(x.amt)&&Math.abs(a.day-x.day)<=win).slice(0,14);if(c.length<2)return;
@@ -1949,9 +1962,9 @@ function rcTable(){const X=RCS.R,q=RCS.q.toLowerCase();if(X.t=='gst'){
    return '<tr class="st-'+st+'"><td><span class="tag '+l[1]+'">'+l[0]+'</span></td><td><b>'+E(o.party||'')+'</b><br><small>'+E(o.gstin)+'</small></td><td>'+(r.b&&r.b.items&&r.b.items.length?'<a class="rcbka" onclick="rcBrk('+i+')" title="Show HSN lines">'+E(o.inv)+' ▾</a>':E(o.inv))+(r.b&&r.g&&r.b.inv!==r.g.inv?'<br><small>'+(rcSl()?'GSTR-1':'2B')+': '+E(r.g.inv)+'</small>':'')+'</td><td>'+fd(o.date)+'</td><td class="n">'+cell(r.b,'taxable')+'</td><td class="n">'+cell(r.g,'taxable')+'</td><td class="n">'+cell(r.b,'tax')+'</td><td class="n">'+cell(r.g,'tax')+'</td><td>'+E(note)+(r.st=='probable'?' <button class="g sm" onclick="rcAcc('+i+')">'+(r.acc?'Undo':'Accept')+'</button>':'')+(!rcSl()&&r.g&&r.g.itc&&/^n/i.test(r.g.itc)?' <span class="tag bad">ITC not available</span>':'')+'</td></tr>'+(r.b&&r.b.items&&r.b.items.length?'<tr class="rcbr" id="rcbr'+i+'" style="display:none"><td colspan="9">'+rcBrkHtml(r.b.items)+'</td></tr>':'')}).join('')+'</table></div>'+(L.length>1500?'<small>Showing the first 1500 rows. The Excel file has all of them.</small>':'')}
  const L=X.R.filter(r=>{if(RCS.fl!='all'&&r.st!=RCS.fl)return false;if(!q)return true;return[...r.books,...r.bank].map(x=>x.desc+' '+x.ref+' '+x.amt).join(' ').toLowerCase().includes(q)});
  if(!L.length)return'<div class="card" style="text-align:center;padding:26px"><b>Nothing to show here</b></div>';
- const nm={match:['Matched','ok'],bOnly:['In books only','warn'],kOnly:['In bank only','bad']};
+ const nm={match:['Matched','ok'],bOnly:['In books only','warn'],kOnly:['In bank only','bad']},chkL=['Matched - check','warn'];
  const part=a=>a.map(x=>'<div>'+fd(x.date)+' · <b>'+rcMoney(x.amt)+'</b><br><small>'+E((x.ref?x.ref+' · ':'')+x.desc).slice(0,90)+'</small></div>').join('');
- return '<div class="rct-w"><table class="rctb"><tr><th>Status</th><th>Books (Tally)</th><th>Bank statement</th><th>How / what to do</th></tr>'+L.slice(0,1500).map(r=>{const l=nm[r.st],a=r.books[0]||r.bank[0],todo=r.st=='match'?r.how:r.st=='bOnly'?(a.amt<0?'Cheque issued, not yet cleared':'Deposit not yet credited'):(a.amt<0?'Bank debit (charges, EMI?). Enter it in Tally':'Bank credit. Enter it in Tally');
+ return '<div class="rct-w"><table class="rctb"><tr><th>Status</th><th>Books (Tally)</th><th>Bank statement</th><th>How / what to do</th></tr>'+L.slice(0,1500).map(r=>{const l=r.chk?chkL:nm[r.st],a=r.books[0]||r.bank[0],todo=r.st=='match'?r.how:r.st=='bOnly'?(a.amt<0?'Cheque issued, not yet cleared':'Deposit not yet credited'):(a.amt<0?'Bank debit (charges, EMI?). Enter it in Tally':'Bank credit. Enter it in Tally');
   return '<tr class="st-'+r.st+'"><td><span class="tag '+l[1]+'">'+l[0]+'</span></td><td>'+part(r.books)+'</td><td>'+part(r.bank)+'</td><td>'+E(todo)+'</td></tr>'}).join('')+'</table></div>'}
 
 /* ---------- Excel export ---------- */
