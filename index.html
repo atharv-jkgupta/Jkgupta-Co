@@ -1,5 +1,5 @@
 <!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>JK Gupta &amp; Co</title>
-<meta name="description" content="JK Gupta &amp; Co. client accounting workspace"><meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#0f2742"><meta name="jkg-build" content="b2611011200"><script>try{var t=localStorage.getItem("jkgtheme")||(matchMedia("(prefers-color-scheme:dark)").matches?"dark":"light");document.documentElement.dataset.theme=t}catch(e){document.documentElement.dataset.theme="light"}</script><link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27%3E%3Crect width=%2764%27 height=%2764%27 rx=%2714%27 fill=%27%230f2742%27/%3E%3Ctext x=%2732%27 y=%2742%27 font-size=%2734%27 font-family=%27Georgia,serif%27 font-weight=%27700%27 text-anchor=%27middle%27 fill=%27%23e9d9ae%27%3EJK%3C/text%3E%3C/svg%3E"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:wght@500;600;700&display=swap"><style>
+<meta name="description" content="JK Gupta &amp; Co. client accounting workspace"><meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#0f2742"><meta name="jkg-build" content="b2611011700"><script>try{var t=localStorage.getItem("jkgtheme")||(matchMedia("(prefers-color-scheme:dark)").matches?"dark":"light");document.documentElement.dataset.theme=t}catch(e){document.documentElement.dataset.theme="light"}</script><link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27%3E%3Crect width=%2764%27 height=%2764%27 rx=%2714%27 fill=%27%230f2742%27/%3E%3Ctext x=%2732%27 y=%2742%27 font-size=%2734%27 font-family=%27Georgia,serif%27 font-weight=%27700%27 text-anchor=%27middle%27 fill=%27%23e9d9ae%27%3EJK%3C/text%3E%3C/svg%3E"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:wght@500;600;700&display=swap"><style>
 /* ============ tokens ============ */
 :root{--serif:'Source Serif 4',Georgia,'Times New Roman',serif;--sans:'Inter','Segoe UI',system-ui,-apple-system,Arial,sans-serif;--r:12px;--ease:cubic-bezier(.2,.7,.2,1)}
 :root,:root[data-theme=light]{color-scheme:light;
@@ -755,12 +755,19 @@ function build(rows,a,df,dt){
   T.push(t)});
  if(T.length>1&&T.every(t=>t.bal!=null&&!isNaN(t.bal))){const asc=T[0].date<=T[T.length-1].date;
   for(let i=1;i<T.length;i++){const[p,q]=asc?[T[i-1],T[i]]:[T[i],T[i-1]];if(Math.abs(p.bal+q.cr-q.dr-q.bal)>1)T[i].warn=1}}
- T.forEach(t=>{if(t.out||t.dup)return;const g=guess(t,a);t.g=g;if(g.conf=='high'&&!t.warn)t.l=g.l});
+ T.forEach(t=>{if(t.out||t.dup)return;const g=guess(t,a);t.g=g;if(g.conf=='high'&&!t.warn)t.l=g.l;else if(!t.warn){t.l=susName(c);t.susp=1}});
  S.T=T;S.bad=bad;S.done=0;scanRep()}
 
-const GEN=/^(the|and|ltd|pvt|private|limited|co|company|bank|account|traders|enterprises|stores|store|india|payment|payments|upi|neft|imps|rtgs|fund|transfer|paymen|trf|ref|mrs|shri|smt|yes|axis|hdfc|icici|sbin|canara|state|cash)$/,tk=x=>(String(x).toLowerCase().match(/[a-z]{3,}/g)||[]).filter(w=>!GEN.test(w));
-function fz(n,L){const nt=new Set(tk(n));let b=null;L.forEach(l=>{const t=tk(l);if(!t.length)return;const h=t.filter(w=>nt.has(w));if(!h.length)return;const sc=h.length/t.length*100+h.join('').length;if(!b||sc>b.sc)b={l,sc,full:h.length==t.length,t,tie:false};else if(sc==b.sc)b.tie=true});
- return b?{l:b.l,sure:b.full&&!b.tie&&(b.t.length>=2||b.t[0].length>=5)}:null}
+const GEN=/^(the|and|ltd|pvt|private|limited|co|company|bank|account|traders|enterprise|enterprises|stores|store|india|payment|payments|upi|neft|imps|rtgs|fund|transfer|paymen|trf|ref|mrs|shri|smt|yes|axis|hdfc|icici|sbin|canara|state|cash)$/,tk=x=>(String(x).toLowerCase().match(/[a-z]{3,}/g)||[]).filter(w=>!GEN.test(w));
+function fz(n,L){const ns=new Set(tk(n));let b=null,tie=0;
+ L.forEach(l=>{const t=tk(l);if(!t.length)return;const all=t.every(w=>ns.has(w)),ends=t.length>=3&&ns.has(t[0])&&ns.has(t[t.length-1]);if(!all&&!ends)return;const sc=(all?1000:0)+t.length*100+t.join('').length;if(!b||sc>b.sc){b={l,sc,t};tie=0}else if(sc==b.sc&&l!=b.l)tie=1});
+ return b?{l:b.l,sure:!tie&&b.t.length>=2,tie}:null}
+const susName=c=>(c.ledgers||[]).find(l=>/suspense/i.test(l))||'Suspense A/c';
+const GNOISE=/^(upi|neft|imps|rtgs|nach|ach|ecs|cr|dr|mob|ref|txn|trf|trfr|transfer|payment|paid|pay|from|to|by|via|bank|ltd|pvt|the|and|yesb|sbin|hdfc|icic|utib|kkbk|barb|cnrb|ibkl|ucba|punb|bkid|mmt|collect|request|chq|cheque|clg|clearing|atm|cash|int|interest|charges|chrg|gst|sms|pos|ecom|ibl|ybl|oksbi|okaxis|okhdfcbank|okicici|paytm|axl|apl|fbl|sbi|axis|hdfcbank|icici|enterprise|enterprises|traders|trader|stores|store)$/;
+const npk=n=>(String(n).toLowerCase().match(/[a-z]+/g)||[]).filter(x=>x.length>=3&&!GNOISE.test(x)).slice(0,3);
+function suGroups(){const G=[],T=S.T;T.forEach((t,i)=>{if(!t.susp||t.pend)return;const p=npk(t.narr);if(!p.length||!p.some(x=>x.length>=4))return;const ph=p.join(' ');let g=G.find(g=>g.ph==ph||gsim(g.ph,ph)>=.85);if(!g){g={ph,idx:[]};G.push(g)}g.idx.push(i)});S.G=G.filter(g=>g.idx.length>=2);return S.G}
+function gRule(g){const N=g.idx.map(i=>S.T[i].narr.toLowerCase()),ph=g.ph;if(N.every(n=>n.includes(ph)))return ph;const w=ph.split(' ').filter(x=>x.length>=5&&N.every(n=>n.includes(x)));return w.sort((a,b)=>b.length-a.length)[0]||''}
+function gdec(k){const g=S.G[k],c=C(),L=v('gin'+k).trim();if(!L)return alert('Please choose a ledger.');g.idx.forEach(i=>{const t=S.T[i];t.l=L;t.susp=0;t.pend=0});const r=gRule(g),sv=document.getElementById('gsv'+k);if(r&&sv&&sv.checked&&!c.rules.some(x=>x.k==r))c.rules.push({k:r,l:L});save();review()}
 function guess(t,a){const c=C(),n=t.narr.toLowerCase(),amt=t.dr||t.cr;
  const r=c.rules.filter(r=>n.includes(r.k)).sort((x,y)=>y.k.length-x.k.length)[0];
  if(r)return{l:r.l,why:'of your saved rule "'+r.k+'"',conf:'high'};
@@ -775,22 +782,23 @@ function card(t,i){const g=t.g,amt=t.dr||t.cr,b=C().accounts[S.a].ledger;
  return `<b>${fd(t.date)}</b> · ${E(t.narr)} · <b>${t.dr?'Dr':'Cr'} ₹${M(amt)}</b><br>`+(t.warn?'<b style="color:#c0392b">⚠ Running balance does not tally at this row (file row '+t.row+'). Please verify it against the original.</b><br>':'')+
  (g.l?`I recommend <b>${E(g.l)}</b> because ${E(g.why)}.<br><small>If yes: ${E(eff)}. If no, choose another ledger below.</small><br><button onclick="dec(${i},1)">Yes, use ${E(g.l)}</button> `:'I could not match this with confidence.<br>')+
  `<input id="in${i}" list="ll" placeholder="Choose ledger"> <button class="g" onclick="dec(${i},0)">Use chosen</button> <button class="g" onclick="pend(${i})">Leave pending</button> ${key(t.narr)?`<label><input type="checkbox" id="sv${i}" checked> remember "${E(key(t.narr))}"</label>`:`<input type="checkbox" id="sv${i}" hidden>`}`}
-const st=t=>t.out?'out':t.dup?'dup':t.pend?'pend':t.l?'done':'ask';
+const st=t=>t.out?'out':t.dup?'dup':t.pend?'pend':t.susp?'susp':t.l?'done':'ask';
 function sum(){const mc=document.getElementById('mc');if(mc)mc.innerHTML=mcard();const n={};S.T.forEach(t=>n[st(t)]=(n[st(t)]||0)+1);
- document.getElementById('sm').innerHTML=`Rows read: <b>${S.T.length}</b> · Ready: <b>${n.done||0}</b> · Need your decision: <b>${n.ask||0}</b> · Pending: <b>${n.pend||0}</b> · Already imported (skipped): <b>${n.dup||0}</b> · Outside period (skipped): <b>${n.out||0}</b> · Unreadable (not imported): <b>${S.bad.length}</b>`}
-function review(){const a=C().accounts[S.a],T=S.T,ask=T.map((t,i)=>[t,i]).filter(x=>st(x[0])=='ask'),auto=T.map((t,i)=>[t,i]).filter(x=>x[0].l&&!x[0].out&&!x[0].dup);
+ document.getElementById('sm').innerHTML=`Rows read: <b>${S.T.length}</b> · Ready: <b>${n.done||0}</b> · Kept in Suspense: <b>${n.susp||0}</b> · Need your decision: <b>${n.ask||0}</b> · Pending: <b>${n.pend||0}</b> · Already imported (skipped): <b>${n.dup||0}</b> · Outside period (skipped): <b>${n.out||0}</b> · Unreadable (not imported): <b>${S.bad.length}</b>`}
+function review(){const a=C().accounts[S.a],T=S.T,ask=T.map((t,i)=>[t,i]).filter(x=>st(x[0])=='ask'),auto=T.map((t,i)=>[t,i]).filter(x=>x[0].l&&!x[0].susp&&!x[0].out&&!x[0].dup),G=suGroups(),inG=new Set([].concat(...G.map(g=>g.idx))),sing=T.map((t,i)=>[t,i]).filter(x=>x[0].susp&&!x[0].pend&&!inG.has(x[1]));
  const first=T.filter(t=>!t.out&&!t.dup)[0],gap=first&&a.lastTxn&&(new Date(first.date)-new Date(a.lastTxn))/864e5>3;
  app.innerHTML=`<button class="g" onclick="start(${S.a})">← Back</button><h2>${E(a.label)} — preview</h2>${stepBar(3)}
  ${gap?'<div class="card bad">⚠ This statement starts '+fd(first.date)+', but the last imported transaction was '+fd(a.lastTxn)+'. There may be a gap — please check before importing.</div>':''}
  <div class="card ok" id="sm"></div>
  ${S.bad.length?'<div class="card bad"><b>Not imported — fix these rows in the file and import again:</b><br>'+S.bad.map(b=>'Row '+b.row+': '+b.why+' — '+E(b.narr)).join('<br>')+'</div>':''}
  ${ask.length?'<h3>I need your decision on these</h3>'+ask.map(x=>'<div class="card '+(x[0].g.l?'ask':'bad')+'" id="q'+x[1]+'">'+card(x[0],x[1])+'</div>').join(''):''}
+ ${G.length||sing.length?'<h3>Kept in Suspense until a ledger is certain</h3><p><small>I only fill a ledger by myself when its full name is in the narration. Everything else sits in the suspense ledger. Choose a ledger to move entries out of it.</small></p>':''}${G.map((g,k)=>{const tot=g.idx.reduce((a,i)=>a+(S.T[i].dr||S.T[i].cr),0),sg=[...new Set(g.idx.map(i=>S.T[i].g&&S.T[i].g.l).filter(Boolean))];return '<div class="card ask"><b>'+g.idx.length+' entries look like the same party: '+E(g.ph.toUpperCase())+'</b> (total ₹'+M(tot)+')<br><small>'+g.idx.slice(0,5).map(i=>fd(S.T[i].date)+' · '+E(S.T[i].narr.slice(0,70))+' · ₹'+M(S.T[i].dr||S.T[i].cr)).join('<br>')+(g.idx.length>5?'<br>and '+(g.idx.length-5)+' more':'')+'</small><br>'+(sg.length==1?'<button onclick="document.getElementById(\'gin'+k+'\').value=this.dataset.l;gdec('+k+')" data-l="'+E(sg[0])+'">Use '+E(sg[0])+' for all</button> ':'')+'<input id="gin'+k+'" list="ll" placeholder="Choose ledger for all"> <button onclick="gdec('+k+')">Use for all '+g.idx.length+'</button> '+(gRule(g)?'<label><input type="checkbox" id="gsv'+k+'" checked> remember "'+E(gRule(g))+'"</label>':'')+'</div>'}).join('')}${sing.length?'<details><summary>'+sing.length+' single entries in Suspense</summary><div style="overflow-x:auto"><table><tr><th>Date</th><th>Narration</th><th>Amount</th><th>Ledger</th></tr>'+sing.map(x=>'<tr><td>'+fd(x[0].date)+'</td><td>'+E(x[0].narr)+(x[0].g&&x[0].g.l?'<br><small>Maybe: '+E(x[0].g.l)+'</small>':'')+'</td><td>'+(x[0].dr?'Dr ':'Cr ')+M(x[0].dr||x[0].cr)+'</td><td><input list="ll" size="24" placeholder="'+E(x[0].l)+'" onchange="chg('+x[1]+',this.value)"></td></tr>').join('')+'</table></div></details>':''}
  <details open><summary>Preview: all assigned transactions (${auto.length}). You can change any ledger.</summary><div style="overflow-x:auto"><table><tr><th>Date</th><th>Narration</th><th>Dr / Cr</th><th>Amount</th><th>Ledger</th></tr>${auto.map(x=>'<tr><td>'+fd(x[0].date)+'</td><td>'+E(x[0].narr)+'</td><td>'+(x[0].dr?'Dr':'Cr')+'</td><td>'+M(x[0].dr||x[0].cr)+'</td><td><input list="ll" size="24" value="'+E(x[0].l)+'" onchange="chg('+x[1]+',this.value)"></td></tr>').join('')}</table></div></details>
  <div id="mc">${mcard()}</div><h3>Export for Tally</h3><p>Pending entries are not in the file. Re-import the same statement later: rows already exported are skipped automatically.</p>
  <button class="g xb" onclick="ex('xml')">Tally XML</button> <button class="g xb" onclick="ex('tpl')">Auto Entry template (Excel)</button> <button class="g xb" onclick="ex('csv')">CSV</button> ${window.XLSX?'<button class="g xb" onclick="ex(\'xlsx\')">Excel</button>':''}`;sum();if(S.auto){const f=S.auto;S.auto=0;if(!S.T.some(t=>st(t)=='ask')){ex(f);document.getElementById('sm').insertAdjacentHTML('beforeend','<br><b>✔ Converted and downloaded.</b>')}}}
-function chg(i,val){const t=S.T[i],c=C();val=val.trim();if(!val){return review()}t.l=val;if(t.contra){t.contra=0;t.skip=0}save();sum()}
+function chg(i,val){const t=S.T[i],c=C();val=val.trim();if(!val){return review()}const was=t.susp;t.l=val;t.susp=0;if(t.contra){t.contra=0;t.skip=0}save();if(was)review();else sum()}
 function dec(i,yes){const t=S.T[i],c=C(),L=(yes?t.g.l:v('in'+i)).trim();if(!L)return alert('Please choose a ledger.');
- t.l=L;t.pend=0;const k=key(t.narr);if(yes&&t.g.contra){t.contra=1;if(t.g.covered)t.skip=1}
+ t.l=L;t.pend=0;t.susp=0;const k=key(t.narr);if(yes&&t.g.contra){t.contra=1;if(t.g.covered)t.skip=1}
  else if(document.getElementById('sv'+i).checked&&k&&!c.rules.some(r=>r.k==k)){c.rules.push({k,l:L})}
  save();document.getElementById('q'+i).className='card ok';document.getElementById('q'+i).innerHTML='✔ '+fd(t.date)+' · '+E(t.narr)+' → <b>'+E(L)+'</b>'+(t.skip?' (already covered by the Contra entry from the other bank)':'');sum()}
 function pend(i){S.T[i].pend=1;S.T[i].l='';document.getElementById('q'+i).className='card';document.getElementById('q'+i).innerHTML='Left pending: '+E(S.T[i].narr);sum()}
@@ -841,8 +849,8 @@ function ex(f){const a=C().accounts[S.a],b=a.ledger;
   if(f=='csv')dl(nm+'.csv',R.map(r=>r.map(x=>'"'+String(x).replace(/"/g,'""')+'"').join(',')).join('\r\n'),'text/csv');
   else{const wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(R),'Vouchers');XLSX.writeFile(wb,nm+'.xlsx')}}
  if(mvl().m.length)setTimeout(mlx,700);
- document.querySelectorAll('.sb div').forEach((d,i)=>{d.className=i<3?'dn':'on';d.firstChild.textContent=i<3?'✓':'4'});if(!S.committed){S.committed=1;const c=C(),ok=S.T.filter(t=>!t.out);X.forEach(t=>c.hist.push({acc:a.label,date:t.date,dr:t.dr,cr:t.cr,narr:t.narr,l:t.l,contra:t.contra?1:0}));
-  a.lastImport=new Date().toISOString().slice(0,10);a.lastTxn=ok.map(t=>t.date).sort().pop()||a.lastTxn;c.pending=ok.filter(t=>!t.dup&&(!t.l||t.pend)).length;save()}}
+ document.querySelectorAll('.sb div').forEach((d,i)=>{d.className=i<3?'dn':'on';d.firstChild.textContent=i<3?'✓':'4'});if(!S.committed){S.committed=1;const c=C(),ok=S.T.filter(t=>!t.out);X.forEach(t=>c.hist.push({acc:a.label,date:t.date,dr:t.dr,cr:t.cr,narr:t.narr,l:t.susp?'':t.l,contra:t.contra?1:0}));
+  a.lastImport=new Date().toISOString().slice(0,10);a.lastTxn=ok.map(t=>t.date).sort().pop()||a.lastTxn;c.pending=ok.filter(t=>!t.dup&&(!t.l||t.pend||t.susp)).length;save()}}
 const er=(c,m)=>Object.assign(new Error(m),{code:c});
 const FIX={lib:['Connect this PC to the internet once and press the button again. The browser keeps the reader after the first load.','If the internet is on and it still fails, the office network or antivirus may be blocking it. Try a mobile hotspot once.','Meanwhile use the Excel or CSV from net banking. Those need no internet.'],xls:['This may be an old .xls file. Open it in Excel, use File, Save As, and choose Excel Workbook (.xlsx) or CSV.','Upload the newly saved file.'],hdr:['Open the file in Excel. The table needs a heading row with Date, Narration, Debit (or Withdrawal), Credit (or Deposit) and Balance.','Delete any rows above the headings, such as the bank name and address, then save and upload again.'],cols:['The file needs separate Debit (Withdrawal) and Credit (Deposit) columns. If your bank gives one Amount column with Dr/Cr, split it into two columns in Excel.','Or download the Excel or CSV from net banking, which normally has both columns.'],scan:['This PDF is a scan, so it is read by OCR. Connect to the internet once and try again.','If OCR still fails, download the Excel or CSV from net banking, or ask the bank for a text PDF.'],pdf:['The PDF layout could not be read. Download the Excel or CSV from net banking if you can.','If only the PDF exists, send it to Claude with names masked so the reader can be tuned for that bank.'],x:['Try the file again. If it still fails, open it in Excel, save it as CSV and upload that.']};
 function fail(c,d){document.getElementById('msg').innerHTML='<div class="card bad"><b>Problem:</b> '+E(d)+'<br><button class="g" onclick="this.nextElementSibling.style.display=\'block\';this.remove()">Show solution</button><div style="display:none"><b>What to do:</b><ol>'+(FIX[c]||FIX.x).map(f=>'<li>'+E(f)+'</li>').join('')+'</ol></div></div>'}
@@ -997,8 +1005,9 @@ function loadR(i){const f=i.files[0];if(!f)return;(async()=>{try{const nm=f.name
  alert(rows.length+' rows read. '+add+' new rule(s) added, '+dup+' already there (kept as they are), '+skip+' row(s) ignored.'+(nl?' '+nl+' of the new rules use a ledger that is not in this client\'s ledger list, please check them.':'')+' Nothing was removed.')}
  catch(e){alert('Could not read file: '+e.message)}finally{try{i.value=''}catch(e){}}})()}
 function bulkR(){const c=C();v('br').split('\n').forEach(l=>{const m=l.split(/=|,|\t/);const k=(m[0]||'').trim().toLowerCase(),x=(m[1]||'').trim();if(k&&x&&!c.rules.some(r=>r.k==k))c.rules.push({k,l:x})});save();dash()}
+function chVer(){const c=C(),n=c.ver=='Tally Prime'?'Tally ERP 9':'Tally Prime';if(!confirm('Change '+S.c+' from '+c.ver+' to '+n+'? Nothing else is removed.'))return;c.ver=n;save();dash()}
 function dash(){CURP='';pgIn('dash');const c=C();
- app.innerHTML=`<button class="g" onclick="home()">← All clients</button> <button onclick="gst()">Sales / Purchase with GST</button> <button class="g" onclick="arcOpen()">Save to folder</button><h2>${E(S.c)} <small>(${c.ver})</small></h2><h3>Bank accounts</h3>
+ app.innerHTML=`<button class="g" onclick="home()">← All clients</button> <button onclick="gst()">Sales / Purchase with GST</button> <button class="g" onclick="arcOpen()">Save to folder</button><h2>${E(S.c)} <small>(${c.ver})</small> <button class="g" onclick="chVer()">Change to ${c.ver=='Tally Prime'?'Tally ERP 9':'Tally Prime'}</button></h2><h3>Bank accounts</h3>
  ${bankCards(c)}
  <div class="stats"><div><b>${c.accounts.length}</b>Bank accounts</div><div><b>${c.rules.length}</b>Saved rules</div><div><b>${c.ledgers.length}</b>Ledgers loaded<br><small>updated ${fd(c.ledgerUpdated)||'never'}</small></div><div><b>${c.pending||0}</b>Pending last time</div></div>
  <details open><summary>Import from Tally (Excel or XML)</summary>${tlBox()}</details>
@@ -1037,8 +1046,16 @@ const gn=s=>String(s==null?'':s).toLowerCase().replace(/&/g,' and ').replace(/[^
  GSUF=/^(pvt|private|ltd|limited|llp|co|company|corp|m|s|mr|mrs|ms|shri|smt|and|the|of)$/,
  gt=s=>gn(s).split(' ').filter(t=>t&&!GSUF.test(t)),
  GTY=['Sales','Purchase','Credit Note','Debit Note'];
+const GWEAK=new Set('enterprise enterprises traders trader trading associates associate agency agencies industries industry corporation corp services service solutions solution stores store sales works international india group mart brothers bros sons infra infrastructure engineers engineering construction constructions builders developers interior interiors electricals electric electronics hardware plywood laminates tiles tile glass furniture motors auto garage'.split(' '));
 function lev(a,b){const m=a.length,n=b.length;if(!m)return n;if(!n)return m;let p=Array.from({length:n+1},(_,j)=>j);for(let i=1;i<=m;i++){const c=[i];for(let j=1;j<=n;j++)c[j]=Math.min(p[j]+1,c[j-1]+1,p[j-1]+(a[i-1]==b[j-1]?0:1));p=c}return p[n]}
 function gsim(a,b){const A=gt(a),B=gt(b);if(!A.length||!B.length)return 0;const x=A.join(''),y=B.join('');if(x==y)return 1;
+ return gsim2(A,B,x,y)}
+function gsim2(A,B,x,y){const dA=A.filter(t=>!GWEAK.has(t)),dB=B.filter(t=>!GWEAK.has(t));let cap=1;
+ if(dA.length&&dB.length){const cov=(X,Y)=>X.every(t=>Y.some(u=>u==t||(t.length>=5&&u.length>=5&&lev(t,u)<=1))),sm=dA.length<=dB.length?dA:dB,bg=sm===dA?dB:dA;
+  /* the real name must agree: a shared word like Enterprise or Traders is not enough */
+  if(!cov(sm,bg))cap=.5;else{const wA=A.filter(t=>GWEAK.has(t)),wB=B.filter(t=>GWEAK.has(t));const st=t=>t.replace(/s$/,'');if(wA.length&&wB.length&&!wA.some(t=>wB.some(u=>st(u)==st(t))))cap=.8;if(sm.length==1&&A.length!=B.length)cap=Math.min(cap,.8)}}
+ return Math.min(cap,gsim3(A,B,x,y))}
+function gsim3(A,B,x,y){
  const sa=new Set(A),sb=new Set(B),u=new Set([...sa,...sb]),it=[...sa].filter(t=>sb.has(t)).length,sm=sa.size<=sb.size?sa:sb,lg=sa.size<=sb.size?sb:sa;
  let s=Math.max(1-lev(x,y)/Math.max(x.length,y.length),it/u.size);
  if(Math.min(x.length,y.length)>=4&&[...sm].every(t=>lg.has(t)))s=Math.max(s,.9-.02*Math.min(3,lg.size-sm.size));
@@ -1149,7 +1166,7 @@ function gRead(){const f=document.getElementById('gf').files[0];if(!f)return gFa
  {const c0=C();if(brNames(c0).length>1&&!confirm('This file will use the ledgers of branch "'+brAct(c0)+'". Is that right?\n\nPress Cancel to pick another branch first.'))return}
  const g=C().gs={out:v('g1').trim()||'OUTPUT',inp:v('g2').trim()||'INPUT',co:v('g3').trim()};save();const isC=/\.csv$/i.test(f.name),rd=new FileReader();
  rd.onload=async()=>{try{const sh=isC?[{name:f.name.replace(/\.csv$/i,''),rows:csv(rd.result)}]:await xlAll(rd.result);gStart(sh,g)}catch(e){gFail('The file could not be opened: '+e.message,FIX.xls)}};isC?rd.readAsText(f):rd.readAsArrayBuffer(f)}
-/* PATCH b2611011200: some 2B files have a Rate column inserted in the DATA without a heading, so every heading sits one column
+/* PATCH b2611011700: some 2B files have a Rate column inserted in the DATA without a heading, so every heading sits one column
    to the left of its numbers (Taxable Value then holds 18, Tax holds the taxable value ...). Every bill then fails with NO GST RATE FOUND.
    Detect it from the VALUES (rate-like, and tax / taxable = that rate on the next columns) and insert the missing 'Rate' heading. */
 function jkRealign(rows){try{
@@ -1406,7 +1423,7 @@ function PNAME(n){return String(n||'').replace(/[._-]+/g,' ').trim().replace(/(^
    JK Gupta & Co. - interface, client tracker, attendance, staff control
    (added on top of the original program; everything above is unchanged)
    ==================================================================== */
-const BUILD='b2611011200';
+const BUILD='b2611011700';
 let CURP='';
 const $id=i=>document.getElementById(i);
 const jkP2=n=>String(n).padStart(2,'0');
