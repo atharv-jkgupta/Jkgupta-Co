@@ -1,5 +1,5 @@
 <!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>JK Gupta &amp; Co</title>
-<meta name="description" content="JK Gupta &amp; Co. client accounting workspace"><meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#0f2742"><meta name="jkg-build" content="b2611011100"><script>try{var t=localStorage.getItem("jkgtheme")||(matchMedia("(prefers-color-scheme:dark)").matches?"dark":"light");document.documentElement.dataset.theme=t}catch(e){document.documentElement.dataset.theme="light"}</script><link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27%3E%3Crect width=%2764%27 height=%2764%27 rx=%2714%27 fill=%27%230f2742%27/%3E%3Ctext x=%2732%27 y=%2742%27 font-size=%2734%27 font-family=%27Georgia,serif%27 font-weight=%27700%27 text-anchor=%27middle%27 fill=%27%23e9d9ae%27%3EJK%3C/text%3E%3C/svg%3E"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:wght@500;600;700&display=swap"><style>
+<meta name="description" content="JK Gupta &amp; Co. client accounting workspace"><meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#0f2742"><meta name="jkg-build" content="b2611011200"><script>try{var t=localStorage.getItem("jkgtheme")||(matchMedia("(prefers-color-scheme:dark)").matches?"dark":"light");document.documentElement.dataset.theme=t}catch(e){document.documentElement.dataset.theme="light"}</script><link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27%3E%3Crect width=%2764%27 height=%2764%27 rx=%2714%27 fill=%27%230f2742%27/%3E%3Ctext x=%2732%27 y=%2742%27 font-size=%2734%27 font-family=%27Georgia,serif%27 font-weight=%27700%27 text-anchor=%27middle%27 fill=%27%23e9d9ae%27%3EJK%3C/text%3E%3C/svg%3E"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:wght@500;600;700&display=swap"><style>
 /* ============ tokens ============ */
 :root{--serif:'Source Serif 4',Georgia,'Times New Roman',serif;--sans:'Inter','Segoe UI',system-ui,-apple-system,Arial,sans-serif;--r:12px;--ease:cubic-bezier(.2,.7,.2,1)}
 :root,:root[data-theme=light]{color-scheme:light;
@@ -1149,7 +1149,7 @@ function gRead(){const f=document.getElementById('gf').files[0];if(!f)return gFa
  {const c0=C();if(brNames(c0).length>1&&!confirm('This file will use the ledgers of branch "'+brAct(c0)+'". Is that right?\n\nPress Cancel to pick another branch first.'))return}
  const g=C().gs={out:v('g1').trim()||'OUTPUT',inp:v('g2').trim()||'INPUT',co:v('g3').trim()};save();const isC=/\.csv$/i.test(f.name),rd=new FileReader();
  rd.onload=async()=>{try{const sh=isC?[{name:f.name.replace(/\.csv$/i,''),rows:csv(rd.result)}]:await xlAll(rd.result);gStart(sh,g)}catch(e){gFail('The file could not be opened: '+e.message,FIX.xls)}};isC?rd.readAsText(f):rd.readAsArrayBuffer(f)}
-/* PATCH b2611011100: some 2B files have a Rate column inserted in the DATA without a heading, so every heading sits one column
+/* PATCH b2611011200: some 2B files have a Rate column inserted in the DATA without a heading, so every heading sits one column
    to the left of its numbers (Taxable Value then holds 18, Tax holds the taxable value ...). Every bill then fails with NO GST RATE FOUND.
    Detect it from the VALUES (rate-like, and tax / taxable = that rate on the next columns) and insert the missing 'Rate' heading. */
 function jkRealign(rows){try{
@@ -1406,7 +1406,7 @@ function PNAME(n){return String(n||'').replace(/[._-]+/g,' ').trim().replace(/(^
    JK Gupta & Co. - interface, client tracker, attendance, staff control
    (added on top of the original program; everything above is unchanged)
    ==================================================================== */
-const BUILD='b2611011100';
+const BUILD='b2611011200';
 let CURP='';
 const $id=i=>document.getElementById(i);
 const jkP2=n=>String(n).padStart(2,'0');
@@ -1781,6 +1781,10 @@ function rcDate(x){if(x==null||x==='')return'';if(x instanceof Date&&!isNaN(x))r
 const rcDayN=d=>d?Math.round(Date.UTC(+d.slice(0,4),+d.slice(5,7)-1,+d.slice(8,10))/864e5):null;
 const rcNorm=s=>String(s==null?'':s).toUpperCase().replace(/[^A-Z0-9]/g,'');
 const rcInv=s=>rcNorm(s).replace(/^0+(?=.)/,'');
+/* invoice number without the financial-year part (26-27, 2026-27, FY2026-27), so 141 and 141/26-27 can be recognised as the same bill */
+function rcCore(x){let t=String(x==null?'':x).toUpperCase(),o='',i=0;const re=/(?<!\d)(?:20)?(\d\d)\s*[-\/]\s*(?:20)?(\d\d)(?!\d)/g;let m,last=0;
+ while((m=re.exec(t))){const a=+m[1],b=+m[2];if(b==(a+1)%100){o+=t.slice(last,m.index).replace(/FY\s*$/,'');last=m.index+m[0].length;re.lastIndex=last}else re.lastIndex=m.index+1}
+ o+=t.slice(last);return rcInv(o)}
 const rcDig=s=>(String(s).match(/\d+/g)||[]).join('').replace(/^0+(?=.)/,'');
 function rcLev(a,b){if(a===b)return 0;if(Math.abs(a.length-b.length)>1)return 2;const m=a.length,n=b.length;let p=Array.from({length:n+1},(_,i)=>i);for(let i=1;i<=m;i++){const c=[i];for(let j=1;j<=n;j++)c[j]=Math.min(p[j]+1,c[j-1]+1,p[j-1]+(a[i-1]===b[j-1]?0:1));p=c}return p[n]}
 const GSTINRX=/\b\d{2}[A-Z]{5}\d{4}[A-Z][1-9A-Z]Z[0-9A-Z]\b/;
@@ -1823,7 +1827,7 @@ function rcGstRows(rows,src,sign){const hi=rcHead(rows,'gst');if(hi<0)return{err
   if(!t&&!ig&&!cg&&!sc)continue;
   out.push({src,ns,row:i+1,gstin:g,party:m.party!=null?String(r[m.party]||'').trim():'',inv,date:rcDate(r[m.date]),taxable:t,igst:ig,cgst:cg,sgst:sc,cess:ce,itc:m.itc!=null?String(r[m.itc]||''):'',vc:m.note!=null?String(r[m.note]||''):''})}
  return{rows:out,cols:h.filter((_,i)=>Object.values(m).includes(i)).length}}
-function rcAgg(L){const M=new Map();L.forEach(x=>{const k=(x.gstin||'?')+'|'+rcInv(x.inv);let a=M.get(k);if(!a){a=Object.assign({},x,{n:1,keyInv:rcInv(x.inv),rows:[x.row]});M.set(k,a)}else{if(x.ns)a.ns=true;['taxable','igst','cgst','sgst','cess'].forEach(f=>a[f]+=x[f]);a.n++;a.rows.push(x.row);if(!a.date)a.date=x.date;if(!a.party)a.party=x.party}});
+function rcAgg(L){const M=new Map();L.forEach(x=>{const k=(x.gstin||'?')+'|'+rcInv(x.inv);let a=M.get(k);if(!a){a=Object.assign({},x,{n:1,keyInv:rcInv(x.inv),keyCore:rcCore(x.inv),rows:[x.row]});M.set(k,a)}else{if(x.ns)a.ns=true;['taxable','igst','cgst','sgst','cess'].forEach(f=>a[f]+=x[f]);a.n++;a.rows.push(x.row);if(!a.date)a.date=x.date;if(!a.party)a.party=x.party}});
  return[...M.values()].map(a=>{['taxable','igst','cgst','sgst','cess'].forEach(f=>a[f]=rcR(a[f]));a.tax=rcR(a.igst+a.cgst+a.sgst);return a})}
 
 /* ---------- GST matching ---------- */
@@ -1837,24 +1841,27 @@ function rcGst(books,gstr,tol){try{rcFillG(books,gstr)}catch(e){}const B=rcAgg(b
  G.forEach((g,i)=>gmap.set((g.gstin||'?')+'|'+g.keyInv,i));
  const pair=(bi,gi,kind,why)=>{usedB.add(bi);usedG.add(gi);const b=B[bi],g=G[gi],d=rcDiff(b,g,tol);
   let st=kind;if(kind=='exact')st=d.length?'mismatch':'match';else st=d.length?'mismatch':'probable';
-  res.push({st,why:why||(b.gfrom&&!d.length?'GSTIN taken from the supplier name (your books have no GSTIN)':''),b,g,diff:d,acc:0})};
+  const nn=(b.n>1||g.n>1)?' · This invoice is entered '+Math.max(b.n,g.n)+' times (values added together)':'';
+  res.push({st,why:(why||(kind=='exact'?(b.gfrom?'Verified: invoice number and supplier name (your books have no GSTIN)':'Verified: same GSTIN and invoice number'):''))+nn,b,g,diff:d,acc:0})};
  B.forEach((b,bi)=>{const gi=gmap.get((b.gstin||'?')+'|'+b.keyInv);if(gi!=null&&!usedG.has(gi))pair(bi,gi,'exact','')});
  const byG=new Map();G.forEach((g,gi)=>{if(usedG.has(gi))return;const k=g.gstin||'?';(byG.get(k)||byG.set(k,[]).get(k)).push(gi)});
  const close=(b,g)=>Math.abs(b.taxable-g.taxable)<=tol&&Math.abs(b.tax-g.tax)<=tol;
- B.forEach((b,bi)=>{if(usedB.has(bi))return;const c=(byG.get(b.gstin||'?')||[]).filter(gi=>!usedG.has(gi));let hit=-1,why='';
+ /* The invoice number decides. A written-differently number is only accepted when the amounts also agree; two different invoices are never joined just because the date and amount look alike. */
+ B.forEach((b,bi)=>{if(usedB.has(bi))return;const c=(byG.get(b.gstin||'?')||[]).filter(gi=>!usedG.has(gi)&&close(b,G[gi]));let hit=-1,why='';
   for(const gi of c){const g=G[gi];const dB=rcDig(b.inv),dG=rcDig(g.inv);
-   if(b.keyInv.length>=3&&g.keyInv.length>=3&&(b.keyInv.endsWith(g.keyInv)||g.keyInv.endsWith(b.keyInv))){hit=gi;why='Invoice number written differently';break}
-   if(dB&&dB===dG&&close(b,g)){hit=gi;why='Same digits in invoice number';break}
-   if(b.keyInv.length>=5&&g.keyInv.length>=5&&rcLev(b.keyInv,g.keyInv)<=1){hit=gi;why='Invoice number differs by one character';break}}
-  if(hit<0)for(const gi of c){const g=G[gi];if(close(b,g)&&b.date&&b.date===g.date){hit=gi;why='Same date and amount, invoice number differs';break}}
+   if(b.keyInv.length>=3&&g.keyInv.length>=3&&(b.keyInv.endsWith(g.keyInv)||g.keyInv.endsWith(b.keyInv))){hit=gi;why='Invoice number written differently, amounts agree';break}
+   if(b.keyCore.length>=1&&b.keyCore===g.keyCore){hit=gi;why='Same invoice number without the financial year part, amounts agree';break}
+   if(dB&&dB===dG){hit=gi;why='Same digits in invoice number, amounts agree';break}}
   if(hit>=0)pair(bi,hit,'prob',why)});
  /* same invoice number and amount but a different GSTIN */
  const byInv=new Map();G.forEach((g,gi)=>{if(usedG.has(gi)||g.keyInv.length<3)return;(byInv.get(g.keyInv)||byInv.set(g.keyInv,[]).get(g.keyInv)).push(gi)});
  B.forEach((b,bi)=>{if(usedB.has(bi))return;const c=(byInv.get(b.keyInv)||[]).filter(gi=>!usedG.has(gi)&&close(b,G[gi]));if(!c.length)return;let pick=c[0];
   if(c.length>1){const sc=c.map(gi=>[gi,gsim(b.party||'',G[gi].party||'')]).sort((x,y)=>y[1]-x[1]);if(sc[0][1]<.6||sc[0][1]-sc[1][1]<.05)return;pick=sc[0][0]}
   pair(bi,pick,'prob','GSTIN differs, check the supplier GSTIN in books')});
- B.forEach((b,bi)=>{if(!usedB.has(bi))res.push({st:'missG',why:'',b,g:null,diff:[],acc:0})});
- G.forEach((g,gi)=>{if(!usedG.has(gi))res.push({st:'missB',why:'',b:null,g,diff:[],acc:0})});
+ const hb=new Map(),hg=new Map();
+ B.forEach((b,bi)=>{if(usedB.has(bi))return;G.forEach((g,gi)=>{if(usedG.has(gi)||(b.gstin||'?')!=(g.gstin||'?')||!b.date||b.date!==g.date||!close(b,g))return;(hb.get(bi)||hb.set(bi,[]).get(bi)).push(gi);(hg.get(gi)||hg.set(gi,[]).get(gi)).push(bi)})});
+ B.forEach((b,bi)=>{if(!usedB.has(bi)){const h=hb.get(bi),w=h?'Not matched: the invoice number is not in '+(rcSl()?'GSTR-1':'2B')+'. Same date and amount as '+(rcSl()?'GSTR-1':'2B')+' invoice '+h.map(x=>G[x].inv).slice(0,3).join(' / ')+' - check the number in your books.':'Invoice number not found in '+(rcSl()?'GSTR-1':'2B')+'.';res.push({st:'missG',why:w,b,g:null,diff:[],acc:0})}});
+ G.forEach((g,gi)=>{if(!usedG.has(gi)){const h=hg.get(gi),w=h?'Not matched: the invoice number is not in your books. Same date and amount as your books invoice '+h.map(x=>B[x].inv).slice(0,3).join(' / ')+' - check the number.':'Invoice number not found in your books.';res.push({st:'missB',why:w,b:null,g,diff:[],acc:0})}});
  return res}
 function rcGstSum(R){const S={match:0,mismatch:0,probable:0,missG:0,missB:0,itcB:0,itcG:0,risk:0,extra:0};R.forEach(r=>{const st=r.acc&&r.st=='probable'?'match':r.st;S[st]++;
   if(r.b)S.itcB+=r.b.tax;if(r.g)S.itcG+=r.g.tax;
@@ -1958,7 +1965,7 @@ function rcTable(){const X=RCS.R,q=RCS.q.toLowerCase();if(X.t=='gst'){
   const cell=(x,k)=>x?rcMoney(x[k]):'';
   return '<div class="rct-w"><table class="rctb"><tr><th>Status</th><th>'+(rcSl()?'Customer':'Supplier')+'</th><th>Invoice</th><th>Date</th><th class="n">Taxable (books)</th><th class="n">Taxable ('+(rcSl()?'GSTR-1':'2B')+')</th><th class="n">Tax (books)</th><th class="n">Tax ('+(rcSl()?'GSTR-1':'2B')+')</th><th>Note</th></tr>'
   +L.slice(0,1500).map(([r,i])=>{const o=r.b||r.g,st=r.acc&&r.st=='probable'?'match':r.st,l=RCL[st];
-   const note=r.st=='mismatch'?r.diff.map(d=>d.l+' '+(d.x>0?'+':'')+rcMoney(d.x)).join(', '):r.why;
+   const note=r.st=='mismatch'?r.diff.map(d=>d.l+' '+(d.x>0?'+':'')+rcMoney(d.x)).join(', ')+(r.why?' · '+r.why:''):r.why;
    return '<tr class="st-'+st+'"><td><span class="tag '+l[1]+'">'+l[0]+'</span></td><td><b>'+E(o.party||'')+'</b><br><small>'+E(o.gstin)+'</small></td><td>'+(r.b&&r.b.items&&r.b.items.length?'<a class="rcbka" onclick="rcBrk('+i+')" title="Show HSN lines">'+E(o.inv)+' ▾</a>':E(o.inv))+(r.b&&r.g&&r.b.inv!==r.g.inv?'<br><small>'+(rcSl()?'GSTR-1':'2B')+': '+E(r.g.inv)+'</small>':'')+'</td><td>'+fd(o.date)+'</td><td class="n">'+cell(r.b,'taxable')+'</td><td class="n">'+cell(r.g,'taxable')+'</td><td class="n">'+cell(r.b,'tax')+'</td><td class="n">'+cell(r.g,'tax')+'</td><td>'+E(note)+(r.st=='probable'?' <button class="g sm" onclick="rcAcc('+i+')">'+(r.acc?'Undo':'Accept')+'</button>':'')+(!rcSl()&&r.g&&r.g.itc&&/^n/i.test(r.g.itc)?' <span class="tag bad">ITC not available</span>':'')+'</td></tr>'+(r.b&&r.b.items&&r.b.items.length?'<tr class="rcbr" id="rcbr'+i+'" style="display:none"><td colspan="9">'+rcBrkHtml(r.b.items)+'</td></tr>':'')}).join('')+'</table></div>'+(L.length>1500?'<small>Showing the first 1500 rows. The Excel file has all of them.</small>':'')}
  const L=X.R.filter(r=>{if(RCS.fl!='all'&&r.st!=RCS.fl)return false;if(!q)return true;return[...r.books,...r.bank].map(x=>x.desc+' '+x.ref+' '+x.amt).join(' ').toLowerCase().includes(q)});
  if(!L.length)return'<div class="card" style="text-align:center;padding:26px"><b>Nothing to show here</b></div>';
@@ -2069,7 +2076,7 @@ function rcGstRows(rows,src,sign,ov){const notes=[];let hi=rcHead(rows,'gst');ro
  if(!out.length)notes.push(rcNote('bad','No invoices could be read from this sheet.','Check the "Columns I used" box. Invoice number and at least one amount column are needed.'));
  return{rows:out,notes,h,m,hi}}
 
-function rcAgg(L){const M=new Map();L.forEach(x=>{const k=(x.gstin||'?')+'|'+rcInv(x.inv);let a=M.get(k);if(!a){a=Object.assign({},x,{n:1,keyInv:rcInv(x.inv),rows:[x.row],items:(x.items||[]).slice()});M.set(k,a)}else{if(x.ns)a.ns=true;['taxable','igst','cgst','sgst','cess'].forEach(f=>a[f]+=x[f]);a.n++;a.rows.push(x.row);if(!a.date)a.date=x.date;if(!a.party)a.party=x.party;a.items=a.items.concat(x.items||[])}});
+function rcAgg(L){const M=new Map();L.forEach(x=>{const k=(x.gstin||'?')+'|'+rcInv(x.inv);let a=M.get(k);if(!a){a=Object.assign({},x,{n:1,keyInv:rcInv(x.inv),keyCore:rcCore(x.inv),rows:[x.row],items:(x.items||[]).slice()});M.set(k,a)}else{if(x.ns)a.ns=true;['taxable','igst','cgst','sgst','cess'].forEach(f=>a[f]+=x[f]);a.n++;a.rows.push(x.row);if(!a.date)a.date=x.date;if(!a.party)a.party=x.party;a.items=a.items.concat(x.items||[])}});
  return[...M.values()].map(a=>{['taxable','igst','cgst','sgst','cess'].forEach(f=>a[f]=rcR(a[f]));a.tax=rcR(a.igst+a.cgst+a.sgst);return a})}
 const rcPct=x=>(x==null?'':(Math.round(x*100)/100)+'%');
 function rcBrkHtml(items){return '<div class="rcbk-w"><b>HSN breakup</b><table class="rcbk"><tr><th>HSN</th><th class="n">Qty</th><th>Unit</th><th class="n">Taxable</th><th class="n">IGST</th><th class="n">CGST</th><th class="n">SGST</th></tr>'+items.map(x=>'<tr><td>'+E(x.hsn)+'</td><td class="n">'+E(x.qty)+'</td><td>'+E(x.unit)+'</td><td class="n">₹'+rcMoney(x.taxable)+'</td>'+[['igst','igstR'],['cgst','cgstR'],['sgst','sgstR']].map(([a,b])=>'<td class="n">'+(x[b]||x[a]?rcPct(x[b])+' · ₹'+rcMoney(x[a]):'—')+'</td>').join('')+'</tr>').join('')+'</table></div>'}
