@@ -1,5 +1,5 @@
 <!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>JK Gupta &amp; Co</title>
-<meta name="description" content="JK Gupta &amp; Co. client accounting workspace"><meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#0f2742"><meta name="jkg-build" content="b2611021400"><script>try{var t=localStorage.getItem("jkgtheme")||(matchMedia("(prefers-color-scheme:dark)").matches?"dark":"light");document.documentElement.dataset.theme=t}catch(e){document.documentElement.dataset.theme="light"}</script><link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27%3E%3Crect width=%2764%27 height=%2764%27 rx=%2714%27 fill=%27%230f2742%27/%3E%3Ctext x=%2732%27 y=%2742%27 font-size=%2734%27 font-family=%27Georgia,serif%27 font-weight=%27700%27 text-anchor=%27middle%27 fill=%27%23e9d9ae%27%3EJK%3C/text%3E%3C/svg%3E"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:wght@500;600;700&display=swap"><style>
+<meta name="description" content="JK Gupta &amp; Co. client accounting workspace"><meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#0f2742"><meta name="jkg-build" content="b2611021630"><script>try{var t=localStorage.getItem("jkgtheme")||(matchMedia("(prefers-color-scheme:dark)").matches?"dark":"light");document.documentElement.dataset.theme=t}catch(e){document.documentElement.dataset.theme="light"}</script><link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27%3E%3Crect width=%2764%27 height=%2764%27 rx=%2714%27 fill=%27%230f2742%27/%3E%3Ctext x=%2732%27 y=%2742%27 font-size=%2734%27 font-family=%27Georgia,serif%27 font-weight=%27700%27 text-anchor=%27middle%27 fill=%27%23e9d9ae%27%3EJK%3C/text%3E%3C/svg%3E"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:wght@500;600;700&display=swap"><style>
 /* ============ tokens ============ */
 :root{--serif:'Source Serif 4',Georgia,'Times New Roman',serif;--sans:'Inter','Segoe UI',system-ui,-apple-system,Arial,sans-serif;--r:12px;--ease:cubic-bezier(.2,.7,.2,1)}
 :root,:root[data-theme=light]{color-scheme:light;
@@ -1166,7 +1166,7 @@ function gRead(){const f=document.getElementById('gf').files[0];if(!f)return gFa
  {const c0=C();if(brNames(c0).length>1&&!confirm('This file will use the ledgers of branch "'+brAct(c0)+'". Is that right?\n\nPress Cancel to pick another branch first.'))return}
  const g=C().gs={out:v('g1').trim()||'OUTPUT',inp:v('g2').trim()||'INPUT',co:v('g3').trim()};save();const isC=/\.csv$/i.test(f.name),rd=new FileReader();
  rd.onload=async()=>{try{const sh=isC?[{name:f.name.replace(/\.csv$/i,''),rows:csv(rd.result)}]:await xlAll(rd.result);gStart(sh,g)}catch(e){gFail('The file could not be opened: '+e.message,FIX.xls)}};isC?rd.readAsText(f):rd.readAsArrayBuffer(f)}
-/* PATCH b2611021400: some 2B files have a Rate column inserted in the DATA without a heading, so every heading sits one column
+/* PATCH b2611021630: some 2B files have a Rate column inserted in the DATA without a heading, so every heading sits one column
    to the left of its numbers (Taxable Value then holds 18, Tax holds the taxable value ...). Every bill then fails with NO GST RATE FOUND.
    Detect it from the VALUES (rate-like, and tax / taxable = that rate on the next columns) and insert the missing 'Rate' heading. */
 function jkRealign(rows){try{
@@ -1423,7 +1423,7 @@ function PNAME(n){return String(n||'').replace(/[._-]+/g,' ').trim().replace(/(^
    JK Gupta & Co. - interface, client tracker, attendance, staff control
    (added on top of the original program; everything above is unchanged)
    ==================================================================== */
-const BUILD='b2611021400';
+const BUILD='b2611021630';
 let CURP='';
 const $id=i=>document.getElementById(i);
 const jkP2=n=>String(n).padStart(2,'0');
@@ -3198,17 +3198,122 @@ function fsParse(rows){let hi=-1,dc=-1,cc=-1,nc=-1,ac=-1;
  for(let i=0;i<N;i++){const r=node(i);if(r.grp){it[i].grp=1;for(let j=i+1;j<r.end;j++)it[j].gp.push(it[i].n)}}
  it.forEach(x=>{x.c=x.grp?'ign':fsGuess(x.n,x.gp,x.v)});
  return{items:it,total,hadGroups:it.some(x=>x.grp)}}
-function fsCalc(items,cs,dp){const S={};FSC.forEach(c=>S[c[0]]=0);items.forEach(x=>{const k=FSK[x.c];S[x.c]+=(k=='L'||k=='I')?-x.v:x.v});
- const cstk=S.cstk+(+cs||0),dep=S.dep+(+dp||0),gp=S.sales+cstk-S.ostk-S.pur-S.dexp,np=gp+S.oinc-S.iexp-dep,fa=S.fa-(+dp||0);
+function fsCalc(items,cs,dp,os){const S={};FSC.forEach(c=>S[c[0]]=0);items.forEach(x=>{const k=FSK[x.c];S[x.c]+=(k=='L'||k=='I')?-x.v:x.v});
+ const cstk=S.cstk+(+cs||0),dep=S.dep+(+dp||0),ostk=S.ostk+(+os||0),gp=S.sales+cstk-ostk-S.pur-S.dexp,np=gp+S.oinc-S.iexp-dep,fa=S.fa-(+dp||0);
  const L=[['Capital',S.cap-S.drw],['Reserves and surplus',S.res],['Net profit / (loss) for the year',np],['Loans and borrowings',S.loan],['Sundry creditors',S.cre],['Duties and taxes',S.tax],['Provisions and outstanding expenses',S.prov],['Other current liabilities',S.ocl]],
  A=[['Fixed assets (after depreciation)',fa],['Investments',S.inv],['Closing stock',cstk],['Sundry debtors',S.deb],['Cash in hand',S.cash],['Bank balances',S.bank],['Loans, advances and deposits',S.ladv],['Other current assets',S.oca],['Misc. expenses not written off',S.misc],['Suspense / not classified',S.susp+items.filter(x=>x.c=='unk').reduce((a,x)=>a+x.v,0)]];
  const tl=L.reduce((a,x)=>a+x[1],0),ta=A.reduce((a,x)=>a+x[1],0);
- return{S,cstk,dep,gp,np,L,A,tl,ta,diff:ta-tl,sales:S.sales,oinc:S.oinc,ostk:S.ostk,pur:S.pur,dexp:S.dexp,iexp:S.iexp}}
+ return{S,cstk,dep,gp,np,L,A,tl,ta,diff:ta-tl,sales:S.sales,oinc:S.oinc,ostk:ostk,pur:S.pur,dexp:S.dexp,iexp:S.iexp}}
 let FS=null;
+
+/* ===== Direct link to Tally through a small helper program on the office PC ===== */
+const thHELP='http://localhost:9100',thPS=`# JK Gupta & Co - Tally helper
+# Lets the JK Gupta & Co website read data from Tally on this computer.
+# It only talks to Tally on this PC and only answers the JK Gupta & Co website.
+$Allowed = @('https://jkgupta-co.vercel.app','https://jkgupta-co-remo-137e.vercel.app')
+$TallyUrl = 'http://localhost:9000'
+$Port = 9100
+$listener = New-Object System.Net.HttpListener
+$listener.Prefixes.Add("http://localhost:$Port/")
+try { $listener.Start() } catch {
+  Write-Host "Could not start. The helper may already be running in another window." -ForegroundColor Yellow
+  exit
+}
+Write-Host "JK Gupta & Co Tally helper is running. Keep this window open while you use the website." -ForegroundColor Green
+Write-Host "Tally must be open, with Tally server turned on (F1 Help, Settings, Connectivity)."
+function Send($rs, [int]$code, [string]$text) {
+  $b = [Text.Encoding]::UTF8.GetBytes($text)
+  $rs.StatusCode = $code
+  $rs.ContentType = 'text/plain; charset=utf-8'
+  $rs.ContentLength64 = $b.Length
+  $rs.OutputStream.Write($b, 0, $b.Length)
+  $rs.OutputStream.Close()
+}
+while ($listener.IsListening) {
+  $ctx = $listener.GetContext()
+  $rq = $ctx.Request
+  $rs = $ctx.Response
+  try {
+    $origin = $rq.Headers['Origin']
+    if ($origin -and ($Allowed -notcontains $origin)) { Send $rs 403 'Not allowed'; continue }
+    if ($origin) { $rs.Headers.Add('Access-Control-Allow-Origin', $origin) }
+    $rs.Headers.Add('Access-Control-Allow-Headers', 'content-type')
+    $rs.Headers.Add('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
+    $rs.Headers.Add('Access-Control-Allow-Private-Network', 'true')
+    $rs.Headers.Add('Vary', 'Origin')
+    $path = $rq.Url.AbsolutePath
+    if ($rq.HttpMethod -eq 'OPTIONS') { $rs.StatusCode = 204; $rs.OutputStream.Close(); continue }
+    if ($path -eq '/ping') { Send $rs 200 'jkg-tally-helper 1'; continue }
+    if ($path -eq '/tally' -and $rq.HttpMethod -eq 'POST') {
+      $sr = New-Object IO.StreamReader($rq.InputStream, [Text.Encoding]::UTF8)
+      $body = $sr.ReadToEnd()
+      $req = [System.Net.HttpWebRequest]::Create($TallyUrl)
+      $req.Method = 'POST'
+      $req.ContentType = 'text/xml; charset=utf-8'
+      $req.Timeout = 120000
+      $bytes = [Text.Encoding]::UTF8.GetBytes($body)
+      $req.ContentLength = $bytes.Length
+      $st = $req.GetRequestStream()
+      $st.Write($bytes, 0, $bytes.Length)
+      $st.Close()
+      $resp = $req.GetResponse()
+      $ms = New-Object IO.MemoryStream
+      $resp.GetResponseStream().CopyTo($ms)
+      $resp.Close()
+      $raw = $ms.ToArray()
+      if ($raw.Length -ge 2 -and $raw[0] -eq 255 -and $raw[1] -eq 254) {
+        $txt = [Text.Encoding]::Unicode.GetString($raw, 2, $raw.Length - 2)
+      } else {
+        $txt = [Text.Encoding]::UTF8.GetString($raw)
+      }
+      Send $rs 200 $txt
+      continue
+    }
+    Send $rs 404 'Not found'
+  } catch {
+    try { Send $rs 502 ('Tally did not answer: ' + $_.Exception.Message) } catch { }
+  }
+}
+`,thBAT=`@echo off
+title JK Gupta and Co - Tally helper
+powershell -NoProfile -ExecutionPolicy Bypass -File "%~dp0JKG-Tally-Helper.ps1"
+pause
+`;
+async function thPing(){try{const c=new AbortController();setTimeout(()=>c.abort(),2500);const r=await fetch(thHELP+'/ping',{signal:c.signal});return/jkg-tally-helper/.test(await r.text())}catch(e){return false}}
+async function thPost(xml){const r=await fetch(thHELP+'/tally',{method:'POST',headers:{'Content-Type':'text/plain'},body:xml});const t=await r.text();if(!r.ok)throw new Error(t||('Helper answered '+r.status));return t}
+const thClean=t=>String(t).replace(/&#(?:[0-9]|1[0-9]|2[0-9]|3[01]);/g,'').replace(/[\u0000-\u0008\u000b\u000c\u000e-\u001f]/g,'');
+function thDoc(t){const d=new DOMParser().parseFromString(thClean(t),'text/xml');if(d.getElementsByTagName('parsererror').length)throw new Error('Tally sent an answer I could not read.');return d}
+const thTxt=(e,tag)=>{const x=e.getElementsByTagName(tag)[0];return x?String(x.textContent).replace(/[\u0000-\u001f]/g,'').trim():''};
+const thNm=e=>(e.getAttribute('NAME')||thTxt(e,'NAME')).replace(/[\u0000-\u001f]/g,'').trim();
+function thReq(id,type,methods,co,from,to){return '<ENVELOPE><HEADER><VERSION>1</VERSION><TALLYREQUEST>Export</TALLYREQUEST><TYPE>Collection</TYPE><ID>'+id+'</ID></HEADER><BODY><DESC><STATICVARIABLES><SVEXPORTFORMAT>$$SysName:XML</SVEXPORTFORMAT>'+(co?'<SVCURRENTCOMPANY>'+E(co)+'</SVCURRENTCOMPANY>':'')+(from?'<SVFROMDATE>'+from+'</SVFROMDATE><SVTODATE>'+to+'</SVTODATE>':'')+'</STATICVARIABLES><TDL><TDLMESSAGE><COLLECTION NAME="'+id+'" ISMODIFY="No"><TYPE>'+type+'</TYPE><NATIVEMETHOD>'+methods+'</NATIVEMETHOD></COLLECTION></TDLMESSAGE></TDL></DESC></BODY></ENVELOPE>'}
+function thMoney(x){const t=String(x||'').replace(/[,\s₹]/g,'');if(!t)return 0;const m=t.match(/^(-?[\d.]+)(Dr|Cr)?$/i);if(!m)return 0;let v=parseFloat(m[1]);if(isNaN(v))return 0;if(m[2])return(m[2].toLowerCase()=='dr'?-1:1)*Math.abs(v);return v}
+/* Tally gives a debit as a negative number. This reads both ways by checking the asset and expense ledgers. */
+function thItems(ledgers,groups){const gm={};groups.forEach(g=>gm[g.n]=g);const items=[];
+ const pathOf=p=>{const out=[];let g=p,seen=0;while(g&&g.toLowerCase()!='primary'&&seen++<12){out.unshift(g);g=gm[g]?gm[g].p:''}return out};
+ ledgers.forEach(l=>{const pl=/^profit (&|and) loss a\/c$/i.test(l.n),raw=pl?l.o:l.c;if(Math.abs(raw)<.005)return;items.push({n:l.n,raw,gp:pathOf(l.p),grp:0})});
+ items.forEach(x=>x.c0=fsGuess(x.n,x.gp,0));
+ const dn=new Set(['fa','cash','bank','deb','pur','iexp','dexp','inv','ladv']),sum=items.filter(x=>dn.has(x.c0)).reduce((a,x)=>a+x.raw,0),sg=sum>0?1:-1;
+ items.forEach(x=>{x.v=sg*x.raw;x.c=x.c0});return{items,sg,gm}}
+async function thLoadCo(){try{const d=thDoc(await thPost(thReq('JKCompanies','Company','Name')));const L=[...d.getElementsByTagName('COMPANY')].map(thNm).filter(Boolean);$id('thco').innerHTML=L.map(x=>'<option value="'+E(x)+'">').join('');return L}catch(e){return[]}}
+async function thCheck(){const m=$id('thmsg'),ok=await thPing();if(!ok){m.innerHTML='<div class="card bad"><b>The helper is not running on this computer.</b><ol><li>Press <b>Download the two helper files</b> below and keep both in one folder on this PC (for example Desktop).</li><li>Double-click <b>Start-JKG-Helper.bat</b>. If Windows warns, choose More info, then Run anyway. A black window opens. Keep it open.</li><li>In Tally press <b>F1 Help, Settings, Connectivity</b> and turn the Tally server on (port 9000). Open your company.</li><li>Come back and press <b>Check connection</b> again.</li></ol></div>';return false}
+ const L=await thLoadCo();m.innerHTML='<div class="card ok"><b>Helper is running.</b> '+(L.length?L.length+' compan'+(L.length>1?'ies':'y')+' found in Tally. Choose one below.':'I could not list the companies, so Tally may not have its server on. You can still try Get trial balance; it uses the company open in Tally.')+'</div>';return true}
+function thFile(n){dl(n=='ps'?'JKG-Tally-Helper.ps1':'Start-JKG-Helper.bat',n=='ps'?thPS.replace(/\r?\n/g,'\r\n'):thBAT,'text/plain')}
+async function thGet(){const m=$id('thmsg'),co=($id('thc')||{}).value.trim(),f=$id('thf').value.replace(/-/g,''),t=$id('tht').value.replace(/-/g,'');if(!f||!t)return alert('Please choose the from and to dates.');m.innerHTML='<div class="tbr">Reading from Tally... this can take a minute for a big company.</div>';
+ try{if(!(await thPing()))return thCheck();
+  const gd=thDoc(await thPost(thReq('JKGroups','Group','Name,Parent,ClosingBalance,OpeningBalance',co,f,t))),groups=[...gd.getElementsByTagName('GROUP')].map(e=>({n:thNm(e),p:thTxt(e,'PARENT'),c:thMoney(thTxt(e,'CLOSINGBALANCE')),o:thMoney(thTxt(e,'OPENINGBALANCE'))})).filter(g=>g.n);
+  const ld=thDoc(await thPost(thReq('JKLedgers','Ledger','Name,Parent,ClosingBalance,OpeningBalance',co,f,t))),ledgers=[...ld.getElementsByTagName('LEDGER')].map(e=>({n:thNm(e),p:thTxt(e,'PARENT'),c:thMoney(thTxt(e,'CLOSINGBALANCE')),o:thMoney(thTxt(e,'OPENINGBALANCE'))})).filter(l=>l.n);
+  if(!ledgers.length){m.innerHTML='<div class="card bad">Tally answered but gave no ledgers. Check that the company name is exactly as in Tally and that the company is open.</div>';return}
+  const r=thItems(ledgers,groups);let cs=0,os=0;const sih=groups.find(g=>/^stock-in-hand$/i.test(g.n));
+  if(sih&&!r.items.some(x=>x.gp.some(g=>/stock-in-hand/i.test(g)))){cs=Math.abs(sih.c);os=Math.abs(sih.o)}
+  const cn=($id('fcl2')||{}).value||'',map=(DB.clients&&DB.clients[cn]&&DB.clients[cn].fsMap)||{};r.items.forEach(x=>{if(map[x.n])x.c=map[x.n]});
+  const y=$id('tht').value.split('-');FS={items:r.items,total:null,hadGroups:false,client:cn||co,year:new Date($id('tht').value).toLocaleDateString('en-IN',{day:'numeric',month:'long',year:'numeric'}),cs,os,dp:0,name:'Tally'};fsView();
+  const mm=$id('thmsg');if(mm)mm.innerHTML='<div class="card ok"><b>Read '+r.items.length+' ledgers directly from Tally.</b> Ledger groups came from Tally itself, so the heading of each ledger follows your Tally groups.'+(cs||os?' Stock-in-hand: opening ₹'+tbN(os)+', closing ₹'+tbN(cs)+' (taken from Tally, please confirm).':'')+'</div>'}
+ catch(e){m.innerHTML='<div class="card bad">Could not read from Tally: '+E(e&&e.message||e)+'<br><small>Check that Tally is open with the company loaded and the Tally server is on (port 9000). If Chrome asks to allow access to devices on your network, choose Allow.</small></div>'}}
+function thFy(){const d=new Date(),y=d.getMonth()>=3?d.getFullYear():d.getFullYear()-1;return[(y-1)+'-04-01',y+'-03-31']}
 function fs(){if(!USER)return home();CURP='fs';sb();pgIn('fs');window.TBF=null;fsDraw()}
 function fsDraw(){const cl=Object.keys(DB.clients||{});
  app.innerHTML='<i data-pg="fs" hidden></i><div class="gxh"><h2>Balance sheet</h2><p>Upload the Trial Balance exported from Tally and get a balance sheet and profit and loss account, ready for Excel.</p></div>'
- +'<div class="tbc"><h3 style="margin-top:0">1. Upload the Trial Balance</h3><p style="margin-top:0">In Tally open <b>Display, Trial Balance</b>, press <b>Alt+E</b> and export to Excel. Choose the one that shows the ledgers (the detailed one) so every ledger has its own line.</p><div class="tbg"><div><label>Client (so your choices are remembered)<input id="fcl2" list="fcll" placeholder="Client name" value="'+E(FS&&FS.client||'')+'"></label><datalist id="fcll">'+cl.map(c=>'<option value="'+E(c)+'">').join('')+'</datalist></div><div><label>Year<input id="fyr" placeholder="e.g. 31 March 2026" value="'+E(FS&&FS.year||'')+'"></label></div><div><label>Excel or CSV file<input type="file" id="ffl" accept=".xlsx,.xls,.csv" onchange="fsLoad(this)"></label></div></div><div id="fmsg"></div></div><div id="fbody"></div>';if(FS)fsView()}
+ +'<div class="tbc"><h3 style="margin-top:0">Option A. Get it straight from Tally</h3><p style="margin-top:0">Needs a small helper running on this PC. No export and no upload.</p><div class="tbg"><div><label>Company in Tally (leave empty for the open one)<input id="thc" list="thco" placeholder="Company name"></label><datalist id="thco"></datalist></div>'+tbF('thf','From',thFy()[0],'date')+tbF('tht','To',thFy()[1],'date')+'<div><button type="button" class="g" onclick="thCheck()">Check connection</button> <button type="button" onclick="thGet()">Get trial balance</button></div></div><p><button type="button" class="g" onclick="thFile(\'ps\')">Download helper file 1</button> <button type="button" class="g" onclick="thFile(\'bat\')">Download helper file 2</button> <small>Keep both in one folder, then double-click Start-JKG-Helper.bat.</small></p><div id="thmsg"></div></div><div class="tbc" style="margin-top:14px"><h3 style="margin-top:0">Option B. Upload the Trial Balance</h3><p style="margin-top:0">In Tally open <b>Display, Trial Balance</b>, press <b>Alt+E</b> and export to Excel. Choose the one that shows the ledgers (the detailed one) so every ledger has its own line.</p><div class="tbg"><div><label>Client (so your choices are remembered)<input id="fcl2" list="fcll" placeholder="Client name" value="'+E(FS&&FS.client||'')+'"></label><datalist id="fcll">'+cl.map(c=>'<option value="'+E(c)+'">').join('')+'</datalist></div><div><label>Year<input id="fyr" placeholder="e.g. 31 March 2026" value="'+E(FS&&FS.year||'')+'"></label></div><div><label>Excel or CSV file<input type="file" id="ffl" accept=".xlsx,.xls,.csv" onchange="fsLoad(this)"></label></div></div><div id="fmsg"></div></div><div id="fbody"></div>';if(FS)fsView()}
 async function fsLoad(el){const f=el.files[0];if(!f)return;$id('fmsg').innerHTML='<div class="tbr">Reading the file...</div>';
  try{const X=await bxXlsxLib(),wb=X.read(await f.arrayBuffer(),{type:'array'}),ws=wb.Sheets[wb.SheetNames[0]],rows=X.utils.sheet_to_json(ws,{header:1,raw:false,defval:''});fsSet(rows,f.name)}catch(e){$id('fmsg').innerHTML='<div class="card bad">I could not read this file ('+E(e&&e.message||e)+'). Please export from Tally again as Excel and upload that.</div>'}}
 function fsSet(rows,name){const r=fsParse(rows);if(!r.items.length){$id('fmsg').innerHTML='<div class="card bad">I could not find any ledger lines with amounts in this file. It needs a Particulars column and Debit and Credit columns, as in the Tally Trial Balance.</div>';return}
@@ -3217,9 +3322,9 @@ function fsSet(rows,name){const r=fsParse(rows);if(!r.items.length){$id('fmsg').
 function fsView(){const it=FS.items,dr=it.filter(x=>!x.grp).reduce((a,x)=>a+Math.max(x.v,0),0),cr=it.filter(x=>!x.grp).reduce((a,x)=>a-Math.min(x.v,0),0),unk=it.filter(x=>x.c=='unk').length,opts=c=>FSC.map(x=>'<option value="'+x[0]+'"'+(x[0]==c?' selected':'')+'>'+E(x[1])+'</option>').join('');
  const rows=it.map((x,i)=>[x,i]).sort((a,b)=>(b[0].c=='unk')-(a[0].c=='unk')||a[1]-b[1]);
  $id('fbody').innerHTML='<div class="tbc" style="margin-top:14px"><h3 style="margin-top:0">2. Check where each ledger goes</h3><p style="margin-top:0">'+it.filter(x=>!x.grp).length+' ledgers read'+(FS.hadGroups?', '+it.filter(x=>x.grp).length+' group total lines recognised and left out':'')+'. Debit total ₹'+tbN(dr)+', credit total ₹'+tbN(cr)+(Math.abs(dr-cr)<1?' <b style="color:var(--ok)">(they agree)</b>':' <b style="color:var(--bad)">(they differ by ₹'+tbN(Math.abs(dr-cr))+'. A group line may be counted twice, or a ledger is missing. Set a group total to Ignore.)</b>')+(unk?'<br><b style="color:var(--warn)">'+unk+' ledger(s) not classified. Please choose for each one (shown first).</b>':'')+'</p><div style="overflow-x:auto;max-height:420px;overflow-y:auto"><table><tr><th>Ledger</th><th>Dr / Cr</th><th style="text-align:right">Amount</th><th>Goes to</th></tr>'+rows.map(([x,i])=>'<tr'+(x.c=='unk'?' style="background:var(--warnbg)"':'')+'><td>'+E(x.n)+(x.gp.length?'<br><small>'+E(x.gp[x.gp.length-1])+'</small>':'')+'</td><td>'+(x.v>=0?'Dr':'Cr')+'</td><td style="text-align:right">'+tbN(Math.abs(x.v))+'</td><td><select onchange="fsSetC('+i+',this.value)">'+opts(x.c)+'</select></td></tr>').join('')+'</table></div></div>'
- +'<div class="tbc" style="margin-top:14px"><h3 style="margin-top:0">3. Year-end adjustments (leave 0 if already in the file)</h3><div class="tbg">'+tbF('fcs','Closing stock (₹), if not already a ledger',FS.cs)+tbF('fdp','Depreciation for the year (₹), if not booked',FS.dp)+'</div></div><div id="fout"></div>';window.TBF=()=>{FS.cs=tbV('fcs');FS.dp=tbV('fdp');fsOut()};fsOut()}
+ +'<div class="tbc" style="margin-top:14px"><h3 style="margin-top:0">3. Year-end adjustments (leave 0 if already in the file)</h3><div class="tbg">'+tbF('fcs','Closing stock (₹), if not already a ledger',FS.cs)+tbF('fos','Opening stock (₹), if not already a ledger',FS.os||0)+tbF('fdp','Depreciation for the year (₹), if not booked',FS.dp)+'</div></div><div id="fout"></div>';window.TBF=()=>{FS.cs=tbV('fcs');FS.dp=tbV('fdp');FS.os=tbV('fos');fsOut()};fsOut()}
 function fsSetC(i,c){FS.items[i].c=c;const cn=FS.client||(($id('fcl2')||{}).value||'').trim();if(cn&&DB.clients&&DB.clients[cn]){(DB.clients[cn].fsMap=DB.clients[cn].fsMap||{})[FS.items[i].n]=c;save()}fsView()}
-function fsOut(){const R=fsCalc(FS.items,FS.cs,FS.dp),side=(t,L,tot)=>'<div style="flex:1;min-width:290px"><table style="width:100%"><tr><th>'+t+'</th><th style="text-align:right">₹</th></tr>'+L.filter(x=>Math.abs(x[1])>0.005||/Capital|Net profit/.test(x[0])).map(x=>'<tr><td>'+E(x[0])+'</td><td style="text-align:right">'+tbN(x[1])+'</td></tr>').join('')+'<tr><td><b>Total</b></td><td style="text-align:right"><b>'+tbN(tot)+'</b></td></tr></table></div>';
+function fsOut(){const R=fsCalc(FS.items,FS.cs,FS.dp,FS.os),side=(t,L,tot)=>'<div style="flex:1;min-width:290px"><table style="width:100%"><tr><th>'+t+'</th><th style="text-align:right">₹</th></tr>'+L.filter(x=>Math.abs(x[1])>0.005||/Capital|Net profit/.test(x[0])).map(x=>'<tr><td>'+E(x[0])+'</td><td style="text-align:right">'+tbN(x[1])+'</td></tr>').join('')+'<tr><td><b>Total</b></td><td style="text-align:right"><b>'+tbN(tot)+'</b></td></tr></table></div>';
  const pl=[['Sales / income from operations',R.sales],['Add: closing stock',R.cstk],['Less: opening stock',-R.ostk],['Less: purchases',-R.pur],['Less: direct expenses',-R.dexp],['Gross profit / (loss)',R.gp],['Add: other income',R.oinc],['Less: indirect expenses',-R.iexp],['Less: depreciation',-R.dep],['Net profit / (loss)',R.np]];
  $id('fout').innerHTML='<div class="tbc" style="margin-top:14px"><h3 style="margin-top:0">4. Balance sheet'+(FS.year?' as at '+E(FS.year):'')+(FS.client?' — '+E(FS.client):'')+'</h3><div style="display:flex;gap:18px;flex-wrap:wrap">'+side('Liabilities',R.L,R.tl)+side('Assets',R.A,R.ta)+'</div>'+(Math.abs(R.diff)<1?'<div class="tbr" style="color:var(--ok)"><b>Balance sheet tallies.</b></div>':'<div class="tbr" style="background:var(--badbg)"><b>Does not tally: difference ₹'+tbN(Math.abs(R.diff))+'</b> ('+(R.diff>0?'assets are more':'liabilities are more')+'). Check unclassified ledgers, group totals counted twice, and whether the closing stock is entered.</div>')+'<h3>Profit and loss account</h3><table style="max-width:520px">'+pl.map(x=>'<tr><td'+(/profit/i.test(x[0])&&!/Add|Less/.test(x[0])?' style="font-weight:700"':'')+'>'+E(x[0])+'</td><td style="text-align:right">'+tbN(x[1])+'</td></tr>').join('')+'</table><p><button type="button" onclick="fsXl()">Download Excel</button></p><p><small>Prepared from the Trial Balance. Please review the classification, closing stock, depreciation, provisions and notes before this goes to a client or a bank.</small></p></div>';window.FSR=R}
 async function fsXl(){const R=window.FSR,X=await bxXlsxLib(),t=(FS.client||'Client')+(FS.year?' — '+FS.year:''),n=x=>Math.round(x*100)/100;
