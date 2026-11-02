@@ -19,11 +19,11 @@ h2{font-size:18px;margin:0 0 8px}p{font-size:13px;line-height:1.55;color:#5b6878
     if(!response.ok)throw new Error('Workspace returned HTTP '+response.status);
     let html=await response.text();
     const tag='<script src="/notice-intelligence.js"><\/script>';
-    if(!html.includes('/notice-intelligence.js')) {
-      const at=html.toLowerCase().lastIndexOf('</body>');
-      if(at<0)throw new Error('Workspace page structure was not recognized');
-      html=html.slice(0,at)+tag+'\n'+html.slice(at);
-    }
+    const at=html.toLowerCase().lastIndexOf('</body>');
+    if(at<0)throw new Error('Workspace page structure was not recognized');
+    const moduleTag=html.includes('/notice-intelligence.js')?'':tag+'\n';
+    const quietTag='<script>(function(){function clearVersionToast(){document.querySelectorAll("#toasts .toast").forEach(function(t){if((t.textContent||"").indexOf("A new version is ready.")>=0)t.remove()})}clearVersionToast();new MutationObserver(clearVersionToast).observe(document.body,{childList:true,subtree:true});})();<\\/script>';
+    html=html.slice(0,at)+moduleTag+quietTag+'\n'+html.slice(at);
     document.open();
     document.write(html);
     document.close();
