@@ -16,10 +16,24 @@ echo b<same stamp> > version.txt
 Then commit and push; Vercel deploys by itself.
 
 
+
+
 ## Notice Intelligence preview branch
 
-Preview URL after Vercel creates the branch deployment: `/notice-preview.html`.
+Preview launcher: `/notice-preview.html` on the feature-branch Vercel deployment. It fetches the existing workspace as the top-level page and adds `notice-intelligence.js`; it does not frame the app or change production `main`.
 
-The preview loads the existing workspace in a same-origin frame and injects `notice-intelligence.js`. It does not replace the production homepage. It supports manual email/notice text capture, rule-based classification and date/identifier suggestions, owner/reviewer assignment, human verification of deadlines, checklists, office milestones, activity history and CSV export.
+Included in this preview:
+- Manual capture of pasted email or notice text.
+- Rule-based category suggestion for Income Tax, GST, court/tribunal, client/document requests, accounts/payment and general communication.
+- Basic PAN, assessment year, section and date suggestions with source context.
+- Separate confirmed statutory deadline and hearing-date fields, requiring human verification.
+- Owner/reviewer fields, status, checklist, internal office milestones, timeline and CSV export.
+- Editable unsent starter reply drafts saved within the application. There is no send control in this preview.
 
-This is a preview only. It does not monitor Gmail automatically, fetch Gmail attachments, run OCR, or generate AI-written email replies. The ChatGPT Gmail connection is not automatically available to the deployed website. Background mail monitoring requires a separate Gmail OAuth authorization and server-side worker with a durable synchronization process. Do not rely on suggested dates until staff verifies them against the original notice.
+Not included yet:
+- Automatic Gmail monitoring from the deployed website.
+- Retrieval/processing of Gmail attachments and scanned-PDF OCR.
+- AI-generated legal replies. The existing AI route has no production `AI_API_KEY` configured in the inspected environment, so this preview uses a transparent starter template only.
+- Durable 24×7 email worker, Gmail OAuth/Pub/Sub watch renewal and retry/reconciliation.
+
+The ChatGPT Gmail connector is not automatically available to the deployed website. Automatic monitoring requires separate website OAuth authorization and a backend worker. Do not rely on extracted dates until staff verifies the original notice.
