@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>JK Gupta & Co. — Notice Intelligence Preview</title>
+<style>
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;font-family:Inter,system-ui,sans-serif;background:#f4f6f8;color:#172437}
+header{height:54px;display:flex;align-items:center;justify-content:space-between;padding:0 16px;background:#102b49;color:#fff}
+header strong{font-size:14px}header span{font-size:12px;opacity:.82}
+main{height:calc(100% - 54px);position:relative}iframe{width:100%;height:100%;border:0;background:#fff}
+#state{position:absolute;inset:0;display:grid;place-items:center;background:#f4f6f8;z-index:2;padding:24px;text-align:center}
+#state.hide{display:none}.card{max-width:480px;background:white;border:1px solid #dce3eb;border-radius:14px;padding:22px;box-shadow:0 8px 28px #17304a12}
+.card h2{margin:0 0 8px;font-size:18px}.card p{font-size:13px;line-height:1.5;color:#5b6878}
+</style>
+</head>
+<body>
+<header><strong>JK Gupta &amp; Co. — Notice Intelligence</strong><span>Protected preview · Does not change production</span></header>
+<main>
+<iframe id="app" title="Existing JK Gupta & Co. workspace" src="/index.html?notice-preview=1"></iframe>
+<div id="state"><div class="card"><h2>Loading preview…</h2><p>Opening the existing workspace and safely loading the Notice Intelligence preview.</p></div></div>
+</main>
+<script>
+(function(){
+  const frame=document.getElementById('app'),state=document.getElementById('state');
+  function show(title,message){state.classList.remove('hide');state.innerHTML='<div class="card"><h2>'+title+'</h2><p>'+message+'</p></div>'}
+  frame.addEventListener('load',function(){
+    let w,d;
+    try{w=frame.contentWindow;d=frame.contentDocument;if(!d||!d.body)throw new Error('Workspace not available');}
+    catch(e){show('Preview could not open','The existing workspace is protected or did not load in this preview. Open the preview deployment through its Vercel access link, then try again.');return;}
+    const s=d.createElement('script');s.src='/notice-intelligence.js';
+    s.onload=function(){
+      try{
+        if(typeof w.USER==='undefined' && !w.sessionStorage.getItem('jkgu')) {
+          show('Sign in to the existing workspace','Use your normal JK Gupta & Co. login in the workspace below. After signing in, open Notices from the sidebar to try the new module.');
+          state.classList.add('hide');return;
+        }
+        w.notices();
+        state.classList.add('hide');
+      }catch(e){show('Preview loaded with an issue','The module could not open the Notices screen: '+String(e.message||e));}
+    };
+    s.onerror=function(){show('Module did not load','The Notice Intelligence JavaScript file could not be fetched from this preview.');};
+    d.head.appendChild(s);
+  });
+})();
+</script>
+</body></html>
