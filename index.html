@@ -832,6 +832,8 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{ou
 .aiq button:hover{background:color-mix(in srgb,var(--pri) 12%,var(--s1));transform:translateY(-1px)}
 .intro .sig{font-size:clamp(30px,5.4vw,88px)!important}
 .brandR .bt b{font-size:15px}
+.qlk{display:flex;flex-wrap:wrap;gap:10px;margin:14px 0}.qlk a{display:inline-flex;align-items:center;padding:10px 20px;border-radius:999px;border:1px solid var(--line2,#3a4663);background:var(--s1,#131a2e);color:var(--ink,#e8ecf6);font-weight:700;font-size:14px;text-decoration:none;transition:transform .15s,background .15s}.qlk a:hover{transform:translateY(-1px);background:color-mix(in srgb,var(--pri,#7c8cff) 14%,var(--s1,#131a2e))}
+table.stf td:first-child b{text-transform:capitalize}
 </style></head><body class="out">
 <div id="top"><div class="tl"><button id="mb" class="ib" onclick="tg()" aria-label="Menu">&#9776;</button><div class="brandR" onclick="logo()" title="Jaykaran Gupta &amp; Co"><div class="bm">JK</div><div class="bt"><b>Jaykaran Gupta <i>&amp;</i> Co</b><small>CHARTERED ACCOUNTANTS</small></div></div></div><div class="tr"><span id="sv"></span><button id="tm" class="ib" onclick="theme()" aria-label="Theme"></button><button id="dm" class="ib" onclick="dm(event)" aria-label="More">&#8942;</button></div></div>
 <div id="dd"></div><div id="md"></div><input type="file" id="lb" accept=".json,application/json,text/plain,*/*" onchange="imp(this)" hidden>
@@ -1611,7 +1613,7 @@ function ldU(u){try{const d=JSON.parse(LS.getItem('jkg_'+u)||'null');return d&&d
 function staffNames(){const k=new Set(Object.keys(U()));for(let i=0;i<LS.length;i++){const n=LS.key(i);if(n&&n.indexOf('jkg_')==0&&n.slice(4)!=ADMIN)k.add(n.slice(4))}return[...k].sort()}
 function stfP(){const N=staffNames(),us=U();
   const rows=N.map((u,i)=>{const d=ldU(u),C=Object.keys(d.clients);let A=0,P=0,L='';C.forEach(n=>{const c=d.clients[n];P+=c.pending||0;(c.accounts||[]).forEach(a=>{A++;if(a.lastImport>L)L=a.lastImport})});
-   return '<tr><td><b>'+E(u)+'</b>'+(us[u]?'':'<br><small>no login (data only)</small>')+'</td><td>'+C.length+(C.length?'<br><small>'+E(C.slice(0,3).join(', '))+(C.length>3?' +'+(C.length-3)+' more':'')+'</small>':'')+'</td><td>'+A+'</td><td>'+(P?'<span class="w">'+P+'</span>':0)+'</td><td>'+(fd(L)||'—')+'</td><td style="white-space:nowrap"><button onclick="viewAs('+i+')">Open their work</button>'+'</td></tr>'}).join('');
+   return '<tr><td><b>'+E(PNAME(u))+'</b>'+(us[u]?'':'<br><small>no login (data only)</small>')+'</td><td>'+C.length+(C.length?'<br><small>'+E(C.slice(0,3).join(', '))+(C.length>3?' +'+(C.length-3)+' more':'')+'</small>':'')+'</td><td>'+A+'</td><td>'+(P?'<span class="w">'+P+'</span>':0)+'</td><td>'+(fd(L)||'—')+'</td><td style="white-space:nowrap"><button onclick="viewAs('+i+')">Open their work</button>'+'</td></tr>'}).join('');
   return '<h3>All staff ('+N.length+')</h3>'+(N.length?'<div style="overflow-x:auto"><table class="stf"><tr><th>Staff</th><th>Clients</th><th>Bank accounts</th><th>Pending</th><th>Last import</th><th></th></tr>'+rows+'</table></div>':'<div class="card">No staff yet. Open the ⋮ menu, choose <b>Staff logins</b> and add one.</div>')+'<button class="g" onclick="staffF()">Add or remove staff logins</button>'}
 function viewAs(i){const u=staffNames()[i];if(!u)return;save();VIEW=u;DB=ldU(u);Object.values(DB.clients).forEach(fixN);S={};dls();sb();home();scrollTo(0,0)}
 function exitView(){if(!VIEW){home();return}save();VIEW='';let d=null;try{d=JSON.parse(LS.getItem('jkg_'+USER)||'null')}catch(e){}DB=d&&d.clients?d:{clients:{}};S={};dls();sb();home()}
@@ -1786,7 +1788,7 @@ function home(){CURP='home';S={};window.onscroll=null;sb();dls();document.body.c
  const same=pgIn('home');
  app.innerHTML='<i data-pg="home" hidden></i>'+(VIEW?vbar():'')+hero()
   +'<div class="stats hs"><div><b data-n="'+N.length+'">'+N.length+'</b>Clients</div><div><b data-n="'+A+'">'+A+'</b>Bank accounts</div><div><b class="'+(O?'w':'')+'" data-n="'+O+'">'+O+'</b>Need import (30+ days)</div><div><b data-n="'+P+'">'+P+'</b>Pending entries</div></div>'
-  +(N.length==0&&!VIEW?'<div class="card empty big"><b>Welcome! Let\'s add your first client</b><small>Drop a Tally export and the client, bank accounts and ledgers are set up for you.</small><div><button onclick="tlNew()">Create client from Tally file</button><button class="g" onclick="tg(1)">Add by hand</button></div></div>':'')+'<div class="ql">'+ql+'</div>'
+  +QLK+'<div class="ql">'+ql+'</div>'
   +(ADM()&&!VIEW?stfP():'')+kdHtml()
   +'<div class="toolbar" style="margin-bottom:0"><button onclick="tlNew()">+ Create client from Tally file</button></div><h3>'+(VIEW?E(VIEW)+'\'s clients':ADM()?'Admin\'s own clients':'Clients')+'</h3><input id="q" class="sq" placeholder="Search clients..." oninput="clearTimeout(window._qt);window._qt=setTimeout(cards,120)"><div id="cl" class="cg"></div>';
  cards();if(!same)countUp()}
@@ -1873,7 +1875,8 @@ function tkMo(n){TKS.m=mShift(tkMonth(),n);trk()}
 const ATM={P:['Present','ok'],H:['Half day','warn'],L:['Leave','info'],A:['Absent','bad'],W:['Week off','']};
 const ATS={m:'',L:[],pick:''};
 const ATG=()=>{try{return JSON.parse(LS.getItem('jkgatg')||'[]')}catch(e){return[]}};
-const atOK=()=>!!USER&&(USER===ADMIN||ATG().includes(USER));
+const QLK='<div class="qlk"><a href="https://www.gst.gov.in/" target="_blank" rel="noopener">GST Portal</a><a href="https://web.whatsapp.com/" target="_blank" rel="noopener">WhatsApp</a><a href="https://mail.google.com/" target="_blank" rel="noopener">Gmail</a></div>';
+const atOK=()=>!!USER&&USER===ADMIN;
 const attGet=u=>{try{const o=JSON.parse(LS.getItem('att_'+u)||'null');return o&&o.d?o:{d:{}}}catch(e){return{d:{}}}};
 const attSave=(u,o)=>LS.setItem('att_'+u,JSON.stringify(o));
 const attMonth=()=>ATS.m||(ATS.m=ymd(new Date()).slice(0,7));
@@ -1938,9 +1941,8 @@ function attXls(){const L=Object.keys(U()),mo=attMonth(),dim=new Date(+mo.slice(
    STAFF & ACCESS  (admin only)
    ==================================================================== */
 function staffF(){if(!ADM())return;CURP='stf';sb();tg(0);$id('dd').classList.remove('o');const same=pgIn('stf'),us=Object.keys(U()),pcg=PG(),atg=ATG(),SN=staffNames();
- const rows=us.map((u,i)=>'<div class="sfr"><div><b>'+E(u)+'</b><small>'+(()=>{const r=attGet(u).d[ymd(new Date())];return r&&r.i?'In at '+r.i:'Staff login'})()+'</small></div>'
+ const rows=us.map((u,i)=>'<div class="sfr"><div><b>'+E(PNAME(u))+'</b><small>'+(()=>{const r=attGet(u).d[ymd(new Date())];return r&&r.i?'In at '+r.i:'Staff login'})()+'</small></div>'
   +'<label class="sw"><input type="checkbox" '+(pcg.includes(u)?'checked ':'')+'onchange="pcTog('+i+')"><i></i><span>Petty cash</span></label>'
-  +'<label class="sw"><input type="checkbox" '+(atg.includes(u)?'checked ':'')+'onchange="atTog('+i+')"><i></i><span>Attendance</span></label>'
   +'<div class="ac"><button class="sm" onclick="viewAs('+SN.indexOf(u)+')">Open work</button><span style="display:inline-flex;align-items:center;gap:4px"><span id="pw'+i+'" style="font-family:ui-monospace,Consolas,monospace">••••••</span><button class="g sm" onclick="pwShow('+i+')">Show</button></span><button class="g sm" onclick="rstU('+i+')">Reset password</button><button class="g sm" onclick="delU('+i+')" style="color:var(--bad)">Delete</button></div></div>').join('');
  app.innerHTML='<i data-pg="stf" hidden></i><h2>Staff &amp; access</h2><small>Add staff, reset their passwords and decide who can use petty cash and attendance. Changes apply straight away on every PC.</small>'
   +'<div class="card"><b>Add a staff login</b><div class="addf" style="margin-top:10px"><label>Username<input id="au" autocomplete="off" autocapitalize="none" placeholder="e.g. ravi"></label><label>Password<input id="ap" type="text" autocomplete="off" placeholder="At least 4 characters"></label><button onclick="addU()">Add staff</button></div></div>'
@@ -2926,7 +2928,7 @@ async function hybSync(){if(!USER||ADM()||!LS.on||typeof window.showDirectoryPic
   try{if(h){if(await trvPerm(h,true))return hybMerge(h)}const nh=await window.showDirectoryPicker({mode:'readwrite',id:'jkgtravel'});try{await trvIdb('put','h',nh)}catch(e){}hybMerge(nh)}catch(e){}})}
 (function(){const o=window.afterLogin;window.afterLogin=function(){const r=o&&o.apply(this,arguments);if(HYB&&LS.on&&USER&&!ADM())setTimeout(hybSync,400);return r}})();
 (function(){const o=window.logout;window.logout=function(){hybBanner('');clearInterval(hybMerge.i);return o.apply(this,arguments)}})();
-/* Bill Reader: reads bills (Excel, PDF, image), lets you check them, and writes the register in the INDIA TRADING layout */
+/* Bill Reader: reads bills (Excel, PDF, image), lets you check them, and writes the register in the HSN Number Layout */
 const BXH=['DATE','BILL NO','PARTY NAME','GSTIN NO','HSN CODE','QTY','UNIT','TAXABLE AMT','IGST RATE','IGST AMT','CGST RATE','CGST AMT','SGST RATE','SGST AMT','TOTAL'];
 const BXGS=/\b\d{2}[A-Z]{5}\d{4}[A-Z][1-9A-Z]Z[0-9A-Z]\b/g;
 const bxN=x=>{const n=parseFloat(String(x==null?'':x).replace(/[,\s₹]/g,''));return isNaN(n)?0:n};
@@ -3013,7 +3015,7 @@ function bxFromRows(rows,ownG,ownN){
     else{const t=cells.filter(c=>/[A-Za-z]/.test(c)).join(' ');if(!t)continue;if(last&&!/^project\b/i.test(t))last.desc=(last.desc+' '+t).trim();else if(!last)names.push(t)}}
    if(B.items.length&&!hs)B.warn.push('No SAC / HSN code found on this bill. Please type it.')}}
  const ht={};R.forEach(r=>{const m=r.join(' ').match(/^(\d{4}|\d{6}|\d{8})\s+([\d,]+(?:\.\d+)?)\s+(\d+(?:\.\d+)?)\s*%\s+([\d,]+(?:\.\d+)?)(?:\s+(\d+(?:\.\d+)?)\s*%\s+([\d,]+(?:\.\d+)?))?/);if(m)ht[m[1]]={taxable:bxN(m[2]),r1:+m[3]/100,r2:m[5]!=null?+m[5]/100:null}});
- /* tax table with decimal rates (India Trading layout): HSN, taxable, central rate, amount, [state rate, amount], total */
+ /* tax table with decimal rates (HSN Number Layout): HSN, taxable, central rate, amount, [state rate, amount], total */
  R.forEach(r=>{if(!/^(\d{4}|\d{6}|\d{8})$/.test(r[0]||'')||ht[r[0]])return;const n=r.slice(1).filter(x=>/^[\d,]+(\.\d+)?$/.test(x)).map(bxN);
   const rt=x=>x>=1?x/100:x;
   if(n.length==6&&Math.abs(n[0]*rt(n[1])-n[2])<=1&&Math.abs(n[0]*rt(n[3])-n[4])<=1)ht[r[0]]={taxable:n[0],r1:rt(n[1]),r2:rt(n[3])};
@@ -3081,7 +3083,7 @@ function bxCheck(sheet,bills){const W=[],seen={};(sheet.bills||[]).forEach(b=>se
   if(b.printed_total!=null&&b.items.length){const calc=bxFig(b)[4];if(Math.abs(calc-b.printed_total)>1){b.flag=true;add('Printed bill total '+b.printed_total.toFixed(2)+' differs from the sheet total '+calc.toFixed(2)+'.','A difference under about 1 rupee is rounding. Otherwise check amounts, rates or a missing item. The total cell is highlighted yellow.')}}
  });return W}
 
-/* ---------- writing the Excel file (same look and formulas as the INDIA TRADING sample) ---------- */
+/* ---------- writing the Excel file (same look and formulas as the HSN Number Layout sample) ---------- */
 function bxSerial(iso){const m=String(iso||'').match(/^(\d{4})-(\d\d)-(\d\d)/);return m?Math.round((Date.UTC(+m[1],+m[2]-1,+m[3])-Date.UTC(1899,11,30))/864e5):null}
 const bxX=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])).replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F]/g,'');
 const BXL=['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O'];
@@ -3157,11 +3159,11 @@ let BXP=[],BXW=[],BXBUSY=0;
 function bx(){CURP='bx';bxMerge();sb();tg(0);const dd=$id('dd');if(dd)dd.classList.remove('o');pgIn('bx');bxDraw()}
 function bxMoney(x){return x.toLocaleString('en-IN',{minimumFractionDigits:2,maximumFractionDigits:2})}
 function bxDraw(){if(CURP!='bx')return;const d=bxDb(),s=bxCur();
- let h='<i data-pg="bx" hidden></i><div class="bx"><div class="gxh"><h2>Bill Reader</h2><p>Upload your bills (Excel, PDF or a photo). Check what was read, then download the Excel register in your INDIA TRADING layout.</p></div>';
+ let h='<i data-pg="bx" hidden></i><div class="bx"><div class="gxh"><h2>Bill Reader</h2><p>Upload your bills (Excel, PDF or a photo). Check what was read, then download the Excel register in your HSN Number Layout.</p></div>';
  h+='<div class="card"><b>Sheet</b><div class="bxr"><select id="bxs" onchange="bxPick(this.value)">'+(d.sheets.length?'':'<option value="">No sheet yet</option>')+d.sheets.map(x=>'<option value="'+E(x.id)+'"'+(x.id==d.cur?' selected':'')+'>'+E(x.company)+(x.kind=='purchase'?' · PURCHASE':'')+' · '+E((x.month||'').slice(0,7))+' ('+x.bills.length+' bills)</option>').join('')+'</select><button onclick="bxNew()">New sheet</button><label class="bxf">Continue from an Excel I made earlier<input type="file" accept=".xlsx,.xls" onchange="bxCont(this.files[0]);this.value=\'\'"></label>'+(s?'<button class="g" onclick="bxDelSheet()">Delete sheet</button>':'')+'</div></div>';
  if(!s)h+='<div class="card">Start with <b>New sheet</b> (company name, GSTIN and month), or continue a sheet from an Excel file you made earlier.</div>';
  else{const f=s.bills.reduce((a,b)=>{const z=bxFig(b);return[a[0]+z[0],a[1]+z[1]+z[2]+z[3],a[2]+z[4]]},[0,0,0]);
-  h+='<div class="card"><b>'+E(s.company)+'</b> · '+E(s.gstin)+' · '+E((s.month||'').slice(0,7))+'<div class="bxs"><span>Bills <b>'+s.bills.length+'</b></span><span>Taxable <b>₹'+bxMoney(f[0])+'</b></span><span>GST <b>₹'+bxMoney(f[1])+'</b></span><span>Total <b>₹'+bxMoney(f[2])+'</b></span></div><div class="bxr"><label class="bxf">Excel format <select onchange="bxFmt(this.value)"><option value="india"'+(s.fmt=='si'?'':' selected')+'>INDIA TRADING layout</option><option value="si"'+(s.fmt=='si'?' selected':'')+'>SI No layout (Bill No, Date, Party, GSTIN, HSN, rates, amounts)</option></select></label> <button onclick="bxDown()"'+(s.bills.length?'':' disabled')+'>Download Excel</button><button class="g" onclick="bxList()">See bills in this sheet</button> <button class="g" onclick="bxDedupe()">Remove repeat bills</button><button class="g" onclick="bxSet()">Change company / month</button></div></div>';
+  h+='<div class="card"><b>'+E(s.company)+'</b> · '+E(s.gstin)+' · '+E((s.month||'').slice(0,7))+'<div class="bxs"><span>Bills <b>'+s.bills.length+'</b></span><span>Taxable <b>₹'+bxMoney(f[0])+'</b></span><span>GST <b>₹'+bxMoney(f[1])+'</b></span><span>Total <b>₹'+bxMoney(f[2])+'</b></span></div><div class="bxr"><label class="bxf">Excel format <select onchange="bxFmt(this.value)"><option value="india"'+(s.fmt=='si'?'':' selected')+'>HSN Number Layout</option><option value="si"'+(s.fmt=='si'?' selected':'')+'>Bill Number Layout</option></select></label> <button onclick="bxDown()"'+(s.bills.length?'':' disabled')+'>Download Excel</button><button class="g" onclick="bxList()">See bills in this sheet</button> <button class="g" onclick="bxDedupe()">Remove repeat bills</button><button class="g" onclick="bxSet()">Change company / month</button></div></div>';
   h+='<div class="card"><b>Add bills</b><p style="margin:6px 0">Choose one or many files. Excel bills are read exactly; PDF and photo bills are read from their text, so check them below.</p><input type="file" id="bxin" multiple accept=".xlsx,.xls,.csv,.pdf,.png,.jpg,.jpeg,.webp" onchange="bxAdd(this.files)"><div id="bxmsg" class="bxm">'+(BXBUSY?'Reading…':'')+'</div></div>'}
  if(BXW.length)h+='<div class="card bxw"><b>Please check</b>'+BXW.map(w=>'<div class="bxwi"><b>'+E(w.bill)+'</b> '+E(w.party||'')+': '+E(w.problem)+'<br><small>What to do: '+E(w.fix)+'</small></div>').join('')+'</div>';
  BXP.forEach((b,i)=>h+=bxCard(b,i));
@@ -3185,7 +3187,7 @@ function bxSet(){const s=bxCur();if(!s)return;modal('<h3>Change sheet details</h
 function bxSet2(){const s=bxCur(),g=bxC($id('bxg').value).toUpperCase();if(g&&!bxGstOk(g))return $id('bxe').textContent='That GSTIN is not valid.';s.company=bxC($id('bxc').value)||s.company;s.gstin=g;s.month=($id('bxm').value||(s.month||'').slice(0,7))+'-01';save();modal();bxDraw()}
 function bxPick(v){bxDb().cur=v;BXP=[];BXW=[];save();bxDraw()}
 function bxDelSheet(){const s=bxCur();if(!s||!confirm('Delete the sheet "'+s.company+'" with its '+s.bills.length+' bills? Download it first if you need it.'))return;const d=bxDb();d.sheets=d.sheets.filter(x=>x.id!=s.id);d.cur=d.sheets[0]?d.sheets[0].id:'';save();bxDraw()}
-async function bxCont(f){if(!f)return;try{const s=await bxReadSheet(f);if(!s.bills.length&&!s.company)throw new Error('empty');const d=bxDb();const ex=d.sheets.find(x=>bxSame(x,s,bxKd(s)));if(ex){const have=new Set((ex.bills||[]).filter(b=>b.no).map(bxDk));let n=0;s.bills.forEach(b=>{if(b.no&&have.has(bxDk(b)))return;if(b.no)have.add(bxDk(b));ex.bills.push(b);n++});if(!ex.gstin&&s.gstin)ex.gstin=s.gstin;d.cur=ex.id;save();toast('This sheet already exists, so I added '+n+' new bill'+(n==1?'':'s')+' to it (no new sheet made).');return bxDraw()}d.sheets.push(s);d.cur=s.id;save();toast('Loaded '+s.bills.length+' bills from '+f.name);bxDraw()}catch(e){alert('I could not read that file as a sheet in this layout. Please pick the Excel file that this page made (or your INDIA TRADING sample).')}}
+async function bxCont(f){if(!f)return;try{const s=await bxReadSheet(f);if(!s.bills.length&&!s.company)throw new Error('empty');const d=bxDb();const ex=d.sheets.find(x=>bxSame(x,s,bxKd(s)));if(ex){const have=new Set((ex.bills||[]).filter(b=>b.no).map(bxDk));let n=0;s.bills.forEach(b=>{if(b.no&&have.has(bxDk(b)))return;if(b.no)have.add(bxDk(b));ex.bills.push(b);n++});if(!ex.gstin&&s.gstin)ex.gstin=s.gstin;d.cur=ex.id;save();toast('This sheet already exists, so I added '+n+' new bill'+(n==1?'':'s')+' to it (no new sheet made).');return bxDraw()}d.sheets.push(s);d.cur=s.id;save();toast('Loaded '+s.bills.length+' bills from '+f.name);bxDraw()}catch(e){alert('I could not read that file as a sheet in this layout. Please pick the Excel file that this page made (or your HSN Number Layout sample).')}}
 async function bxAdd(files){const s=bxCur();if(!s||!files.length)return;files=[...files];BXBUSY=1;const me=$id('bxmsg');
  for(let k=0;k<files.length;k++){const f=files[k];if(me)me.textContent='Reading '+(k+1)+' of '+files.length+': '+f.name;
   try{const grp=await bxFileBills(f),list=grp||[{rows:await bxFileRows(f),pg:null}];
@@ -3231,7 +3233,7 @@ function bxEinv(rows,ownG,sh){
  W.push('Read as an e-invoice (IRN). Please check the figures.');
  return{no,date,party,gstin,kind,einv:true,printed_total:tot,warn:W,items:items.map(i=>({hsn:i.hsn,qty:i.qty,unit:i.unit,taxable:i.taxable,igst:inter?i.rate:0,cgst:inter?0:i.rate/2,sgst:inter?0:i.rate/2}))}}
 
-function bxFmt(v){const s=bxCur();if(!s)return;s.fmt=v=='si'?'si':'india';save();toast(s.fmt=='si'?'Excel format: SI No layout':'Excel format: INDIA TRADING layout')}
+function bxFmt(v){const s=bxCur();if(!s)return;s.fmt=v=='si'?'si':'india';save();toast(s.fmt=='si'?'Excel format: Bill Number Layout':'Excel format: HSN Number Layout')}
 async function bxXlsxSi(s){if(!window.ExcelJS)await loadJs('https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.4.0/exceljs.min.js');
  const pu=s.kind=='purchase',wb=new ExcelJS.Workbook(),w=wb.addWorksheet(pu?'Purchase':'SALES');wb.calcProperties={fullCalcOnLoad:true};
  const H=pu?['SI No','Bill No','Date','Party Name','GSTIN No','Taxble Value','IGST Rate','IGST Amount','CGST Rate','CGST Amount','SGST Rate','SGST Amount','Total']:['SI No','Bill No','Date','Party Name','GSTIN No','HSN CODE','Taxble Value','IGST Rate','IGST Amount','CGST Rate','CGST Amount','SGST Rate','SGST Amount','Total','Remark'];
@@ -3858,7 +3860,7 @@ function home(){CURP='home';S={};window.onscroll=null;sb();dls();document.body.c
   dkGrp('Checks',[dkTile('scale','Reco','GSTR-2B and bank reconciliation','reco()'),dkTile('shield','GSTIN / HSN check','Check a number in one tap','gchk()'),dkTile('calc','Toolbox','Calculator, GST, TDS finder, income tax, interest','tools()'),dkTile('rupee','Fees tracker','Bills to clients and what is pending','fees()'),dkTile('bell','Notices',(!VIEW?ntLine():'Notices'),'notices()'),dkTile('bal','Balance sheet','Trial Balance from Tally to balance sheet and P&L','fs()'),dkTile('bal','Final accounts','Balance sheet, P&L and Notes from your Trial Balance Excel','af()')]),
   dkGrp(ADM()&&!VIEW?'Admin':'Help and backup',[].concat(ADM()&&!VIEW?[dkTile('users','Staff &amp; access','Add staff, set permissions','staffF()')]:[]).concat([dkTile('key','Change password','Set a new login password','chpw()'),dkTile('down','Download backup','Save a copy of your data',"dl('JK-backup-'+USER+'.json',JSON.stringify(DB),'application/json')"),dkTile('help','Help','How to use each part','help()')]))].join('');
  const firstBox='<div class="dfirst"><h2>Welcome! Let\'s add your first client</h2><p>Drop a Tally export and the client, bank accounts and ledgers are set up for you.</p><div class="dfb"><button type="button" class="dprim" onclick="tlNew()">'+IC.plus+' Create client from Tally file</button><button type="button" class="g" onclick="tg(1)">Add by hand</button></div></div>';
- app.innerHTML='<i data-pg="home" hidden></i>'+(VIEW?vbar():'')+dkHero()+(first?firstBox:'<div class="dbar"><button type="button" class="dprim" onclick="tlNew()">'+IC.plus+' Create client from Tally file</button><div class="dcs">'+chips+'</div></div>')+'<div class="dgs">'+grp+'</div>'
+ app.innerHTML='<i data-pg="home" hidden></i>'+(VIEW?vbar():'')+dkHero()+QLK+(false?firstBox:'<div class="dbar"><button type="button" class="dprim" onclick="tlNew()">'+IC.plus+' Create client from Tally file</button><div class="dcs">'+chips+'</div></div>')+'<div class="dgs">'+grp+'</div>'
   +(ADM()&&!VIEW?stfP():'')+kdHtml()
   +(first?'':'<h2 class="dsec">'+(VIEW?E(VIEW)+'\'s clients':ADM()?'Admin\'s own clients':'Clients')+'</h2><input id="q" class="sq" aria-label="Search clients" placeholder="Search clients..." oninput="clearTimeout(window._qt);window._qt=setTimeout(cards,120)"><div id="cl" class="cg"></div>');
  if(!first)cards()}
