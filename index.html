@@ -834,6 +834,21 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{ou
 .brandR .bt b{font-size:15px}
 .qlk{display:flex;flex-wrap:wrap;gap:10px;margin:14px 0}.qlk a{display:inline-flex;align-items:center;gap:9px;padding:10px 20px;border-radius:999px;border:1px solid var(--line2,#3a4663);background:var(--s1,#131a2e);color:var(--ink,#e8ecf6);font-weight:700;font-size:14px;text-decoration:none;transition:transform .15s,background .15s}.qlk a:hover{transform:translateY(-1px);background:color-mix(in srgb,var(--pri,#7c8cff) 14%,var(--s1,#131a2e))}
 table.stf td:first-child b{text-transform:capitalize}
+.qlk a{cursor:pointer}
+.pwp{max-width:1100px}.pwt h2{margin:0 0 4px}.pwh{display:flex;flex-wrap:wrap;gap:10px;margin:16px 0}
+.pwb{display:inline-flex;align-items:center;gap:9px;padding:11px 20px;border-radius:999px;border:1px solid var(--line2,#3a4663);background:var(--s1,#131a2e);color:var(--ink,#e8ecf6);font-weight:700;font-size:14px;cursor:pointer}
+.pwb i{font-style:normal;font-size:12px;opacity:.75;background:rgba(127,127,127,.2);border-radius:999px;padding:1px 8px}
+.pwb.on{background:linear-gradient(100deg,var(--pri,#7c8cff),color-mix(in srgb,var(--pri,#7c8cff) 45%,var(--gold,#e3b95a)));color:var(--priink,#fff);border-color:transparent}
+.pwq{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin:8px 0}.pwq h3{margin:0 auto 0 0}.pwq input{min-width:220px}
+.pwbtn{display:inline-block;padding:10px 18px;border-radius:999px;border:0;background:linear-gradient(100deg,var(--pri,#7c8cff),color-mix(in srgb,var(--pri,#7c8cff) 45%,var(--gold,#e3b95a)));color:var(--priink,#fff);font-weight:700;cursor:pointer}
+.pwa{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0}.pwe{margin:14px 0;padding:18px}
+.pwtb{width:100%;border-collapse:collapse}.pwtb th,.pwtb td{padding:10px 12px;text-align:left;border-bottom:1px solid var(--line2,rgba(127,127,127,.25));vertical-align:middle}
+.pwtb code{font-size:14px;letter-spacing:.04em}.pwi{margin:0 3px;padding:4px 10px;font-size:12px;border-radius:8px;border:1px solid var(--line2,#3a4663);background:transparent;color:inherit;cursor:pointer}
+.pwfm{display:grid;gap:10px;min-width:min(340px,80vw)}.pwfm label{display:grid;gap:4px;font-size:13px;font-weight:600}.pwn{display:block;margin-top:12px;opacity:.7}
+.pwdot{display:inline-block;min-width:18px;margin-left:7px;padding:1px 6px;border-radius:999px;background:#e5484d;color:#fff;font-style:normal;font-size:11px;font-weight:800;text-align:center}
+.pwtk{margin:12px 0;padding:14px 16px;display:grid;gap:6px}.pwtt{display:flex;justify-content:space-between;gap:10px;align-items:center}
+.pwst{display:inline-block;padding:3px 10px;border-radius:999px;font-size:12px;font-weight:700;background:rgba(127,127,127,.2)}.pwst.p{background:rgba(245,179,1,.2);color:#d99a00}.pwst.a{background:rgba(48,164,108,.2);color:#30a46c}.pwst.r{background:rgba(229,72,77,.2);color:#e5484d}
+.pwact{display:flex;flex-wrap:wrap;gap:10px;margin-top:6px}.pwtk code{font-size:14px}
 </style></head><body class="out">
 <div id="top"><div class="tl"><button id="mb" class="ib" onclick="tg()" aria-label="Menu">&#9776;</button><div class="brandR" onclick="logo()" title="Jaykaran Gupta &amp; Co"><div class="bm">JK</div><div class="bt"><b>Jaykaran Gupta <i>&amp;</i> Co</b><small>CHARTERED ACCOUNTANTS</small></div></div></div><div class="tr"><span id="sv"></span><button id="tm" class="ib" onclick="theme()" aria-label="Theme"></button><button id="dm" class="ib" onclick="dm(event)" aria-label="More">&#8942;</button></div></div>
 <div id="dd"></div><div id="md"></div><input type="file" id="lb" accept=".json,application/json,text/plain,*/*" onchange="imp(this)" hidden>
@@ -1788,7 +1803,7 @@ function home(){CURP='home';S={};window.onscroll=null;sb();dls();document.body.c
  const same=pgIn('home');
  app.innerHTML='<i data-pg="home" hidden></i>'+(VIEW?vbar():'')+hero()
   +'<div class="stats hs"><div><b data-n="'+N.length+'">'+N.length+'</b>Clients</div><div><b data-n="'+A+'">'+A+'</b>Bank accounts</div><div><b class="'+(O?'w':'')+'" data-n="'+O+'">'+O+'</b>Need import (30+ days)</div><div><b data-n="'+P+'">'+P+'</b>Pending entries</div></div>'
-  +QLK+'<div class="ql">'+ql+'</div>'
+  +QLKf()+'<div class="ql">'+ql+'</div>'
   +(ADM()&&!VIEW?stfP():'')+kdHtml()
   +'<div class="toolbar" style="margin-bottom:0"><button onclick="tlNew()">+ Create client from Tally file</button></div><h3>'+(VIEW?E(VIEW)+'\'s clients':ADM()?'Admin\'s own clients':'Clients')+'</h3><input id="q" class="sq" placeholder="Search clients..." oninput="clearTimeout(window._qt);window._qt=setTimeout(cards,120)"><div id="cl" class="cg"></div>';
  cards();if(!same)countUp()}
@@ -1796,7 +1811,7 @@ function home(){CURP='home';S={};window.onscroll=null;sb();dls();document.body.c
 /* ---------------- top menu ---------------- */
 function dm(e){e.stopPropagation();const d=$id('dd');if(d.classList.contains('o')){d.classList.remove('o');return}
  const A=(ic,t,fn,c)=>'<a'+(c?' class="'+c+'"':'')+' onclick="'+fn+'">'+IC[ic]+t+'</a>';
- d.innerHTML=A('help','Help and how to use','help()')+(USER?A('scale','Reco (GSTR-2B / Bank)','reco()')+A('shield','GSTIN / HSN check','gchk()')+(ADM()?A('users','Staff &amp; access','staffF()'):'')+'<hr>'
+ d.innerHTML=A('help','Help and how to use','help()')+(USER?A('scale','Reco (GSTR-2B / Bank)','reco()')+A('shield','GSTIN / HSN check','gchk()')+A('shield','Passwords','pw()')+(ADM()?A('users','Staff &amp; access','staffF()'):'')+'<hr>'
   +A('down','Download backup',"dl('JK-backup-'+USER+'.json',JSON.stringify(DB),'application/json')")+A('up','Load backup',"document.getElementById('lb').click()")+A('key','Change password','chpw()')+'<hr>'+A('out','Log out','logout()','dg'):'');
  d.classList.add('o')}
 
@@ -1875,8 +1890,8 @@ function tkMo(n){TKS.m=mShift(tkMonth(),n);trk()}
 const ATM={P:['Present','ok'],H:['Half day','warn'],L:['Leave','info'],A:['Absent','bad'],W:['Week off','']};
 const ATS={m:'',L:[],pick:''};
 const ATG=()=>{try{return JSON.parse(LS.getItem('jkgatg')||'[]')}catch(e){return[]}};
-const QLK='<div class="qlk"><a href="https://www.gst.gov.in/" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><rect x="3" y="2" width="18" height="20" rx="3" fill="#2f6fed"/><path d="M8 8h8M8 12h8M9 17l6-6" stroke="#fff" stroke-width="1.8" stroke-linecap="round" fill="none"/></svg><span>GST Portal</span></a><a href="https://web.whatsapp.com/" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2z" fill="#25d366"/><path d="M8.3 7.6c.2-.4.5-.4.8-.4h.5c.2 0 .4.1.5.4l.8 1.9c.1.2 0 .4-.1.6l-.5.7c.8 1.4 1.8 2.3 3.2 3l.8-.9c.2-.2.4-.2.6-.1l1.8.9c.2.1.3.3.3.5 0 .8-.7 1.6-1.6 1.8-1.5.3-4.2-.7-6-3.2-1.3-1.8-1.6-3.4-.9-5z" fill="#fff"/></svg><span>WhatsApp</span></a><a href="https://mail.google.com/" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2.5" fill="#fff"/><path d="M2 7l10 7 10-7v-.5A2.5 2.5 0 0 0 19.500 4h-15A2.500 2.500 0 0 0 2 6.500z" fill="#ea4335"/><path d="M2 7v11.500A1.500 1.500 0 0 0 3.500 20H6V10.500z" fill="#4285f4"/><path d="M22 7v11.500a1.500 1.500 0 0 1-1.500 1.500H18v-9.500z" fill="#34a853"/><path d="M18 10.500V20" stroke="#fbbc04" stroke-width="0"/></svg><span>Gmail</span></a></div>';
-const atOK=()=>!!USER&&USER===ADMIN;
+const QLKf=()=>'<div class="qlk">'+(USER?'<a class="qkp" onclick="pw()"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><circle cx="8" cy="15" r="4.5" fill="#f5b301"/><circle cx="8" cy="15" r="1.5" fill="#fff"/><path d="M11.500 11.500l8-8M16 7l3 3M13.500 9.500l2 2" stroke="#f5b301" stroke-width="2.200" fill="none" stroke-linecap="round"/></svg><span>Passwords'+(typeof pwPend=='function'&&pwPend()?'<b class="pwdot">'+pwPend()+'</b>':'')+'</span></a>':'')+'<a href="https://www.gst.gov.in/" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><rect x="3" y="2" width="18" height="20" rx="3" fill="#2f6fed"/><path d="M8 8h8M8 12h8M9 17l6-6" stroke="#fff" stroke-width="1.8" stroke-linecap="round" fill="none"/></svg><span>GST Portal</span></a><a href="https://web.whatsapp.com/" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2z" fill="#25d366"/><path d="M8.3 7.6c.2-.4.5-.4.8-.4h.5c.2 0 .4.1.5.4l.8 1.9c.1.2 0 .4-.1.6l-.5.7c.8 1.4 1.8 2.3 3.2 3l.8-.9c.2-.2.4-.2.6-.1l1.8.9c.2.1.3.3.3.5 0 .8-.7 1.6-1.6 1.8-1.5.3-4.2-.7-6-3.2-1.3-1.8-1.6-3.4-.9-5z" fill="#fff"/></svg><span>WhatsApp</span></a><a href="https://mail.google.com/" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2.5" fill="#fff"/><path d="M2 7l10 7 10-7v-.5A2.5 2.5 0 0 0 19.500 4h-15A2.500 2.500 0 0 0 2 6.500z" fill="#ea4335"/><path d="M2 7v11.500A1.500 1.500 0 0 0 3.500 20H6V10.500z" fill="#4285f4"/><path d="M22 7v11.500a1.500 1.500 0 0 1-1.500 1.500H18v-9.500z" fill="#34a853"/><path d="M18 10.500V20" stroke="#fbbc04" stroke-width="0"/></svg><span>Gmail</span></a></div>';
+const atOK=()=>false;
 const attGet=u=>{try{const o=JSON.parse(LS.getItem('att_'+u)||'null');return o&&o.d?o:{d:{}}}catch(e){return{d:{}}}};
 const attSave=(u,o)=>LS.setItem('att_'+u,JSON.stringify(o));
 const attMonth=()=>ATS.m||(ATS.m=ymd(new Date()).slice(0,7));
@@ -3859,7 +3874,7 @@ function home(){CURP='home';S={};window.onscroll=null;sb();dls();document.body.c
   dkGrp('Checks',[dkTile('scale','Reco','GSTR-2B and bank reconciliation','reco()'),dkTile('shield','GSTIN / HSN check','Check a number in one tap','gchk()'),dkTile('calc','Toolbox','Calculator, GST, TDS finder, income tax, interest','tools()'),dkTile('rupee','Fees tracker','Bills to clients and what is pending','fees()'),dkTile('bell','Notices',(!VIEW?ntLine():'Notices'),'notices()'),dkTile('bal','Balance sheet','Trial Balance from Tally to balance sheet and P&L','fs()'),dkTile('bal','Final accounts','Balance sheet, P&L and Notes from your Trial Balance Excel','af()')]),
   dkGrp(ADM()&&!VIEW?'Admin':'Help and backup',[].concat(ADM()&&!VIEW?[dkTile('users','Staff &amp; access','Add staff, set permissions','staffF()')]:[]).concat([dkTile('key','Change password','Set a new login password','chpw()'),dkTile('down','Download backup','Save a copy of your data',"dl('JK-backup-'+USER+'.json',JSON.stringify(DB),'application/json')"),dkTile('help','Help','How to use each part','help()')]))].join('');
  const firstBox='<div class="dfirst"><h2>Welcome! Let\'s add your first client</h2><p>Drop a Tally export and the client, bank accounts and ledgers are set up for you.</p><div class="dfb"><button type="button" class="dprim" onclick="tlNew()">'+IC.plus+' Create client from Tally file</button><button type="button" class="g" onclick="tg(1)">Add by hand</button></div></div>';
- app.innerHTML='<i data-pg="home" hidden></i>'+(VIEW?vbar():'')+dkHero()+QLK+(false?firstBox:'<div class="dbar"><button type="button" class="dprim" onclick="tlNew()">'+IC.plus+' Create client from Tally file</button><div class="dcs">'+chips+'</div></div>')+'<div class="dgs">'+grp+'</div>'
+ app.innerHTML='<i data-pg="home" hidden></i>'+(VIEW?vbar():'')+dkHero()+QLKf()+(false?firstBox:'<div class="dbar"><button type="button" class="dprim" onclick="tlNew()">'+IC.plus+' Create client from Tally file</button><div class="dcs">'+chips+'</div></div>')+'<div class="dgs">'+grp+'</div>'
   +(ADM()&&!VIEW?stfP():'')+kdHtml()
   +(first?'':'<h2 class="dsec">'+(VIEW?E(VIEW)+'\'s clients':ADM()?'Admin\'s own clients':'Clients')+'</h2><input id="q" class="sq" aria-label="Search clients" placeholder="Search clients..." oninput="clearTimeout(window._qt);window._qt=setTimeout(cards,120)"><div id="cl" class="cg"></div>');
  if(!first)cards()}
@@ -3976,4 +3991,134 @@ async function mtLoad(force){const m=window._mt;if(!(typeof LS!='undefined'&&LS.
 
 LS.onSync=onSyncKeys;LS.onExpire=()=>{USER='';VIEW='';DB={clients:{}};sessionStorage.removeItem('jkgu');home();toast('Your session ended. Please sign in again.')};
 (async()=>{try{if(typeof hybInit=='function')await hybInit()}catch(e){}const su=sessionStorage.getItem('jkgu');let okr=!LS.on;if(su&&LS.on)okr=!!(await LS.resume()).ok;if(su&&okr&&(LS.on||su==ADMIN||U()[su])){USER=su;try{DB=JSON.parse(LS.getItem('jkg_'+su))||{clients:{}}}catch(e){DB={clients:{}}}if(!DB.clients)DB={clients:{}};afterLogin()}updTm();home()})();
-</script></body></html>
+</script><script>
+/* ===== Passwords: one shared list (everyone can see, only admin can change) + change tickets ===== */
+const PWH=['Income Tax','GST','E-Invoice','E-Way Bill','TRACES','TDS','MGST'];
+const PWS={h:'',q:'',hid:{},v:''};
+let PWC=null;
+const pwU=()=>String(USER||'').toLowerCase();
+const pwLoad=()=>{let o=null;try{o=JSON.parse(LS.getItem('pwv')||'null')}catch(e){}
+ if(!o||typeof o!='object'||Array.isArray(o))o={};
+ if(ADM()&&!PWH.some(h=>Array.isArray(o[h])&&o[h].length)&&DB&&DB.pw&&PWH.some(h=>Array.isArray(DB.pw[h])&&DB.pw[h].length)){
+  o=JSON.parse(JSON.stringify(DB.pw));try{LS.setItem('pwv',JSON.stringify(o));delete DB.pw;save()}catch(e){}}
+ PWH.forEach(h=>{if(!Array.isArray(o[h]))o[h]=[]});return o};
+const pwD=()=>PWC||(PWC=pwLoad());
+function pwPut(){if(!ADM())return false;try{LS.setItem('pwv',JSON.stringify(pwD()));return true}catch(e){alert('Could not save the passwords.');return false}}
+function pwHead(t){const x=String(t||'').toLowerCase().replace(/[^a-z]/g,'');if(!x)return'';
+ if(/mgst|maharashtra/.test(x))return'MGST';
+ if(/eway|ebill|ewb/.test(x))return'E-Way Bill';
+ if(/invoice|irp/.test(x))return'E-Invoice';
+ if(/traces/.test(x))return'TRACES';
+ if(/tds/.test(x))return'TDS';
+ if(/incometax|^it$|^itr|efiling|income/.test(x))return'Income Tax';
+ if(/gst/.test(x))return'GST';return''}
+function pwParse(sheets,cur){const out=[];let skipped=0;
+ sheets.forEach(sh=>{const R=(sh.rows||[]).map(r=>(r||[]).map(c=>String(c==null?'':c).trim())).filter(r=>r.some(c=>c));if(!R.length)return;
+  let hi=-1;for(let i=0;i<Math.min(6,R.length);i++){if(R[i].some(c=>/pass|pwd/i.test(c))){hi=i;break}}
+  let C={n:0,u:1,p:2,o:3,h:-1};
+  if(hi>=0){C={n:-1,u:-1,p:-1,o:-1,h:-1};R[hi].forEach((c,j)=>{const t=c.toLowerCase();
+    if(/pass|pwd/.test(t)){if(C.p<0)C.p=j}
+    else if(/user|login/.test(t)){if(C.u<0)C.u=j}
+    else if(/^(head|portal|type|category|site|section)$/.test(t)){if(C.h<0)C.h=j}
+    else if(/client|party|name|company|firm|holder/.test(t)){if(C.n<0)C.n=j}
+    else if(/note|remark|detail|other|hint/.test(t)){if(C.o<0)C.o=j}
+    else if(/^(id|pan|gstin|gst no|mobile|email)$/.test(t)){if(C.u<0)C.u=j}})}
+  const g=(r,k)=>C[k]>=0?(r[C[k]]||''):'';
+  R.slice(hi>=0?hi+1:0).forEach(r=>{const e={c:g(r,'n'),u:g(r,'u'),p:g(r,'p'),o:g(r,'o')};if(!e.c&&!e.u&&!e.p)return;
+   const h=pwHead(g(r,'h'))||pwHead(sh.name)||cur;if(!h){skipped++;return}e.h=h;out.push(e)})});
+ return{rows:out,skipped}}
+function pwMerge(rows){const D=pwD();let add=0,upd=0,same=0;
+ rows.forEach(e=>{const L=D[e.h],k=L.find(x=>x.c.toLowerCase()==e.c.toLowerCase()&&x.u==e.u);
+  if(!k){L.push({c:e.c,u:e.u,p:e.p,o:e.o});add++}
+  else if(k.p==e.p&&(k.o||'')==(e.o||'')){same++}
+  else{k.p=e.p;if(e.o)k.o=e.o;upd++}});
+ return{add,upd,same}}
+/* ---- tickets ---- */
+function pwTk(){const o=[];try{LS.keys().forEach(k=>{if(String(k).indexOf('pwr_'))return;try{const t=JSON.parse(LS.getItem(k));if(t&&t.u&&t.h)o.push({k,t})}catch(e){}})}catch(e){}
+ return o.filter(x=>ADM()||x.t.u==pwU()).sort((a,b)=>a.t.st==b.t.st?(a.t.t<b.t.t?1:-1):(a.t.st=='pending'?-1:1))}
+const pwPend=()=>{try{return pwTk().filter(x=>x.t.st=='pending').length}catch(e){return 0}};
+/* ---- pages ---- */
+function pw(h){if(!USER){toast('Please log in first.');return}
+ CURP='pw';sb();pgIn('pw');tg(0);PWC=null;if(typeof h=='string')PWS.h=h;PWS.q='';PWS.v='';pwDraw()}
+function pwPick(i){PWC=null;PWS.h=PWH[i]===PWS.h&&!PWS.v?'':PWH[i];PWS.q='';PWS.v='';pwDraw()}
+function pwReqs(){PWC=null;PWS.v='req';PWS.h='';pwDraw()}
+function pwBar(){if(!ADM())return'';return'<div class="pwa"><label class="pwf"><input type="file" accept=".csv,.xlsx,.xls,.txt" onchange="pwImp(this)" hidden><span class="pwbtn">Import from Excel / CSV</span></label>'
+ +'<button type="button" class="g" onclick="pwTpl()">Download template</button><button type="button" class="g" onclick="pwExp()">Export all (CSV)</button></div>'}
+function pwDraw(){if(CURP!='pw')return;const D=pwD(),h=PWS.h,n=pwPend();
+ let H='<i data-pg="pw" hidden></i><div class="pwp"><div class="pwt"><h2>Passwords</h2><small>'+(ADM()?'All portal logins in one place. Only you can change them.':'Everyone can see these passwords. To get one changed, raise a request and the admin will approve it.')+'</small></div>'
+ +'<div class="pwh">'+PWH.map((x,i)=>'<button type="button" class="pwb'+(x==h&&!PWS.v?' on':'')+'" onclick="pwPick('+i+')">'+E(x)+'<i>'+D[x].length+'</i></button>').join('')
+ +'<button type="button" class="pwb pwr'+(PWS.v=='req'?' on':'')+'" onclick="pwReqs()">'+(ADM()?'Change requests':'My requests')+(n?'<i class="pwdot">'+n+'</i>':'')+'</button></div>';
+ if(PWS.v=='req'){H+='<div id="pwl"></div>'}
+ else if(!h){H+='<div class="card pwe"><b>Choose a head above.</b>'+(ADM()?'<br><small>To bring in everything at once, import one file that has a Head column (or one sheet per head, named like the heads). Use Download template to see the format.</small>':'')+'</div>'+pwBar()}
+ else{H+='<div class="pwq"><h3>'+E(h)+' <small>('+D[h].length+')</small></h3><input id="pwq" placeholder="Search name or username" value="'+E(PWS.q)+'" oninput="PWS.q=this.value;pwList()">'+(ADM()?'<button type="button" class="pwbtn" onclick="pwEdit(-1)">+ Add</button>':'')+'</div><div id="pwl"></div>'+pwBar()}
+ H+='</div>';app.innerHTML=H;pwList()}
+function pwList(){const el=$id('pwl');if(!el)return;if(PWS.v=='req')return pwReqList(el);if(!PWS.h)return;
+ const D=pwD(),h=PWS.h,q=PWS.q.toLowerCase(),A=ADM();
+ const L=D[h].map((x,i)=>[x,i]).filter(a=>!q||(a[0].c+' '+a[0].u+' '+(a[0].o||'')).toLowerCase().includes(q)).sort((a,b)=>a[0].c.toLowerCase()<b[0].c.toLowerCase()?-1:1);
+ const pend=new Set(pwTk().filter(x=>x.t.st=='pending'&&x.t.h==h).map(x=>x.t.c.toLowerCase()+'|'+x.t.un));
+ el.innerHTML=L.length?'<div style="overflow-x:auto"><table class="pwtb"><tr><th>Client / Name</th><th>Username</th><th>Password</th><th>Note</th><th></th></tr>'
+ +L.map(a=>{const x=a[0],i=a[1],hd=PWS.hid[h+i],pd=pend.has(x.c.toLowerCase()+'|'+x.u);return'<tr><td><b>'+E(x.c)+'</b></td><td>'+E(x.u)+(x.u?' <button type="button" class="pwi" onclick="pwCopy('+i+',0)">Copy</button>':'')+'</td><td><code>'+(hd?'••••••••':E(x.p))+'</code> <button type="button" class="pwi" onclick="pwHide('+i+')">'+(hd?'Show':'Hide')+'</button><button type="button" class="pwi" onclick="pwCopy('+i+',1)">Copy</button></td><td>'+E(x.o||'')+'</td><td style="white-space:nowrap">'
+  +(A?'<button type="button" class="pwi" onclick="pwEdit('+i+')">Edit</button><button type="button" class="pwi" onclick="pwDel('+i+')">Delete</button>':(pd?'<span class="pwst p">Request pending</span>':'<button type="button" class="pwi" onclick="pwReq('+i+')">Request change</button>'))+'</td></tr>'}).join('')+'</table></div>'
+ :'<div class="card pwe"><small>'+(q?'Nothing matches your search.':'No passwords here yet.'+(A?' Use + Add or Import.':''))+'</small></div>'}
+function pwHide(i){const k=PWS.h+i;PWS.hid[k]=!PWS.hid[k];pwList()}
+function pwCopy(i,w){const x=pwD()[PWS.h][i];if(!x)return;const v=w?x.p:x.u;
+ const done=()=>toast(w?'Password copied':'Username copied');
+ if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(v).then(done,()=>pwCopy2(v,done));else pwCopy2(v,done)}
+function pwCopy2(v,done){const a=document.createElement('textarea');a.value=v;a.style.position='fixed';a.style.opacity='0';document.body.appendChild(a);a.select();try{document.execCommand('copy');done()}catch(e){}a.remove()}
+/* ---- admin: add / edit / delete ---- */
+function pwEdit(i){if(!ADM())return;const x=i>=0?pwD()[PWS.h][i]:{c:'',u:'',p:'',o:''};
+ modal('<h3>'+(i>=0?'Edit':'Add')+' · '+E(PWS.h)+'</h3><div class="pwfm"><label>Client / Name<input id="pwn" value="'+E(x.c)+'"></label><label>Username<input id="pwu" autocomplete="off" value="'+E(x.u)+'"></label><label>Password<input id="pwp" autocomplete="off" value="'+E(x.p)+'"></label><label>Note<input id="pwo" value="'+E(x.o||'')+'"></label><button type="button" onclick="pwSave('+i+')">Save</button></div>')}
+function pwSave(i){if(!ADM())return;const e={c:$id('pwn').value.trim(),u:$id('pwu').value.trim(),p:$id('pwp').value,o:$id('pwo').value.trim()};
+ if(!e.c&&!e.u){toast('Enter a name or username.');return}
+ const L=pwD()[PWS.h];if(i>=0)L[i]=e;else L.push(e);if(pwPut()){modal();pwDraw();toast('Saved')}}
+function pwDel(i){if(!ADM())return;const x=pwD()[PWS.h][i];if(!x)return;if(!confirm('Delete the '+PWS.h+' login of "'+(x.c||x.u)+'"?'))return;pwD()[PWS.h].splice(i,1);pwPut();pwDraw()}
+/* ---- staff: raise a change request ---- */
+function pwReq(i){const x=pwD()[PWS.h][i];if(!x)return;
+ modal('<h3>Request password change</h3><small>'+E(PWS.h)+' · '+E(x.c)+(x.u?' · '+E(x.u):'')+'</small><div class="pwfm"><label>New password (if you already have it)<input id="pwnp" autocomplete="off"></label><label>Reason / note<input id="pwrs" placeholder="e.g. portal asked to reset"></label><button type="button" onclick="pwReqSend('+i+')">Send to admin</button></div>')}
+function pwReqSend(i){const x=pwD()[PWS.h][i];if(!x)return;const np=$id('pwnp').value.trim(),why=$id('pwrs').value.trim();
+ if(!np&&!why){toast('Enter the new password or a reason.');return}
+ if(pwTk().some(z=>z.t.st=='pending'&&z.t.h==PWS.h&&z.t.c==x.c&&z.t.un==x.u)){toast('A request for this login is already pending.');modal();return}
+ const t={id:Date.now().toString(36),u:pwU(),h:PWS.h,c:x.c,un:x.u,np,why,st:'pending',t:new Date().toISOString()};
+ try{LS.setItem('pwr_'+pwU()+'_'+t.id,JSON.stringify(t))}catch(e){alert('Could not send the request.');return}
+ modal();toast('Request sent to the admin');pwDraw()}
+/* ---- tickets list (admin approves, staff follows status) ---- */
+function pwReqList(el){const L=pwTk(),A=ADM(),lab={pending:'Pending',approved:'Approved',rejected:'Rejected'};
+ const when=s=>{try{return new Date(s).toLocaleString('en-IN',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'})}catch(e){return''}};
+ el.innerHTML=L.length?L.map(({k,t})=>'<div class="card pwtk st-'+E(t.st)+'"><div class="pwtt"><b>'+E(t.h)+' · '+E(t.c)+'</b><span class="pwst '+(t.st=='approved'?'a':t.st=='rejected'?'r':'p')+'">'+E(lab[t.st]||t.st)+'</span></div>'
+  +'<small>'+(A?'From <b>'+E(PNAME(t.u))+'</b> · ':'')+(t.un?'Username '+E(t.un)+' · ':'')+when(t.t)+'</small>'
+  +(t.st=='pending'&&t.np?'<div>Requested new password: <code>'+E(t.np)+'</code></div>':'')+(t.why?'<div>'+E(t.why)+'</div>':'')
+  +(t.st!='pending'?'<small>'+(t.st=='approved'?'Password updated'+(t.m=='manual'?' by admin':' automatically'):'Not changed')+(t.at?' · '+when(t.at):'')+(t.note?' · '+E(t.note):'')+'</small>':'')
+  +(A&&t.st=='pending'?'<div class="pwact"><button type="button" class="pwbtn" onclick="pwAp(\''+E(k)+'\',0)">Approve &amp; apply</button><button type="button" class="g" onclick="pwAp(\''+E(k)+'\',1)">Approve with my password</button><button type="button" class="g" onclick="pwRj(\''+E(k)+'\')">Reject</button></div>':'')
+  +(A&&t.st!='pending'?'<div class="pwact"><button type="button" class="pwi" onclick="pwTkDel(\''+E(k)+'\')">Clear</button></div>':'')+'</div>').join('')
+ :'<div class="card pwe"><small>'+(A?'No change requests.':'You have not raised any requests.')+'</small></div>'}
+function pwTkGet(k){try{return JSON.parse(LS.getItem(k))}catch(e){return null}}
+function pwAp(k,manual){if(!ADM())return;const t=pwTkGet(k);if(!t||t.st!='pending')return;
+ if(manual||!t.np){modal('<h3>Set the new password</h3><small>'+E(t.h)+' · '+E(t.c)+'</small><div class="pwfm"><label>New password<input id="pwmp" autocomplete="off" value="'+E(t.np||'')+'"></label><button type="button" onclick="pwApGo(\''+E(k)+'\',1)">Approve &amp; apply</button></div>');return}
+ pwApGo(k,0)}
+function pwApGo(k,manual){if(!ADM())return;const t=pwTkGet(k);if(!t||t.st!='pending')return;
+ const np=manual?($id('pwmp').value.trim()):t.np;if(!np){toast('Enter the new password.');return}
+ const e=pwD()[t.h].find(x=>x.c.toLowerCase()==String(t.c).toLowerCase()&&x.u==t.un);
+ if(!e){alert('That login is no longer in the list, so nothing was changed.');return}
+ e.p=np;if(!pwPut())return;
+ t.st='approved';t.m=manual?'manual':'auto';t.at=new Date().toISOString();t.np='';
+ LS.setItem(k,JSON.stringify(t));modal();pwDraw();toast('Password updated')}
+function pwRj(k){if(!ADM())return;modal('<h3>Reject request</h3><div class="pwfm"><label>Reason (optional)<input id="pwrn"></label><button type="button" onclick="pwRjGo(\''+E(k)+'\')">Reject</button></div>')}
+function pwRjGo(k){if(!ADM())return;const t=pwTkGet(k);if(!t||t.st!='pending')return;t.st='rejected';t.at=new Date().toISOString();t.note=$id('pwrn').value.trim();t.np='';LS.setItem(k,JSON.stringify(t));modal();pwDraw()}
+function pwTkDel(k){if(!ADM())return;try{LS.removeItem(k)}catch(e){}pwDraw()}
+/* ---- import / export (admin) ---- */
+async function pwImp(inp){if(!ADM())return;const f=inp.files&&inp.files[0];inp.value='';if(!f)return;
+ try{let sheets;
+  if(/\.(csv|txt)$/i.test(f.name)){sheets=[{name:'',rows:csv(await f.text())}]}
+  else{const X=await bxXlsxLib();const wb=X.read(await f.arrayBuffer(),{type:'array'});sheets=wb.SheetNames.map(n=>({name:n,rows:X.utils.sheet_to_json(wb.Sheets[n],{header:1,raw:false,defval:''})}))}
+  const P=pwParse(sheets,PWS.h);if(!P.rows.length){alert(P.skipped?'I could not tell which head these belong to. Add a Head column (Income Tax, GST, E-Invoice, E-Way Bill, TRACES, TDS, MGST), name each sheet by its head, or open a head first and import there.':'No passwords were found in that file. Use Download template to see the format.');return}
+  const r=pwMerge(P.rows);pwPut();pwDraw();
+  alert('Import done.\n\nNew: '+r.add+'\nUpdated: '+r.upd+'\nAlready there: '+r.same+(P.skipped?'\nSkipped (no head): '+P.skipped:''))
+ }catch(e){alert('Could not read that file. '+(e&&e.message?e.message:''))}}
+const pwQ=v=>'"'+String(v==null?'':v).replace(/"/g,'""')+'"';
+function pwTpl(){const R=[['Head','Client','Username','Password','Note'],['Income Tax','Sample Client','ABCDE1234F','password','PAN login'],['GST','Sample Client','sampleuser','password','']];
+ dl('Passwords-template.csv','\ufeff'+R.map(r=>r.map(pwQ).join(',')).join('\r\n'),'text/csv')}
+function pwExp(){if(!ADM())return;const D=pwD(),R=[['Head','Client','Username','Password','Note']];PWH.forEach(h=>D[h].forEach(x=>R.push([h,x.c,x.u,x.p,x.o||''])));
+ dl('Passwords-'+ymd(new Date())+'.csv','\ufeff'+R.map(r=>r.map(pwQ).join(',')).join('\r\n'),'text/csv')}
+
+</script>
+</body></html>
