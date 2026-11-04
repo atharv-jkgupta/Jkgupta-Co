@@ -121,6 +121,8 @@ create or replace function public.kv_put(p_t text, p_k text, p_v text) returns j
 language plpgsql security definer set search_path = public, pg_temp as $$
 declare
   v_s jkg_sess%rowtype; v_old jsonb; v_new jsonb; v_nh text; v_ok boolean := false; v_val text := p_v;
+  v_res jsonb; v_h text; v_e jsonb; v_f text;
+  v_heads text[] := array['Income Tax','GST','E-Invoice','E-Way Bill','TRACES','TDS','MGST'];
 begin
   select * into v_s from jkg_sess s where s.t = p_t and s.exp > now();
   if not found then return jsonb_build_object('ok', false, 'err', 'session'); end if;
@@ -152,6 +154,30 @@ begin
     v_new := p_v::jsonb;
     select kv.v::jsonb into v_old from jkg_kv kv where kv.k = p_k;
     v_ok := v_old is null and (v_new ->> 'u') = v_s.u and (v_new ->> 'st') = 'pending';
+  elsif p_k = 'pwv' then
+    -- password vault: staff can only ADD new entries; existing ones are kept exactly as they are
+    v_new := p_v::jsonb;
+    if jsonb_typeof(v_new) <> 'object' then return jsonb_build_object('ok', false, 'err', 'bad'); end if;
+    select kv.v::jsonb into v_old from jkg_kv kv where kv.k = 'pwv' for update;
+    v_res := coalesce(v_old, '{}'::jsonb);
+    foreach v_h in array v_heads loop
+      if jsonb_typeof(v_new -> v_h) = 'array' then
+        for v_e in select x from jsonb_array_elements(v_new -> v_h) x loop
+          if jsonb_typeof(v_e) = 'object' and not exists (
+               select 1 from jsonb_array_elements(coalesce(v_res -> v_h, '[]'::jsonb)) o
+               where lower(coalesce(o ->> 'c','')) = lower(coalesce(v_e ->> 'c',''))
+                 and coalesce(o ->> 'u','') = coalesce(v_e ->> 'u','')) then
+            v_f := case when v_e ->> 'f' in ('Monthly','Quarterly') then v_e ->> 'f' else '' end;
+            v_res := jsonb_set(v_res, array[v_h],
+              coalesce(v_res -> v_h, '[]'::jsonb) || jsonb_build_array(jsonb_build_object(
+                'c', coalesce(v_e ->> 'c',''), 'u', coalesce(v_e ->> 'u',''), 'p', coalesce(v_e ->> 'p',''),
+                'o', coalesce(v_e ->> 'o',''), 'f', v_f)), true);
+          end if;
+        end loop;
+      end if;
+    end loop;
+    v_val := v_res::text;
+    v_ok := true;
   end if;
 
   if not v_ok then return jsonb_build_object('ok', false, 'err', 'denied'); end if;
