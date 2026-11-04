@@ -1,5 +1,5 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>JK Gupta &amp; Co</title>
-<meta name="description" content="JK Gupta &amp; Co. client accounting workspace"><meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#0f2742"><meta name="jkg-build" content="b2611041000"><script>try{var t=localStorage.getItem("jkgtheme")||(matchMedia("(prefers-color-scheme:dark)").matches?"dark":"light");document.documentElement.dataset.theme=t}catch(e){document.documentElement.dataset.theme="light"}</script><link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27%3E%3Crect width=%2764%27 height=%2764%27 rx=%2714%27 fill=%27%230f2742%27/%3E%3Ctext x=%2732%27 y=%2742%27 font-size=%2734%27 font-family=%27Georgia,serif%27 font-weight=%27700%27 text-anchor=%27middle%27 fill=%27%23e9d9ae%27%3EJK%3C/text%3E%3C/svg%3E"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:wght@500;600;700&display=swap"><style>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>JKGupta&amp;Co</title>
+<meta name="description" content="JKGupta&amp;Co client accounting workspace"><meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#0b1020"><meta name="jkg-build" content="b2611041905"><script>try{var t=localStorage.getItem("jkgtheme")||(matchMedia("(prefers-color-scheme:dark)").matches?"dark":"light");document.documentElement.dataset.theme=t}catch(e){document.documentElement.dataset.theme="light"}</script><link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns=%27http://www.w3.org/2000/svg%27%20viewBox=%270%200%2064%2064%27%3E%3Cdefs%3E%3ClinearGradient%20id=%27g%27%20x1=%270%27%20y1=%270%27%20x2=%271%27%20y2=%271%27%3E%3Cstop%20offset=%270%27%20stop-color=%27#5b4bf0%27/%3E%3Cstop%20offset=%271%27%20stop-color=%27#22b8d9%27/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect%20width=%2764%27%20height=%2764%27%20rx=%2716%27%20fill=%27url(#g)%27/%3E%3Ctext%20x=%2732%27%20y=%2743%27%20font-size=%2727%27%20font-family=%27Arial,Helvetica,sans-serif%27%20font-weight=%27800%27%20text-anchor=%27middle%27%20fill=%27#fff%27%3EJK%3C/text%3E%3C/svg%3E"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@600;700;800&display=swap" media="print" onload="this.media='all'"><noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@600;700;800&display=swap"></noscript><style>
 /* ============ tokens ============ */
 :root{--serif:'Source Serif 4',Georgia,'Times New Roman',serif;--sans:'Inter','Segoe UI',system-ui,-apple-system,Arial,sans-serif;--r:12px;--ease:cubic-bezier(.2,.7,.2,1)}
 :root,:root[data-theme=light]{color-scheme:light;
@@ -574,8 +574,264 @@ small{font-size:13.5px}
 @keyframes jrise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 @media(max-width:640px){.card,.kc,.cc,.stp{padding:14px 16px}.dh{padding:20px}input,select,textarea{font-size:16px}h2{font-size:26px}}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+/* =====================================================================
+   JKGupta&Co  UX refresh  (appended last, so it wins over older rules)
+   - new colour system (indigo / violet / cyan), Sora display font
+   - new logo lockup, new login, new dashboard
+   - speed: no backdrop blur, no fixed-attachment backgrounds, short animations
+   ===================================================================== */
+:root{--serif:'Sora','Inter','Segoe UI',system-ui,sans-serif;--sans:'Inter','Segoe UI',system-ui,-apple-system,Arial,sans-serif;--r:14px;
+ --pri:#5b4bf0;--pri2:#4a3bd6;--priink:#fff;--gold:#22b8d9;--gold2:#bff0fa;--goldbg:#e8f8fc;--link:#4a3bd6;--ring:rgba(91,75,240,.35)}
+:root,:root[data-theme=light]{
+ --bg:#f3f5fc;--bg2:#e8ecf9;--s1:#ffffff;--s2:#f8f9fe;--s3:#eef1fb;--ink:#0d1230;--mute:#5a6486;--line:#e4e8f6;--line2:#d2d9ee;
+ --navy:#15183b;--navy2:#3a3f95;
+ --ok:#0f9d6a;--okbg:#e0f6ec;--warn:#b86e00;--warnbg:#fff1d6;--bad:#d4324a;--badbg:#fde6ea;--info:#2563eb;--infobg:#e3edff;
+ --hero1:#2b21a8;--hero2:#6a3de0;--heroink:#fff;--herosub:#d8d4ff;
+ --shadow:0 1px 2px rgba(21,24,59,.04),0 8px 24px rgba(58,63,149,.08);--shadow2:0 20px 48px rgba(58,63,149,.20)}
+:root[data-theme=dark]{
+ --bg:#070a15;--bg2:#0c1122;--s1:#101627;--s2:#141b30;--s3:#1a2340;--ink:#e8ebfa;--mute:#98a3c6;--line:#212a47;--line2:#2d3961;
+ --navy:#cbd0ff;--navy2:#aab3ff;
+ --ok:#3dd598;--okbg:#0e2a20;--warn:#f2b94b;--warnbg:#2b2210;--bad:#ff7a8c;--badbg:#301218;--info:#7fa8ff;--infobg:#111e3a;
+ --hero1:#1b1a60;--hero2:#4a2aa6;--heroink:#f4f5ff;--herosub:#b4b9e6;
+ --shadow:0 1px 2px rgba(0,0,0,.35),0 10px 28px rgba(0,0,0,.40);--shadow2:0 22px 54px rgba(0,0,0,.6)}
+
+html{scroll-behavior:auto}
+body{font-family:var(--sans);letter-spacing:-.003em}
+body:not(.out){background:radial-gradient(1100px 380px at 85% -140px,color-mix(in srgb,var(--pri) 11%,transparent),transparent 72%) no-repeat,var(--bg)}
+h2{font-family:var(--serif);font-weight:700;letter-spacing:-.02em;color:var(--ink)}
+h3{color:var(--mute);letter-spacing:.14em}
+::selection{background:color-mix(in srgb,var(--pri) 30%,transparent);color:var(--ink)}
+
+/* ---------- top bar + LOGO ---------- */
+#top{height:64px;background:var(--s1);border-bottom:1px solid var(--line);backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
+#top:after{content:'';position:absolute;left:0;right:0;bottom:-1px;height:2px;background:linear-gradient(90deg,var(--pri),var(--gold) 55%,transparent);opacity:.9;pointer-events:none}
+body.out #top:after{display:none}
+.brandR{display:flex;align-items:center;gap:11px;margin:0;padding:0;line-height:1;letter-spacing:0;font:inherit}
+.brandR .bm{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;flex:none;background:linear-gradient(135deg,var(--pri),var(--gold));color:var(--priink);font:800 15px/1 var(--serif);letter-spacing:-.04em;box-shadow:0 6px 16px color-mix(in srgb,var(--pri) 38%,transparent)}
+.brandR .bt{display:flex;flex-direction:column;gap:5px;min-width:0}
+.brandR .bt b{font:800 20px/1 var(--serif);letter-spacing:-.035em;color:var(--ink);white-space:nowrap}
+.brandR .bt b i{font-style:normal;color:var(--pri);margin:0 .5px;font-weight:800}
+.brandR .bt small{display:block;margin:0;font:700 8.5px/1 var(--sans);letter-spacing:.26em;color:var(--mute);white-space:nowrap}
+:root[data-theme=dark] .brandR .bt b i{color:var(--gold)}
+button.ib{border-radius:12px;background:var(--s1);border-color:var(--line2);color:var(--ink)}
+button.ib:hover{background:var(--s3);border-color:var(--pri);color:var(--pri);box-shadow:none}
+@media(max-width:520px){.brandR .bm{width:36px;height:36px;font-size:14px}.brandR .bt b{font-size:17px}.brandR .bt small{display:none}}
+
+/* ---------- sidebar / menus / modals ---------- */
+#sb{background:var(--s1);border-right:1px solid var(--line)}
+#sb.o{box-shadow:var(--shadow2)}
+#ov{backdrop-filter:none!important;background:rgba(6,9,22,.55)}
+#md{backdrop-filter:none!important;background:rgba(6,9,22,.66)}
+#md .box{border-radius:20px;border:1px solid var(--line);box-shadow:var(--shadow2)}
+#dd{border-radius:16px;box-shadow:var(--shadow2)}
+#dd a:hover{background:color-mix(in srgb,var(--pri) 10%,var(--s1));color:var(--pri)}
+.toast{background:var(--ink);color:var(--bg);border-radius:14px}
+
+/* ---------- controls ---------- */
+button{border-radius:12px;font-weight:600}
+button:hover:not(:disabled){box-shadow:0 8px 20px color-mix(in srgb,var(--pri) 28%,transparent)}
+button.g{background:var(--s1);color:var(--ink);border:1px solid var(--line2)}
+button.g:hover:not(:disabled){background:color-mix(in srgb,var(--pri) 8%,var(--s1));border-color:var(--pri);color:var(--pri);box-shadow:none}
+input,select,textarea{border-radius:12px;border-color:var(--line2);background:var(--s1)}
+input:focus,select:focus,textarea:focus{border-color:var(--pri);box-shadow:0 0 0 4px var(--ring)}
+input[type=checkbox]{accent-color:var(--pri)}
+summary{color:var(--ink)}
+th{background:var(--s2);color:var(--mute)}
+tr:hover td{background:color-mix(in srgb,var(--pri) 5%,var(--s1))}
+.card,details,.stp,.kc,.cc{border-radius:18px;border-color:var(--line);box-shadow:var(--shadow)}
+.kc{border-top-color:var(--pri)}.kc.au{border-top-color:var(--gold)}
+.dz:hover,.dz.ov{background:color-mix(in srgb,var(--pri) 8%,var(--s1));border-color:var(--pri)}
+.tag.gold{background:color-mix(in srgb,var(--gold) 16%,var(--s1));color:var(--link)}
+.bar{background:linear-gradient(90deg,var(--pri),var(--gold))}
+
+/* ---------- dashboard ---------- */
+.dh{position:relative;overflow:hidden;border-radius:26px;padding:30px 34px;margin:4px 0 22px;color:var(--priink);
+ background:linear-gradient(118deg,color-mix(in srgb,var(--pri) 78%,#000) 0%,var(--pri) 48%,color-mix(in srgb,var(--pri) 55%,var(--gold)) 120%);
+ box-shadow:0 24px 50px -16px color-mix(in srgb,var(--pri) 55%,transparent)}
+.dh:before{content:'';position:absolute;right:-90px;top:-130px;width:380px;height:380px;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.22),transparent 68%);pointer-events:none}
+.dh:after{content:'';position:absolute;left:34%;bottom:-170px;width:340px;height:340px;border-radius:50%;background:radial-gradient(circle,color-mix(in srgb,var(--gold) 45%,transparent),transparent 68%);pointer-events:none;opacity:.7}
+.dh>*{position:relative;z-index:1}
+.dh h1{font:800 clamp(26px,4.4vw,38px)/1.15 var(--serif);letter-spacing:-.03em}
+.dhd{opacity:.85;font-size:14px;letter-spacing:.02em}
+.dn{background:var(--s1);border-radius:18px;padding:14px 22px;box-shadow:0 12px 28px rgba(0,0,0,.18)}
+.dn b{font-family:var(--serif);font-weight:800;color:var(--ink)}
+.dprim{border-radius:14px;box-shadow:0 10px 24px rgba(0,0,0,.18)}
+.dg{margin:0 0 26px;padding:20px 20px 6px;background:var(--s1);border:1px solid var(--line);border-radius:24px;box-shadow:var(--shadow);overflow:hidden}
+.dg h2{display:flex;width:auto;align-items:center;gap:10px;background:none;border:0;border-left:0;padding:0;margin:0 0 14px;font:700 12.5px/1.2 var(--sans);letter-spacing:.16em;text-transform:uppercase;color:var(--mute)}
+.dg h2:before{content:'';width:22px;height:4px;border-radius:4px;background:linear-gradient(90deg,var(--pri),var(--gold))}
+.dtg{gap:16px;grid-template-columns:repeat(auto-fill,minmax(236px,1fr))}
+.dt{position:relative;min-height:150px;padding:20px;border:1px solid var(--line);border-radius:20px;background:var(--s2);box-shadow:none;transition:transform .18s var(--ease),box-shadow .18s,border-color .18s}
+.dt:hover{transform:translateY(-4px);border-color:color-mix(in srgb,var(--pri) 55%,var(--line));box-shadow:0 18px 40px -12px color-mix(in srgb,var(--pri) 38%,transparent)}
+.dt i{width:54px;height:54px;border-radius:16px;color:var(--pri);background:linear-gradient(135deg,color-mix(in srgb,var(--pri) 16%,var(--s1)),color-mix(in srgb,var(--gold) 20%,var(--s1)));transition:background .18s,color .18s}
+.dt:hover i{background:linear-gradient(135deg,var(--pri),var(--gold));color:var(--priink)}
+.dt b{font:700 17px/1.25 var(--serif);letter-spacing:-.015em}
+.dt span{font-size:14px}
+.stats div{border-radius:18px;border-color:var(--line);padding:18px 20px}
+.stats div:before{width:100%;height:3px;bottom:auto;right:0;background:linear-gradient(90deg,var(--pri),var(--gold))}
+.stats div:nth-child(3):before{background:linear-gradient(90deg,var(--warn),var(--bad))}
+.stats div:nth-child(4):before{background:linear-gradient(90deg,var(--ok),var(--gold))}
+.stats b{font:800 34px/1.15 var(--serif);letter-spacing:-.03em;color:var(--ink)}
+.cc{padding:20px 22px}
+.cc:hover{border-color:color-mix(in srgb,var(--pri) 55%,var(--line));box-shadow:0 18px 40px -14px color-mix(in srgb,var(--pri) 38%,transparent)}
+.cc .cn{font:700 18px/1.25 var(--serif);letter-spacing:-.02em;color:var(--ink)}
+.cs{border-radius:999px}
+.mc b{color:var(--ink)}
+.sq{border-radius:14px}
+.promo{border-radius:20px;background:linear-gradient(120deg,color-mix(in srgb,var(--pri) 12%,var(--s1)),color-mix(in srgb,var(--gold) 16%,var(--s1)));border:1px solid color-mix(in srgb,var(--pri) 25%,var(--line))}
+
+
+/* the login screen has its own dark token set: re-point it at the new palette */
+body.out{--bg:#070a15;--bg2:#0c1122;--s1:#101627;--s2:#141b30;--s3:#1a2340;--ink:#e8ebfa;--mute:#98a3c6;--line:#212a47;--line2:#2d3961;
+ --navy:#cbd0ff;--navy2:#aab3ff;--pri:var(--theme-primary,#5b4bf0);--pri2:color-mix(in srgb,var(--pri) 85%,#fff);--priink:var(--theme-on-primary,#fff);
+ --gold:var(--theme-secondary,#22b8d9);--gold2:color-mix(in srgb,var(--gold) 40%,#000);--goldbg:color-mix(in srgb,var(--gold) 12%,#070a15);
+ --link:#a9b4ff;--ring:rgba(139,125,255,.45);--sigink:#fff;--sigglow:rgba(255,255,255,.2)}
+
+/* ---------- login ( body.out ) : light-weight, no fixed rings / SVG art ---------- */
+.bgart{display:none!important}
+body.out{background:#070a15!important;background-image:none!important;background-attachment:scroll!important;color:#eef0ff}
+body.out:before{display:block!important;content:'';position:fixed;inset:0;z-index:-2;pointer-events:none;-webkit-mask-image:none;mask-image:none;
+ background:radial-gradient(620px 420px at 14% 8%,color-mix(in srgb,var(--pri) 62%,transparent),transparent 70%),radial-gradient(560px 420px at 92% 18%,color-mix(in srgb,var(--gold) 40%,transparent),transparent 70%),radial-gradient(820px 520px at 50% 124%,color-mix(in srgb,var(--pri) 45%,transparent),transparent 70%)}
+body.out:after{display:block!important;content:'';position:fixed;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(rgba(255,255,255,.10) 1px,transparent 1.4px) 0 0/30px 30px;-webkit-mask-image:radial-gradient(ellipse at 50% 40%,#000 15%,transparent 72%);mask-image:radial-gradient(ellipse at 50% 40%,#000 15%,transparent 72%)}
+body.out #sb{background:rgba(10,13,28,.97);border-right:1px solid rgba(255,255,255,.08);backdrop-filter:none!important}
+.sig i{font-style:normal;color:var(--gold);margin:0 .04em}
+.intro .cta{border-radius:999px;border:0;color:var(--priink);background:linear-gradient(100deg,var(--pri),color-mix(in srgb,var(--pri) 45%,var(--gold)));box-shadow:0 14px 34px -8px color-mix(in srgb,var(--pri) 70%,transparent)}
+.lgc{backdrop-filter:none!important;border-radius:22px;border-top:3px solid var(--pri)}
+.loc{color:color-mix(in srgb,var(--gold) 80%,#fff)}
+
+/* ---------- speed ---------- */
+#app.pgin>*{animation:up .26s var(--ease) both}
+#app.pgin>*:nth-child(n){animation-delay:0s}
+.cc,.tkr,.sfr,.gxr,.hero{animation:none}
+.nxt,.lgc,#top,#sb,#ov,#md{-webkit-backdrop-filter:none}
+body{transition:none}
+@media print{.dh:before,.dh:after,body:not(.out){background:#fff!important}}
+
+body.out .brandR .bt b i{color:var(--gold)}
+body.out .brandR .bt b{color:#fff}
+.dtg{margin-bottom:14px}
+.dtg{padding:0!important;margin:0 0 14px}
+:root[data-theme=dark] .dh{background:linear-gradient(118deg,#1a1760 0%,#3a2a9c 55%,color-mix(in srgb,#3a2a9c 55%,var(--gold)) 130%);color:#fff;box-shadow:0 24px 50px -18px rgba(91,75,240,.55)}
+:root[data-theme=dark] .dh h1,:root[data-theme=dark] .dh p,:root[data-theme=dark] .dhd{color:#fff}
+
+</style><style>
+/* ===== big animated greeting ===== */
+.dh{background:linear-gradient(135deg,#1e1b6e,#4c1d95 60%,#6d28d9);color:#fff;padding:34px 30px}
+.dh .dhd{color:#e0e7ff;font-size:17px}
+.dh h1.dgreet{font:800 clamp(34px,8vw,64px)/1.08 var(--sans);margin:8px 0 6px;color:#fff;text-shadow:0 2px 14px rgba(0,0,0,.4);letter-spacing:-.5px;animation:dkPop .7s cubic-bezier(.2,1.4,.4,1) both}
+.dh .dgw{display:inline-block;white-space:nowrap}
+.dh .dgn{display:inline-block;white-space:nowrap;color:#fde68a}
+.dh .dwave{display:inline-block;white-space:nowrap;transform-origin:70% 70%;animation:dkWave 2.2s ease-in-out .8s infinite}
+.dh p{color:#e0e7ff}
+@keyframes dkPop{from{opacity:0;transform:translateY(18px) scale(.9)}to{opacity:1;transform:none}}
+@keyframes dkWave{0%,60%,100%{transform:rotate(0)}10%,30%{transform:rotate(14deg)}20%,40%{transform:rotate(-8deg)}50%{transform:rotate(10deg)}}
+@media(prefers-reduced-motion:reduce){.dh h1.dgreet,.dh .dwave{animation:none}}
+@media(max-width:420px){.dh h1.dgreet{font-size:clamp(28px,9vw,40px)}}
+
+/* hero(): same big animated greeting */
+.hero{background:linear-gradient(135deg,#1e1b6e,#4c1d95 60%,#6d28d9);padding:34px 30px}
+.hero small{color:#e0e7ff;font-size:13px;letter-spacing:.14em}
+.hero h1.dgreet{font:800 clamp(34px,8vw,64px)/1.08 var(--sans);margin:8px 0 6px;color:#fff;text-shadow:0 2px 14px rgba(0,0,0,.4);letter-spacing:-.5px;animation:dkPop .7s cubic-bezier(.2,1.4,.4,1) both}
+.hero h1.dgreet span{color:inherit}
+.hero h1.dgreet .dgn{color:#fde68a}
+.hero p{color:#e0e7ff}
+.hero .nxt{background:rgba(255,255,255,.96);color:#1e1b4b;border-radius:16px;padding:14px 20px}
+@media(prefers-reduced-motion:reduce){.hero h1.dgreet{animation:none}}
+@media(max-width:420px){.hero h1.dgreet{font-size:clamp(28px,9vw,40px)}}
+
+/* keep name + wave together; allow text column to grow */
+.dh .dhl,.hero>div:first-child{flex:1 1 380px;min-width:0}
+.dh .dn,.hero .nxt{flex:0 0 auto}
+.dh h1.dgreet,.hero h1.dgreet{font-size:clamp(32px,6vw,56px)}
+.dgn .dwave{display:inline-block}
+
+/* ===== polish v2: layout, depth, motion ===== */
+html{scroll-behavior:smooth}
+.dgs{align-items:stretch;gap:18px}
+.dg{display:flex;flex-direction:column;box-shadow:0 1px 2px rgba(15,23,42,.05),0 8px 24px -12px rgba(15,23,42,.18);transition:box-shadow .25s,transform .25s}
+.dg:hover{box-shadow:0 2px 4px rgba(15,23,42,.06),0 16px 36px -14px rgba(79,70,229,.28)}
+.dg .dtg{flex:1;align-content:start}
+/* flatter tiles: no border box inside the card */
+.dt{border:0;background:transparent;box-shadow:none;min-height:0;padding:12px;border-radius:14px;flex-direction:row;align-items:center;gap:14px}
+.dt i{flex:0 0 auto;width:48px;height:48px;border-radius:14px;box-shadow:0 6px 14px -6px rgba(79,70,229,.55);transition:transform .25s}
+.dt>div,.dt b,.dt span{min-width:0}
+.dt:hover{background:color-mix(in srgb,var(--pri) 8%,transparent);transform:translateX(3px)}
+.dt:hover i{transform:scale(1.08) rotate(-4deg)}
+.dt:active{transform:scale(.98)}
+.dtg{grid-template-columns:1fr;gap:4px;padding:10px}
+@media(min-width:900px){.dtg{grid-template-columns:repeat(auto-fit,minmax(230px,1fr))}}
+/* tile text sits beside the icon */
+.dt{display:grid;grid-template-columns:48px 1fr;column-gap:14px;row-gap:0;align-items:center}
+.dt i{grid-row:1 / span 2}
+.dt b{align-self:end}.dt span{align-self:start}
+/* section headers: stronger */
+.dg h2{font-size:18px;letter-spacing:.01em;border-left-width:5px}
+/* staggered entrance */
+@keyframes dkRise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+#app.pgin .dh,#app.pgin .hero,#app.pgin .dfirst{animation:dkRise .5s ease both}
+#app.pgin .dg{animation:dkRise .5s ease both}
+#app.pgin .dg:nth-child(1){animation-delay:.08s}#app.pgin .dg:nth-child(2){animation-delay:.16s}
+#app.pgin .dg:nth-child(3){animation-delay:.24s}#app.pgin .dg:nth-child(4){animation-delay:.32s}
+#app.still .dg,#app.still .dh,#app.still .hero,#app.still .dfirst{animation:none}
+/* primary buttons: depth and feedback */
+.dprim{box-shadow:0 8px 20px -8px rgba(79,70,229,.6);transition:transform .15s,box-shadow .15s,filter .15s}
+.dprim:hover{transform:translateY(-2px);box-shadow:0 12px 26px -8px rgba(79,70,229,.7)}
+.dprim:active{transform:scale(.97)}
+.dfirst{border-width:1px;border-color:color-mix(in srgb,var(--pri) 35%,var(--line2));box-shadow:0 10px 30px -16px rgba(79,70,229,.45)}
+/* accessible focus everywhere */
+button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid #818cf8;outline-offset:2px}
+/* deadline chips */
+.dc,.tag{transition:transform .15s}
+@media(max-width:600px){
+ .dtg{grid-template-columns:1fr;padding:6px}
+ .dt{padding:12px 10px}
+ .dh,.hero{border-radius:18px;padding:24px 20px}
+ .dg{border-radius:16px}
+}
+@media(prefers-reduced-motion:reduce){
+ html{scroll-behavior:auto}
+ #app .dg,#app .dh,#app .hero,#app .dfirst{animation:none!important}
+ .dt,.dt i,.dprim,.dg{transition:none}
+}
+
+/* ===== polish v3: sidebar, Ask AI, client pages, clutter, speed ===== */
+/* Ask AI moves to bottom-right so it never covers the sidebar; room left to scroll past it */
+#aiw{left:auto!important;right:16px!important;bottom:16px!important}
+.aib{display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,#4f46e5,#7c3aed)!important;color:#fff!important;border:0!important;box-shadow:0 10px 26px -8px rgba(79,70,229,.7)!important;transition:transform .15s,box-shadow .15s}
+.aib:before{content:'\2726';font-size:16px;line-height:1}
+.aib:hover{transform:translateY(-2px)}.aib:active{transform:scale(.96)}
+#sb{padding-bottom:110px!important}
+#app{padding-bottom:96px}
+@media(max-width:600px){#aiw{right:12px!important;bottom:12px!important}.aip{width:calc(100vw - 24px)}}
+/* sidebar: every row has an icon so text lines up */
+.li.bxl:before,.li.cl:before,.li[onclick^="tlNew"]:before{content:'';flex:none;width:19px;height:19px;background:var(--gold);-webkit-mask:var(--ic) center/contain no-repeat;mask:var(--ic) center/contain no-repeat}
+.li.bxl{--ic:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 3h9l4 4v14H6z'/%3E%3Cpath d='M14 3v5h5M9 13h6M9 17h6'/%3E%3C/svg%3E")}
+.li.cl{--ic:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='8' r='4'/%3E%3Cpath d='M4 21c1-4 4-6 8-6s7 2 8 6'/%3E%3C/svg%3E")}
+.li[onclick^="tlNew"]{--ic:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round'%3E%3Cpath d='M12 5v14M5 12h14'/%3E%3C/svg%3E")}
+.li.cl{padding-left:11px}
+#sb h3{margin-top:20px}
+/* help "i" buttons: quieter, smaller */
+.hli{width:16px;height:16px;font-size:10px;margin-left:4px;opacity:.5;transition:opacity .15s,background .15s}
+.hli:hover,.hli:focus-visible,.hli[aria-expanded=true]{opacity:1}
+/* client page: tidy accordions and cards */
+#app details{border-radius:14px;transition:box-shadow .2s}
+#app details:hover{box-shadow:0 8px 22px -14px rgba(79,70,229,.4)}
+#app details>summary{cursor:pointer;font-weight:700;display:flex;align-items:center;gap:10px;list-style:none}
+#app details>summary::-webkit-details-marker{display:none}
+#app details>summary:before{content:'';flex:none;width:8px;height:8px;border-right:2px solid var(--pri);border-bottom:2px solid var(--pri);transform:rotate(-45deg);transition:transform .2s}
+#app details[open]>summary:before{transform:rotate(45deg)}
+#app .bk2{box-shadow:0 8px 22px -14px rgba(15,23,42,.35)}
+.dfirst{position:relative;overflow:hidden;padding-left:34px}
+.dfirst:before{content:'';position:absolute;left:0;top:0;bottom:0;width:6px;background:linear-gradient(#6366f1,#06b6d4)}
+.dfirst h2{font-size:26px}
+/* speed: skip painting cards that are off-screen */
+.dg,.dfirst{content-visibility:auto;contain-intrinsic-size:auto 260px}
+/* AI quick buttons */
+.aiq{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0 0}
+.aiq button{font:600 13px var(--sans);padding:8px 12px;border-radius:999px;border:1px solid var(--line2);background:var(--s1);color:var(--ink);cursor:pointer;transition:background .15s,transform .15s}
+.aiq button:hover{background:color-mix(in srgb,var(--pri) 12%,var(--s1));transform:translateY(-1px)}
 </style></head><body class="out">
-<div id="top"><div class="tl"><button id="mb" class="ib" onclick="tg()" aria-label="Menu">&#9776;</button><div class="brandR" onclick="logo()" title="JK Gupta &amp; Co.">JK<span>&amp;</span>CO.<small>CHARTERED ACCOUNTANTS</small></div></div><div class="tr"><span id="sv"></span><button id="tm" class="ib" onclick="theme()" aria-label="Theme"></button><button id="dm" class="ib" onclick="dm(event)" aria-label="More">&#8942;</button></div></div>
+<div id="top"><div class="tl"><button id="mb" class="ib" onclick="tg()" aria-label="Menu">&#9776;</button><div class="brandR" onclick="logo()" title="JKGupta&amp;Co"><div class="bm">JK</div><div class="bt"><b>JKGupta<i>&amp;</i>Co</b><small>CHARTERED ACCOUNTANTS</small></div></div></div><div class="tr"><span id="sv"></span><button id="tm" class="ib" onclick="theme()" aria-label="Theme"></button><button id="dm" class="ib" onclick="dm(event)" aria-label="More">&#8942;</button></div></div>
 <div id="dd"></div><div id="md"></div><input type="file" id="lb" accept=".json,application/json,text/plain,*/*" onchange="imp(this)" hidden>
 <aside id="sb"></aside><div id="ov" onclick="tg(0)"></div><main id="app"><div class="boot">Loading...</div></main><datalist id="ll"></datalist>
 <script defer src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
@@ -898,7 +1154,7 @@ function cards(){const q=(document.getElementById('q')||{value:''}).value.toLowe
   document.getElementById('cl').innerHTML=h||'<p><i>No clients to show. Add one from the menu ☰.</i></p>'}
 function home(){S={};window.onscroll=null;sb();dls();
  document.body.classList.toggle('dk',!USER);document.body.classList.toggle('bgon',!USER);
- if(!USER){app.innerHTML='<div class="intro"><div class="sig" onclick="replay()" title="Click to replay">JK Gupta &amp; Co.</div><div class="loc">CHARTERED ACCOUNTANTS</div><button class="cta" onclick="tg(1)">LOGIN</button></div>'+BG;return}
+ if(!USER){app.innerHTML='<div class="intro"><div class="sig" onclick="replay()" title="Click to replay">JKGupta<i>&amp;</i>Co</div><div class="loc">CHARTERED ACCOUNTANTS</div><button class="cta" onclick="tg(1)">LOGIN</button></div>'+BG;return}
  const N=Object.keys(DB.clients);let A=0,O=0,P=0;N.forEach(n=>{const c=DB.clients[n];P+=c.pending||0;c.accounts.forEach(a=>{A++;const d=days(a.lastImport);if(d==null||d>30)O++})});
  app.innerHTML=(VIEW?vbar():'')+hero()+'<div class="stats hs"><div><b>'+N.length+'</b>Clients</div><div><b>'+A+'</b>Bank accounts</div><div><b class="'+(O?'w':'')+'">'+O+'</b>Need import (30+ days)</div><div><b>'+P+'</b>Pending entries</div></div>'+'<div class="promo" onclick="loop()"><b>⚡ JK Loop</b><span>Upload a bank statement (PDF or Excel) and get Tally XML in a minute. Free, no credits.</span><button>Open →</button></div>'+(ADM()&&!VIEW?stfP():'')+kdHtml()+'<h3>'+(VIEW?E(VIEW)+'\'s clients':ADM()?'Admin\'s own clients':'Clients')+'</h3><input id="q" class="sq" placeholder="Search clients…" oninput="clearTimeout(window._qt);window._qt=setTimeout(cards,120)"><div id="cl" class="cg"></div>';cards()}
 
@@ -915,7 +1171,7 @@ const dPill=n=>'<b class="dp '+(n<=3?'r':n<=10?'a':'g')+'">'+(n==0?'Today':n==1?
 function kdHtml(){const K=kdata(),kc=(c,h,L)=>'<div class="kc '+c+'"><h3>'+h+'</h3>'+L.map(r=>'<div class="r"><span>'+E(r[1])+'<i>'+dFmt(r[0])+(r[2]?' · '+E(r[2]):'')+'</i></span>'+dPill(r[3])+'</div>').join('')+'</div>';
  return '<div class="kd">'+kc('','GST and monthly dues',K.G)+kc('au','Audit and income tax',K.T)+kc('fe','Festivals and holidays',K.Z)+'</div><small style="color:#6b7a8f">Dates checked on 18 Oct 2026. Extensions are shown where announced. Festival dates can differ by a day by region.</small>'}
 function hero(){const K=kdata(),h=new Date().getHours(),g=h<12?'Good morning':h<17?'Good afternoon':'Good evening',N=[...K.G,...K.T].sort((a,b)=>a[3]-b[3])[0];
- return '<div class="hero"><div><small>'+K.t.toLocaleString('en-IN',{weekday:'long',day:'numeric',month:'long',year:'numeric'})+'</small><h1>'+g+(USER?', '+E(PNAME(VIEW?'Admin':ADM()?'Admin':USER)):'')+'</h1><p>JK Gupta <span style="color:#e3b95a">&amp;</span> Co. · Chartered Accountants</p></div>'+(N?'<div class="nxt"><small>Next deadline</small><b>'+N[3]+'</b>'+(N[3]==1?'day':'days')+'<div>'+E(N[1])+' · '+dFmt(N[0])+'</div></div>':'')+'</div>'}
+ return '<div class="hero"><div><small>'+K.t.toLocaleString('en-IN',{weekday:'long',day:'numeric',month:'long',year:'numeric'})+'</small><h1 class="dgreet"><span class="dgw">'+g+(USER?',':'')+'</span>'+(USER?' <span class="dgn">'+E(PNAME(VIEW?'Admin':ADM()?'Admin':USER))+' <span class="dwave" aria-hidden="true">\u{1F44B}</span></span>':'<span class="dgn"><span class="dwave" aria-hidden="true">\u{1F44B}</span></span>')+'</h1><p>JK Gupta <span style="color:#e3b95a">&amp;</span> Co. · Chartered Accountants</p></div>'+(N?'<div class="nxt"><small>Next deadline</small><b>'+N[3]+'</b>'+(N[3]==1?'day':'days')+'<div>'+E(N[1])+' · '+dFmt(N[0])+'</div></div>':'')+'</div>'}
 
 const lk=s=>String(s||'').trim().toLowerCase();
 function mvl(){const c=C(),a=c.accounts[S.a],b=lk(a.ledger),V=S.T.filter(t=>t.l&&!t.skip&&!t.pend&&!t.out&&!t.dup);if(!c.ledgers.length)return{m:[],V,none:1};
@@ -1166,7 +1422,7 @@ function gRead(){const f=document.getElementById('gf').files[0];if(!f)return gFa
  {const c0=C();if(brNames(c0).length>1&&!confirm('This file will use the ledgers of branch "'+brAct(c0)+'". Is that right?\n\nPress Cancel to pick another branch first.'))return}
  const g=C().gs={out:v('g1').trim()||'OUTPUT',inp:v('g2').trim()||'INPUT',co:v('g3').trim()};save();const isC=/\.csv$/i.test(f.name),rd=new FileReader();
  rd.onload=async()=>{try{const sh=isC?[{name:f.name.replace(/\.csv$/i,''),rows:csv(rd.result)}]:await xlAll(rd.result);gStart(sh,g)}catch(e){gFail('The file could not be opened: '+e.message,FIX.xls)}};isC?rd.readAsText(f):rd.readAsArrayBuffer(f)}
-/* PATCH b2611041000: some 2B files have a Rate column inserted in the DATA without a heading, so every heading sits one column
+/* PATCH b2611041905: some 2B files have a Rate column inserted in the DATA without a heading, so every heading sits one column
    to the left of its numbers (Taxable Value then holds 18, Tax holds the taxable value ...). Every bill then fails with NO GST RATE FOUND.
    Detect it from the VALUES (rate-like, and tax / taxable = that rate on the next columns) and insert the missing 'Rate' heading. */
 function jkRealign(rows){try{
@@ -1423,7 +1679,7 @@ function PNAME(n){return String(n||'').replace(/[._-]+/g,' ').trim().replace(/(^
    JK Gupta & Co. - interface, client tracker, attendance, staff control
    (added on top of the original program; everything above is unchanged)
    ==================================================================== */
-const BUILD='b2611041000';
+const BUILD='b2611041905';
 let CURP='';
 const $id=i=>document.getElementById(i);
 const jkP2=n=>String(n).padStart(2,'0');
@@ -1457,7 +1713,7 @@ const IC={
 /* ---------------- theme ---------------- */
 function updTm(){const b=$id('tm');if(!b)return;const d=document.documentElement.dataset.theme==='dark';b.innerHTML=d?IC.sun:IC.moon;b.title=d?'Switch to light mode':'Switch to dark mode';b.setAttribute('aria-label',b.title)}
 function theme(t){const h=document.documentElement;t=t||(h.dataset.theme==='dark'?'light':'dark');h.dataset.theme=t;try{NATIVE.setItem('jkgtheme',t)}catch(e){}
- const m=document.querySelector('meta[name=theme-color]');if(m)m.content=t==='dark'?'#0b1017':'#0f2742';updTm()}
+ const m=document.querySelector('meta[name=theme-color]');if(m)m.content=t==='dark'?'#070a15':'#ffffff';updTm()}
 
 /* ---------------- small helpers ---------------- */
 function toast(msg,btn,fn,ms){let c=$id('toasts');if(!c){c=document.createElement('div');c.id='toasts';document.body.appendChild(c)}
@@ -1465,7 +1721,7 @@ function toast(msg,btn,fn,ms){let c=$id('toasts');if(!c){c=document.createElemen
  if(btn)t.querySelector('button').onclick=()=>{try{fn&&fn()}finally{t.remove()}};c.appendChild(t);if(ms!==0)setTimeout(()=>t.remove(),ms||4500);return t}
 let ATI=0;
 function pgIn(n){if(typeof mhHide=='function')mhHide(n);clearInterval(ATI);const same=app.dataset.v===n;app.dataset.v=n||'';app.classList.toggle('still',same);
- if(!same){app.classList.remove('pgin');void app.offsetWidth;app.classList.add('pgin')}return same}
+ if(!same){try{window.scrollTo({top:0,left:0,behavior:'instant'});document.documentElement.style.scrollBehavior='auto';document.documentElement.scrollTop=0;document.body.scrollTop=0;app.scrollTop=0}catch(e){}app.classList.remove('pgin');void app.offsetWidth;app.classList.add('pgin')}return same}
 function countUp(root){if(matchMedia('(prefers-reduced-motion:reduce)').matches)return;(root||app).querySelectorAll('[data-n]').forEach(e=>{const to=+e.dataset.n;if(!(to>0))return;const t0=performance.now();
  const f=t=>{const k=Math.min(1,(t-t0)/700);e.textContent=Math.round(to*(1-Math.pow(1-k,3)));if(k<1)requestAnimationFrame(f)};requestAnimationFrame(f)})}
 const curPg=()=>{const f=app.firstElementChild;return f&&f.dataset&&f.dataset.pg||''};
@@ -1509,7 +1765,7 @@ async function login(){const u=v('lu').trim().toLowerCase(),p=v('lp'),e=$id('le'
  DB=d&&d.clients?d:{clients:{}};Object.values(DB.clients).forEach(fixN);save();tg(0);afterLogin();home()}
 function afterLogin(){try{tkSync()}catch(e){}verCheck()}
 function loginPage(){const seen=sessionStorage.getItem('jkgseen');try{sessionStorage.setItem('jkgseen','1')}catch(e){}
- app.innerHTML='<div class="lg intro'+(seen?' fast':'')+'" data-pg="login"><div class="sig" onclick="replay()" title="Click to replay">JK Gupta &amp; Co.</div><div class="loc">CHARTERED ACCOUNTANTS</div><button class="cta" onclick="loginGo()">LOGIN</button></div>'+BG;
+ app.innerHTML='<div class="lg intro'+(seen?' fast':'')+'" data-pg="login"><div class="sig" onclick="replay()" title="Click to replay">JKGupta<i>&amp;</i>Co</div><div class="loc">CHARTERED ACCOUNTANTS</div><button class="cta" onclick="loginGo()">LOGIN</button></div>'+BG;
  app.dataset.v='login';clearTimeout(loginPage.t);
  }
 function loginGo(){if(innerWidth>900)$id('sb').classList.add('o');else tg(1);setTimeout(()=>{const x=$id('lu');if(x)x.focus()},260)}
@@ -2389,7 +2645,7 @@ const TRA=['placeholder','title','aria-label'];
 function trAttrs(root){root.querySelectorAll('['+TRA.join('],[')+']').forEach(e=>TRA.forEach(a=>{const v=e.getAttribute(a);if(v==null)return;const k='data-o-'+a,o=e.getAttribute(k);
  if(isHi()){if(o==null){const h=HI[v.trim()];if(h){e.setAttribute(k,v);e.setAttribute(a,h)}}}else if(o!=null){e.setAttribute(a,o);e.removeAttribute(k)}}))}
 let TRB=0;
-function trAll(root){root=root||document.body;if(TRB)return;TRB=1;try{const w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT);let n;const L=[];while(n=w.nextNode())L.push(n);L.forEach(trNode);trAttrs(root);hlpAttach(root)}finally{TRB=0}}
+function trAll(root){root=root||document.body;if(TRB)return;if(isHi())window._trHi=1;if(!window._trHi){TRB=1;try{hlpAttach(root)}finally{TRB=0}return}TRB=1;try{const w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT);let n;const L=[];while(n=w.nextNode())L.push(n);L.forEach(trNode);trAttrs(root);hlpAttach(root)}finally{TRB=0}}
 let TRT=0;const TRO2=new MutationObserver(rs=>{if(TRB||TRT)return;if(!rs.some(r=>r.type=='childList'?(r.addedNodes.length||r.removedNodes.length):!(r.target.parentNode&&r.target.parentNode.id=='clk')))return;TRT=setTimeout(()=>{TRT=0;trAll()},150)});
 function lngSet(v){LNG.set(v);document.documentElement.lang=v;lngBtn();trAll();toast(v=='hi'?'भाषा: हिन्दी':'Language: English')}
 function lngBtn(){const b=document.getElementById('lgb');if(b){b.textContent=isHi()?'EN':'हिं';b.title=isHi()?'Switch to English':'हिन्दी में बदलें';b.setAttribute('aria-label',b.title)}}
@@ -2478,32 +2734,32 @@ function xmlSafe(t){t=String(t).replace(/[\u0000-\u0008\u000b\u000c\u000e-\u001f
    THEMES (5, random on load, switcher top right) + FAQ HELP WIDGET
    ==================================================================== */
 const THEMES=[
- {id:'emerald',name:'Emerald Pro',primary:'#10b981',onPrimary:'#04281c',secondary:'#34d399',dot:'rgba(16,185,129,0.18)',titles:['GST Reco Studio','TaxSync Pro']},
- {id:'navy-gold',name:'Navy & Gold',primary:'#0f172a',onPrimary:'#ffffff',secondary:'#f59e0b',dot:'rgba(245,158,11,0.18)',titles:['GST Hub','RecoFlow']},
- {id:'charcoal-mint',name:'Charcoal & Mint',primary:'#1f2937',onPrimary:'#ffffff',secondary:'#6ee7b7',dot:'rgba(110,231,183,0.18)',titles:['GST Match','Smart Reconciler']},
- {id:'purple',name:'Purple',primary:'#7c3aed',onPrimary:'#ffffff',secondary:'#a78bfa',dot:'rgba(124,58,237,0.16)',titles:['TaxSync','GST Matcher']},
- {id:'orange-slate',name:'Orange Slate',primary:'#f97316',onPrimary:'#2a1204',secondary:'#475569',dot:'rgba(249,115,22,0.18)',titles:['Reco Pro','GST Reconciler']}];
+ {id:'aurora',name:'Aurora',primary:'#5b4bf0',onPrimary:'#ffffff',secondary:'#22b8d9',dot:'rgba(91,75,240,0.20)',titles:['GST Reco Studio','TaxSync Pro']},
+ {id:'ocean',name:'Ocean',primary:'#0a6fd1',onPrimary:'#ffffff',secondary:'#f5a524',dot:'rgba(10,111,209,0.20)',titles:['GST Hub','RecoFlow']},
+ {id:'emerald',name:'Emerald',primary:'#0b9a6a',onPrimary:'#ffffff',secondary:'#f2b632',dot:'rgba(11,154,106,0.20)',titles:['GST Match','Smart Reconciler']},
+ {id:'royal',name:'Royal Violet',primary:'#8b3df0',onPrimary:'#ffffff',secondary:'#f472b6',dot:'rgba(139,61,240,0.20)',titles:['TaxSync','GST Matcher']},
+ {id:'ruby',name:'Ruby',primary:'#d6304a',onPrimary:'#ffffff',secondary:'#6366f1',dot:'rgba(214,48,74,0.20)',titles:['Reco Pro','GST Reconciler']}];
 const UPLOAD_TXT=['Drop your Tally Excel here','Upload Sales Register',"Let's match your bills",'Bring your GST files'];
 const SUCCESS_TXT=['{n} invoices decoded!','Reco ready!','Files matched!'];
 const thPick=a=>a[Math.floor(Math.random()*a.length)];
-let TH=THEMES[1],RCT={title:'Reco',upload:UPLOAD_TXT[0],success:SUCCESS_TXT[0]};
+let TH=THEMES[0],RCT={title:'Reco',upload:UPLOAD_TXT[0],success:SUCCESS_TXT[0]};
 const rcTitle=()=>RCT.title;
 const thLum=h=>{const c=[1,3,5].map(i=>parseInt(h.slice(i,i+2),16)/255).map(v=>v<=.03928?v/12.92:Math.pow((v+.055)/1.055,2.4));return .2126*c[0]+.7152*c[1]+.0722*c[2]};
 function thMix(a,b,t){const x=h=>[1,3,5].map(i=>parseInt(h.slice(i,i+2),16));const A=x(a),B=x(b);return '#'+A.map((v,i)=>Math.round(v+(B[i]-v)*t).toString(16).padStart(2,'0')).join('')}
 function applyTheme(t){TH=t||TH;const s=document.documentElement.style,dark=document.documentElement.dataset.theme==='dark';
  let pri=TH.primary,ink=TH.onPrimary,link=TH.primary;
- if(dark&&thLum(pri)<0.12){pri=TH.secondary;ink=thLum(pri)>.35?'#111827':'#ffffff'}     /* dark colours would vanish on a dark page */
+ if(dark&&thLum(pri)<0.2){pri=thMix(pri,'#ffffff',.38);ink=thLum(pri)>.22?'#0b1020':'#ffffff'}     /* dark colours would vanish on a dark page */
  link=dark?(thLum(pri)<.25?thMix(pri,'#ffffff',.55):pri):(thLum(pri)>.45?thMix(pri,'#000000',.45):pri);
  const set=(k,v)=>s.setProperty(k,v);
  set('--pri',pri);set('--pri2',thMix(pri,dark?'#ffffff':'#000000',.2));set('--priink',ink);set('--link',link);
  set('--gold',TH.secondary);set('--gold2',thMix(TH.secondary,dark?'#000000':'#ffffff',.6));set('--goldbg',thMix(TH.secondary,dark?'#000000':'#ffffff',.88));set('--ring',TH.dot.replace(/[\d.]+\)$/,'.45)'));
  set('--theme-primary',pri);set('--theme-on-primary',ink);set('--theme-secondary',TH.secondary);set('--theme-dot',TH.dot);set('--theme-dots','radial-gradient('+TH.dot+' 1.2px, transparent 1.2px)');
  if(typeof dkFix=='function')dkFix(dark);const b=document.getElementById('thb');if(b){b.title='Colour theme: '+TH.name+' (click for next)';b.setAttribute('aria-label',b.title)}}
-function thNext(){applyTheme(THEMES[(THEMES.findIndex(x=>x.id===TH.id)+1)%THEMES.length]);RCT.title=thPick(TH.titles);if(CURP=='reco'&&typeof recoPage=='function')recoPage(true);toast('Theme: '+TH.name)}
+function thNext(){applyTheme(THEMES[(THEMES.findIndex(x=>x.id===TH.id)+1)%THEMES.length]);try{localStorage.setItem('jkgpal',TH.id)}catch(e){}RCT.title=thPick(TH.titles);if(CURP=='reco'&&typeof recoPage=='function')recoPage(true);toast('Theme: '+TH.name)}
 function updTm(){const b=$id('tm');if(!b)return;const d=document.documentElement.dataset.theme==='dark';b.innerHTML=d?IC.sun:IC.moon;b.title=d?'Switch to light mode':'Switch to dark mode';b.setAttribute('aria-label',b.title);applyTheme()}
 function thInit(){const tr=document.querySelector('#top .tr');if(tr&&!document.getElementById('thb')){const b=document.createElement('button');b.id='thb';b.className='ib';b.type='button';b.onclick=thNext;b.innerHTML='<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a9 9 0 1 0 0 18c1.1 0 1.6-.8 1.3-1.7-.4-1 .2-2.3 1.4-2.3H17a4 4 0 0 0 4-4C21 6.6 17 3 12 3z"/><circle cx="7.5" cy="11" r="1"/><circle cx="10.5" cy="7" r="1"/><circle cx="15" cy="7.5" r="1"/></svg>';tr.insertBefore(b,document.getElementById('lgb')||document.getElementById('tm'))}
  /* a fixed first look, then one random theme picked after the page is up */
- applyTheme(THEMES[1]);const t=thPick(THEMES);RCT={title:thPick(t.titles),upload:thPick(UPLOAD_TXT),success:thPick(SUCCESS_TXT)};applyTheme(t)}
+ let t=THEMES[0];try{t=THEMES.find(x=>x.id===localStorage.getItem('jkgpal'))||t}catch(e){}RCT={title:thPick(t.titles),upload:thPick(UPLOAD_TXT),success:thPick(SUCCESS_TXT)};applyTheme(t)}
 setTimeout(thInit,0);
 
 /* ---------- built-in FAQ helper (no AI, no network) ---------- */
@@ -2535,6 +2791,8 @@ try{AIMSG=JSON.parse(sessionStorage.getItem('jkai')||'[]')}catch(e){AIMSG=[]}
 function aiFmt(t){return E(t).replace(/\*\*([^*\n]+)\*\*/g,'<b>$1</b>')}
 function aiSave(){try{sessionStorage.setItem('jkai',JSON.stringify(AIMSG.slice(-30)))}catch(e){}}
 function aiCopy(i){const t=(AIMSG[i]||{}).content||'';let ok=false;try{if(navigator.clipboard&&window.isSecureContext){navigator.clipboard.writeText(t);ok=true}}catch(e){}if(!ok)ok=gCopyFb(t);toast(ok?'Copied':'Copy not available here')}
+const AIQ=[['Client reminder','Write a short, polite WhatsApp message reminding a client to send the pending documents (bank statements and purchase/sales bills) so we can file their GST return on time.'],['Explain a notice','Explain in simple words what this notice means and what to do next: '],['GST due dates','What are the usual monthly GST due dates for GSTR-1 and GSTR-3B? Remind me to verify on the portal.'],['Amount in words','Write this amount in Indian rupees in words: '],['Email draft','Draft a short professional email to a client about: ']];
+function aiQuick(n){const q=AIQ[n];if(!q)return;const i=document.getElementById('aii');if(!i)return;i.value=q[1];i.focus();try{i.setSelectionRange(i.value.length,i.value.length)}catch(e){}}
 function aiNew(){AIMSG=[];AIERR='';aiSave();aiDraw(1)}
 async function aiSend(){const i=document.getElementById('aii'),q=((i&&i.value)||'').trim();if(!q||AIBUSY)return;
  AIMSG.push({role:'user',content:q});AIERR='';AIBUSY=1;aiSave();aiDraw(1);
@@ -2549,7 +2807,7 @@ function aiDraw(open){let w=document.getElementById('aiw');if(!w){w=document.cre
  if(!o){w.innerHTML='<button class="aib" onclick="aiDraw(1)" aria-label="Ask AI">Ask AI</button>';return}
  const keep=(document.getElementById('aii')||{}).value||'';
  w.innerHTML='<div class="aip" role="dialog" aria-label="AI Assistant"><div class="aih"><b>AI Assistant</b><span><button onclick="aiNew()" title="Start a new chat">New chat</button><button onclick="document.getElementById(\'aiw\').dataset.o=0;aiDraw()" aria-label="Close">×</button></span></div>'
- +'<div class="aim" id="aim">'+(AIMSG.length?'':'<div class="aig bot">Hi! Ask me anything: a message or email to a client, a quick calculation, GST, income tax, Tally, Excel or a computer problem.</div>')
+ +'<div class="aim" id="aim">'+(AIMSG.length?'':'<div class="aig bot">Hi! Ask me anything: a message or email to a client, a quick calculation, GST, income tax, Tally, Excel or a computer problem.</div><div class="aiq">'+AIQ.map((q,n)=>'<button type="button" onclick="aiQuick('+n+')">'+E(q[0])+'</button>').join('')+'</div>')
  +AIMSG.map((m,k)=>'<div class="aig '+(m.role=='user'?'me':'bot')+'">'+aiFmt(m.content)+(m.role=='user'?'':'<button class="aic" onclick="aiCopy('+k+')">Copy</button>')+'</div>').join('')
  +(AIBUSY?'<div class="aig bot aiw2">Thinking…</div>':'')+(AIERR?'<div class="aig err">'+E(AIERR)+'</div>':'')+'</div>'
  +'<div class="aif"><textarea id="aii" rows="2" placeholder="Type your question… (Enter to send)" onkeydown="if(event.key===\'Enter\'&&!event.shiftKey){event.preventDefault();aiSend()}">'+E(keep)+'</textarea><button onclick="aiSend()"'+(AIBUSY?' disabled':'')+'>Send</button></div></div>';
@@ -2901,7 +3159,7 @@ function bxDraw(){if(CURP!='bx')return;const d=bxDb(),s=bxCur();
  h+='<div class="card"><b>Sheet</b><div class="bxr"><select id="bxs" onchange="bxPick(this.value)">'+(d.sheets.length?'':'<option value="">No sheet yet</option>')+d.sheets.map(x=>'<option value="'+E(x.id)+'"'+(x.id==d.cur?' selected':'')+'>'+E(x.company)+(x.kind=='purchase'?' · PURCHASE':'')+' · '+E((x.month||'').slice(0,7))+' ('+x.bills.length+' bills)</option>').join('')+'</select><button onclick="bxNew()">New sheet</button><label class="bxf">Continue from an Excel I made earlier<input type="file" accept=".xlsx,.xls" onchange="bxCont(this.files[0]);this.value=\'\'"></label>'+(s?'<button class="g" onclick="bxDelSheet()">Delete sheet</button>':'')+'</div></div>';
  if(!s)h+='<div class="card">Start with <b>New sheet</b> (company name, GSTIN and month), or continue a sheet from an Excel file you made earlier.</div>';
  else{const f=s.bills.reduce((a,b)=>{const z=bxFig(b);return[a[0]+z[0],a[1]+z[1]+z[2]+z[3],a[2]+z[4]]},[0,0,0]);
-  h+='<div class="card"><b>'+E(s.company)+'</b> · '+E(s.gstin)+' · '+E((s.month||'').slice(0,7))+'<div class="bxs"><span>Bills <b>'+s.bills.length+'</b></span><span>Taxable <b>₹'+bxMoney(f[0])+'</b></span><span>GST <b>₹'+bxMoney(f[1])+'</b></span><span>Total <b>₹'+bxMoney(f[2])+'</b></span></div><div class="bxr"><label class="bxf">Excel format <select onchange="bxFmt(this.value)"><option value="india"'+(s.fmt=='si'?'':' selected')+'>INDIA TRADING layout</option><option value="si"'+(s.fmt=='si'?' selected':'')+'>SI No layout (Bill No, Date, Party, GSTIN, HSN, rates, amounts)</option></select></label> <button onclick="bxDown()"'+(s.bills.length?'':' disabled')+'>Download Excel</button><button class="g" onclick="bxList()">See bills in this sheet</button> <button class="g" onclick="bxDedupe()">Remove repeat bills</button><button class="g" onclick="bxSet()">Change company / month</button></div></div>';
+  h+='<div class="card"><b>'+E(s.company)+'</b> · '+E(s.gstin)+' · '+E((s.month||'').slice(0,7))+'<div class="bxs"><span>Bills <b>'+s.bills.length+'</b></span><span>Taxable <b>₹'+bxMoney(f[0])+'</b></span><span>GST <b>₹'+bxMoney(f[1])+'</b></span><span>Total <b>₹'+bxMoney(f[2])+'</b></span></div><div class="bxr"><button onclick="bxDown()"'+(s.bills.length?'':' disabled')+'>Download Excel</button><button class="g" onclick="bxList()">See bills in this sheet</button> <button class="g" onclick="bxDedupe()">Remove repeat bills</button><button class="g" onclick="bxSet()">Change company / month</button></div></div>';
   h+='<div class="card"><b>Add bills</b><p style="margin:6px 0">Choose one or many files. Excel bills are read exactly; PDF and photo bills are read from their text, so check them below.</p><input type="file" id="bxin" multiple accept=".xlsx,.xls,.csv,.pdf,.png,.jpg,.jpeg,.webp" onchange="bxAdd(this.files)"><div id="bxmsg" class="bxm">'+(BXBUSY?'Reading…':'')+'</div></div>'}
  if(BXW.length)h+='<div class="card bxw"><b>Please check</b>'+BXW.map(w=>'<div class="bxwi"><b>'+E(w.bill)+'</b> '+E(w.party||'')+': '+E(w.problem)+'<br><small>What to do: '+E(w.fix)+'</small></div>').join('')+'</div>';
  BXP.forEach((b,i)=>h+=bxCard(b,i));
@@ -2929,7 +3187,7 @@ async function bxCont(f){if(!f)return;try{const s=await bxReadSheet(f);if(!s.bil
 async function bxAdd(files){const s=bxCur();if(!s||!files.length)return;files=[...files];BXBUSY=1;const me=$id('bxmsg');
  for(let k=0;k<files.length;k++){const f=files[k];if(me)me.textContent='Reading '+(k+1)+' of '+files.length+': '+f.name;
   try{const grp=await bxFileBills(f),list=grp||[{rows:await bxFileRows(f),pg:null}];
-   for(const gi of list){const rows=gi.rows,sr=f.name+(gi.pg?' (page '+gi.pg.join('-')+')':'');let b=bxEinv(rows,s.gstin,s)||bxFromRows(rows,s.gstin,s.company);b.src=sr;b.rows=rows;
+   for(const gi of list){const rows=gi.rows,sr=f.name+(gi.pg?' (page '+gi.pg.join('-')+')':'');let b=bxFromRows(rows,s.gstin,s.company);b.src=sr;b.rows=rows;
     if(!b.items.length||!b.party){const a=await bxAi(rows,s);if(a){a.src=sr;a.rows=rows;b=a}}
     BXP.push(b)}
    if(grp&&me)me.textContent='This file has '+grp.length+' bills (one per page group).'}
@@ -2937,7 +3195,7 @@ async function bxAdd(files){const s=bxCur();if(!s||!files.length)return;files=[.
  BXBUSY=0;bxDraw()}
 async function bxAi1(i){const s=bxCur(),b=BXP[i];if(!b.rows)return alert('There is no text to read for this bill.');if(!(LS.on&&LS.token))return alert('The AI works only when you are signed in on the office server, and the admin has set it up.');
  const a=await bxAi(b.rows,s);if(!a)return alert('The AI could not read this bill (it may not be set up yet). Please type the details in.');a.src=b.src;a.rows=b.rows;BXP[i]=a;bxDraw()}
-function bxClean(b){return{kind:b.kind=='purchase'?'purchase':'sales',date:bxDate(b.date)||b.date||'',no:bxC(b.no),party:bxC(b.party),gstin:bxC(b.gstin).toUpperCase(),printed_total:b.printed_total==null?null:b.printed_total,flag:!!b.flag,einv:!!b.einv,
+function bxClean(b){return{kind:b.kind=='purchase'?'purchase':'sales',date:bxDate(b.date)||b.date||'',no:bxC(b.no),party:bxC(b.party),gstin:bxC(b.gstin).toUpperCase(),printed_total:b.printed_total==null?null:b.printed_total,flag:!!b.flag,
  items:b.items.map(i=>({hsn:String(i.hsn||'').trim(),qty:i.qty===''?'':+i.qty,unit:bxC(i.unit),taxable:bxR2(+i.taxable||0),igst:+i.igst||0,cgst:+i.cgst||0,sgst:+i.sgst||0}))}}
 function bxDk(b){const n=s=>String(s||'').toLowerCase().replace(/[^a-z0-9]/g,'');return[n(b.no),b.gstin?n(b.gstin):n(b.party),String(b.date||'')].join('|')}
 function bxDedupe(){const s=bxCur();if(!s)return;const seen=new Set();let n=0;s.bills=s.bills.filter(b=>{if(!b.no)return true;const k=bxDk(b);if(seen.has(k)){n++;return false}seen.add(k);return true});if(!n)return toast('No repeat bills found.');save();bxDraw();toast('Removed '+n+' repeat bill'+(n>1?'s':'')+'. Bills now: '+s.bills.length+'.')}
@@ -2949,49 +3207,7 @@ function bxOne(i){bxPush([i])}
 function bxAll(){bxPush(BXP.map((_,i)=>i))}
 function bxList(){const s=bxCur();modal('<h3>Bills in this sheet</h3><div style="max-height:60vh;overflow:auto"><table class="bxt"><tr><th>Date</th><th>No</th><th>Party</th><th>Taxable</th><th>Total</th><th></th></tr>'+s.bills.map((b,i)=>{const f=bxFig(b);return'<tr><td>'+E(b.date)+'</td><td>'+E(b.no)+'</td><td>'+E(b.party)+'</td><td>'+bxMoney(f[0])+'</td><td>'+bxMoney(f[4])+(b.flag?' ⚠':'')+'</td><td><button class="g sm" onclick="bxRm('+i+')">Remove</button></td></tr>'}).join('')+'</table></div>')}
 function bxRm(i){const s=bxCur();if(!confirm('Remove bill '+s.bills[i].no+' from the sheet?'))return;s.bills.splice(i,1);save();bxList();bxDraw()}
-function bxEinv(rows,ownG,sh){
- const R=rows.map(r=>(Array.isArray(r)?r:[r]).map(x=>String(x==null?'':x).replace(/\s+/g,' ').trim()).filter(Boolean)).filter(r=>r.length),J=r=>r.join(' '),T=R.map(J).join('\n');
- if(!/\bIRN\s*:/i.test(T)||!/Document\s*No\.?\s*:/i.test(T)||!/Details of Goods/i.test(T))return null;
- const n=x=>{const v=parseFloat(String(x).replace(/,/g,''));return isNaN(v)?0:v},r2=x=>Math.round((x+Number.EPSILON)*100)/100,W=[];
- const no=(T.match(/Document\s*No\.?\s*:\s*([A-Za-z0-9\/\-._]+)/)||[])[1]||'',dm=T.match(/Document\s*Date\s*:\s*(\d{2})-(\d{2})-(\d{4})/),date=dm?dm[3]+'-'+dm[2]+'-'+dm[1]:'';
- const ms=[...T.matchAll(/GSTIN\s*:\s*([0-9]{2}[A-Z]{5}[0-9]{4}[A-Z][0-9A-Z]Z[0-9A-Z])/g)].map(m=>m[1]),sup=ms[0]||'',rec=ms[1]||'';
- let sn='',rn='';const gi=R.findIndex(r=>/GSTIN\s*:/.test(J(r)));
- if(gi>=0){const cnt=(J(R[gi]).match(/GSTIN\s*:/g)||[]).length,nx=R[gi+1]||[];sn=nx[0]||'';
-  if(cnt>=2)rn=nx.length>1?nx[nx.length-1]:'';else{const gj=R.findIndex((r,k)=>k>gi&&/GSTIN\s*:/.test(J(r)));rn=gj>=0&&R[gj+1]?R[gj+1][0]:''}}
- const a0=R.findIndex(r=>/Details of Goods/i.test(J(r))),a1=R.findIndex(r=>/Tax'?ble Amt/i.test(J(r))),items=[];
- const RE=/^(\d+)\s+(.*?)\s+(\d{4,8})\s+(\d+(?:\.\d+)?)\s+([A-Za-z]{2,6})\s+(\d+(?:\.\d+)?)\s+(\d+(?:\.\d+)?)\s+(\d+(?:\.\d+)?)\s+(\d+(?:\.\d+)?)\s*\+\s*(\d+(?:\.\d+)?)/;
- let cess=0;if(a0>=0&&a1>a0)for(let k=a0+1;k<a1;k++){const m=J(R[k]).match(RE);if(m){items.push({hsn:m[3],qty:n(m[4]),unit:m[5].toUpperCase(),taxable:r2(n(m[8])),rate:n(m[9])/100});cess+=n(m[10])}}
- if(!items.length)return null;
- const tn=a1>=0&&R[a1+1]?R[a1+1].map(n):[],tx=tn[0]||0,ig=tn[3]||0,tot=tn.length?tn[tn.length-1]:null,inter=ig>0;
- const own=String(ownG||'').toUpperCase();let kind,party,gstin;
- if(own&&sup===own){kind='sales';party=rn;gstin=rec}else if(own&&rec===own){kind='purchase';party=sn;gstin=sup}
- else{kind=sh&&sh.kind=='purchase'?'purchase':'sales';party=kind=='sales'?rn:sn;gstin=kind=='sales'?rec:sup;W.push('Neither GSTIN on this e-invoice matches this client. Check the party.')}
- if(tx&&Math.abs(r2(items.reduce((a,i)=>a+i.taxable,0))-tx)>1)W.push('Item amounts do not add up to the taxable total printed on the bill ('+tx+').');
- if(cess>0||(tn[4]||0)>0)W.push('This bill has CESS. It is not included here.');
- W.push('Read as an e-invoice (IRN). Please check the figures.');
- return{no,date,party,gstin,kind,einv:true,printed_total:tot,warn:W,items:items.map(i=>({hsn:i.hsn,qty:i.qty,unit:i.unit,taxable:i.taxable,igst:inter?i.rate:0,cgst:inter?0:i.rate/2,sgst:inter?0:i.rate/2}))}}
-
-function bxFmt(v){const s=bxCur();if(!s)return;s.fmt=v=='si'?'si':'india';save();toast(s.fmt=='si'?'Excel format: SI No layout':'Excel format: INDIA TRADING layout')}
-async function bxXlsxSi(s){if(!window.ExcelJS)await loadJs('https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.4.0/exceljs.min.js');
- const pu=s.kind=='purchase',wb=new ExcelJS.Workbook(),w=wb.addWorksheet(pu?'Purchase':'SALES');wb.calcProperties={fullCalcOnLoad:true};
- const H=pu?['SI No','Bill No','Date','Party Name','GSTIN No','Taxble Value','IGST Rate','IGST Amount','CGST Rate','CGST Amount','SGST Rate','SGST Amount','Total']:['SI No','Bill No','Date','Party Name','GSTIN No','HSN CODE','Taxble Value','IGST Rate','IGST Amount','CGST Rate','CGST Amount','SGST Rate','SGST Amount','Total','Remark'];
- const T=pu?6:7,L=c=>String.fromCharCode(64+c),dt=x=>{const m=String(x||'').match(/^(\d{4})-(\d{2})-(\d{2})/);return m?new Date(Date.UTC(+m[1],+m[2]-1,+m[3])):(x||null)},pf=x=>(x*100)%1?'0.0#%':'0%';
- w.getCell('D1').value=s.company||'';w.getCell('D2').value=s.gstin||'';const mm=String(s.month||'').match(/^(\d{4})-(\d{2})/);if(mm){w.getCell('D3').value=new Date(Date.UTC(+mm[1],+mm[2]-1,1));w.getCell('D3').numFmt='mmm-yy'}
- ['D1','D2','D3'].forEach(a=>{w.getCell(a).font={bold:true,size:12}});
- H.forEach((t,i)=>{const c=w.getCell(4,i+1);c.value=t;c.font={bold:true};c.fill={type:'pattern',pattern:'solid',fgColor:{argb:'FFE7EEF7'}};c.alignment={horizontal:'center',wrapText:true}});
- [6,14,13,36,18].concat(pu?[14,9,13,9,13,9,13,14]:[11,14,9,13,9,13,9,13,14,12]).forEach((x,i)=>{w.getColumn(i+1).width=x});
- let r=5,n=0;
- s.bills.forEach(b=>{(b.items.length?b.items:[{}]).forEach((it,k)=>{n++;w.getCell(r,1).value=n;
-  if(k==0){w.getCell(r,2).value=b.no;const d=w.getCell(r,3);d.value=dt(b.date);d.numFmt='dd-mm-yyyy';w.getCell(r,4).value=b.party;w.getCell(r,5).value=b.gstin}
-  if(!pu)w.getCell(r,6).value=it.hsn?(/^\d+$/.test(it.hsn)?+it.hsn:it.hsn):null;
-  const X=L(T);w.getCell(r,T).value=it.taxable==null?null:it.taxable;w.getCell(r,T).numFmt='#,##0.00';
-  [[1,it.igst],[3,it.cgst],[5,it.sgst]].forEach(([o,v])=>{const rc=w.getCell(r,T+o),ac=w.getCell(r,T+o+1);rc.value=v||0;rc.numFmt=pf(v||0);ac.value={formula:X+r+'*'+L(T+o)+r};ac.numFmt='#,##0.00'});
-  const tc=w.getCell(r,T+7);tc.value={formula:X+r+'+'+L(T+2)+r+'+'+L(T+4)+r+'+'+L(T+6)+r};tc.numFmt='#,##0.00';
-  if(!pu&&k==0)w.getCell(r,15).value=b.einv?'E-Invoice':'';r++})});
- if(n){const t=w.getCell(r,4);t.value='Total';t.font={bold:true};[T,T+2,T+4,T+6,T+7].forEach(c=>{const x=w.getCell(r,c);x.value={formula:'SUM('+L(c)+'5:'+L(c)+(r-1)+')'};x.font={bold:true};x.numFmt='#,##0.00'})}
- w.views=[{state:'frozen',ySplit:4}];return await wb.xlsx.writeBuffer()}
-
-async function bxDown(){const s=bxCur();if(!s)return;try{const u=s.fmt=='si'?await bxXlsxSi(s):await bxXlsx(s),nm=(s.company||'Sheet').replace(/[^A-Za-z0-9]+/g,'_')+(s.kind=='purchase'?'_Purchase':'')+'_'+(s.month||'').slice(0,7)+'.xlsx',a=document.createElement('a');
+async function bxDown(){const s=bxCur();if(!s)return;try{const u=await bxXlsx(s),nm=(s.company||'Sheet').replace(/[^A-Za-z0-9]+/g,'_')+(s.kind=='purchase'?'_Purchase':'')+'_'+(s.month||'').slice(0,7)+'.xlsx',a=document.createElement('a');
   a.href=URL.createObjectURL(new Blob([u],{type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'}));a.download=nm;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},800)}catch(e){alert('Could not make the Excel file: '+(e&&e.message||e))}}
 /* Back button on every tool page */
 (function(){const SKIP={home:1,login:1,'':1};let busy=0;
@@ -3044,7 +3260,7 @@ function dkFix(dark){const rs=document.documentElement.style,cs=getComputedStyle
 const dkTile=(ic,t,d,fn)=>'<button type="button" class="dt" onclick="'+fn+'"><i>'+IC[ic]+'</i><b>'+t+'</b><span>'+d+'</span></button>';
 const dkGrp=(h,L)=>L.length?'<section class="dg"><h2>'+h+'</h2><div class="dtg">'+L.join('')+'</div></section>':'';
 function dkHero(){const K=kdata(),h=new Date().getHours(),g=h<12?'Good morning':h<17?'Good afternoon':'Good evening',N=[...K.G,...K.T].sort((a,b)=>a[3]-b[3])[0];
- return '<div class="dh"><div class="dhl"><div class="dhd">'+K.t.toLocaleString('en-IN',{weekday:'long',day:'numeric',month:'long',year:'numeric'})+'</div><h1>'+g+(USER?', '+E(PNAME(VIEW?'Admin':ADM()?'Admin':USER)):'')+'</h1><p>JK Gupta &amp; Co. · Chartered Accountants</p></div>'
+ return '<div class="dh"><div class="dhl"><div class="dhd">'+K.t.toLocaleString('en-IN',{weekday:'long',day:'numeric',month:'long',year:'numeric'})+'</div><h1 class="dgreet"><span class="dgw">'+g+(USER?',':'')+'</span>'+(USER?' <span class="dgn">'+E(PNAME(VIEW?'Admin':ADM()?'Admin':USER))+' <span class="dwave" aria-hidden="true">\u{1F44B}</span></span>':'<span class="dgn"><span class="dwave" aria-hidden="true">\u{1F44B}</span></span>')+'</h1><p>JKGupta&amp;Co · Chartered Accountants</p></div>'
   +(N?'<div class="dn"><span>Next deadline</span><b>'+N[3]+' '+(N[3]==1?'day':'days')+'</b><em>'+E(N[1])+' · '+dFmt(N[0])+'</em></div>':'')+'</div>'}
 
 /* ===== Notepad: every staff member has a private notepad saved with their own data ===== */
@@ -3383,6 +3599,210 @@ async function fsXl(){const R=window.FSR,X=await bxXlsxLib(),t=(FS.client||'Clie
  const pl=[[t],['Profit and loss account'],[],['Particulars','₹'],['Sales / income from operations',n(R.sales)],['Add: closing stock',n(R.cstk)],['Less: opening stock',n(-R.ostk)],['Less: purchases',n(-R.pur)],['Less: direct expenses',n(-R.dexp)],['Gross profit / (loss)',n(R.gp)],['Add: other income',n(R.oinc)],['Less: indirect expenses',n(-R.iexp)],['Less: depreciation',n(-R.dep)],['Net profit / (loss)',n(R.np)]];
  const mp=[['Ledger','Dr / Cr','Amount','Goes to']].concat(FS.items.map(x=>[x.n,x.v>=0?'Dr':'Cr',n(Math.abs(x.v)),FSL[x.c]]));
  const wb=X.utils.book_new();X.utils.book_append_sheet(wb,X.utils.aoa_to_sheet(bs),'Balance Sheet');X.utils.book_append_sheet(wb,X.utils.aoa_to_sheet(pl),'Profit and Loss');X.utils.book_append_sheet(wb,X.utils.aoa_to_sheet(mp),'Ledger mapping');X.writeFile(wb,'Balance-Sheet-'+(FS.client||'Client').replace(/[^A-Za-z0-9]+/g,'_')+'.xlsx')}
+/* ================= Final accounts: Balance Sheet, P&L and Notes from the Trial Balance sheets of an Excel file ================= */
+const AFK={sc:['Share capital','L'],cap:['Capital account','L'],rs:['Reserves and surplus','L'],ltb:['Long term borrowings','L'],sec:['Borrowings - secured','L'],uns:['Borrowings - unsecured','L'],stb:['Short term borrowings','L'],tp:['Trade payables','L'],ocl:['Other current liabilities','L'],stp:['Short term provisions','L'],
+ ppe:['Property, plant and equipment','A'],nci:['Non current investments','A'],ltla:['Long term loans and advances','A'],inv:['Inventories','A'],tr:['Trade receivables','A'],cash:['Cash and bank balances','A'],stla:['Loans and advances','A'],oca:['Other current assets','A'],
+ rem:['Remuneration to partners','T'],ctx:['Current tax','T'],ptx:['Earlier year tax','T'],dtx:['Deferred tax','T'],
+ rev:['Revenue from operations','I'],oi:['Other income','I'],coc:['Cost of construction','E'],emp:['Employee benefit expenses','E'],fin:['Finance costs','E'],dep:['Depreciation and amortisation','E'],oe:['Other expenses','E']};
+const AFD=[[/remuneration/i,'rem'],[/earl\w*\s+year|prior year tax/i,'ptx'],[/deferr?ed tax|defferd/i,'dtx'],[/^(current tax|provision for tax|income tax)/i,'ctx'],[/share capital|equity share/i,'sc'],[/^capital\b/i,'cap'],[/reserve|surplus|retained/i,'rs'],[/long.?term borrow/i,'ltb'],[/unsecured/i,'uns'],[/secured/i,'sec'],[/short.?term borrow/i,'stb'],[/trade payable|creditor/i,'tp'],[/provision/i,'stp'],[/other current liab/i,'ocl'],[/property|fixed asset|tangible/i,'ppe'],[/non.?current invest|^investments?\b/i,'nci'],[/long.?term loan/i,'ltla'],[/inventor|stock|work in progress/i,'inv'],[/receivable|debtor/i,'tr'],[/cash|bank bal/i,'cash'],[/loan.*advance|advance|loan given/i,'stla'],[/other current asset/i,'oca'],[/revenue|sales|turnover/i,'rev'],[/other income/i,'oi'],[/cost of|purchase/i,'coc'],[/employee|salar/i,'emp'],[/financ|interest/i,'fin'],[/depr[ei]c|amorti/i,'dep'],[/other expense|expenses/i,'oe']];
+const AFO=Object.keys(AFK);
+function afKey(h){h=String(h||'').trim();if(!h)return'';const m=AFD.find(x=>x[0].test(h));return m?m[1]:''}
+function afNum(x){if(x==null||x==='')return null;if(typeof x=='number')return x;const v=fsNum(x);return isNaN(v)?null:v}
+function afIsTb(rows){for(let i=0;i<Math.min(rows.length,40);i++){const r=(rows[i]||[]).map(x=>String(x==null?'':x).toLowerCase().trim());if(r.some(x=>x=='debit')&&r.some(x=>x=='credit')&&r.some(x=>/^dr\s*\/\s*cr$/.test(x)))return i}return-1}
+const AFT=/^(capital account|loans \(liability\)|current liabilities|current assets|investments|stock-in-hand|sales accounts|purchase accounts|direct (expenses|incomes?)|indirect (expenses|incomes?)|branch \/ divisions)$/i;
+function afParse(rows){const hi=afIsTb(rows);if(hi<0)return null;const H=rows[hi].map(x=>String(x==null?'':x).toLowerCase().trim()),ix=re=>H.findIndex(x=>re.test(x)),dc=ix(/^debit$/),cc=ix(/^credit$/),mk=ix(/^dr\s*\/\s*cr$/),hd=ix(/^head$/),sh=ix(/^sub\s*head$/);const ac=ix(/^amt$/);
+ const out=[];let grp='',inFA=0;
+ for(let i=hi+1;i<rows.length;i++){const r=rows[i]||[],n=String(r[0]==null?'':r[0]).replace(/[\r\n]+/g,' ').replace(/_x000D_/g,' ').replace(/\s+/g,' ').trim();if(!n||/^(grand\s*total|total)$/i.test(n)||/^particulars$/i.test(n))continue;
+  const D=afNum(r[dc]),C=afNum(r[cc]),m=String(r[mk]==null?'':r[mk]).trim(),hs=hd>=0?String(r[hd]==null?'':r[hd]).replace(/\s+/g,' ').trim():'',sb=sh>=0?String(r[sh]==null?'':r[sh]).replace(/\s+/g,' ').trim().replace(/^[-–]\s*/,''):'';
+  let v=(D||0)-(C||0),ao=0;
+  if(D==null&&C==null){ao=1;const am=afNum(r[ac]);if(am==null||!/^(dr|cr)$/i.test(m))continue;v=/^dr$/i.test(m)?am:-am}
+  if(hs){out.push({n,v,head:hs,sub:sb,g:afKey(hs),row:i+1,tag:1,ao});continue}
+  if(/^(dr|cr)$/i.test(m)){let g='';if(/^fixed assets?$/i.test(n)){g='ppe';inFA=1}else if(/depr[ei]c/i.test(n))g='dep';else if(/retained|^p\s*&\s*l|profit\s*(&|and)\s*loss|surplus/i.test(n))g='rs';else if(/share capital/i.test(n))g='sc';else if(/capital a\/c|capital account|current capital|fixed capital|- partner$|capital$/i.test(n))g='cap';else if(sb&&afKey(sb))g=afKey(sb);else if(/receivable|debtor/i.test(n))g='tr';
+   out.push({n,v,head:'',sub:'',g,row:i+1,tag:0});continue}
+  if(/^profit\s*(&|and)\s*loss\s*a\/c$/i.test(n)&&!hs){out.push({n,v,head:'',sub:'',g:'rs',row:i+1,tag:0});continue}
+  if(/^fixed assets?$/i.test(n)){out.push({n,v,head:'',sub:'',g:'ppe',row:i+1,tag:0});inFA=1;continue}
+  if(/capital/i.test(grp)&&!/^(shobhav|.*llp)$/i.test(grp)&&((D==null)!=(C==null))){out.push({n,v,head:'',sub:'',g:'cap',row:i+1,tag:0});continue}
+  if(D!=null&&C!=null){grp=n;if(AFT.test(n))inFA=0;continue}
+  if(!inFA&&Math.abs(v)>0.004){let acc=0,isG=0;for(let j=i+1;j<rows.length&&j<i+80;j++){const q=rows[j]||[],qm=String(q[mk]==null?'':q[mk]).trim(),qh=hd>=0?String(q[hd]==null?'':q[hd]).trim():'';if(!(/^(dr|cr)$/i.test(qm)||qh))continue;const a1=afNum(q[dc]),b1=afNum(q[cc]);if(a1==null&&b1==null)continue;acc+=(a1||0)-(b1||0);if(Math.abs(acc-v)<0.51){isG=1;break}}
+   if(!isG){let g='';if(/revenue|sales/i.test(n))g=v>0?'coc':'rev';else if(sb&&afKey(sb))g=afKey(sb);else if(/receivable|debtor/i.test(n))g='tr';else if(/^indirect expenses$/i.test(n))g='ign';else if(/\b(cgst|sgst|igst|gst|tds|tcs)\b/i.test(n))g='ign';out.push({n,v,head:'',sub:'',g,row:i+1,tag:0})}}}
+ return out.filter(x=>Math.abs(x.v)>0.004||x.tag)}
+function afSign(k,v){const s=AFK[k][1];return s=='L'||s=='I'?-v:v}
+function afKeyOf(x,over,ho){return over[x.n.toLowerCase()]||(x.head&&ho&&ho[x.head.toLowerCase()])||x.g}
+function afCalc(items,over,ex,fmt,ho,add){const A={},unk=[];AFO.forEach(k=>A[k]={v:0,subs:new Map()});let rem=0,tc=0,tp=0,td=0;
+ const put=(k,val,sb)=>{const a=A[k];a.v+=val;a.subs.set(sb,(a.subs.get(sb)||0)+val)};
+ items.forEach(x=>{let k=afKeyOf(x,over,ho);if(fmt!='co'&&k=='rs')k='cap';if(k=='ign')return;
+  if(/closing stock/i.test(x.n)||/^closing stock$/i.test(x.sub||'')){const cv=ex.cstk!=null?ex.cstk:Math.abs(x.v);if(ex.cstk!=null)put('coc',Math.abs(x.v),'Opening stock');put('inv',cv,'Closing stock');put('coc',-cv,'Less: closing stock');return}
+  if(!k||!AFK[k]){unk.push(x);return}
+  if(AFK[k][1]=='T'){if(k=='rem')rem+=x.v;else if(k=='ctx')tc+=x.v;else if(k=='ptx')tp+=x.v;else td+=x.v;return}
+  if(/closing stock/i.test(x.n)||/^closing stock$/i.test(x.sub||'')){const cv=ex.cstk!=null?ex.cstk:Math.abs(x.v);if(ex.cstk!=null)put('coc',Math.abs(x.v),'Opening stock');put('inv',cv,'Closing stock');put('coc',-cv,'Less: closing stock');return}
+  put(k,afSign(k,x.v),x.sub||(k=='cap'?x.n:AFK[k][0]))});
+ rem+=ex.rem||0;tc+=ex.ctax||0;tp+=ex.ptax||0;td+=ex.dtax||0;
+ const rev=A.rev.v+A.oi.v,exp=A.coc.v+A.emp.v+A.fin.v+A.dep.v+A.oe.v,pbt0=rev-exp,pbt=pbt0-rem,tax=tc+tp+td,pat=pbt-tax,tgt=fmt=='co'?'rs':'cap',op=A[tgt].v;
+ if(add){const nm=fmt=='co'?'Balance as per Trial Balance (before profit)':'Capital as per Trial Balance (before profit)';const old=new Map();A[tgt].subs.forEach((v,k)=>old.set(k==AFK[tgt][0]?'Opening balance as per Trial Balance':k,v));A[tgt].subs=old;A[tgt].subs.set('Add: profit for the year',pat);A[tgt].v=op+pat;if(fmt=='llp'&&ex.rem){A[tgt].subs.set('Add: remuneration to partners',ex.rem);A[tgt].v+=ex.rem}}
+ if(ex.ctax||ex.ptax){const q=(ex.ctax||0)+(ex.ptax||0);A.stp.v+=q;A.stp.subs.set('Provision for income tax',(A.stp.subs.get('Provision for income tax')||0)+q)}
+ const dtl=ex.dtl||0;let L=0,As=0;AFO.forEach(k=>{if(AFK[k][1]=='L')L+=A[k].v;if(AFK[k][1]=='A')As+=A[k].v});L+=dtl;
+ return{A,unk,pbt0,pbt,rem,tc,tp,td,tax,pat,L,As,dtl,diff:L-As,rev,exp,added:!!add}}
+function afDtax(book,it,open,rate){if(!(book>0||it>0))return{dtl:0,charge:0,calc:false};const dtl=Math.round((book-it)*rate/100*100)/100;return{dtl,charge:Math.round((dtl-(open||0))*100)/100,calc:true}}
+function afPKey(n){const t=n.replace(/[-–]\s*(fixed|current)?\s*capital(\s*a\/c|\s*account)?/ig,'').replace(/(fixed|current)?\s*capital(\s*a\/c|\s*account)?/ig,'').replace(/[-–]\s*partner/ig,'').replace(/\ba\/c\b/ig,'').replace(/[-–\s]+$/,'').trim(),w=t.toLowerCase().split(/\s+/);return{name:t,key:(w[0]||'').slice(0,4)+' '+(w[w.length-1]||'')}}
+function afPartners(items,over,ho,fmt){const M=new Map();items.forEach(x=>{let k=afKeyOf(x,over,ho);if(fmt!='co'&&k=='rs')k='cap';if(k!='cap'||/^profit/i.test(x.n))return;const p=afPKey(x.n),e=M.get(p.key)||{key:p.key,name:p.name,fixed:0,cur:0};if(/fixed/i.test(x.n))e.fixed+=-x.v;else{e.cur+=-x.v;e.name=p.name}M.set(p.key,e)});return M}
+function afModel(F){const fm=F.fmt,c=F.cur,p=F.prev,over=F.over||{},dt=afDtax(F.book,F.itw,F.open,F.rate||25.168);
+ const exC={ctax:F.ctax,ptax:F.ptax,rem:F.rem||0,dtax:dt.calc?dt.charge:0,dtl:dt.calc?dt.dtl:0},exP={ctax:F.pctax||0,rem:F.prem||0};{const os=c.filter(x=>/^opening stock/i.test(x.n)&&Math.abs(x.v)>0.004);if(p&&os.length&&p.some(x=>/closing stock/i.test(x.n)))exP.cstk=Math.abs(os.reduce((a,x)=>a+x.v,0))}
+ const one=(it,ex)=>{let r=afCalc(it,over,ex,fm,F.hover,true);if(Math.abs(r.diff)>=1){const r2=afCalc(it,over,ex,fm,F.hover,false);if(Math.abs(r2.diff)<Math.abs(r.diff))r=r2}return r};
+ const C=one(c,exC),P=p?one(p,exP):null;
+ const order=[];AFO.forEach(k=>{const s=AFK[k][1];if((C.A[k].v||P&&P.A[k].v||C.A[k].subs.size||P&&P.A[k].subs.size)&&Math.abs(C.A[k].v)+(P?Math.abs(P.A[k].v):0)>0.004)order.push(k)});
+ const note={};let n=1;order.forEach(k=>{note[k]=n++});
+ let partners=null;
+ if(fm=='llp'){const pc=afPartners(c,over,F.hover,fm),pp=p?afPartners(p,over,F.hover,fm):new Map(),inp=F.partners||{};
+  partners=[...pc.values()].map(e=>{const i=inp[e.key]||{},psr=+i.psr||0,share=Math.round(psr/100*C.pat*100)/100,rem=+i.rem||0,close=C.added?e.cur+share+rem:e.cur,pv=pp.get(e.key),open=i.open!==''&&i.open!=null?+i.open:(pv?pv.cur:null);let intro=i.intro!==''&&i.intro!=null?+i.intro:null,wd=i.wd!==''&&i.wd!=null?+i.wd:null;const net=open==null?null:close-open-share-rem;if(intro==null&&wd==null&&net!=null){intro=net>0?net:0;wd=net<0?-net:0}
+   return{key:e.key,name:e.name,psr,fixed:e.fixed,fixedP:pv?pv.fixed:0,open,intro,wd,rem,share,close}});
+  partners.sum=partners.reduce((a,x)=>a+x.psr,0)}
+ return{F,fm,C,P,order,note,dt,partners}}
+
+/* ---------- writing the Excel file ---------- */
+function afXlsxParts(M){const F=M.F,C=M.C,P=M.P,yr=F.year||'',y1=String(yr),y0=String(+yr-1);
+ const esc=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'),col=i=>String.fromCharCode(65+i);
+ const mk=()=>({r:{},w:{},m:[]}),setc=(W,r,c,v,s,f)=>{(W.r[r]=W.r[r]||{})[c]={v,s:s||0,f}};
+ /* styles: 0 normal,1 bold,2 title,3 number,4 bold number top border,5 header,6 wrap,7 centre,8 centre bold,9 italic small */
+ const styles='<?xml version="1.0" encoding="UTF-8" standalone="yes"?><styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><numFmts count="1"><numFmt numFmtId="164" formatCode="#,##0.00;[Red]\\(#,##0.00\\);\\-"/></numFmts><fonts count="4"><font><sz val="11"/><name val="Calibri"/></font><font><b/><sz val="11"/><name val="Calibri"/></font><font><b/><sz val="14"/><name val="Calibri"/></font><font><i/><sz val="9"/><name val="Calibri"/></font></fonts><fills count="3"><fill><patternFill patternType="none"/></fill><fill><patternFill patternType="gray125"/></fill><fill><patternFill patternType="solid"><fgColor rgb="FFDCE6F1"/></patternFill></fill></fills><borders count="3"><border><left/><right/><top/><bottom/><diagonal/></border><border><left/><right/><top style="thin"/><bottom/><diagonal/></border><border><left style="thin"/><right style="thin"/><top style="thin"/><bottom style="thin"/><diagonal/></border></borders><cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs><cellXfs count="10"><xf numFmtId="0" fontId="0" fillId="0" borderId="0" xfId="0"/><xf numFmtId="0" fontId="1" fillId="0" borderId="0" xfId="0" applyFont="1"/><xf numFmtId="0" fontId="2" fillId="0" borderId="0" xfId="0" applyFont="1" applyAlignment="1"><alignment horizontal="center"/></xf><xf numFmtId="164" fontId="0" fillId="0" borderId="0" xfId="0" applyNumberFormat="1"/><xf numFmtId="164" fontId="1" fillId="0" borderId="1" xfId="0" applyNumberFormat="1" applyFont="1" applyBorder="1"/><xf numFmtId="0" fontId="1" fillId="2" borderId="2" xfId="0" applyFont="1" applyFill="1" applyBorder="1" applyAlignment="1"><alignment horizontal="center" vertical="center" wrapText="1"/></xf><xf numFmtId="0" fontId="0" fillId="0" borderId="0" xfId="0" applyAlignment="1"><alignment wrapText="1" vertical="top"/></xf><xf numFmtId="0" fontId="0" fillId="0" borderId="0" xfId="0" applyAlignment="1"><alignment horizontal="center"/></xf><xf numFmtId="0" fontId="1" fillId="0" borderId="0" xfId="0" applyFont="1" applyAlignment="1"><alignment horizontal="center"/></xf><xf numFmtId="0" fontId="3" fillId="0" borderId="0" xfId="0" applyFont="1"/></cellXfs></styleSheet>';
+ const NT=mk(),BS=mk(),PL=mk(),LG=mk(),tot={};let r=1;
+ /* Notes */
+ setc(NT,1,1,F.name||'',2);NT.m.push('A1:D1');setc(NT,2,1,'Notes to the financial statements for the year ended 31st March '+y1,8);NT.m.push('A2:D2');setc(NT,3,1,'(Currency : Indian Rupees)',9);
+ setc(NT,5,0,'Note No',5);setc(NT,5,1,'Particulars',5);setc(NT,5,2,y1,5);setc(NT,5,3,P?y0:'',5);r=6;
+ M.order.forEach(k=>{const a=C.A[k],b=P?P.A[k]:null;
+  if(k=='cap'&&M.fm=='llp'&&M.partners&&M.partners.length){const pt=M.partners,rd2=x=>Math.round((x||0)*100)/100;setc(NT,r,0,M.note[k],8);setc(NT,r,1,"PARTNERS' CAPITAL ACCOUNT",1);r++;setc(NT,r,1,'a) Fixed capital',1);setc(NT,r,2,y1,8);setc(NT,r,3,P?y0:'',8);r++;const f0=r;pt.forEach(x=>{setc(NT,r,1,x.name+' - Fixed capital',0);setc(NT,r,2,rd2(x.fixed),3);if(P)setc(NT,r,3,rd2(x.fixedP),3);r++});setc(NT,r,1,'Total fixed capital',1);setc(NT,r,2,rd2(pt.reduce((q,x)=>q+x.fixed,0)),4,'SUM(C'+f0+':C'+(r-1)+')');if(P)setc(NT,r,3,rd2(pt.reduce((q,x)=>q+x.fixedP,0)),4,'SUM(D'+f0+':D'+(r-1)+')');const ft=r;r+=2;
+   setc(NT,r,1,'b) Current capital',1);r++;['Particulars','PSR %','Opening balance','Introduced','Withdrawal','Remuneration','Net profit','Closing balance'].forEach((h,i)=>setc(NT,r,1+i,h,5));r++;const c0=r;
+   pt.forEach(x=>{setc(NT,r,1,x.name+' - Current capital',0);setc(NT,r,2,x.psr,3);setc(NT,r,3,x.open==null?'':rd2(x.open),3);setc(NT,r,4,x.intro==null?'':rd2(x.intro),3);setc(NT,r,5,x.wd==null?'':rd2(x.wd),3);setc(NT,r,6,rd2(x.rem),3);setc(NT,r,7,rd2(x.share),3);setc(NT,r,8,rd2(x.close),3);r++});
+   setc(NT,r,1,'Total',1);setc(NT,r,2,rd2(pt.sum),4,'SUM(C'+c0+':C'+(r-1)+')');for(let q=3;q<=8;q++){const L=col(q),v=q==3?pt.reduce((z,x)=>z+(x.open||0),0):q==4?pt.reduce((z,x)=>z+(x.intro||0),0):q==5?pt.reduce((z,x)=>z+(x.wd||0),0):q==6?pt.reduce((z,x)=>z+x.rem,0):q==7?pt.reduce((z,x)=>z+x.share,0):pt.reduce((z,x)=>z+x.close,0);setc(NT,r,q,rd2(v),4,'SUM('+L+c0+':'+L+(r-1)+')')}const ct=r;r+=2;
+   setc(NT,r,1,"Total partners' capital",1);setc(NT,r,2,rd2(C.A.cap.v),4,'C'+ft+'+I'+ct);if(P)setc(NT,r,3,rd2(P.A.cap.v),4);tot[k]='Notes!$C$'+r;tot[k+'P']='Notes!$D$'+r;r++;
+   if(Math.abs(pt.sum-100)>0.01){setc(NT,r,1,'Profit sharing ratios add up to '+pt.sum+'%. They should add up to 100%.',9);r++}
+   if(pt.some(x=>x.open==null)){setc(NT,r,1,'Opening balances are blank because last year\'s Trial Balance was not chosen.',9);r++}
+   setc(NT,r,1,'Introduced and withdrawal are the balancing movement unless you typed them. Check them with your capital account ledgers.',9);r+=2;return}
+  if(k=='cap'&&M.fm=='pr'&&P&&a.subs.size){const rd2=x=>Math.round((x||0)*100)/100,tb=C.A.cap.v-(C.added?C.pat:0),op=P.A.cap.v,intro=F.intro||0,wd=F.wd||0,have=intro||wd;setc(NT,r,0,M.note[k],8);setc(NT,r,1,'CAPITAL ACCOUNT',1);r++;const c0=r;
+   setc(NT,r,1,'Opening balance',0);setc(NT,r,2,rd2(op),3);setc(NT,r,3,'',3);r++;
+   if(have){setc(NT,r,1,'Add: introduced during the year',0);setc(NT,r,2,rd2(intro),3);r++;setc(NT,r,1,'Add: profit for the year',0);setc(NT,r,2,rd2(C.pat),3);r++;setc(NT,r,1,'Less: withdrawal during the year',0);setc(NT,r,2,rd2(-wd),3);r++;const df=tb-op-intro+wd;if(Math.abs(df)>0.5){setc(NT,r,1,'Other movement (difference to the Trial Balance)',0);setc(NT,r,2,rd2(df),3);r++}}
+   else{setc(NT,r,1,'Add / (less): introduced less withdrawn during the year (balancing)',0);setc(NT,r,2,rd2(tb-op),3);r++;setc(NT,r,1,'Add: profit for the year',0);setc(NT,r,2,rd2(C.pat),3);r++}
+   setc(NT,r,1,'Closing balance',1);setc(NT,r,2,rd2(C.A.cap.v),4,'SUM(C'+c0+':C'+(r-1)+')');if(P)setc(NT,r,3,rd2(P.A.cap.v),4);tot[k]='Notes!$C$'+r;tot[k+'P']='Notes!$D$'+r;r+=2;return}
+  const keys=[...a.subs.keys()];if(b)b.subs.forEach((v,s)=>{if(!keys.includes(s))keys.push(s)});
+  setc(NT,r,0,M.note[k],8);setc(NT,r,1,(k=='cap'&&M.fm=='llp'?"PARTNERS' CAPITAL ACCOUNT":AFK[k][0].toUpperCase()),1);r++;const a0=r;
+  keys.forEach(s=>{setc(NT,r,1,s,0);setc(NT,r,2,Math.round((a.subs.get(s)||0)*100)/100,3);if(P)setc(NT,r,3,Math.round(((b&&b.subs.get(s))||0)*100)/100,3);r++});
+  if(k=='ppe'){setc(NT,r,1,'Net block as per the Trial Balance. Attach the fixed asset schedule for the gross block and depreciation.',9);r++}
+  setc(NT,r,1,'Total',1);setc(NT,r,2,Math.round(a.v*100)/100,4,'SUM(C'+a0+':C'+(r-(k=='ppe'?2:1))+')');if(P)setc(NT,r,3,Math.round((b?b.v:0)*100)/100,4,'SUM(D'+a0+':D'+(r-(k=='ppe'?2:1))+')');tot[k]='Notes!$C$'+r;tot[k+'P']='Notes!$D$'+r;r+=2;
+  if(k=='sc'&&M.fm=='co'&&(F.auth||F.shares||(F.holders&&F.holders.length))){const fv=F.face||10,rd3=x=>Math.round(x*100)/100;if(F.auth){setc(NT,r,1,'Authorised capital: '+F.auth.toLocaleString('en-IN')+' equity shares of Rs '+fv+' each',0);setc(NT,r,2,rd3(F.auth*fv),3);r++}if(F.shares){setc(NT,r,1,'Issued, subscribed and paid up: '+F.shares.toLocaleString('en-IN')+' equity shares of Rs '+fv+' each',0);setc(NT,r,2,rd3(F.shares*fv),3);r++}
+   if(F.holders&&F.holders.length){r++;setc(NT,r,1,'Shareholders holding more than 5% of the shares',1);r++;setc(NT,r,1,'Name of shareholder',5);setc(NT,r,2,'Number of shares',5);setc(NT,r,3,'% of holding',5);r++;const tt=F.shares||F.holders.reduce((q,h)=>q+h.n,0);F.holders.forEach(h=>{setc(NT,r,1,h.name,0);setc(NT,r,2,h.n,3);setc(NT,r,3,tt?Math.round(h.n/tt*10000)/100:0,3);r++})}r++}});
+ if(M.dt.calc){setc(NT,r,0,'',8);setc(NT,r,1,'DEFERRED TAX LIABILITY (net)',1);r++;setc(NT,r,1,'Book value of depreciable assets',0);setc(NT,r,2,F.book||0,3);r++;setc(NT,r,1,'Value as per Income Tax Act',0);setc(NT,r,2,F.itw||0,3);r++;setc(NT,r,1,'Difference',0);setc(NT,r,2,(F.book||0)-(F.itw||0),3,'C'+(r-2)+'-C'+(r-1));r++;setc(NT,r,1,'Deferred tax liability at '+(F.rate||25.168)+'%',1);setc(NT,r,2,M.dt.dtl,4,'ROUND(C'+(r-1)+'*'+(F.rate||25.168)+'/100,2)');tot.dtl='Notes!$C$'+r;r++;setc(NT,r,1,'Less: already in the books at the start of the year',0);setc(NT,r,2,F.open||0,3);r++;setc(NT,r,1,'Charge / (credit) for the year',1);setc(NT,r,2,M.dt.charge,4,'C'+(r-2)+'-C'+(r-1));tot.dch='Notes!$C$'+r;r+=2}
+ NT.w={0:9,1:62,2:20,3:20,4:18,5:18,6:18,7:18,8:20};
+ /* Profit and loss */
+ setc(PL,1,1,F.name||'',2);PL.m.push('B1:E1');if(F.line2){setc(PL,2,1,F.line2,8);PL.m.push('B2:E2')}setc(PL,4,1,'Statement of Profit & Loss account',8);PL.m.push('B4:E4');setc(PL,5,1,'for the year ended 31st March '+y1,8);PL.m.push('B5:E5');setc(PL,7,1,'(Currency : Indian Rupees)',9);
+ function fm0(){return M.fm}
+ setc(PL,9,1,'PARTICULARS',5);setc(PL,9,2,'Note No',5);setc(PL,9,3,y1,5);setc(PL,9,4,P?y0:'',5);
+ const lbl=k=>k=='cap'?(M.fm=='llp'?"Partners' capital account":'Capital account'):AFK[k][0];const line=(W,rr,k,sec)=>{setc(W,rr,1,lbl(k),0);setc(W,rr,2,M.note[k],7);setc(W,rr,3,Math.round(C.A[k].v*100)/100,3,tot[k]);if(P)setc(W,rr,4,Math.round(P.A[k].v*100)/100,3,tot[k+'P'])};
+ r=10;setc(PL,r,1,'INCOME',1);r++;const i0=r;['rev','oi'].forEach(k=>{if(M.order.includes(k)){line(PL,r,k);r++}});const i1=r-1;
+ setc(PL,r,1,'Total income',1);setc(PL,r,3,Math.round(C.rev*100)/100,4,i1>=i0?'SUM(D'+i0+':D'+i1+')':null);if(P)setc(PL,r,4,Math.round(P.rev*100)/100,4,i1>=i0?'SUM(E'+i0+':E'+i1+')':null);const ti=r;r+=2;
+ setc(PL,r,1,'EXPENSES',1);r++;const e0=r;['coc','emp','fin','dep','oe'].forEach(k=>{if(M.order.includes(k)){line(PL,r,k);r++}});const e1=r-1;
+ setc(PL,r,1,'Total expenses',1);setc(PL,r,3,Math.round(C.exp*100)/100,4,e1>=e0?'SUM(D'+e0+':D'+e1+')':null);if(P)setc(PL,r,4,Math.round(P.exp*100)/100,4,e1>=e0?'SUM(E'+e0+':E'+e1+')':null);const te=r;r+=2;
+ const rd=x=>Math.round(x*100)/100,llp=M.fm=='llp';
+ setc(PL,r,1,llp?'Profit before remuneration and tax':'Profit / (Loss) before tax',1);setc(PL,r,3,rd(C.pbt0),4,'D'+ti+'-D'+te);if(P)setc(PL,r,4,rd(P.pbt0),4,'E'+ti+'-E'+te);let pb=r;r+=2;
+ if(llp||C.rem||(P&&P.rem)){setc(PL,r,1,'Remuneration to partners',0);setc(PL,r,3,rd(C.rem),3);if(P)setc(PL,r,4,rd(P.rem),3);r++;const rr=r;setc(PL,r,1,'Profit before tax',1);setc(PL,r,3,rd(C.pbt),4,'D'+pb+'-D'+(r-1));if(P)setc(PL,r,4,rd(P.pbt),4,'E'+pb+'-E'+(r-1));pb=rr;r+=2}
+ let tx=0;if(M.fm=='co'||llp||C.tax||(P&&P.tax)){setc(PL,r,1,'Tax expenses:',1);r++;const t0=r;
+  setc(PL,r,1,'Current tax',0);setc(PL,r,3,rd(C.tc),3);if(P)setc(PL,r,4,rd(P.tc),3);r++;
+  setc(PL,r,1,llp?'Earlier year tax':'Prior year change of current tax',0);setc(PL,r,3,rd(C.tp),3);if(P)setc(PL,r,4,rd(P.tp),3);r++;
+  setc(PL,r,1,'Deferred tax',0);setc(PL,r,3,rd(C.td),3);if(P)setc(PL,r,4,rd(P.td),3);r++;
+  setc(PL,r,1,'Total tax',1);setc(PL,r,3,rd(C.tax),4,'SUM(D'+t0+':D'+(r-1)+')');if(P)setc(PL,r,4,rd(P.tax),4,'SUM(E'+t0+':E'+(r-1)+')');tx=r;r+=2}
+ setc(PL,r,1,M.fm=='pr'?'Profit for the year (carried to the capital account)':llp?"Profit after tax transferred to partners' capital account":'Profit / (Loss) after tax',1);setc(PL,r,3,rd(C.pat),4,tx?'D'+pb+'-D'+tx:'D'+pb);if(P)setc(PL,r,4,rd(P.pat),4,tx?'E'+pb+'-E'+tx:'E'+pb);const pt=r;r+=2;
+ if(M.fm=='co'&&F.shares>0){setc(PL,r,1,'Earning per share (basic and diluted)',0);setc(PL,r,3,Math.round(C.pat/F.shares*100)/100,3,'D'+pt+'/'+F.shares);if(P)setc(PL,r,4,Math.round(P.pat/F.shares*100)/100,3,'E'+pt+'/'+F.shares);r+=2}
+ if(F.sign){F.sign.replace(/\{name\}/g,F.name||'').split(/\n/).forEach(t=>{setc(PL,r,1,t,0);r++})}
+ PL.w={0:3,1:58,2:10,3:20,4:20};
+ /* Balance sheet */
+ setc(BS,1,1,F.name||'',2);BS.m.push('B1:E1');if(F.line2){setc(BS,2,1,F.line2,8);BS.m.push('B2:E2')}setc(BS,4,1,'Balance Sheet',8);BS.m.push('B4:E4');setc(BS,5,1,'as at 31st March '+y1,8);BS.m.push('B5:E5');setc(BS,7,1,'(Currency : Indian Rupees)',9);
+ setc(BS,9,1,'PARTICULARS',5);setc(BS,9,2,'Note No',5);setc(BS,9,3,y1,5);setc(BS,9,4,P?y0:'',5);
+ r=10;setc(BS,r,1,M.fm=='co'?'EQUITY AND LIABILITIES':'LIABILITIES',1);r++;const l0=r;
+ AFO.filter(k=>AFK[k][1]=='L'&&M.order.includes(k)).forEach(k=>{line(BS,r,k);r++});
+ if(M.dt.calc&&M.dt.dtl){setc(BS,r,1,M.dt.dtl>0?'Deferred tax liabilities (net)':'Deferred tax assets (net) - shown as a negative liability',0);setc(BS,r,3,M.dt.dtl,3,tot.dtl);if(P)setc(BS,r,4,0,3);r++}
+ const l1=r-1;setc(BS,r,1,'TOTAL',1);setc(BS,r,3,Math.round(C.L*100)/100,4,'SUM(D'+l0+':D'+l1+')');if(P)setc(BS,r,4,Math.round(P.L*100)/100,4,'SUM(E'+l0+':E'+l1+')');const lt=r;r+=2;
+ setc(BS,r,1,'ASSETS',1);r++;const s0=r;AFO.filter(k=>AFK[k][1]=='A'&&M.order.includes(k)).forEach(k=>{line(BS,r,k);r++});
+ const s1=r-1;setc(BS,r,1,'TOTAL',1);setc(BS,r,3,Math.round(C.As*100)/100,4,'SUM(D'+s0+':D'+s1+')');if(P)setc(BS,r,4,Math.round(P.As*100)/100,4,'SUM(E'+s0+':E'+s1+')');const at=r;r+=2;
+ setc(BS,r,1,'Difference (should be nil)',9);setc(BS,r,3,Math.round((C.L-C.As)*100)/100,3,'D'+lt+'-D'+at);if(P)setc(BS,r,4,Math.round((P.L-P.As)*100)/100,3,'E'+lt+'-E'+at);r+=2;
+ if(F.sign){F.sign.replace(/\{name\}/g,F.name||'').split(/\n/).forEach(t=>{setc(BS,r,1,t,0);r++})}
+ BS.w={0:3,1:58,2:10,3:20,4:20};
+ /* ledgers */
+ setc(LG,1,0,'Ledgers used and where each one went',1);setc(LG,3,0,'Ledger',5);setc(LG,3,1,'Year',5);setc(LG,3,2,'Dr / (Cr)',5);setc(LG,3,3,'Goes to',5);setc(LG,3,4,'Sub head',5);r=4;
+ [[F.cur,y1],[F.prev,y0]].forEach(([arr,y])=>{if(!arr)return;arr.forEach(x=>{const k=afKeyOf(x,F.over||{},F.hover);setc(LG,r,0,x.n,0);setc(LG,r,1,y,7);setc(LG,r,2,Math.round(x.v*100)/100,3);setc(LG,r,3,k=='ign'?'LEFT OUT':k?AFK[k][0]:'NOT PLACED',0);setc(LG,r,4,x.sub||'',0);r++})});
+ LG.w={0:46,1:8,2:18,3:34,4:44};
+ const sx=W=>{const rs=Object.keys(W.r).map(Number).sort((a,b)=>a-b);return '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><sheetPr><pageSetUpPr fitToPage="1"/></sheetPr><sheetViews><sheetView showGridLines="0" workbookViewId="0"/></sheetViews><cols>'+Object.keys(W.w).map(i=>'<col min="'+(+i+1)+'" max="'+(+i+1)+'" width="'+W.w[i]+'" customWidth="1"/>').join('')+'</cols><sheetData>'+rs.map(rr=>'<row r="'+rr+'">'+Object.keys(W.r[rr]).map(Number).sort((a,b)=>a-b).map(c=>{const o=W.r[rr][c],ref=col(c)+rr;if(o.v===''||o.v==null)return o.s?'<c r="'+ref+'" s="'+o.s+'"/>':'';if(typeof o.v=='number')return '<c r="'+ref+'" s="'+o.s+'">'+(o.f?'<f>'+esc(o.f)+'</f>':'')+'<v>'+o.v+'</v></c>';return '<c r="'+ref+'" s="'+o.s+'" t="inlineStr"><is><t xml:space="preserve">'+esc(o.v)+'</t></is></c>'}).join('')+'</row>').join('')+'</sheetData>'+(W.m.length?'<mergeCells count="'+W.m.length+'">'+W.m.map(m=>'<mergeCell ref="'+m+'"/>').join('')+'</mergeCells>':'')+'<pageMargins left="0.7" right="0.7" top="0.75" bottom="0.75" header="0.3" footer="0.3"/><pageSetup paperSize="9" orientation="portrait" fitToWidth="1" fitToHeight="0"/></worksheet>'};
+ const FA=mk();if(F.fa&&F.fa.length){let mx=0;F.fa.forEach((row,i)=>{row.forEach((v,j)=>{if(v==null||v==='')return;mx=Math.max(mx,j);if(typeof v=='number')setc(FA,i+1,j,Math.round(v*100)/100,3);else setc(FA,i+1,j,String(v).replace(/[\r\n]+/g,' ').trim(),i<3?1:0)})});FA.w={0:42};for(let j=1;j<=mx;j++)FA.w[j]=16}
+ return{styles,sheets:[['BS',sx(BS)],['PL',sx(PL)],['Notes',sx(NT)]].concat(F.fa&&F.fa.length?[['Fixed assets',sx(FA)]]:[],[['Ledgers',sx(LG)]])}}
+async function afXlsx(M){const Z=await bxZip(),z=new Z(),{styles,sheets}=afXlsxParts(M);
+ z.file('[Content_Types].xml','<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/>'+sheets.map((s,i)=>'<Override PartName="/xl/worksheets/sheet'+(i+1)+'.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/>').join('')+'<Override PartName="/xl/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml"/></Types>');
+ z.file('_rels/.rels','<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="xl/workbook.xml"/></Relationships>');
+ z.file('xl/workbook.xml','<?xml version="1.0" encoding="UTF-8" standalone="yes"?><workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"><sheets>'+sheets.map((s,i)=>'<sheet name="'+s[0]+'" sheetId="'+(i+1)+'" r:id="rId'+(i+1)+'"/>').join('')+'</sheets><calcPr calcId="191029" fullCalcOnLoad="1"/></workbook>');
+ z.file('xl/_rels/workbook.xml.rels','<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">'+sheets.map((s,i)=>'<Relationship Id="rId'+(i+1)+'" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet'+(i+1)+'.xml"/>').join('')+'<Relationship Id="rId'+(sheets.length+1)+'" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/></Relationships>');
+ z.file('xl/styles.xml',styles);sheets.forEach((s,i)=>z.file('xl/worksheets/sheet'+(i+1)+'.xml',s[1]));
+ return z.generateAsync({type:'uint8array',compression:'DEFLATE'})}
+
+/* ---------- the page ---------- */
+let AF={inp:{}};
+function af(){if(!USER)return home();CURP='af';sb();pgIn('af');window.TBF=null;afDraw()}
+function afV(id,d){const v=AF.inp[id];return v==null?(d==null?'':d):v}
+function afN(id){return parseFloat(AF.inp[id])||0}
+function afCli(){return AF.inp.afc||''}
+function afI(id,l,ty,ph){return '<div><label>'+l+'<input id="'+id+'" type="'+(ty||'number')+'" step="any" value="'+E(afV(id))+'" placeholder="'+E(ph||'')+'" oninput="AF.inp[this.id]=this.value" onchange="afIn()"></label></div>'}
+function afSl(id,l,o){return '<div><label>'+l+'<select id="'+id+'" onchange="AF.inp[this.id]=this.value;afIn();afRef()">'+o.map(x=>'<option value="'+x[0]+'"'+(afV(id,o[0][0])==x[0]?' selected':'')+'>'+E(x[1])+'</option>').join('')+'</select></label></div>'}
+function afIn(){const c=afCli();if(c&&DB.clients&&DB.clients[c]){DB.clients[c].afSet=JSON.parse(JSON.stringify(AF.inp));save()}}
+function afRef(){if(AF.S)afView()}
+function afDraw(){const cl=Object.keys(DB.clients||{});
+ app.innerHTML='<i data-pg="af" hidden></i><div class="gxh"><h2>Final accounts</h2><p>Upload the Excel file that has your Trial Balance sheets (with Note No, Head and Sub Head filled in). You get the Balance Sheet, Profit and Loss and Notes in Excel, with the previous year beside it.</p></div>'
+ +'<div class="tbc"><h3 style="margin-top:0">1. Client and file</h3><div class="tbg"><div><label>Client (settings are remembered for each client)<select id="afc" onchange="afCl(this.value)"><option value="">(none)</option>'+cl.map(c=>'<option'+(afCli()==c?' selected':'')+'>'+E(c)+'</option>').join('')+'</select></label></div>'+afI('afn','Name on the accounts','text','e.g. JVP Construction Company Private Limited')+afI('afl','Line under the name (CIN etc., optional)','text','(CIN:U45201MH2003PTC143475)')+afSl('aft','Type',[['co','Company'],['pr','Proprietor'],['llp','LLP / Partnership firm']])+afI('afy','Year ending 31 March','number')+'</div>'
+ +'<p><input type="file" id="aff" accept=".xlsx,.xlsm,.xls" onchange="afLoad(this)"></p><div id="afm"></div></div><div id="afb"></div>';if(!AF.inp.afy)AF.inp.afy='2026';$id('afy').value=AF.inp.afy;if(AF.S){afMeta();afView()}}
+function afCl(c){const keepY=AF.inp.afy;AF.inp=(c&&DB.clients[c]&&DB.clients[c].afSet)?Object.assign({},DB.clients[c].afSet):{};AF.inp.afc=c;if(!AF.inp.afn&&c)AF.inp.afn=c;if(!AF.inp.afy)AF.inp.afy=keepY||'2026';AF.hlocal=null;AF.local=null;afDraw()}
+function afMap(){const c=afCli();return c&&DB.clients[c]?(DB.clients[c].afMap=DB.clients[c].afMap||{}):{}}
+function afHMap(){const c=afCli();return c&&DB.clients[c]?(DB.clients[c].afHead=DB.clients[c].afHead||{}):{}}
+function afHSet(h,k){h=decodeURIComponent(h).toLowerCase();const c=afCli();if(c&&DB.clients[c]){const m=afHMap();if(k)m[h]=k;else delete m[h];save()}else{AF.hlocal=AF.hlocal||{};if(k)AF.hlocal[h]=k;else delete AF.hlocal[h]}afView()}
+function afSet(n,k){n=decodeURIComponent(n);const m=afMap(),c=afCli();if(c&&DB.clients[c]){m[n.toLowerCase()]=k;save()}else{AF.local=AF.local||{};AF.local[n.toLowerCase()]=k}afView()}
+async function afLoad(el){const f=el.files[0];if(!f)return;$id('afm').innerHTML='<div class="tbr">Reading the file...</div>';
+ try{const X=await bxXlsxLib(),wb=X.read(new Uint8Array(await f.arrayBuffer()),{type:'array'});afWb(X,wb,f.name)}catch(e){$id('afm').innerHTML='<div class="card bad">I could not read this file ('+E(e&&e.message||e)+').</div>'}}
+function afWb(X,wb,fn){const S=[];wb.SheetNames.forEach(n=>{const rows=X.utils.sheet_to_json(wb.Sheets[n],{header:1,raw:true,defval:null,blankrows:false});if(afIsTb(rows)>=0){const it=afParse(rows);if(it&&it.length)S.push({name:n,items:it})}});
+ afSheets(S,fn,X,wb)}
+function afYears(S){let m=0;S.forEach(s=>{const r=s.name.match(/(\d{2})\D{0,3}(\d{2})/);if(r&&+r[2]==(+r[1]+1)%100)m=Math.max(m,2000+ +r[2])});return m}
+function afSheets(S,fn,X,wb){if(!S.length){$id('afm').innerHTML='<div class="card bad">I found no Trial Balance sheet in this file. A sheet needs the columns Particulars, Debit, Credit, Amt, Dr / Cr, Note No, Head and Sub Head.</div>';return}
+ const ay=afYears(S);if(ay&&!AF.yearSet){AF.inp.afy=String(ay);if($id('afy'))$id('afy').value=ay}
+ const yr=+AF.inp.afy,pick=y=>{const a=String(y-1).slice(2)+'-'+String(y).slice(2),b=String(y-1).slice(2)+'_'+String(y).slice(2),c=String(y-1).slice(2)+' '+String(y).slice(2);return S.findIndex(s=>s.name.includes(a)||s.name.includes(b)||s.name.includes(c))};let ci=pick(yr),pi=pick(yr-1);if(ci<0)ci=0;if(pi<0)pi=S.length>1?(ci==0?1:-1):-1;if(pi==ci)pi=-1;
+ const names=wb?wb.SheetNames:[],fa=names.findIndex(n=>/^(fa|nca)([\s_]|$)|fixed[\s_]*as|^ppe/i.test(n.trim()));
+ AF.S=S;AF.fn=fn;AF.ci=ci;AF.pi=pi;AF.X=X;AF.wb=wb;AF.fa=fa>=0?names[fa]:'';afMeta();afView()}
+function afMeta(){const S=AF.S,names=AF.wb?AF.wb.SheetNames:[];$id('afm').innerHTML='<p>Found '+S.length+' Trial Balance sheet'+(S.length>1?'s':'')+'. Choose which one is this year and which is last year.</p><div class="tbg"><div><label>This year<select id="afci" onchange="afPick()">'+S.map((s,i)=>'<option value="'+i+'"'+(i==AF.ci?' selected':'')+'>'+E(s.name)+' ('+s.items.length+' ledgers)</option>').join('')+'</select></label></div><div><label>Last year<select id="afpi" onchange="afPick()"><option value="-1">(none)</option>'+S.map((s,i)=>'<option value="'+i+'"'+(i==AF.pi?' selected':'')+'>'+E(s.name)+'</option>').join('')+'</select></label></div><div><label>Fixed asset schedule sheet (copied into the file)<select id="afsf" onchange="AF.fa=this.value"><option value="">(none)</option>'+names.map(n=>'<option'+(n==AF.fa?' selected':'')+'>'+E(n)+'</option>').join('')+'</select></label></div></div>'}
+function afPick(){AF.ci=+$id('afci').value;AF.pi=+$id('afpi').value;if(AF.pi==AF.ci){AF.pi=-1;$id('afpi').value=-1}AF.yearSet=1;afView()}
+function afOpts(k){return '<option value="">- choose -</option><option value="ign"'+(k=='ign'?' selected':'')+'>Leave out of the accounts</option>'+AFO.map(x=>'<option value="'+x+'"'+(x==k?' selected':'')+'>'+E(AFK[x][0])+'</option>').join('')}
+function afFaRows(){if(!AF.fa||!AF.wb||!AF.X)return null;const g=AF.X.utils.sheet_to_json(AF.wb.Sheets[AF.fa],{header:1,raw:true,defval:null,blankrows:true});let st=g.findIndex(r=>r.some(x=>x!=null&&x!==''));if(st<0)return null;let en=g.length,seen=0,blank=0,hadTotal=0;for(let i=st;i<g.length;i++){const r=g[i],ne=r.some(x=>x!=null&&x!=='');if(ne){seen++;blank=0;if(/^total/i.test(String(r[0]==null?'':r[0]).trim()))hadTotal=i}else{blank++;if(hadTotal&&i>hadTotal){en=i;break}if(blank>=2&&seen>=5){en=i-1;break}}}return g.slice(st,en).map(r=>r.slice(0,14))}
+function afPTable(fm){if(fm!='llp'||!AF.S)return '';const it=AF.S[AF.ci].items,pc=afPartners(it,Object.assign({},afMap(),AF.local||{}),Object.assign({},afHMap(),AF.hlocal||{}),'llp'),L=[...pc.values()];if(!L.length)return '';
+ return '<h4>Partners</h4><p style="margin-top:0">Type each partner\'s profit sharing ratio. Opening, introduced and withdrawn are optional: if you leave them empty, opening comes from last year\'s Trial Balance and introduced / withdrawn are worked out as the balancing movement.</p><table style="width:100%"><tr><th>Partner</th><th>PSR %</th><th>Remuneration ₹</th><th>Opening ₹</th><th>Introduced ₹</th><th>Withdrawn ₹</th></tr>'+L.map(e=>{const g=(f)=>{const q=(AF.inp.partners||{})[e.key]||{};return q[f]==null?'':q[f]};const c=f=>'<td><input style="width:100%" type="number" step="any" value="'+E(g(f))+'" oninput="afPSet(\''+encodeURIComponent(e.key)+'\',\''+f+'\',this.value)" onchange="afIn()"></td>';return '<tr><td>'+E(e.name)+'</td>'+c('psr')+c('rem')+c('open')+c('intro')+c('wd')+'</tr>'}).join('')+'</table>'}
+function afPSet(k,f,v){k=decodeURIComponent(k);AF.inp.partners=AF.inp.partners||{};(AF.inp.partners[k]=AF.inp.partners[k]||{})[f]=v}
+function afView(){const cur=AF.S[AF.ci].items,map=afMap(),fm=afV('aft','co');
+ const ho=Object.assign({},afHMap(),AF.hlocal||{}),kf=x=>(AF.local||{})[x.n.toLowerCase()]||afKeyOf(x,map,ho),unk=cur.filter(x=>!kf(x)),sum=cur.reduce((a,x)=>x.ao?a:a+x.v,0),untag=cur.filter(x=>!x.tag);
+ const defSign=()=>"For Jaykaran Gupta & Co\nChartered Accountants\nFirm's Registration No: 142640W\nUDIN: \n\nJaykaran Gupta\nProprietor\nMembership No: 143499\n\nFor and on behalf of {name}\n"+(fm=='co'?'Director: \nDIN No: \nDirector: \nDIN No: \n':fm=='llp'?'Designated Partner: \nDIN No: \nDesignated Partner: \nDIN No: \n':'Proprietor: \n')+"\nPlace: Mumbai\nDate: ";
+ const keep=document.activeElement&&document.activeElement.id;
+ $id('afb').innerHTML='<div class="tbc" style="margin-top:14px"><h3 style="margin-top:0">2. Check</h3><p style="margin-top:0">'+cur.length+' ledgers read from <b>'+E(AF.S[AF.ci].name)+'</b>. Debit minus credit of all of them: <b style="color:var(--'+(Math.abs(sum)<1?'ok':'bad')+')">'+tbN(sum)+'</b>'+(Math.abs(sum)<1?' (the Trial Balance agrees)':' (it should be nil. Some ledger is missing or wrong)')+'.</p>'
+ +(unk.length?'<div class="card bad" style="margin-bottom:10px"><b>'+unk.length+' ledger'+(unk.length>1?'s are':' is')+' not placed.</b> Choose where each one goes:</div><table style="width:100%"><tr><th>Ledger</th><th style="text-align:right">Dr / (Cr)</th><th>Goes to</th></tr>'+unk.map(x=>'<tr><td>'+E(x.n)+'</td><td style="text-align:right">'+tbN(x.v)+'</td><td><select onchange="afSet(\''+encodeURIComponent(x.n)+'\',this.value)">'+afOpts('')+'</select></td></tr>').join('')+'</table>':'<div class="tbr" style="color:var(--ok)"><b>Every ledger has a place.</b></div>')
+ +(untag.length?'<p class="tbr" style="margin-top:12px"><b>'+untag.length+' ledger'+(untag.length>1?'s have':' has')+' no Head in your sheet.</b> I placed them by name (Fixed Assets, Depreciation, Capital, Profit &amp; Loss A/c and similar). Check them and change if needed:</p><table style="width:100%"><tr><th>Ledger</th><th style="text-align:right">Dr / (Cr)</th><th>Goes to</th></tr>'+untag.map(x=>'<tr><td>'+E(x.n)+'</td><td style="text-align:right">'+tbN(x.v)+'</td><td><select onchange="afSet(\''+encodeURIComponent(x.n)+'\',this.value)">'+afOpts(kf(x)||x.g)+'</select></td></tr>').join('')+'</table>':'')
+ +(function(){const H={};cur.forEach(x=>{if(x.head){const h=x.head.toLowerCase();(H[h]=H[h]||{n:x.head,c:0,v:0,g:x.g}).c++;H[h].v+=x.v}});const L=Object.values(H);return L.length?'<h4>Your Heads and where they go</h4><p style="margin-top:0">Every ledger with a Head follows this table. Change a line to move all its ledgers (for example, Secured Loan into Other current liabilities).</p><table style="width:100%"><tr><th>Head in your sheet</th><th>Ledgers</th><th style="text-align:right">Dr / (Cr)</th><th>Goes to</th></tr>'+L.map(h=>'<tr><td>'+E(h.n)+'</td><td>'+h.c+'</td><td style="text-align:right">'+tbN(h.v)+'</td><td><select onchange="afHSet(\''+encodeURIComponent(h.n)+'\',this.value)">'+afOpts(ho[h.n.toLowerCase()]||h.g)+'</select></td></tr>').join('')+'</table>':''})()+'</div>'
+ +'<div class="tbc" style="margin-top:14px"><h3 style="margin-top:0">3. Tax and other details</h3><p style="margin-top:0">Leave a box empty if it is already in the Trial Balance.</p><div class="tbg">'+afI('afct','Current tax for this year (₹)')+afI('afpt','Earlier year tax (₹)')+afI('afpc','Current tax of last year (₹)')+(fm=='llp'?afI('afrm','Remuneration to partners this year (₹), if not in the Trial Balance')+afI('afpr','Remuneration to partners last year (₹), if not in the Trial Balance'):'')+'</div>'
+ +'<h4>Deferred tax (I calculate it)</h4><p style="margin-top:0">Deferred tax = (value of the assets in the books − value as per Income Tax) × rate. The Trial Balance has the books value only, so the Income Tax value comes from your tax depreciation sheet. If both are empty, no deferred tax is shown.</p><div class="tbg">'+afI('afbk','Books: depreciable assets after depreciation (₹)')+afI('afit','Income Tax: the same assets after tax depreciation (₹)')+afI('afop','Deferred tax liability already in the books at the start of the year (₹)')+afI('afrt','Rate (%)','number','25.168')+'</div>'
+ +afPTable(fm)+(fm=='pr'?'<h4>Capital account</h4><p style="margin-top:0">Optional. If you leave these empty, introduced less withdrawn is shown as one balancing line.</p><div class="tbg">'+afI('afin','Introduced during the year (₹)')+afI('afwd','Withdrawn during the year (₹)')+'</div>':'')
+ +(fm=='co'?'<h4>Share capital</h4><div class="tbg">'+afI('afsh','Number of equity shares issued (also used for earning per share)')+afI('afau','Authorised number of shares')+afI('afface','Face value per share (₹)','number','10')+'</div><label>Shareholders holding more than 5% (one per line: name, number of shares)<textarea id="afhold" rows="3" style="width:100%" oninput="AF.inp.afhold=this.value" onchange="afIn()">'+E(afV('afhold'))+'</textarea></label>':'')
+ +'<h4>Signature block (printed under the Balance Sheet and Profit and Loss)</h4><label>One line per row. {name} becomes the name on the accounts.<textarea id="afsg" rows="9" style="width:100%" oninput="AF.inp.afsg=this.value" onchange="afIn()">'+E(AF.inp.afsg!=null?AF.inp.afsg:defSign())+'</textarea></label></div>'
+ +'<div class="tbc" style="margin-top:14px"><h3 style="margin-top:0">4. Result</h3><button class="btn" onclick="afOut()">Show the accounts</button> <button class="btn" onclick="afDl()">Download Excel</button><div id="afo"></div></div>';
+ if(keep&&$id(keep))try{$id(keep).focus()}catch(e){}}
+function afForm(){const F={},m=Object.assign({},afMap(),AF.local||{}),I=AF.inp;F.fmt=afV('aft','co');F.name=(I.afn||'').trim();F.line2=(I.afl||'').trim();F.year=String(I.afy||'2026');F.cur=AF.S[AF.ci].items;F.prev=AF.pi>=0?AF.S[AF.pi].items:null;F.over=m;F.hover=Object.assign({},afHMap(),AF.hlocal||{});
+ F.rem=afN('afrm');F.prem=afN('afpr');F.ctax=afN('afct');F.ptax=afN('afpt');F.pctax=afN('afpc');F.shares=afN('afsh');F.auth=afN('afau');F.face=afN('afface')||10;F.book=afN('afbk');F.itw=afN('afit');F.open=afN('afop');F.rate=afN('afrt')||25.168;
+ F.holders=(I.afhold||'').split(/\n/).map(l=>{const q=l.split(/[,\t]/);const n=parseFloat(String(q[q.length-1]).replace(/[, ]/g,''));return q.length>1&&!isNaN(n)?{name:q.slice(0,-1).join(',').trim(),n}:null}).filter(Boolean);
+ F.intro=afN('afin');F.wd=afN('afwd');F.partners=I.partners||{};F.sign=I.afsg!=null?I.afsg:'';F.fa=afFaRows();return F}
+function afOut(){const M=afModel(afForm()),C=M.C,P=M.P,row=(l,a,b,bold)=>'<tr><td>'+(bold?'<b>'+E(l)+'</b>':E(l))+'</td><td style="text-align:right">'+tbN(a)+'</td>'+(P?'<td style="text-align:right">'+tbN(b)+'</td>':'')+'</tr>',
+ blk=(t,keys)=>'<h4>'+t+'</h4><table style="width:100%"><tr><th></th><th style="text-align:right">'+E(M.F.year)+'</th>'+(P?'<th style="text-align:right">'+(M.F.year-1)+'</th>':'')+'</tr>'+keys.filter(k=>M.order.includes(k)).map(k=>row(k=='cap'&&M.fm=='llp'?"Partners' capital account":AFK[k][0],C.A[k].v,P?P.A[k].v:0)).join('')+'</table>';
+ $id('afo').innerHTML=blk('Liabilities',AFO.filter(k=>AFK[k][1]=='L'))+(M.dt.calc?'<p>Deferred tax liability worked out: <b>'+tbN(M.dt.dtl)+'</b>. Charge for the year: <b>'+tbN(M.dt.charge)+'</b>.</p>':'')+'<p>Total liabilities <b>'+tbN(C.L)+'</b>'+(P?' (last year '+tbN(P.L)+')':'')+'</p>'+blk('Assets',AFO.filter(k=>AFK[k][1]=='A'))+'<p>Total assets <b>'+tbN(C.As)+'</b>'+(P?' (last year '+tbN(P.As)+')':'')+'</p>'
+ +'<h4>Profit and loss</h4><table style="width:100%">'+row('Total income',C.rev,P?P.rev:0)+row('Total expenses',C.exp,P?P.exp:0)+row('Profit before'+(M.fm=='llp'?' remuneration and':'')+' tax',C.pbt0,P?P.pbt0:0)+(C.rem||(P&&P.rem)?row('Remuneration to partners',C.rem,P?P.rem:0):'')+(M.fm=='llp'?row('Profit before tax',C.pbt,P?P.pbt:0,1):'')+row('Tax',C.tax,P?P.tax:0)+row('Profit after tax',C.pat,P?P.pat:0,1)+'</table>'
+ +(M.partners&&M.partners.length&&Math.abs(M.partners.sum-100)>0.01?'<div class="card bad" style="margin-top:8px">The partners\' profit sharing ratios add up to '+M.partners.sum+'%. They should add up to 100%.</div>':'')
+ +(C.added?'':'<p class="tbr">The Trial Balance already has the profit in the capital account, so I did not add it again.</p>')+(Math.abs(C.diff)<1?'<div class="tbr" style="color:var(--ok)"><b>This year tallies.</b></div>':'<div class="card bad" style="margin-top:8px">This year does not tally. Difference '+tbN(C.diff)+'. Assets and liabilities in the Trial Balance do not match, or a ledger is placed wrongly.</div>')
+ +(P&&Math.abs(P.diff)>=1?'<div class="card bad" style="margin-top:8px">Last year does not tally. Difference '+tbN(P.diff)+'. Check last year\'s Trial Balance sheet.</div>':'');window.AFM=M}
+async function afDl(){try{const M=afModel(afForm()),u=await afXlsx(M),b=new Blob([u],{type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'}),a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='Final-Accounts-'+(M.F.name||'Client').replace(/[^A-Za-z0-9]+/g,'_')+'-'+M.F.year+'.xlsx';document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},2000)}catch(e){alert('Could not make the file: '+(e&&e.message||e))}}
+
 function home(){CURP='home';S={};window.onscroll=null;sb();dls();document.body.classList.toggle('out',!USER);
  if(!USER){loginPage();return}
  const N=Object.keys(DB.clients);let A=0,O=0,P=0;N.forEach(n=>{const c=DB.clients[n];P+=c.pending||0;c.accounts.forEach(a=>{A++;const d=days(a.lastImport);if(d==null||d>30)O++})});
@@ -3391,7 +3811,7 @@ function home(){CURP='home';S={};window.onscroll=null;sb();dls();document.body.c
  const grp=[
   dkGrp('Clients',[dkTile('check','Client tracker',T.t?(T.d+' of '+T.t+' done this month'):'Track the work client by client','trk()'),dkTile('search','Find a client','Jump to the client list','var q=$id(\'q\');if(q){q.scrollIntoView({behavior:\'smooth\',block:\'center\'});q.focus()}')].concat(arcOK()?[dkTile('folder','Saved clients (folder)','Find a saved client and bring him back','arcFind()')]:[]).concat(atOK()?[dkTile('clock','Attendance',attLine(),'att()')]:[])),
   dkGrp('Entries and imports',[].concat(pcOK()?[dkTile('wallet','Petty cash book','Record and export expenses','pc()')]:[]).concat(typeof bx=='function'?[dkTile('sheet','Bill Reader','Turn bills into the India layout sheet','bx()')]:[]).concat(typeof qm=='function'?[dkTile('sheet','Quick message','Ready messages for clients','qm()')]:[]).concat(!VIEW?[dkTile('note','My notepad',(DB.notes||[]).filter(n=>n.x.trim()).length+' notes · private to you','np()')]:[])),
-  dkGrp('Checks',[dkTile('scale','Reco','GSTR-2B and bank reconciliation','reco()'),dkTile('shield','GSTIN / HSN check','Check a number in one tap','gchk()'),dkTile('calc','Toolbox','Calculator, GST, TDS finder, income tax, interest','tools()'),dkTile('rupee','Fees tracker','Bills to clients and what is pending','fees()'),dkTile('bell','Notices',(!VIEW?ntLine():'Notices'),'notices()'),dkTile('bal','Balance sheet','Trial Balance from Tally to balance sheet and P&L','fs()')]),
+  dkGrp('Checks',[dkTile('scale','Reco','GSTR-2B and bank reconciliation','reco()'),dkTile('shield','GSTIN / HSN check','Check a number in one tap','gchk()'),dkTile('calc','Toolbox','Calculator, GST, TDS finder, income tax, interest','tools()'),dkTile('rupee','Fees tracker','Bills to clients and what is pending','fees()'),dkTile('bell','Notices',(!VIEW?ntLine():'Notices'),'notices()'),dkTile('bal','Balance sheet','Trial Balance from Tally to balance sheet and P&L','fs()'),dkTile('bal','Final accounts','Balance sheet, P&L and Notes from your Trial Balance Excel','af()')]),
   dkGrp(ADM()&&!VIEW?'Admin':'Help and backup',[].concat(ADM()&&!VIEW?[dkTile('users','Staff &amp; access','Add staff, set permissions','staffF()')]:[]).concat([dkTile('key','Change password','Set a new login password','chpw()'),dkTile('down','Download backup','Save a copy of your data',"dl('JK-backup-'+USER+'.json',JSON.stringify(DB),'application/json')"),dkTile('help','Help','How to use each part','help()')]))].join('');
  const firstBox='<div class="dfirst"><h2>Welcome! Let\'s add your first client</h2><p>Drop a Tally export and the client, bank accounts and ledgers are set up for you.</p><div class="dfb"><button type="button" class="dprim" onclick="tlNew()">'+IC.plus+' Create client from Tally file</button><button type="button" class="g" onclick="tg(1)">Add by hand</button></div></div>';
  app.innerHTML='<i data-pg="home" hidden></i>'+(VIEW?vbar():'')+dkHero()+(first?firstBox:'<div class="dbar"><button type="button" class="dprim" onclick="tlNew()">'+IC.plus+' Create client from Tally file</button><div class="dcs">'+chips+'</div></div>')+'<div class="dgs">'+grp+'</div>'
