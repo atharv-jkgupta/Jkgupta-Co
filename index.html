@@ -3810,6 +3810,25 @@ function afXlsxParts(M){const F=M.F,C=M.C,P=M.P,yr=F.year||'',y1=String(yr),y0=S
  const FA=mk();if(F.fa&&F.fa.length){let mx=0;F.fa.forEach((row,i)=>{row.forEach((v,j)=>{if(v==null||v==='')return;mx=Math.max(mx,j);if(typeof v=='number')setc(FA,i+1,j,Math.round(v*100)/100,3);else setc(FA,i+1,j,String(v).replace(/[\r\n]+/g,' ').trim(),i<3?1:0)})});FA.w={0:42};for(let j=1;j<=mx;j++)FA.w[j]=16}
  const nm=n=>String(n||'').replace(/[\[\]:*?\/\\]/g,'').slice(0,31),used=['BS','PL',NBn,NPn],uniq=n=>{n=nm(n);let q=n,i=2;while(used.includes(q))q=n.slice(0,28)+' '+(i++);used.push(q);return q};
  const sh=[['BS',sx(BS)],['PL',sx(PL)],[NBn,sx(NB)],[NPn,sx(NPL)]];if(F.curRows)sh.push([uniq(cn||'TB'),sx(TC.W)]);if(P&&F.prevRows)sh.push([uniq(pn||'TB previous'),sx(TP.W)]);if(F.fa&&F.fa.length)sh.push([uniq(F.faName||'Fixed assets'),sx(FA)]);
+ /* the other working sheets that your files carry, with the same names */
+ const brow=k=>cellOf[k]?cellOf[k].replace('BS!C',''):null,sumBS=(ks,c)=>{const q=ks.filter(k=>brow(k)).map(k=>'BS!'+c+brow(k));return q.length?q.join('+'):null};
+ const pAs=sumBS(['inv','tr','cash','stla','oca'],'D'),pLi=sumBS(['stb','tp','ocl','stp'],'D');
+ const sv=(k,c)=>{let t=0;['inv','tr','cash','stla','oca'].forEach(q=>{if(k=='A'&&C.A[q])t+=C.A[q].v});['stb','tp','ocl','stp'].forEach(q=>{if(k=='L'&&C.A[q])t+=C.A[q].v});return Math.round(t*100)/100};
+ const tool=(nm0,fn)=>{const W=mk();fn(W);sh.push([uniq(nm0),sx(W)])};
+ const t26=(W,top,title)=>{if(title){setc(W,1,0,F.name||'',1)}['Sr No','Sec','TAN No','Name of Party','Amt','TDS',M.fm=='co'?'Revenue':'Sales','Elegible TDS','TDS C/f'].forEach((h,j)=>setc(W,top,j,h,5));
+  for(let i=1;i<=15;i++){const R=top+i;setc(W,R,0,i,7,i>1?'A'+(R-1)+'+1':null);setc(W,R,7,0,3,'MIN(ROUND(IF(E'+R+'=0,0,F'+R+'/E'+R+'*G'+R+'),0),F'+R+')')}
+  const T=top+16;setc(W,T,3,'Total',1);['E','F','G','H','I'].forEach((L,j)=>setc(W,T,4+j,0,4,'SUM('+L+(top+1)+':'+L+(T-1)+')'));setc(W,T+2,1,'Paste the Form 26AS details above. Eligible TDS is the lower of TDS and TDS on the revenue booked.',9);W.w={0:7,1:9,2:14,3:44,4:16,5:14,6:16,7:16,8:14}};
+ if(M.fm=='co'){
+  tool('Statutory Audit',W=>{setc(W,1,0,'',0);setc(W,1,2,'Type the UDIN of the statutory audit report in A1',9);W.w={0:30,1:4,2:50}});
+  tool('Tax Audit',W=>{setc(W,2,0,'',0);setc(W,2,2,'Type the UDIN of the tax audit report in A2',9);W.w={0:30,1:4,2:50}});
+  tool('Ratio',W=>{setc(W,3,0,1,0);setc(W,3,1,'Current ratio',1);setc(W,4,1,'Current asset',0);setc(W,4,2,sv('A'),3,pAs);setc(W,5,1,'Less: Trade receivable greater then 6 months',0);setc(W,5,2,0,3);setc(W,6,1,'Others more then 6 months',0);setc(W,6,2,0,3);setc(W,7,2,sv('A'),4,'C4-C5-C6');
+   setc(W,9,1,'Current liabilities',0);setc(W,9,2,sv('L'),3,pLi);setc(W,11,1,'Current Ratio',1);const ca=sv('A'),cl=sv('L');setc(W,11,2,cl?Math.round(ca/cl*100)/100:0,4,'IF(C9=0,0,C7/C9)');
+   setc(W,13,1,'Type the receivables older than 6 months in C5 and C6.',9);W.w={0:5,1:52,2:20}})}
+ if(M.fm=='pr')tool('26AS',W=>{setc(W,2,4,'26AS',1);t26(W,3,0)});
+ if(M.fm=='llp'){
+  tool('UDIN Stat Audit',W=>{setc(W,3,0,'Stat Audit UDIN',0);setc(W,3,2,'',0);setc(W,3,4,'Type the UDIN in C3',9);W.w={0:20,1:4,2:34,3:4,4:30}});
+  tool('26AS Reco',W=>t26(W,4,1));
+  tool('Crs confirmation',W=>{setc(W,1,0,F.name||'',1);setc(W,3,0,'Confirmation of accounts',1);setc(W,5,0,'Sr No',5);setc(W,5,1,'Name of Party',5);const pl=(F.cur||[]).filter(x=>x._k=='tp'&&Math.abs(x.v)>0.004);pl.forEach((x,i)=>{const R=6+i;setc(W,R,0,i+1,7,i?'A'+(R-1)+'+1':null);setc(W,R,1,x.n,0)});W.w={0:8,1:60}})}
  return{styles,sheets:sh}}
 async function afXlsx(M){const Z=await bxZip(),z=new Z(),{styles,sheets}=afXlsxParts(M);
  z.file('[Content_Types].xml','<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/>'+sheets.map((s,i)=>'<Override PartName="/xl/worksheets/sheet'+(i+1)+'.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/>').join('')+'<Override PartName="/xl/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml"/></Types>');
