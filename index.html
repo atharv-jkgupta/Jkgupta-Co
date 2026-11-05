@@ -1,5 +1,5 @@
 <!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Jaykaran Gupta &amp; Co</title>
-<meta name="description" content="Jaykaran Gupta &amp; Co client accounting workspace"><meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#0b1020"><meta name="jkg-build" content="b2611042000"><script>try{var t=localStorage.getItem("jkgtheme")||(matchMedia("(prefers-color-scheme:dark)").matches?"dark":"light");document.documentElement.dataset.theme=t}catch(e){document.documentElement.dataset.theme="light"}</script><link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns=%27http://www.w3.org/2000/svg%27%20viewBox=%270%200%2064%2064%27%3E%3Cdefs%3E%3ClinearGradient%20id=%27g%27%20x1=%270%27%20y1=%270%27%20x2=%271%27%20y2=%271%27%3E%3Cstop%20offset=%270%27%20stop-color=%27#5b4bf0%27/%3E%3Cstop%20offset=%271%27%20stop-color=%27#22b8d9%27/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect%20width=%2764%27%20height=%2764%27%20rx=%2716%27%20fill=%27url(#g)%27/%3E%3Ctext%20x=%2732%27%20y=%2743%27%20font-size=%2727%27%20font-family=%27Arial,Helvetica,sans-serif%27%20font-weight=%27800%27%20text-anchor=%27middle%27%20fill=%27#fff%27%3EJK%3C/text%3E%3C/svg%3E"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@600;700;800&display=swap" media="print" onload="this.media='all'"><noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@600;700;800&display=swap"></noscript><style>
+<meta name="description" content="Jaykaran Gupta &amp; Co client accounting workspace"><meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#0b1020"><meta name="jkg-build" content="b2611050730"><script>try{var t=localStorage.getItem("jkgtheme")||(matchMedia("(prefers-color-scheme:dark)").matches?"dark":"light");document.documentElement.dataset.theme=t}catch(e){document.documentElement.dataset.theme="light"}</script><link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns=%27http://www.w3.org/2000/svg%27%20viewBox=%270%200%2064%2064%27%3E%3Cdefs%3E%3ClinearGradient%20id=%27g%27%20x1=%270%27%20y1=%270%27%20x2=%271%27%20y2=%271%27%3E%3Cstop%20offset=%270%27%20stop-color=%27#5b4bf0%27/%3E%3Cstop%20offset=%271%27%20stop-color=%27#22b8d9%27/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect%20width=%2764%27%20height=%2764%27%20rx=%2716%27%20fill=%27url(#g)%27/%3E%3Ctext%20x=%2732%27%20y=%2743%27%20font-size=%2727%27%20font-family=%27Arial,Helvetica,sans-serif%27%20font-weight=%27800%27%20text-anchor=%27middle%27%20fill=%27#fff%27%3EJK%3C/text%3E%3C/svg%3E"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@600;700;800&display=swap" media="print" onload="this.media='all'"><noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@600;700;800&display=swap"></noscript><style>
 /* ============ tokens ============ */
 :root{--serif:'Source Serif 4',Georgia,'Times New Roman',serif;--sans:'Inter','Segoe UI',system-ui,-apple-system,Arial,sans-serif;--r:12px;--ease:cubic-bezier(.2,.7,.2,1)}
 :root,:root[data-theme=light]{color-scheme:light;
@@ -853,6 +853,42 @@ table.stf td:first-child b{text-transform:capitalize}
 .pwc{padding:7px 14px;border-radius:999px;border:1px solid var(--line2,#3a4663);background:var(--s1,#131a2e);color:var(--ink,#e8ecf6);font-weight:600;font-size:13px;cursor:pointer}
 .pwc i{font-style:normal;opacity:.7;margin-left:4px}.pwc.on{background:linear-gradient(100deg,var(--pri,#7c8cff),color-mix(in srgb,var(--pri,#7c8cff) 45%,var(--gold,#e3b95a)));color:var(--priink,#fff);border-color:transparent}
 .pwfm select{padding:8px;border-radius:8px}
+
+/* ===== polish v4: forms, file pickers, cards on every page ===== */
+#g1,#g2,#g3{display:inline-block;margin:4px 8px 12px 4px;min-width:130px}
+#g3{width:min(100%,340px)}
+#app input[type=file]{padding:8px;border:1.5px dashed var(--line2);border-radius:12px;background:color-mix(in srgb,var(--pri) 4%,transparent);max-width:100%;transition:border-color .15s,background .15s}
+#app input[type=file]:hover{border-color:var(--pri);background:color-mix(in srgb,var(--pri) 9%,transparent)}
+#app input[type=file]::file-selector-button{font:600 14px var(--sans);margin-right:12px;padding:8px 14px;border:0;border-radius:9px;background:var(--pri);color:var(--priink);cursor:pointer}
+#app input[type=text],#app input[type=number],#app input[type=search],#app input:not([type]),#app select,#app textarea{border-radius:10px;transition:border-color .15s,box-shadow .15s}
+#app input:focus,#app select:focus,#app textarea:focus{outline:none;border-color:var(--pri);box-shadow:0 0 0 3px color-mix(in srgb,var(--pri) 25%,transparent)}
+#app .card{border-radius:16px;box-shadow:0 1px 2px rgba(15,23,42,.05),0 10px 26px -16px rgba(15,23,42,.3)}
+#app button:not(.hli):not(.ib){transition:transform .12s,filter .12s,box-shadow .12s}
+#app button:not(.hli):not(.ib):active{transform:scale(.97)}
+#app .dz,#app [class*=drop]{transition:border-color .15s,background .15s,transform .15s}
+#app .dz:hover,#app [class*=drop]:hover{transform:translateY(-1px)}
+::selection{background:color-mix(in srgb,var(--pri) 35%,transparent)}
+/* nicer scrollbars */
+*{scrollbar-width:thin;scrollbar-color:color-mix(in srgb,var(--pri) 45%,transparent) transparent}
+/* tables: easier to read */
+#app table{border-collapse:separate;border-spacing:0}
+#app tbody tr{transition:background .12s}
+#app tbody tr:hover{background:color-mix(in srgb,var(--pri) 7%,transparent)}
+/* tap targets on phones */
+@media(max-width:600px){#app button:not(.hli):not(.ib),#app select,#app input:not([type=checkbox]):not([type=radio]){min-height:44px}}
+
+/* ===== polish v5: passwords page, quick links ===== */
+.pwt h2{font-size:clamp(26px,4vw,34px);letter-spacing:-.3px}
+.pwe{border-radius:16px;text-align:center;padding:26px 20px;box-shadow:0 1px 2px rgba(15,23,42,.05),0 10px 26px -16px rgba(15,23,42,.3)}
+.pwe b{display:block;font-size:18px;margin-bottom:4px}
+.pwb{box-shadow:0 1px 2px rgba(15,23,42,.06);transition:transform .12s,box-shadow .15s,background .15s}
+.pwb:hover{transform:translateY(-1px);box-shadow:0 8px 18px -10px rgba(79,70,229,.5)}
+.pwbtn{box-shadow:0 8px 20px -10px rgba(79,70,229,.6);transition:transform .12s,box-shadow .15s}
+.pwbtn:hover{transform:translateY(-1px)}.pwbtn:active{transform:scale(.97)}
+.pwtb tbody tr{transition:background .12s}.pwtb tbody tr:hover{background:color-mix(in srgb,var(--pri,#7c8cff) 8%,transparent)}
+.pwtk{border-radius:14px}
+.qlk a{transition:transform .12s,box-shadow .15s}.qlk a:hover{transform:translateY(-2px);box-shadow:0 10px 22px -12px rgba(79,70,229,.45)}
+@media(prefers-reduced-motion:reduce){.pwb,.pwbtn,.qlk a{transition:none}}
 </style></head><body class="out">
 <div id="top"><div class="tl"><button id="mb" class="ib" onclick="tg()" aria-label="Menu">&#9776;</button><div class="brandR" onclick="logo()" title="Jaykaran Gupta &amp; Co"><div class="bm">JK</div><div class="bt"><b>Jaykaran Gupta <i>&amp;</i> Co</b><small>CHARTERED ACCOUNTANTS</small></div></div></div><div class="tr"><span id="sv"></span><button id="tm" class="ib" onclick="theme()" aria-label="Theme"></button><button id="dm" class="ib" onclick="dm(event)" aria-label="More">&#8942;</button></div></div>
 <div id="dd"></div><div id="md"></div><input type="file" id="lb" accept=".json,application/json,text/plain,*/*" onchange="imp(this)" hidden>
@@ -1445,7 +1481,7 @@ function gRead(){const f=document.getElementById('gf').files[0];if(!f)return gFa
  {const c0=C();if(brNames(c0).length>1&&!confirm('This file will use the ledgers of branch "'+brAct(c0)+'". Is that right?\n\nPress Cancel to pick another branch first.'))return}
  const g=C().gs={out:v('g1').trim()||'OUTPUT',inp:v('g2').trim()||'INPUT',co:v('g3').trim()};save();const isC=/\.csv$/i.test(f.name),rd=new FileReader();
  rd.onload=async()=>{try{const sh=isC?[{name:f.name.replace(/\.csv$/i,''),rows:csv(rd.result)}]:await xlAll(rd.result);gStart(sh,g)}catch(e){gFail('The file could not be opened: '+e.message,FIX.xls)}};isC?rd.readAsText(f):rd.readAsArrayBuffer(f)}
-/* PATCH b2611042000: some 2B files have a Rate column inserted in the DATA without a heading, so every heading sits one column
+/* PATCH b2611050730: some 2B files have a Rate column inserted in the DATA without a heading, so every heading sits one column
    to the left of its numbers (Taxable Value then holds 18, Tax holds the taxable value ...). Every bill then fails with NO GST RATE FOUND.
    Detect it from the VALUES (rate-like, and tax / taxable = that rate on the next columns) and insert the missing 'Rate' heading. */
 function jkRealign(rows){try{
@@ -1702,7 +1738,7 @@ function PNAME(n){return String(n||'').replace(/[._-]+/g,' ').trim().replace(/(^
    Jaykaran Gupta & Co. - interface, client tracker, attendance, staff control
    (added on top of the original program; everything above is unchanged)
    ==================================================================== */
-const BUILD='b2611042000';
+const BUILD='b2611050730';
 let CURP='';
 const $id=i=>document.getElementById(i);
 const jkP2=n=>String(n).padStart(2,'0');
@@ -2761,7 +2797,7 @@ const THEMES=[
  {id:'emerald',name:'Emerald',primary:'#0b9a6a',onPrimary:'#ffffff',secondary:'#f2b632',dot:'rgba(11,154,106,0.20)',titles:['GST Match','Smart Reconciler']},
  {id:'royal',name:'Royal Violet',primary:'#8b3df0',onPrimary:'#ffffff',secondary:'#f472b6',dot:'rgba(139,61,240,0.20)',titles:['TaxSync','GST Matcher']},
  {id:'ruby',name:'Ruby',primary:'#d6304a',onPrimary:'#ffffff',secondary:'#6366f1',dot:'rgba(214,48,74,0.20)',titles:['Reco Pro','GST Reconciler']}];
-const UPLOAD_TXT=['Drop your Tally Excel here','Upload Sales Register',"Let's match your bills",'Bring your GST files'];
+const UPLOAD_TXT=['Drop your Tally Excel here','Drop your Excel file here',"Let's match your bills",'Bring your GST files'];
 const SUCCESS_TXT=['{n} invoices decoded!','Reco ready!','Files matched!'];
 const thPick=a=>a[Math.floor(Math.random()*a.length)];
 let TH=THEMES[0],RCT={title:'Reco',upload:UPLOAD_TXT[0],success:SUCCESS_TXT[0]};

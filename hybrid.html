@@ -1,5 +1,5 @@
 <!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>JK Gupta &amp; Co</title>
-<meta name="description" content="JK Gupta &amp; Co. client accounting workspace"><meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#0f2742"><meta name="jkg-build" content="b2611041500"><script>try{var t=localStorage.getItem("jkgtheme")||(matchMedia("(prefers-color-scheme:dark)").matches?"dark":"light");document.documentElement.dataset.theme=t}catch(e){document.documentElement.dataset.theme="light"}</script><link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27%3E%3Crect width=%2764%27 height=%2764%27 rx=%2714%27 fill=%27%230f2742%27/%3E%3Ctext x=%2732%27 y=%2742%27 font-size=%2734%27 font-family=%27Georgia,serif%27 font-weight=%27700%27 text-anchor=%27middle%27 fill=%27%23e9d9ae%27%3EJK%3C/text%3E%3C/svg%3E"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:wght@500;600;700&display=swap"><style>
+<meta name="description" content="JK Gupta &amp; Co. client accounting workspace"><meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#0f2742"><meta name="jkg-build" content="b2611050730"><script>try{var t=localStorage.getItem("jkgtheme")||(matchMedia("(prefers-color-scheme:dark)").matches?"dark":"light");document.documentElement.dataset.theme=t}catch(e){document.documentElement.dataset.theme="light"}</script><link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27%3E%3Crect width=%2764%27 height=%2764%27 rx=%2714%27 fill=%27%230f2742%27/%3E%3Ctext x=%2732%27 y=%2742%27 font-size=%2734%27 font-family=%27Georgia,serif%27 font-weight=%27700%27 text-anchor=%27middle%27 fill=%27%23e9d9ae%27%3EJK%3C/text%3E%3C/svg%3E"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:wght@500;600;700&display=swap"><style>
 /* ============ tokens ============ */
 :root{--serif:'Source Serif 4',Georgia,'Times New Roman',serif;--sans:'Inter','Segoe UI',system-ui,-apple-system,Arial,sans-serif;--r:12px;--ease:cubic-bezier(.2,.7,.2,1)}
 :root,:root[data-theme=light]{color-scheme:light;
@@ -518,6 +518,181 @@ body{background-image:none!important;font-size:16px;line-height:1.6}
 .stor{display:flex;flex-wrap:wrap;gap:10px 32px}.stor div{min-width:0}.stor span{display:block;font-size:15px;color:var(--mute)}
 .stor b{font-size:17px;font-weight:700;color:var(--ink);overflow-wrap:anywhere}.stor em{font-style:normal;font-size:15px;color:var(--mute);margin-left:8px}
 @media(max-width:600px){.sto{padding:14px 16px}.stoh .g{width:auto}}
+
+/* ===== big animated greeting ===== */
+.dh{background:linear-gradient(135deg,#1e1b6e,#4c1d95 60%,#6d28d9);color:#fff;padding:34px 30px}
+.dh .dhd{color:#e0e7ff;font-size:17px}
+.dh h1.dgreet{font:800 clamp(34px,8vw,64px)/1.08 var(--sans);margin:8px 0 6px;color:#fff;text-shadow:0 2px 14px rgba(0,0,0,.4);letter-spacing:-.5px;animation:dkPop .7s cubic-bezier(.2,1.4,.4,1) both}
+.dh .dgw{display:inline-block;white-space:nowrap}
+.dh .dgn{display:inline-block;white-space:nowrap;color:#fde68a}
+.dh .dwave{display:inline-block;white-space:nowrap;transform-origin:70% 70%;animation:dkWave 2.2s ease-in-out .8s infinite}
+.dh p{color:#e0e7ff}
+@keyframes dkPop{from{opacity:0;transform:translateY(18px) scale(.9)}to{opacity:1;transform:none}}
+@keyframes dkWave{0%,60%,100%{transform:rotate(0)}10%,30%{transform:rotate(14deg)}20%,40%{transform:rotate(-8deg)}50%{transform:rotate(10deg)}}
+@media(prefers-reduced-motion:reduce){.dh h1.dgreet,.dh .dwave{animation:none}}
+@media(max-width:420px){.dh h1.dgreet{font-size:clamp(28px,9vw,40px)}}
+
+/* hero(): same big animated greeting */
+.hero{background:linear-gradient(135deg,#1e1b6e,#4c1d95 60%,#6d28d9);padding:34px 30px}
+.hero small{color:#e0e7ff;font-size:13px;letter-spacing:.14em}
+.hero h1.dgreet{font:800 clamp(34px,8vw,64px)/1.08 var(--sans);margin:8px 0 6px;color:#fff;text-shadow:0 2px 14px rgba(0,0,0,.4);letter-spacing:-.5px;animation:dkPop .7s cubic-bezier(.2,1.4,.4,1) both}
+.hero h1.dgreet span{color:inherit}
+.hero h1.dgreet .dgn{color:#fde68a}
+.hero p{color:#e0e7ff}
+.hero .nxt{background:rgba(255,255,255,.96);color:#1e1b4b;border-radius:16px;padding:14px 20px}
+@media(prefers-reduced-motion:reduce){.hero h1.dgreet{animation:none}}
+@media(max-width:420px){.hero h1.dgreet{font-size:clamp(28px,9vw,40px)}}
+
+/* keep name + wave together; allow text column to grow */
+.dh .dhl,.hero>div:first-child{flex:1 1 380px;min-width:0}
+.dh .dn,.hero .nxt{flex:0 0 auto}
+.dh h1.dgreet,.hero h1.dgreet{font-size:clamp(32px,6vw,56px)}
+.dgn .dwave{display:inline-block}
+
+/* ===== polish v2: layout, depth, motion ===== */
+html{scroll-behavior:smooth}
+.dgs{align-items:stretch;gap:18px}
+.dg{display:flex;flex-direction:column;box-shadow:0 1px 2px rgba(15,23,42,.05),0 8px 24px -12px rgba(15,23,42,.18);transition:box-shadow .25s,transform .25s}
+.dg:hover{box-shadow:0 2px 4px rgba(15,23,42,.06),0 16px 36px -14px rgba(79,70,229,.28)}
+.dg .dtg{flex:1;align-content:start}
+/* flatter tiles: no border box inside the card */
+.dt{border:0;background:transparent;box-shadow:none;min-height:0;padding:12px;border-radius:14px;flex-direction:row;align-items:center;gap:14px}
+.dt i{flex:0 0 auto;width:48px;height:48px;border-radius:14px;box-shadow:0 6px 14px -6px rgba(79,70,229,.55);transition:transform .25s}
+.dt>div,.dt b,.dt span{min-width:0}
+.dt:hover{background:color-mix(in srgb,var(--pri) 8%,transparent);transform:translateX(3px)}
+.dt:hover i{transform:scale(1.08) rotate(-4deg)}
+.dt:active{transform:scale(.98)}
+.dtg{grid-template-columns:1fr;gap:4px;padding:10px}
+@media(min-width:900px){.dtg{grid-template-columns:repeat(auto-fit,minmax(230px,1fr))}}
+/* tile text sits beside the icon */
+.dt{display:grid;grid-template-columns:48px 1fr;column-gap:14px;row-gap:0;align-items:center}
+.dt i{grid-row:1 / span 2}
+.dt b{align-self:end}.dt span{align-self:start}
+/* section headers: stronger */
+.dg h2{font-size:18px;letter-spacing:.01em;border-left-width:5px}
+/* staggered entrance */
+@keyframes dkRise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+#app.pgin .dh,#app.pgin .hero,#app.pgin .dfirst{animation:dkRise .5s ease both}
+#app.pgin .dg{animation:dkRise .5s ease both}
+#app.pgin .dg:nth-child(1){animation-delay:.08s}#app.pgin .dg:nth-child(2){animation-delay:.16s}
+#app.pgin .dg:nth-child(3){animation-delay:.24s}#app.pgin .dg:nth-child(4){animation-delay:.32s}
+#app.still .dg,#app.still .dh,#app.still .hero,#app.still .dfirst{animation:none}
+/* primary buttons: depth and feedback */
+.dprim{box-shadow:0 8px 20px -8px rgba(79,70,229,.6);transition:transform .15s,box-shadow .15s,filter .15s}
+.dprim:hover{transform:translateY(-2px);box-shadow:0 12px 26px -8px rgba(79,70,229,.7)}
+.dprim:active{transform:scale(.97)}
+.dfirst{border-width:1px;border-color:color-mix(in srgb,var(--pri) 35%,var(--line2));box-shadow:0 10px 30px -16px rgba(79,70,229,.45)}
+/* accessible focus everywhere */
+button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid #818cf8;outline-offset:2px}
+/* deadline chips */
+.dc,.tag{transition:transform .15s}
+@media(max-width:600px){
+ .dtg{grid-template-columns:1fr;padding:6px}
+ .dt{padding:12px 10px}
+ .dh,.hero{border-radius:18px;padding:24px 20px}
+ .dg{border-radius:16px}
+}
+@media(prefers-reduced-motion:reduce){
+ html{scroll-behavior:auto}
+ #app .dg,#app .dh,#app .hero,#app .dfirst{animation:none!important}
+ .dt,.dt i,.dprim,.dg{transition:none}
+}
+
+/* ===== polish v3: sidebar, Ask AI, client pages, clutter, speed ===== */
+/* Ask AI moves to bottom-right so it never covers the sidebar; room left to scroll past it */
+#aiw{left:auto!important;right:16px!important;bottom:16px!important}
+.aib{display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,#4f46e5,#7c3aed)!important;color:#fff!important;border:0!important;box-shadow:0 10px 26px -8px rgba(79,70,229,.7)!important;transition:transform .15s,box-shadow .15s}
+.aib:before{content:'\2726';font-size:16px;line-height:1}
+.aib:hover{transform:translateY(-2px)}.aib:active{transform:scale(.96)}
+#sb{padding-bottom:110px!important}
+#app{padding-bottom:96px}
+@media(max-width:600px){#aiw{right:12px!important;bottom:12px!important}.aip{width:calc(100vw - 24px)}}
+/* sidebar: every row has an icon so text lines up */
+.li.bxl:before,.li.cl:before,.li[onclick^="tlNew"]:before{content:'';flex:none;width:19px;height:19px;background:var(--gold);-webkit-mask:var(--ic) center/contain no-repeat;mask:var(--ic) center/contain no-repeat}
+.li.bxl{--ic:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 3h9l4 4v14H6z'/%3E%3Cpath d='M14 3v5h5M9 13h6M9 17h6'/%3E%3C/svg%3E")}
+.li.cl{--ic:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='8' r='4'/%3E%3Cpath d='M4 21c1-4 4-6 8-6s7 2 8 6'/%3E%3C/svg%3E")}
+.li[onclick^="tlNew"]{--ic:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round'%3E%3Cpath d='M12 5v14M5 12h14'/%3E%3C/svg%3E")}
+.li.cl{padding-left:11px}
+#sb h3{margin-top:20px}
+/* help "i" buttons: quieter, smaller */
+.hli{width:16px;height:16px;font-size:10px;margin-left:4px;opacity:.5;transition:opacity .15s,background .15s}
+.hli:hover,.hli:focus-visible,.hli[aria-expanded=true]{opacity:1}
+/* client page: tidy accordions and cards */
+#app details{border-radius:14px;transition:box-shadow .2s}
+#app details:hover{box-shadow:0 8px 22px -14px rgba(79,70,229,.4)}
+#app details>summary{cursor:pointer;font-weight:700;display:flex;align-items:center;gap:10px;list-style:none}
+#app details>summary::-webkit-details-marker{display:none}
+#app details>summary:before{content:'';flex:none;width:8px;height:8px;border-right:2px solid var(--pri);border-bottom:2px solid var(--pri);transform:rotate(-45deg);transition:transform .2s}
+#app details[open]>summary:before{transform:rotate(45deg)}
+#app .bk2{box-shadow:0 8px 22px -14px rgba(15,23,42,.35)}
+.dfirst{position:relative;overflow:hidden;padding-left:34px}
+.dfirst:before{content:'';position:absolute;left:0;top:0;bottom:0;width:6px;background:linear-gradient(#6366f1,#06b6d4)}
+.dfirst h2{font-size:26px}
+/* speed: skip painting cards that are off-screen */
+.dg,.dfirst{content-visibility:auto;contain-intrinsic-size:auto 260px}
+/* AI quick buttons */
+.aiq{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0 0}
+.aiq button{font:600 13px var(--sans);padding:8px 12px;border-radius:999px;border:1px solid var(--line2);background:var(--s1);color:var(--ink);cursor:pointer;transition:background .15s,transform .15s}
+.aiq button:hover{background:color-mix(in srgb,var(--pri) 12%,var(--s1));transform:translateY(-1px)}
+.intro .sig{font-size:clamp(30px,5.4vw,88px)!important}
+.brandR .bt b{font-size:15px}
+.qlk{display:flex;flex-wrap:wrap;gap:10px;margin:14px 0}.qlk a{display:inline-flex;align-items:center;gap:9px;padding:10px 20px;border-radius:999px;border:1px solid var(--line2,#3a4663);background:var(--s1,#131a2e);color:var(--ink,#e8ecf6);font-weight:700;font-size:14px;text-decoration:none;transition:transform .15s,background .15s}.qlk a:hover{transform:translateY(-1px);background:color-mix(in srgb,var(--pri,#7c8cff) 14%,var(--s1,#131a2e))}
+table.stf td:first-child b{text-transform:capitalize}
+.qlk a{cursor:pointer}
+.pwp{max-width:1100px}.pwt h2{margin:0 0 4px}.pwh{display:flex;flex-wrap:wrap;gap:10px;margin:16px 0}
+.pwb{display:inline-flex;align-items:center;gap:9px;padding:11px 20px;border-radius:999px;border:1px solid var(--line2,#3a4663);background:var(--s1,#131a2e);color:var(--ink,#e8ecf6);font-weight:700;font-size:14px;cursor:pointer}
+.pwb i{font-style:normal;font-size:12px;opacity:.75;background:rgba(127,127,127,.2);border-radius:999px;padding:1px 8px}
+.pwb.on{background:linear-gradient(100deg,var(--pri,#7c8cff),color-mix(in srgb,var(--pri,#7c8cff) 45%,var(--gold,#e3b95a)));color:var(--priink,#fff);border-color:transparent}
+.pwq{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin:8px 0}.pwq h3{margin:0 auto 0 0}.pwq input{min-width:220px}
+.pwbtn{display:inline-block;padding:10px 18px;border-radius:999px;border:0;background:linear-gradient(100deg,var(--pri,#7c8cff),color-mix(in srgb,var(--pri,#7c8cff) 45%,var(--gold,#e3b95a)));color:var(--priink,#fff);font-weight:700;cursor:pointer}
+.pwa{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0}.pwe{margin:14px 0;padding:18px}
+.pwtb{width:100%;border-collapse:collapse}.pwtb th,.pwtb td{padding:10px 12px;text-align:left;border-bottom:1px solid var(--line2,rgba(127,127,127,.25));vertical-align:middle}
+.pwtb code{font-size:14px;letter-spacing:.04em}.pwi{margin:0 3px;padding:4px 10px;font-size:12px;border-radius:8px;border:1px solid var(--line2,#3a4663);background:transparent;color:inherit;cursor:pointer}
+.pwfm{display:grid;gap:10px;min-width:min(340px,80vw)}.pwfm label{display:grid;gap:4px;font-size:13px;font-weight:600}.pwn{display:block;margin-top:12px;opacity:.7}
+.pwdot{display:inline-block;min-width:18px;margin-left:7px;padding:1px 6px;border-radius:999px;background:#e5484d;color:#fff;font-style:normal;font-size:11px;font-weight:800;text-align:center}
+.pwtk{margin:12px 0;padding:14px 16px;display:grid;gap:6px}.pwtt{display:flex;justify-content:space-between;gap:10px;align-items:center}
+.pwst{display:inline-block;padding:3px 10px;border-radius:999px;font-size:12px;font-weight:700;background:rgba(127,127,127,.2)}.pwst.p{background:rgba(245,179,1,.2);color:#d99a00}.pwst.a{background:rgba(48,164,108,.2);color:#30a46c}.pwst.r{background:rgba(229,72,77,.2);color:#e5484d}
+.pwact{display:flex;flex-wrap:wrap;gap:10px;margin-top:6px}.pwtk code{font-size:14px}
+.pwfl{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:10px 0}.pwfl span{font-weight:700;font-size:13px;opacity:.8;margin-right:4px}
+.pwc{padding:7px 14px;border-radius:999px;border:1px solid var(--line2,#3a4663);background:var(--s1,#131a2e);color:var(--ink,#e8ecf6);font-weight:600;font-size:13px;cursor:pointer}
+.pwc i{font-style:normal;opacity:.7;margin-left:4px}.pwc.on{background:linear-gradient(100deg,var(--pri,#7c8cff),color-mix(in srgb,var(--pri,#7c8cff) 45%,var(--gold,#e3b95a)));color:var(--priink,#fff);border-color:transparent}
+.pwfm select{padding:8px;border-radius:8px}
+
+/* ===== polish v4: forms, file pickers, cards on every page ===== */
+#g1,#g2,#g3{display:inline-block;margin:4px 8px 12px 4px;min-width:130px}
+#g3{width:min(100%,340px)}
+#app input[type=file]{padding:8px;border:1.5px dashed var(--line2);border-radius:12px;background:color-mix(in srgb,var(--pri) 4%,transparent);max-width:100%;transition:border-color .15s,background .15s}
+#app input[type=file]:hover{border-color:var(--pri);background:color-mix(in srgb,var(--pri) 9%,transparent)}
+#app input[type=file]::file-selector-button{font:600 14px var(--sans);margin-right:12px;padding:8px 14px;border:0;border-radius:9px;background:var(--pri);color:var(--priink);cursor:pointer}
+#app input[type=text],#app input[type=number],#app input[type=search],#app input:not([type]),#app select,#app textarea{border-radius:10px;transition:border-color .15s,box-shadow .15s}
+#app input:focus,#app select:focus,#app textarea:focus{outline:none;border-color:var(--pri);box-shadow:0 0 0 3px color-mix(in srgb,var(--pri) 25%,transparent)}
+#app .card{border-radius:16px;box-shadow:0 1px 2px rgba(15,23,42,.05),0 10px 26px -16px rgba(15,23,42,.3)}
+#app button:not(.hli):not(.ib){transition:transform .12s,filter .12s,box-shadow .12s}
+#app button:not(.hli):not(.ib):active{transform:scale(.97)}
+#app .dz,#app [class*=drop]{transition:border-color .15s,background .15s,transform .15s}
+#app .dz:hover,#app [class*=drop]:hover{transform:translateY(-1px)}
+::selection{background:color-mix(in srgb,var(--pri) 35%,transparent)}
+/* nicer scrollbars */
+*{scrollbar-width:thin;scrollbar-color:color-mix(in srgb,var(--pri) 45%,transparent) transparent}
+/* tables: easier to read */
+#app table{border-collapse:separate;border-spacing:0}
+#app tbody tr{transition:background .12s}
+#app tbody tr:hover{background:color-mix(in srgb,var(--pri) 7%,transparent)}
+/* tap targets on phones */
+@media(max-width:600px){#app button:not(.hli):not(.ib),#app select,#app input:not([type=checkbox]):not([type=radio]){min-height:44px}}
+
+/* ===== polish v5: passwords page, quick links ===== */
+.pwt h2{font-size:clamp(26px,4vw,34px);letter-spacing:-.3px}
+.pwe{border-radius:16px;text-align:center;padding:26px 20px;box-shadow:0 1px 2px rgba(15,23,42,.05),0 10px 26px -16px rgba(15,23,42,.3)}
+.pwe b{display:block;font-size:18px;margin-bottom:4px}
+.pwb{box-shadow:0 1px 2px rgba(15,23,42,.06);transition:transform .12s,box-shadow .15s,background .15s}
+.pwb:hover{transform:translateY(-1px);box-shadow:0 8px 18px -10px rgba(79,70,229,.5)}
+.pwbtn{box-shadow:0 8px 20px -10px rgba(79,70,229,.6);transition:transform .12s,box-shadow .15s}
+.pwbtn:hover{transform:translateY(-1px)}.pwbtn:active{transform:scale(.97)}
+.pwtb tbody tr{transition:background .12s}.pwtb tbody tr:hover{background:color-mix(in srgb,var(--pri,#7c8cff) 8%,transparent)}
+.pwtk{border-radius:14px}
+.qlk a{transition:transform .12s,box-shadow .15s}.qlk a:hover{transform:translateY(-2px);box-shadow:0 10px 22px -12px rgba(79,70,229,.45)}
+@media(prefers-reduced-motion:reduce){.pwb,.pwbtn,.qlk a{transition:none}}
 </style></head><body class="out">
 <div id="top"><div class="tl"><button id="mb" class="ib" onclick="tg()" aria-label="Menu">&#9776;</button><div class="brandR" onclick="logo()" title="JK Gupta &amp; Co.">JK<span>&amp;</span>CO.<small>CHARTERED ACCOUNTANTS</small></div></div><div class="tr"><span id="sv"></span><button id="tm" class="ib" onclick="theme()" aria-label="Theme"></button><button id="dm" class="ib" onclick="dm(event)" aria-label="More">&#8942;</button></div></div>
 <div id="dd"></div><div id="md"></div><input type="file" id="lb" accept=".json,application/json,text/plain,*/*" onchange="imp(this)" hidden>
@@ -819,7 +994,7 @@ const dPill=n=>'<b class="dp '+(n<=3?'r':n<=10?'a':'g')+'">'+(n==0?'Today':n==1?
 function kdHtml(){const K=kdata(),kc=(c,h,L)=>'<div class="kc '+c+'"><h3>'+h+'</h3>'+L.map(r=>'<div class="r"><span>'+E(r[1])+'<i>'+dFmt(r[0])+(r[2]?' · '+E(r[2]):'')+'</i></span>'+dPill(r[3])+'</div>').join('')+'</div>';
  return '<div class="kd">'+kc('','GST and monthly dues',K.G)+kc('au','Audit and income tax',K.T)+kc('fe','Festivals and holidays',K.Z)+'</div><small style="color:#6b7a8f">Dates checked on 18 Oct 2026. Extensions are shown where announced. Festival dates can differ by a day by region.</small>'}
 function hero(){const K=kdata(),h=new Date().getHours(),g=h<12?'Good morning':h<17?'Good afternoon':'Good evening',N=[...K.G,...K.T].sort((a,b)=>a[3]-b[3])[0];
- return '<div class="hero"><div><small>'+K.t.toLocaleString('en-IN',{weekday:'long',day:'numeric',month:'long',year:'numeric'})+'</small><h1>'+g+(USER?', '+E(PNAME(VIEW?'Admin':ADM()?'Admin':USER)):'')+'</h1><p>JK Gupta <span style="color:#e3b95a">&amp;</span> Co. · Chartered Accountants</p></div>'+(N?'<div class="nxt"><small>Next deadline</small><b>'+N[3]+'</b>'+(N[3]==1?'day':'days')+'<div>'+E(N[1])+' · '+dFmt(N[0])+'</div></div>':'')+'</div>'}
+ return '<div class="hero"><div><small>'+K.t.toLocaleString('en-IN',{weekday:'long',day:'numeric',month:'long',year:'numeric'})+'</small><h1 class="dgreet"><span class="dgw">'+g+(USER?',':'')+'</span>'+(USER?' <span class="dgn">'+E(PNAME(VIEW?'Admin':ADM()?'Admin':USER))+' <span class="dwave" aria-hidden="true">\u{1F44B}</span></span>':'<span class="dgn"><span class="dwave" aria-hidden="true">\u{1F44B}</span></span>')+'</h1><p>JK Gupta <span style="color:#e3b95a">&amp;</span> Co. · Chartered Accountants</p></div>'+(N?'<div class="nxt"><small>Next deadline</small><b>'+N[3]+'</b>'+(N[3]==1?'day':'days')+'<div>'+E(N[1])+' · '+dFmt(N[0])+'</div></div>':'')+'</div>'}
 
 const lk=s=>String(s||'').trim().toLowerCase();
 function mvl(){const c=C(),a=c.accounts[S.a],b=lk(a.ledger),V=S.T.filter(t=>t.l&&!t.skip&&!t.pend&&!t.out&&!t.dup);if(!c.ledgers.length)return{m:[],V,none:1};
@@ -1188,7 +1363,7 @@ function PNAME(n){return String(n||'').replace(/[._-]+/g,' ').trim().replace(/(^
    JK Gupta & Co. - interface, client tracker, attendance, staff control
    (added on top of the original program; everything above is unchanged)
    ==================================================================== */
-const BUILD='b2611041500';
+const BUILD='b2611050730';
 let CURP='';
 const $id=i=>document.getElementById(i);
 const jkP2=n=>String(n).padStart(2,'0');
@@ -1230,7 +1405,7 @@ function toast(msg,btn,fn,ms){let c=$id('toasts');if(!c){c=document.createElemen
  if(btn)t.querySelector('button').onclick=()=>{try{fn&&fn()}finally{t.remove()}};c.appendChild(t);if(ms!==0)setTimeout(()=>t.remove(),ms||4500);return t}
 let ATI=0;
 function pgIn(n){if(typeof mhHide=='function')mhHide(n);clearInterval(ATI);const same=app.dataset.v===n;app.dataset.v=n||'';app.classList.toggle('still',same);
- if(!same){app.classList.remove('pgin');void app.offsetWidth;app.classList.add('pgin')}return same}
+ if(!same){try{window.scrollTo({top:0,left:0,behavior:'instant'});document.documentElement.style.scrollBehavior='auto';document.documentElement.scrollTop=0;document.body.scrollTop=0;app.scrollTop=0}catch(e){}app.classList.remove('pgin');void app.offsetWidth;app.classList.add('pgin')}return same}
 function countUp(root){if(matchMedia('(prefers-reduced-motion:reduce)').matches)return;(root||app).querySelectorAll('[data-n]').forEach(e=>{const to=+e.dataset.n;if(!(to>0))return;const t0=performance.now();
  const f=t=>{const k=Math.min(1,(t-t0)/700);e.textContent=Math.round(to*(1-Math.pow(1-k,3)));if(k<1)requestAnimationFrame(f)};requestAnimationFrame(f)})}
 const curPg=()=>{const f=app.firstElementChild;return f&&f.dataset&&f.dataset.pg||''};
@@ -2367,7 +2542,7 @@ const THEMES=[
  {id:'charcoal-mint',name:'Charcoal & Mint',primary:'#1f2937',onPrimary:'#ffffff',secondary:'#6ee7b7',dot:'rgba(110,231,183,0.18)',titles:['GST Match','Smart Reconciler']},
  {id:'purple',name:'Purple',primary:'#7c3aed',onPrimary:'#ffffff',secondary:'#a78bfa',dot:'rgba(124,58,237,0.16)',titles:['TaxSync','GST Matcher']},
  {id:'orange-slate',name:'Orange Slate',primary:'#f97316',onPrimary:'#2a1204',secondary:'#475569',dot:'rgba(249,115,22,0.18)',titles:['Reco Pro','GST Reconciler']}];
-const UPLOAD_TXT=['Drop your Tally Excel here','Upload Sales Register',"Let's match your bills",'Bring your GST files'];
+const UPLOAD_TXT=['Drop your Tally Excel here','Drop your Excel file here',"Let's match your bills",'Bring your GST files'];
 const SUCCESS_TXT=['{n} invoices decoded!','Reco ready!','Files matched!'];
 const thPick=a=>a[Math.floor(Math.random()*a.length)];
 let TH=THEMES[1],RCT={title:'Reco',upload:UPLOAD_TXT[0],success:SUCCESS_TXT[0]};
@@ -2419,6 +2594,8 @@ try{AIMSG=JSON.parse(sessionStorage.getItem('jkai')||'[]')}catch(e){AIMSG=[]}
 function aiFmt(t){return E(t).replace(/\*\*([^*\n]+)\*\*/g,'<b>$1</b>')}
 function aiSave(){try{sessionStorage.setItem('jkai',JSON.stringify(AIMSG.slice(-30)))}catch(e){}}
 function aiCopy(i){const t=(AIMSG[i]||{}).content||'';let ok=false;try{if(navigator.clipboard&&window.isSecureContext){navigator.clipboard.writeText(t);ok=true}}catch(e){}if(!ok)ok=gCopyFb(t);toast(ok?'Copied':'Copy not available here')}
+const AIQ=[['Client reminder','Write a short, polite WhatsApp message reminding a client to send the pending documents (bank statements and purchase/sales bills) so we can file their GST return on time.'],['Explain a notice','Explain in simple words what this notice means and what to do next: '],['GST due dates','What are the usual monthly GST due dates for GSTR-1 and GSTR-3B? Remind me to verify on the portal.'],['Amount in words','Write this amount in Indian rupees in words: '],['Email draft','Draft a short professional email to a client about: ']];
+function aiQuick(n){const q=AIQ[n];if(!q)return;const i=document.getElementById('aii');if(!i)return;i.value=q[1];i.focus();try{i.setSelectionRange(i.value.length,i.value.length)}catch(e){}}
 function aiNew(){AIMSG=[];AIERR='';aiSave();aiDraw(1)}
 async function aiSend(){const i=document.getElementById('aii'),q=((i&&i.value)||'').trim();if(!q||AIBUSY)return;
  AIMSG.push({role:'user',content:q});AIERR='';AIBUSY=1;aiSave();aiDraw(1);
@@ -2433,7 +2610,7 @@ function aiDraw(open){let w=document.getElementById('aiw');if(!w){w=document.cre
  if(!o){w.innerHTML='<button class="aib" onclick="aiDraw(1)" aria-label="Ask AI">Ask AI</button>';return}
  const keep=(document.getElementById('aii')||{}).value||'';
  w.innerHTML='<div class="aip" role="dialog" aria-label="AI Assistant"><div class="aih"><b>AI Assistant</b><span><button onclick="aiNew()" title="Start a new chat">New chat</button><button onclick="document.getElementById(\'aiw\').dataset.o=0;aiDraw()" aria-label="Close">×</button></span></div>'
- +'<div class="aim" id="aim">'+(AIMSG.length?'':'<div class="aig bot">Hi! Ask me anything: a message or email to a client, a quick calculation, GST, income tax, Tally, Excel or a computer problem.</div>')
+ +'<div class="aim" id="aim">'+(AIMSG.length?'':'<div class="aig bot">Hi! Ask me anything: a message or email to a client, a quick calculation, GST, income tax, Tally, Excel or a computer problem.</div><div class="aiq">'+AIQ.map((q,n)=>'<button type="button" onclick="aiQuick('+n+')">'+E(q[0])+'</button>').join('')+'</div>')
  +AIMSG.map((m,k)=>'<div class="aig '+(m.role=='user'?'me':'bot')+'">'+aiFmt(m.content)+(m.role=='user'?'':'<button class="aic" onclick="aiCopy('+k+')">Copy</button>')+'</div>').join('')
  +(AIBUSY?'<div class="aig bot aiw2">Thinking…</div>':'')+(AIERR?'<div class="aig err">'+E(AIERR)+'</div>':'')+'</div>'
  +'<div class="aif"><textarea id="aii" rows="2" placeholder="Type your question… (Enter to send)" onkeydown="if(event.key===\'Enter\'&&!event.shiftKey){event.preventDefault();aiSend()}">'+E(keep)+'</textarea><button onclick="aiSend()"'+(AIBUSY?' disabled':'')+'>Send</button></div></div>';
@@ -2777,7 +2954,7 @@ function dkFix(dark){const rs=document.documentElement.style,cs=getComputedStyle
 const dkTile=(ic,t,d,fn)=>'<button type="button" class="dt" onclick="'+fn+'"><i>'+IC[ic]+'</i><b>'+t+'</b><span>'+d+'</span></button>';
 const dkGrp=(h,L)=>L.length?'<section class="dg"><h2>'+h+'</h2><div class="dtg">'+L.join('')+'</div></section>':'';
 function dkHero(){const K=kdata(),h=new Date().getHours(),g=h<12?'Good morning':h<17?'Good afternoon':'Good evening',N=[...K.G,...K.T].sort((a,b)=>a[3]-b[3])[0];
- return '<div class="dh"><div class="dhl"><div class="dhd">'+K.t.toLocaleString('en-IN',{weekday:'long',day:'numeric',month:'long',year:'numeric'})+'</div><h1>'+g+(USER?', '+E(PNAME(VIEW?'Admin':ADM()?'Admin':USER)):'')+'</h1><p>JK Gupta &amp; Co. · Chartered Accountants</p></div>'
+ return '<div class="dh"><div class="dhl"><div class="dhd">'+K.t.toLocaleString('en-IN',{weekday:'long',day:'numeric',month:'long',year:'numeric'})+'</div><h1 class="dgreet"><span class="dgw">'+g+(USER?',':'')+'</span>'+(USER?' <span class="dgn">'+E(PNAME(VIEW?'Admin':ADM()?'Admin':USER))+' <span class="dwave" aria-hidden="true">\u{1F44B}</span></span>':'<span class="dgn"><span class="dwave" aria-hidden="true">\u{1F44B}</span></span>')+'</h1><p>JK Gupta &amp; Co. · Chartered Accountants</p></div>'
   +(N?'<div class="dn"><span>Next deadline</span><b>'+N[3]+' '+(N[3]==1?'day':'days')+'</b><em>'+E(N[1])+' · '+dFmt(N[0])+'</em></div>':'')+'</div>'}
 function home(){CURP='home';S={};window.onscroll=null;sb();dls();document.body.classList.toggle('out',!USER);
  if(!USER){loginPage();return}
