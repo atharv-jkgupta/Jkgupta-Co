@@ -24,7 +24,7 @@
     return j;
   }
 
-  var ST = { items: [], state: {}, me: {}, err: '', filter: 'Action needed', q: '', loaded: false, timer: null };
+  var ST = { items: [], state: {}, me: {}, err: '', filter: 'All', q: '', loaded: false, timer: null };
   var STAGE = { draft_ready: 'Draft ready, staff to review', awaiting_review: 'Waiting for the reviewer', awaiting_owner: 'Waiting for the owner', rejected: 'Sent back for changes', confirmed_ready_to_send: 'Confirmed: owner sends by hand', sent_manually: 'Recorded as sent' };
   var STATUSES = ['New', 'In progress', 'Waiting for client', 'Reply drafted', 'Filed', 'Completed'];
   var isAdmin = function () { return ST.me && ST.me.role === 'admin'; };
@@ -67,7 +67,8 @@
   }
   function shown() {
     var q = ST.q.toLowerCase(), f = ST.filter;
-    return ST.items.filter(function (x) {
+    var src = (f === 'All' || f === 'Notices') ? ST.items.slice().sort(function (a, b) { return new Date(b.received_at || 0) - new Date(a.received_at || 0); }) : ST.items;
+    return src.filter(function (x) {
       var open = !/^(filed|completed)$/i.test(x.case_status || '');
       if (f === 'Action needed' && !(x.requires_action && open)) return false;
       if (f === 'Urgent' && !(x.priority === 'Urgent' && open)) return false;
@@ -112,7 +113,7 @@
   }
   async function load(manual) {
     if (!tok()) return;
-    try { var r = await rpc('mail_list', { p_t: tok(), p_limit: 300 }); ST.items = r.items || []; ST.state = r.state || {}; ST.me = r.me || {}; ST.err = ''; ST.loaded = true; }
+    try { var r = await rpc('mail_list', { p_t: tok(), p_limit: 500 }); ST.items = r.items || []; ST.state = r.state || {}; ST.me = r.me || {}; ST.err = ''; ST.loaded = true; }
     catch (e) { ST.err = 'Could not load the inbox: ' + e.message; }
     paint();
   }
