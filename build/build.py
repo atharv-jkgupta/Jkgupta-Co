@@ -66,6 +66,11 @@ boot = ("LS.onSync=onSyncKeys;LS.onExpire=()=>{USER='';VIEW='';DB={clients:{}};s
         "updTm();home()})();\n</script>")
 main = main[:a] + feat + "\n" + boot + main[b + len(end):]
 out = head + shim + main
+# Include the optional Notice Intelligence extension in future rebuilt HTML.
+if 'notice-intelligence.js' not in out:
+    body_end = out.lower().rfind('</body>')
+    if body_end >= 0:
+        out = out[:body_end] + '<script src="/notice-intelligence.js"></script>\\n' + out[body_end:]
 if URL == 'office':
     out = out.replace('the online database', 'the office server').replace('online database', 'office server')
 open(OUT, 'w', encoding='utf-8').write(out)

@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>JK Gupta & Co. — Notice Intelligence Preview</title>
+<style>
+body{margin:0;min-height:100vh;display:grid;place-items:center;background:#f4f6f8;color:#172437;font:14px Inter,system-ui,sans-serif}
+.card{max-width:480px;margin:24px;background:#fff;border:1px solid #dce3eb;border-radius:14px;padding:24px;box-shadow:0 8px 28px #17304a12}
+h2{font-size:18px;margin:0 0 8px}p{font-size:13px;line-height:1.55;color:#5b6878}
+</style>
+</head>
+<body>
+<div class="card"><h2>Opening JK Gupta &amp; Co. preview…</h2><p>Loading the existing workspace in this tab with the Notice Intelligence preview attached. Your production homepage and data are not being changed.</p></div>
+<script>
+(async function(){
+  try {
+    const response=await fetch('/index.html?notice-preview='+Date.now(),{cache:'no-store',credentials:'same-origin'});
+    if(!response.ok)throw new Error('Workspace returned HTTP '+response.status);
+    let html=await response.text();
+    const tag='<script src="/notice-intelligence.js"><\/script>';
+    const at=html.toLowerCase().lastIndexOf('</body>');
+    if(at<0)throw new Error('Workspace page structure was not recognized');
+    const moduleTag=html.includes('/notice-intelligence.js')?'':tag+'\n';
+    const quietTag='<script>(function(){function clearVersionToast(){document.querySelectorAll("#toasts .toast").forEach(function(t){if((t.textContent||"").indexOf("A new version is ready.")>=0)t.remove()})}clearVersionToast();new MutationObserver(clearVersionToast).observe(document.body,{childList:true,subtree:true});})();<\/script>';
+    html=html.slice(0,at)+moduleTag+quietTag+'\n'+html.slice(at);
+    document.open();
+    document.write(html);
+    document.close();
+  } catch(e) {
+    document.querySelector('.card').innerHTML='<h2>Preview could not start</h2><p>'+String(e.message||e).replace(/[&<>]/g,' ')+'</p><p>Open the normal workspace and use its Notices section. This preview has not changed production.</p>';
+  }
+})();
+</script>
+</body></html>

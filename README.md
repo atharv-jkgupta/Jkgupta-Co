@@ -14,3 +14,26 @@ python3 build/build.py source/JK-Gupta-Co.original.html index.html <SUPABASE_URL
 echo b<same stamp> > version.txt
 ```
 Then commit and push; Vercel deploys by itself.
+
+
+
+
+## Notice Intelligence preview branch
+
+Preview launcher: `/notice-preview.html` on the feature-branch Vercel deployment. It fetches the existing workspace as the top-level page and adds `notice-intelligence.js`; it does not frame the app or change production `main`.
+
+Included in this preview:
+- Manual capture of pasted email or notice text.
+- Rule-based category suggestion for Income Tax, GST, court/tribunal, client/document requests, accounts/payment and general communication.
+- Basic PAN, assessment year, section and date suggestions with source context.
+- Separate confirmed statutory deadline and hearing-date fields, requiring human verification.
+- Owner/reviewer fields, status, checklist, internal office milestones, timeline and CSV export.
+- Editable unsent starter reply drafts saved within the application. There is no send control in this preview.
+
+Not included yet:
+- Automatic Gmail monitoring from the deployed website.
+- Retrieval/processing of Gmail attachments and scanned-PDF OCR.
+- AI-generated legal replies. The existing AI route has no production `AI_API_KEY` configured in the inspected environment, so this preview uses a transparent starter template only.
+- Durable 24×7 email worker, Gmail OAuth/Pub/Sub watch renewal and retry/reconciliation.
+
+The ChatGPT Gmail connector is not automatically available to the deployed website. Automatic monitoring requires separate website OAuth authorization and a backend worker. Do not rely on extracted dates until staff verifies the original notice.
