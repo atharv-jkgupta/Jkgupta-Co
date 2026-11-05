@@ -109,3 +109,5 @@ window.notices=render;window.niDraw=render;window.niToggleCapture=toggleCapture;
 document.addEventListener('change',e=>{if(e.target&&e.target.id==='ni-category')e.target.dataset.touched='1'});
 const old=LS.onSync;LS.onSync=function(keys){if(typeof old==='function')old(keys);if(keys.some(k=>String(k).indexOf(P)===0)&&CURP==='nt'&&!modalOpen())setTimeout(render,250)};
 })();
+/* load the live Gmail inbox panel */
+(function(){var s=document.createElement("script");s.src="/mail-inbox.js?v=2";s.defer=true;document.head.appendChild(s)})();
