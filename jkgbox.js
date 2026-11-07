@@ -1,7 +1,8 @@
 /* JK Gupta & Co. - JKG Box
    One simple place for all mail and notices read from Gmail. Newest first.
    Uses the live site's own colours. Nothing here can send an email.
-   Needs /mail-inbox.js (loaded by itself when a mail is opened). */
+   Needs /mail-inbox.js (loaded by itself when a mail is opened).
+   If that file cannot load, a built-in summary window opens instead, so a tap never does nothing. */
 (function () {
   'use strict';
   if (window.__jkgLoaded) return; window.__jkgLoaded = true;
@@ -98,7 +99,7 @@
       ? '<b class="' + (d <= 3 ? 'red' : d <= 7 ? 'amber' : '') + '">' + (d < 0 ? Math.abs(d) + ' days late' : d === 0 ? 'Today' : d + ' days left') + '</b>' + esc(when(x.received_at))
       : esc(when(x.received_at));
     var tag = /notice/i.test(x.category || '') ? '<span class="jb-tag">Notice</span>' : '';
-    return '<div class="jb-row" onclick="jkgOpen(\'' + esc(x.message_id).replace(/'/g, '') + '\')"><span class="jb-dot ' + pc + '"></span><div><div class="jb-t">' + esc(x.subject || '(no subject)') + '</div>' +
+    return '<div class="jb-row" role="button" tabindex="0" data-id="' + esc(x.message_id) + '"><span class="jb-dot ' + pc + '"></span><div><div class="jb-t">' + esc(x.subject || '(no subject)') + '</div>' +
       '<div class="jb-s">' + tag + esc((x.from_name ? x.from_name + ' · ' : '') + x.from_address) + '</div>' +
       (x.summary ? '<div class="jb-d">' + esc(String(x.summary).slice(0, 240)) + '</div>' : '') + '</div><div class="jb-r">' + right + '</div></div>';
   }
@@ -111,7 +112,8 @@
     l.innerHTML = a.length ? a.map(rowHtml).join('') : '<div class="jb-empty">' + (ST.loaded ? 'No mail here.' : 'Loading…') + '</div>';
   }
   async function load(force) {
-    if (!tok() || ST.loading) return;
+    if (!tok()) { ST.err = 'You are not logged in. Please log in again.'; paint(); return; }
+    if (ST.loading) return;
     if (!force && ST.loaded && Date.now() - ST.at < 20000) return;
     ST.loading = true;
     try { var r = await rpc('mail_list', { p_t: tok(), p_limit: 500 }); ST.items = r.items || []; ST.state = r.state || {}; ST.err = ''; ST.loaded = true; ST.at = Date.now(); }
@@ -138,7 +140,11 @@
       '<div id="jb-status"></div><div class="jb-tabs" id="jb-tabs"></div>' +
       '<input id="jb-q" class="sq" aria-label="Search mail" placeholder="Search subject, sender, GSTIN, PAN…" oninput="jkgQ(this.value)">' +
       '<div class="jb-list" id="jb-list"></div>';
-    $('jb-q').value = ST.q; paint(); load(true);
+    $('jb-q').value = ST.q;
+    var L = $('jb-list');
+    L.addEventListener('click', function (e) { var r = e.target.closest && e.target.closest('.jb-row'); if (r) window.jkgOpen(r.getAttribute('data-id')); });
+    L.addEventListener('keydown', function (e) { if (e.key !== 'Enter' && e.key !== ' ') return; var r = e.target.closest && e.target.closest('.jb-row'); if (r) { e.preventDefault(); window.jkgOpen(r.getAttribute('data-id')); } });
+    paint(); load(true);
     if (!ST.timer) ST.timer = setInterval(function () { if ($('jb-list') && !document.hidden && !$('mi-modal')) load(true); }, 60000);
     try { window.scrollTo(0, 0); } catch (e) { }
   };
@@ -151,16 +157,44 @@
   function ensureMail() {
     return new Promise(function (ok, no) {
       if (window.miOpen) return ok();
-      var s = document.createElement('script'); s.src = '/mail-inbox.js'; s.onload = function () { window.miOpen ? ok() : no(new Error('mail window missing')); }; s.onerror = function () { no(new Error('could not load the mail window')); };
+      var done = false, t = setTimeout(function () { if (!done) { done = true; no(new Error('the mail window took too long to load')); } }, 8000);
+      var s = document.createElement('script'); s.src = '/mail-inbox.js?v=' + encodeURIComponent(typeof BUILD !== 'undefined' ? BUILD : '');
+      s.onload = function () { if (done) return; done = true; clearTimeout(t); window.miOpen ? ok() : no(new Error('mail window missing')); };
+      s.onerror = function () { if (done) return; done = true; clearTimeout(t); no(new Error('could not load the mail window')); };
       document.head.appendChild(s);
     });
   }
+  /* built-in summary window: used only if the full mail window cannot open. Uses what the list already holds. */
+  function lineList(a) { return a && a.length ? '<ul style="margin:4px 0 0 18px;padding:0">' + a.map(function (x) { return '<li>' + esc(typeof x === 'string' ? x : (x && (x.action || x.text)) || JSON.stringify(x)) + '</li>'; }).join('') + '</ul>' : ''; }
+  function fallbackOpen(id, why) {
+    var x = null; ST.items.forEach(function (m) { if (m.message_id === id) x = m; });
+    var el = $('jb-modal'); if (el) el.remove();
+    el = document.createElement('div'); el.id = 'jb-modal';
+    el.setAttribute('style', 'position:fixed;inset:0;z-index:99999;background:rgba(5,10,18,.7);display:flex;align-items:flex-start;justify-content:center;overflow:auto;padding:18px 10px');
+    var f = (x && x.facts) || {}, due = x && (x.confirmed_due || x.proposed_due);
+    var chips = ['notice_type', 'authority', 'gstin', 'pan', 'assessment_year', 'financial_year', 'reference'].filter(function (k) { return f[k]; }).map(function (k) { return '<div><b>' + esc(k.replace(/_/g, ' ')) + ':</b> ' + esc(f[k]) + '</div>'; }).join('');
+    el.innerHTML = '<div style="width:min(760px,100%);background:var(--s1,#fff);color:var(--ink,#18283b);border:1px solid var(--line,#dce3ec);border-radius:16px;padding:18px;font:14px/1.55 var(--sans,Inter,system-ui,sans-serif)">' +
+      '<button type="button" class="jb-btn" style="float:right" onclick="document.getElementById(\'jb-modal\').remove()">Close</button>' +
+      (x ? '<h3 style="margin:0 0 4px;font:700 18px var(--serif,Georgia,serif)">' + esc(x.subject || '(no subject)') + '</h3><div style="color:var(--mute,#65758a);font-size:12.5px">' + esc((x.from_name ? x.from_name + ' · ' : '') + x.from_address) + ' · ' + esc(when(x.received_at)) + '</div>' +
+        '<div style="margin-top:8px"><span class="jb-tag">' + esc(x.priority || '') + '</span><span class="jb-tag">' + esc(x.category || '') + '</span></div>' +
+        '<h4 style="margin:14px 0 4px;font-size:12px;letter-spacing:.8px;text-transform:uppercase">Summary</h4><div>' + esc(x.summary || 'No summary yet.') + '</div>' +
+        (due ? '<div style="margin-top:8px"><b>Reply date:</b> ' + esc(String(due).slice(0, 10)) + '</div>' : '') +
+        (chips ? '<h4 style="margin:14px 0 4px;font-size:12px;letter-spacing:.8px;text-transform:uppercase">Details found</h4>' + chips : '') +
+        (x.requested_actions && x.requested_actions.length ? '<h4 style="margin:14px 0 4px;font-size:12px;letter-spacing:.8px;text-transform:uppercase">Tasks</h4>' + lineList(x.requested_actions) : '')
+        : '<p>This mail is no longer in the list. Press Refresh and try again.</p>') +
+      '<p style="margin:14px 0 0;color:var(--mute,#65758a);font-size:12.5px">Simple view. The full window (reply drafts and approvals) could not open' + (why ? ': ' + esc(why) : '') + '. Press Refresh and tap the mail again.</p></div>';
+    el.addEventListener('click', function (e) { if (e.target === el) el.remove(); });
+    document.body.appendChild(el);
+  }
   window.jkgOpen = async function (id) {
+    if (!id || window.__jkgOpening) return;
+    window.__jkgOpening = true;
     try {
       await ensureMail();
-      if (!window.__jkgMe && window.miLoad) { await window.miLoad(false); window.__jkgMe = 1; }
-      window.miOpen(id);
-    } catch (e) { alert('Could not open this mail: ' + e.message); }
+      if (!window.__jkgMe && window.miLoad) { try { await window.miLoad(false); } catch (e) { } window.__jkgMe = 1; }
+      await window.miOpen(id);
+    } catch (e) { fallbackOpen(id, e && e.message); }
+    window.__jkgOpening = false;
   };
 
   /* ---------- home screen: JKG Box at the very top, old Notices tile removed ---------- */
