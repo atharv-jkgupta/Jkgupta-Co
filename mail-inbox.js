@@ -155,28 +155,31 @@
     h += '<div class="line"><span><b>Due:</b> ' + (due ? esc(fmt(due)) + (m.confirmed_due ? '' : ' (estimated)') : 'No date found') + '</span><span><b>Status:</b> ' + esc(m.case_status || 'New') + '</span><span><b>Assigned to:</b> ' + esc(m.assigned_to || 'Not assigned') + '</span></div>';
 
     var rb = '';
-    if (!/confirmed_ready|sent_manually/.test(stage)) rb += '<button type="button" class="ni-btn" onclick="miMake(\'email\')">Make email reply</button><button type="button" class="ni-btn alt" onclick="miMake(\'letter\')">Make formal letter</button>';
-    rb += '<button type="button" class="ni-btn alt" onclick="miAssign()">Assign to someone</button>';
-    h += '<h4>Reply</h4><div class="btns" style="margin-top:0">' + rb + '</div><div class="log" style="margin-top:6px">Nothing is sent by this system. The draft goes through review and approval first.' + (d.stage ? ' Making a new draft replaces the text below and clears earlier approvals.' : '') + '</div>';
+    if (!/confirmed_ready|sent_manually/.test(stage)) rb += '<button type=\"button\" class=\"ni-btn\" onclick=\"miMake(\'email\')\">Make email reply</button>';
+    if (rb) h += '<h4>Reply</h4><div class=\"btns\" style=\"margin-top:0\">' + rb + '</div><div class=\"log\" style=\"margin-top:6px\">Nothing is sent from here.</div>';
 
     if (d.stage) {
-      h += '<h4>Reply drafts and approval</h4>' + flow(stage) + '<div class="card ' + (stage === 'rejected' ? 'warn' : stage === 'confirmed_ready_to_send' ? 'good' : '') + '"><b>' + esc(STAGE[stage] || stage) + '</b>' + (d.submitted_by ? ' · submitted by ' + esc(d.submitted_by) : '') + (d.reviewed_by ? ' · approved by ' + esc(d.reviewed_by) : '') + (d.confirmed_by ? ' · confirmed by ' + esc(d.confirmed_by) : '') + (d.reject_note ? '<br>Sent back because: ' + esc(d.reject_note) : '') + '<div class="log">' + esc(d.note || '') + ' After the owner confirms, the owner sends the reply by hand and records it here.</div></div>';
-      if (r || d.reply_text) h += '<label style="margin-top:9px">Reply letter to the authority (for the portal / letter). Fill the [brackets].</label><textarea id="mi-lt" style="min-height:260px"' + (canEdit ? '' : ' disabled') + '>' + esc(d.reply_text || r.reply_text || '') + '</textarea>';
+      h += '<h4>Reply draft</h4><div class=\"card ' + (stage === 'rejected' ? 'warn' : stage === 'confirmed_ready_to_send' ? 'good' : '') + '\"><b>' + esc(STAGE[stage] || stage) + '</b>' + (d.submitted_by ? ' · submitted by ' + esc(d.submitted_by) : '') + (d.reviewed_by ? ' · approved by ' + esc(d.reviewed_by) : '') + (d.confirmed_by ? ' · confirmed by ' + esc(d.confirmed_by) : '') + (d.reject_note ? '<br>Sent back because: ' + esc(d.reject_note) : '') + '<div class=\"log\">Check the facts and fill the [brackets] before use.</div></div>';
+      if (r || d.reply_text) h += '<details id=\"mi-ltd\" style=\"margin-top:9px\"><summary>Formal letter to the authority (for the portal)</summary><label style=\"margin-top:9px\">Fill the [brackets].</label><textarea id=\"mi-lt\" style=\"min-height:260px\"' + (canEdit ? '' : ' disabled') + '>' + esc(d.reply_text || r.reply_text || '') + '</textarea><div class=\"btns\"><button type=\"button\" class=\"ni-btn alt\" onclick=\"miCopy()\">Copy letter</button></div></details>';
       h += '<div class="g2" style="margin-top:9px"><div><label>Email to client / sender: To</label><input id="mi-to" value="' + esc((d.to || []).join(', ')) + '"' + (canEdit ? '' : ' disabled') + '></div><div><label>Subject</label><input id="mi-sj" value="' + esc(d.subject || '') + '"' + (canEdit ? '' : ' disabled') + '></div></div><label style="margin-top:9px">Email text</label><textarea id="mi-bd"' + (canEdit ? '' : ' disabled') + '>' + esc(d.body || '') + '</textarea>';
       var b = '';
-      if (canEdit) b += '<button type="button" class="ni-btn alt" onclick="miStep(\'edit\')">Save draft changes</button>';
+      if (canEdit) b += '<button type="button" class="ni-btn alt" onclick="miStep(\'edit\')">Save</button>';
       if (/draft_ready|rejected/.test(stage)) b += '<button type="button" class="ni-btn" onclick="miStep(\'submit\')">Submit to reviewer</button>';
       if (stage === 'awaiting_review' && me && me === m.reviewer) b += '<button type="button" class="ni-btn" onclick="miStep(\'approve\')">Approve as reviewer</button>';
       if ((stage === 'awaiting_review' && (admin || me === m.reviewer)) || (stage === 'awaiting_owner' && admin)) b += '<button type="button" class="ni-btn alt" onclick="miReject()">Send back</button>';
       if (stage === 'awaiting_owner' && admin) b += '<button type="button" class="ni-btn" onclick="miStep(\'confirm\')">Owner: final confirmation</button>';
       if (stage === 'confirmed_ready_to_send' && admin) b += '<button type="button" class="ni-btn" onclick="miStep(\'mark_sent\')">I sent it by hand: record</button>';
-      b += '<button type="button" class="ni-btn alt" onclick="miCopy()">Copy letter</button><button type="button" class="ni-btn alt" onclick="miDownload()">Download letter (.txt)</button>';
+      b += '<button type=\"button\" class=\"ni-btn alt\" onclick=\"miCopy(\'email\')\">Copy</button><button type=\"button\" class=\"ni-btn alt\" onclick=\"miGmail()\">Open in Gmail</button>';
       h += '<div class="btns">' + b + '</div>';
     }
 
     /* everything else is tucked away, still fully working */
     var fx = chips('Notice type', f.notice_type) + chips('Authority', f.authority) + chips('GSTIN', f.gstin) + chips('PAN', f.pan) + chips('Assessment year', f.assessment_year) + chips('Financial year', f.financial_year) + chips('Reference', f.reference) + chips('DIN', f.din) + chips('Notice date', f.notice_date ? fmt(f.notice_date) : '') + chips('Sections cited', (f.sections_cited || []).join(', ')) + chips('Amounts', (f.amounts || []).map(function (x) { return 'Rs ' + Number(x).toLocaleString('en-IN'); }).join(', '));
-    h += '<details class="more" id="mi-more"><summary>More details</summary>';
+    h += '<details class="more" id="mi-more"><summary>More</summary>';
+    var mx = '';
+    if (!/confirmed_ready|sent_manually/.test(stage)) mx += '<button type=\"button\" class=\"ni-btn alt\" onclick=\"miMake(\'letter\')\">Make formal letter</button>';
+    if (d.stage) mx += '<button type=\"button\" class=\"ni-btn alt\" onclick=\"miDownload()\">Download (.txt)</button>';
+    if (mx) h += '<div class=\"btns\" style=\"margin-top:10px\">' + mx + '</div>';
     h += '<h4>Dates and people</h4><div class="g3"><div><label>Estimated reply date (system)</label><input value="' + esc(m.proposed_due ? fmt(m.proposed_due) : 'none') + '" disabled></div><div><label>Confirmed due date (you decide)</label><input type="date" id="mi-due" value="' + esc(m.confirmed_due || '') + '"></div><div><label>Hearing date</label><input value="' + esc(m.hearing_date ? fmt(m.hearing_date) : 'none') + '" disabled></div>' +
       '<div><label>Assigned to</label><select id="mi-as">' + opts(ppl.concat(m.assigned_to && ppl.indexOf(m.assigned_to) < 0 ? [m.assigned_to] : []), m.assigned_to, 'Not assigned') + '</select></div><div><label>Reviewer (must be someone else)</label><select id="mi-rv">' + opts(ppl.concat(m.reviewer && ppl.indexOf(m.reviewer) < 0 ? [m.reviewer] : []), m.reviewer, 'Choose reviewer') + '</select></div><div><label>Status</label><select id="mi-st">' + opts(STATUSES, m.case_status) + '</select></div></div>' +
       '<label style="margin-top:9px;display:flex;gap:7px;align-items:center"><input type="checkbox" id="mi-vf" style="width:auto"' + (m.verified ? ' checked' : '') + '> I checked the notice and the details above are correct</label><div class="btns"><button type="button" class="ni-btn" onclick="miSave()">Save these details</button></div>';
@@ -190,8 +193,9 @@
     }
     h += '<details><summary>Email text as received</summary><pre>' + esc(m.body_text || '') + '</pre></details>';
     if (m.attachment_text) h += '<details><summary>Text read from the PDF attachment(s)</summary><pre>' + esc(m.attachment_text) + '</pre></details>';
-    h += '<h4>History</h4><div class="log" style="padding-bottom:12px">' + ((m.activity || []).slice().reverse().map(function (a) { return '<div>' + esc(when(a.at)) + ' · ' + esc(a.by) + ': ' + esc(a.what) + '</div>'; }).join('') || 'No history yet.') + '</div></details>';
+    h += '<h4>History</h4><div class="log" style="padding-bottom:12px">' + ((m.activity || []).slice().reverse().map(function (a) { return '<div>' + esc(when(a.at)) + ' · ' + esc(a.by) + ': ' + esc(a.what) + '</div>'; }).join('') || 'No history yet.') + '</div>';
     if (admin && !m.deleted_at) h += '<div class="btns" style="margin-top:14px"><button type="button" class="ni-btn alt" style="color:var(--bad,#e5484d)" onclick="miTrash(false)">Move this mail to Deleted</button></div>';
+    h += '</details>';
     return h + '</div>';
   }
   async function open(id) {
@@ -234,11 +238,22 @@
       if (j.no_reply_needed) { if (confirm(j.reason + '\n\nMake a draft anyway?')) return make(fmt, true); msg(j.reason, true); return; }
       if (!j.ok) throw new Error(j.error || 'Could not prepare the draft.');
       await reopen(j.applied ? 'Draft ready below. Check it, fill the [brackets], then submit it for review.' : 'The draft is locked after the owner confirmed it, so it was not changed.');
+      if (fmt === 'letter') { var lt = $('mi-ltd'); if (lt) lt.open = true; }
     } catch (e) { msg(e.message, true); }
   }
   function reject() { var n = prompt('Why is it being sent back? (the staff will see this)'); if (n === null) return; step('reject', { note: n }); }
   function letterText() { return ($('mi-lt') ? $('mi-lt').value : '') || ($('mi-bd') ? $('mi-bd').value : ''); }
-  function copy() { var t = letterText(); if (navigator.clipboard) navigator.clipboard.writeText(t).then(function () { msg('Copied.', false); }, function () { msg('Could not copy. Select the text and copy it.', true); }); }
+  function copy(which) { var t = which === 'email' ? ($('mi-bd') ? $('mi-bd').value : '') : letterText(); if (navigator.clipboard) navigator.clipboard.writeText(t).then(function () { msg('Copied.', false); }, function () { msg('Could not copy. Select the text and copy it.', true); }); }
+  function gmail() {
+    var to = $('mi-to') ? $('mi-to').value : '', su = $('mi-sj') ? $('mi-sj').value : '', bd = $('mi-bd') ? $('mi-bd').value : '';
+    var u = 'https://mail.google.com/mail/?view=cm&fs=1&to=' + encodeURIComponent(to) + '&su=' + encodeURIComponent(su) + '&body=' + encodeURIComponent(bd);
+    if (u.length > 6000) {
+      u = 'https://mail.google.com/mail/?view=cm&fs=1&to=' + encodeURIComponent(to) + '&su=' + encodeURIComponent(su);
+      if (navigator.clipboard) navigator.clipboard.writeText(bd);
+      msg('The text is long, so it was copied. Paste it into the Gmail window.', false);
+    }
+    window.open(u, '_blank');
+  }
   function download() { var t = letterText(), a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([t], { type: 'text/plain' })); a.download = 'reply-' + (CUR.message_id || 'draft') + '.txt'; document.body.appendChild(a); a.click(); a.remove(); }
 
   function copyText(el) { var t = el && el.dataset ? el.dataset.v : ''; if (navigator.clipboard && t) navigator.clipboard.writeText(t).then(function () { msg('Copied: ' + t, false); }, function () { msg('Could not copy. Select the text and copy it.', true); }); }
@@ -255,7 +270,7 @@
   }
   window.miCopyText = copyText; window.miAssign = assign; window.miTrash = trash;
   window.miOpen = open; window.miClose = function () { var e = $('mi-modal'); if (e) e.remove(); CUR = null; };
-  window.miMake = make; window.miSave = save; window.miStep = step; window.miReject = reject; window.miCopy = copy; window.miDownload = download;
+  window.miMake = make; window.miSave = save; window.miStep = step; window.miReject = reject; window.miCopy = copy; window.miGmail = gmail; window.miDownload = download;
   window.miLoad = load; window.miQ = function (v) { ST.q = v; paint(); }; window.miF = function (v) { ST.filter = v; paint(); };
 
   /* the dashboard redraws itself often: put the panel back whenever it is missing */
