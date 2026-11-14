@@ -32,12 +32,13 @@
 
   var isDel = function (x) { return !!x.deleted_at; };
   var isAdm = function () { return !!(ST.me && ST.me.role === 'admin'); };
+  var isNotice = function (x) { return /notice/i.test(x.category || '') && !/^suspicious/i.test(x.category || ''); };
   function counts() {
     var a = ST.items.filter(function (x) { return !isDel(x); });
     return {
       all: a.length,
       act: a.filter(function (x) { return x.requires_action && isOpen(x); }).length,
-      notice: a.filter(function (x) { return /notice/i.test(x.category || ''); }).length,
+      notice: a.filter(isNotice).length,
       del: ST.items.length - a.length
     };
   }
@@ -46,7 +47,7 @@
     var a = ST.items.filter(function (x) {
       if (ST.tab === 'del') { if (!isDel(x)) return false; } else if (isDel(x)) return false;
       if (ST.tab === 'act' && !(x.requires_action && isOpen(x))) return false;
-      if (ST.tab === 'notice' && !/notice/i.test(x.category || '')) return false;
+      if (ST.tab === 'notice' && !isNotice(x)) return false;
       if (q && (x.subject + ' ' + x.from_address + ' ' + x.from_name + ' ' + x.summary + ' ' + JSON.stringify(x.facts || {})).toLowerCase().indexOf(q) < 0) return false;
       return true;
     });
@@ -103,37 +104,42 @@
     var right = due && d !== null
       ? '<b class="' + (d <= 3 ? 'red' : d <= 7 ? 'amber' : '') + '">' + (d < 0 ? Math.abs(d) + ' days late' : d === 0 ? 'Today' : d + ' days left') + '</b>' + esc(when(x.received_at))
       : esc(when(x.received_at));
-    var tag = /notice/i.test(x.category || '') ? '<span class="jb-tag">Notice</span>' : '';
+    var tag = isNotice(x) ? '<span class="jb-tag">Notice</span>' : /^suspicious/i.test(x.category || '') ? '<span class="jb-tag">May be fake</span>' : '';
+    var who = x.from_name || x.from_address || '';
     return '<div class="jb-row" role="button" tabindex="0" data-id="' + esc(x.message_id) + '"><span class="jb-dot ' + pc + '"></span><div><div class="jb-t">' + esc(x.subject || '(no subject)') + '</div>' +
-      '<div class="jb-s">' + tag + esc((x.from_name ? x.from_name + ' · ' : '') + x.from_address) + '</div>' +
-      (x.summary ? '<div class="jb-d">' + esc(String(x.summary).slice(0, 240)) + '</div>' : '') + '</div><div class="jb-r">' + right + '</div></div>';
+      '<div class="jb-s">' + tag + esc(who) + '</div>' +
+      (x.summary && x.requires_action ? '<div class="jb-d">' + esc(String(x.summary).slice(0, 140)) + '</div>' : '') + '</div><div class="jb-r">' + right + '</div></div>';
   }
   function paint() {
     var l = $('jb-list'); if (!l) return;
     var c = counts(), a = shown();
+    if (ST.cnt) { c.all = ST.cnt.total; c.act = ST.cnt.act; c.notice = ST.cnt.notice; c.del = ST.cnt.deleted; }
+    var sub = $('jb-sub');
+    if (sub && ST.loaded) sub.innerHTML = '<b>' + c.all + '</b> mails · <b>' + c.notice + '</b> notices · <b>' + c.act + '</b> need action' + (ST.cnt && ST.cnt.today !== undefined ? ' · <b>' + ST.cnt.today + '</b> today' : '') + (ST.cnt && ST.cnt.total > ST.items.length ? '<br><small>Showing the latest ' + ST.items.length + ' of ' + ST.cnt.total + '. Use search to find older mail.</small>' : '');
     var tabs = [['all', 'All mail', c.all], ['act', 'Needs action', c.act], ['notice', 'Notices', c.notice]];
     if (isAdm() || c.del) tabs.push(['del', 'Deleted', c.del]);
     var act = $('jb-act');
     if (act) act.innerHTML = '<button type="button" class="jb-btn" onclick="jkgRefresh()">Refresh</button>' +
-      (isAdm() && a.length ? (ST.tab === 'del' ? '<button type="button" class="jb-btn" onclick="jkgTrashAll(true)">Restore all (' + a.length + ')</button>' : '<button type="button" class="jb-btn dz" onclick="jkgTrashAll(false)">Delete all (' + a.length + ')</button>') : '') +
       '<button type="button" class="jb-btn p" onclick="jkgOld()">+ Add notice</button>';
     $('jb-tabs').innerHTML = tabs.map(function (t) { return '<button type="button" class="jb-tab' + (ST.tab === t[0] ? ' on' : '') + '" onclick="jkgTab(\'' + t[0] + '\')">' + t[1] + '<i>' + t[2] + '</i></button>'; }).join('');
     $('jb-status').innerHTML = statusLine() + (ST.err ? '<div class="jb-st bad"><b></b>' + esc(ST.err) + '</div>' : '');
     l.innerHTML = a.length ? a.map(rowHtml).join('') : '<div class="jb-empty">' + (ST.loaded ? (ST.tab === 'del' ? 'Nothing in Deleted.' : 'No mail here.') : 'Loading…') + '</div>';
+    if (isAdm() && a.length) l.innerHTML += '<div style="padding:14px;text-align:right">' + (ST.tab === 'del' ? '<button type="button" class="jb-btn" onclick="jkgTrashAll(true)">Restore all (' + a.length + ')</button>' : '<button type="button" class="jb-btn dz" onclick="jkgTrashAll(false)">Delete all in this list (' + a.length + ')</button>') + '</div>';
   }
   async function load(force) {
     if (!tok()) { ST.err = 'You are not logged in. Please log in again.'; paint(); return; }
     if (ST.loading) return;
     if (!force && ST.loaded && Date.now() - ST.at < 20000) return;
     ST.loading = true;
-    try { var r = await rpc('mail_list', { p_t: tok(), p_limit: 500 }); ST.items = r.items || []; ST.state = r.state || {}; ST.me = r.me || {}; ST.err = ''; ST.loaded = true; ST.at = Date.now(); }
+    try { var r = await rpc('mail_list', { p_t: tok(), p_limit: 500 }); ST.items = r.items || []; ST.state = r.state || {}; ST.me = r.me || {}; ST.err = ''; ST.loaded = true; ST.at = Date.now(); try { var k = await rpc('mail_counts', { p_t: tok() }); if (k && k.ok) ST.cnt = k; } catch (e2) { }
+    }
     catch (e) { ST.err = 'Could not load the mail: ' + e.message; }
     ST.loading = false;
     paint(); badge();
   }
   function badge() {
     var b = $('jb-hn'); if (!b || !ST.loaded) return;
-    var c = counts(); b.textContent = c.act + ' need action · ' + c.all + ' mails · newest first';
+    var c = counts(); if (ST.cnt) { c.act = ST.cnt.act; c.all = ST.cnt.total; } b.textContent = c.act + ' need action · ' + c.all + ' mails · newest first';
   }
 
   window.jkgbox = function () {
@@ -145,7 +151,7 @@
     try { if (typeof sb === 'function') sb(); if (typeof pgIn === 'function') pgIn('jkgbox'); window.TBF = null; } catch (e) { }
     css();
     app.innerHTML = '<i data-pg="jkgbox" hidden></i>' +
-      '<div class="jb-top"><div><h1>JKG Box</h1><p>All your mail and notices in one place, newest first.</p></div>' +
+      '<div class="jb-top"><div><h1>JKG Box</h1><p id=jb-sub>All your mail and notices in one place, newest first.</p></div>' +
       '<div class="jb-act" id="jb-act"></div></div>' +
       '<div id="jb-status"></div><div class="jb-tabs" id="jb-tabs"></div>' +
       '<input id="jb-q" class="sq" aria-label="Search mail" placeholder="Search subject, sender, GSTIN, PAN…" oninput="jkgQ(this.value)">' +

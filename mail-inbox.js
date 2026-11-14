@@ -148,7 +148,6 @@
       '<div class="mi-pills" style="margin-top:8px"><span class="mi-pill ' + (m.priority === 'Urgent' ? 'u' : m.priority === 'High' ? 'h' : 'n') + '">' + esc(m.priority) + '</span><span class="mi-pill">' + esc(m.category) + '</span></div><div id="mi-msg"></div>';
     if (m.deleted_at) h += '<div class="card warn"><b>This mail is in Deleted.</b> It is kept safely on the server.' + (admin ? '<div class="btns"><button type="button" class="ni-btn" onclick="miTrash(true)">Restore this mail</button></div>' : '') + '</div>';
     if (/suspicious/i.test(m.category)) h += '<div class="card bad"><b>May be fake.</b> The sender is not a government address. Do not click links or share details. Check the real notice on the official portal.</div>';
-    h += contactHtml(m);
     if (m.summary) h += '<h4>Summary</h4><div class="card">' + esc(m.summary) + (f.due_source ? '<div class="log" style="margin-top:6px">Reply date: ' + esc(f.due_source) + '</div>' : '') + '</div>';
     if (f.details_in_attachment) h += '<div class="card warn" style="margin-top:8px">A PDF is attached but its text could not be read. Open the PDF and read the notice yourself.</div>';
     if (f.pdf_locked) h += '<div class="card warn" style="margin-top:8px">A PDF attachment is password protected. Open it manually (often PAN in capitals + date of birth).</div>';
@@ -180,6 +179,7 @@
     if (!/confirmed_ready|sent_manually/.test(stage)) mx += '<button type=\"button\" class=\"ni-btn alt\" onclick=\"miMake(\'letter\')\">Make formal letter</button>';
     if (d.stage) mx += '<button type=\"button\" class=\"ni-btn alt\" onclick=\"miDownload()\">Download (.txt)</button>';
     if (mx) h += '<div class=\"btns\" style=\"margin-top:10px\">' + mx + '</div>';
+    h += contactHtml(m);
     h += '<h4>Dates and people</h4><div class="g3"><div><label>Estimated reply date (system)</label><input value="' + esc(m.proposed_due ? fmt(m.proposed_due) : 'none') + '" disabled></div><div><label>Confirmed due date (you decide)</label><input type="date" id="mi-due" value="' + esc(m.confirmed_due || '') + '"></div><div><label>Hearing date</label><input value="' + esc(m.hearing_date ? fmt(m.hearing_date) : 'none') + '" disabled></div>' +
       '<div><label>Assigned to</label><select id="mi-as">' + opts(ppl.concat(m.assigned_to && ppl.indexOf(m.assigned_to) < 0 ? [m.assigned_to] : []), m.assigned_to, 'Not assigned') + '</select></div><div><label>Reviewer (must be someone else)</label><select id="mi-rv">' + opts(ppl.concat(m.reviewer && ppl.indexOf(m.reviewer) < 0 ? [m.reviewer] : []), m.reviewer, 'Choose reviewer') + '</select></div><div><label>Status</label><select id="mi-st">' + opts(STATUSES, m.case_status) + '</select></div></div>' +
       '<label style="margin-top:9px;display:flex;gap:7px;align-items:center"><input type="checkbox" id="mi-vf" style="width:auto"' + (m.verified ? ' checked' : '') + '> I checked the notice and the details above are correct</label><div class="btns"><button type="button" class="ni-btn" onclick="miSave()">Save these details</button></div>';
