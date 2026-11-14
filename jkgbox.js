@@ -24,23 +24,27 @@
     return j;
   }
 
-  var ST = { items: [], state: {}, err: '', tab: 'all', q: '', loaded: false, at: 0, timer: null, loading: false };
+  var ST = { items: [], state: {}, me: {}, err: '', tab: 'all', q: '', loaded: false, at: 0, timer: null, loading: false };
   var RANK = { Urgent: 0, High: 1, Normal: 2, Low: 3 };
   var isOpen = function (x) { return !/^(filed|completed)$/i.test(x.case_status || ''); };
   var byNew = function (a, b) { return new Date(b.received_at || 0) - new Date(a.received_at || 0); };
   var rank = function (x) { return RANK[x.priority] === undefined ? 2 : RANK[x.priority]; };
 
+  var isDel = function (x) { return !!x.deleted_at; };
+  var isAdm = function () { return !!(ST.me && ST.me.role === 'admin'); };
   function counts() {
-    var a = ST.items;
+    var a = ST.items.filter(function (x) { return !isDel(x); });
     return {
       all: a.length,
       act: a.filter(function (x) { return x.requires_action && isOpen(x); }).length,
-      notice: a.filter(function (x) { return /notice/i.test(x.category || ''); }).length
+      notice: a.filter(function (x) { return /notice/i.test(x.category || ''); }).length,
+      del: ST.items.length - a.length
     };
   }
   function shown() {
     var q = ST.q.toLowerCase();
     var a = ST.items.filter(function (x) {
+      if (ST.tab === 'del') { if (!isDel(x)) return false; } else if (isDel(x)) return false;
       if (ST.tab === 'act' && !(x.requires_action && isOpen(x))) return false;
       if (ST.tab === 'notice' && !/notice/i.test(x.category || '')) return false;
       if (q && (x.subject + ' ' + x.from_address + ' ' + x.from_name + ' ' + x.summary + ' ' + JSON.stringify(x.facts || {})).toLowerCase().indexOf(q) < 0) return false;
@@ -77,9 +81,10 @@
       '.jb-home .jb-ic{width:46px;height:46px;border-radius:12px;background:var(--pri);color:var(--priink);display:grid;place-items:center;font-size:22px;flex:none}',
       '.jb-home .jb-tx{flex:1;min-width:0}.jb-home b{display:block;font-size:19px}.jb-home small{display:block;color:var(--mute);font-size:13px;margin-top:2px}.jb-home .jb-go{font-weight:700;color:var(--pri)}',
       /* buttons inside the opened mail */
-      '#mi-modal .ni-btn{font:600 13px Inter,system-ui,sans-serif;padding:9px 14px;border-radius:9px;border:1px solid var(--n-gold,#c9a45c);background:var(--n-gold,#c9a45c);color:#17202e;cursor:pointer}',
-      '#mi-modal .ni-btn.alt{background:transparent;color:var(--n-text,#edf2f8);border-color:var(--n-border,#30455e)}',
+      '#mi-modal .ni-btn{font:600 14px var(--sans,Inter,system-ui,sans-serif);padding:10px 16px;min-height:42px;border-radius:10px;border:1px solid var(--pri);background:var(--pri);color:var(--priink);cursor:pointer}',
+      '#mi-modal .ni-btn.alt{background:var(--s1);color:var(--ink);border-color:var(--line)}',
       '#mi-modal .ni-btn:disabled{opacity:.5;cursor:default}',
+      '.jb-btn.dz{color:var(--bad,#e5484d)}',
       '@media(max-width:560px){.jb-row{grid-template-columns:12px minmax(0,1fr)}.jb-r{grid-column:2;text-align:left}}'
     ].join('\n');
     document.head.appendChild(s);
@@ -107,16 +112,21 @@
     var l = $('jb-list'); if (!l) return;
     var c = counts(), a = shown();
     var tabs = [['all', 'All mail', c.all], ['act', 'Needs action', c.act], ['notice', 'Notices', c.notice]];
+    if (isAdm() || c.del) tabs.push(['del', 'Deleted', c.del]);
+    var act = $('jb-act');
+    if (act) act.innerHTML = '<button type="button" class="jb-btn" onclick="jkgRefresh()">Refresh</button>' +
+      (isAdm() && a.length ? (ST.tab === 'del' ? '<button type="button" class="jb-btn" onclick="jkgTrashAll(true)">Restore all (' + a.length + ')</button>' : '<button type="button" class="jb-btn dz" onclick="jkgTrashAll(false)">Delete all (' + a.length + ')</button>') : '') +
+      '<button type="button" class="jb-btn p" onclick="jkgOld()">+ Add notice</button>';
     $('jb-tabs').innerHTML = tabs.map(function (t) { return '<button type="button" class="jb-tab' + (ST.tab === t[0] ? ' on' : '') + '" onclick="jkgTab(\'' + t[0] + '\')">' + t[1] + '<i>' + t[2] + '</i></button>'; }).join('');
     $('jb-status').innerHTML = statusLine() + (ST.err ? '<div class="jb-st bad"><b></b>' + esc(ST.err) + '</div>' : '');
-    l.innerHTML = a.length ? a.map(rowHtml).join('') : '<div class="jb-empty">' + (ST.loaded ? 'No mail here.' : 'Loading…') + '</div>';
+    l.innerHTML = a.length ? a.map(rowHtml).join('') : '<div class="jb-empty">' + (ST.loaded ? (ST.tab === 'del' ? 'Nothing in Deleted.' : 'No mail here.') : 'Loading…') + '</div>';
   }
   async function load(force) {
     if (!tok()) { ST.err = 'You are not logged in. Please log in again.'; paint(); return; }
     if (ST.loading) return;
     if (!force && ST.loaded && Date.now() - ST.at < 20000) return;
     ST.loading = true;
-    try { var r = await rpc('mail_list', { p_t: tok(), p_limit: 500 }); ST.items = r.items || []; ST.state = r.state || {}; ST.err = ''; ST.loaded = true; ST.at = Date.now(); }
+    try { var r = await rpc('mail_list', { p_t: tok(), p_limit: 500 }); ST.items = r.items || []; ST.state = r.state || {}; ST.me = r.me || {}; ST.err = ''; ST.loaded = true; ST.at = Date.now(); }
     catch (e) { ST.err = 'Could not load the mail: ' + e.message; }
     ST.loading = false;
     paint(); badge();
@@ -134,9 +144,9 @@
     try { CURP = 'jkgbox'; } catch (e) { }
     try { if (typeof sb === 'function') sb(); if (typeof pgIn === 'function') pgIn('jkgbox'); window.TBF = null; } catch (e) { }
     css();
-    app.innerHTML = '<i data-pg="jkgbox" hidden></i><button type="button" class="jb-btn" onclick="home()">← Back to home</button>' +
+    app.innerHTML = '<i data-pg="jkgbox" hidden></i>' +
       '<div class="jb-top"><div><h1>JKG Box</h1><p>All your mail and notices in one place, newest first.</p></div>' +
-      '<div class="jb-act"><button type="button" class="jb-btn" onclick="jkgRefresh()">Refresh</button><button type="button" class="jb-btn p" onclick="jkgOld()">+ Add notice</button></div></div>' +
+      '<div class="jb-act" id="jb-act"></div></div>' +
       '<div id="jb-status"></div><div class="jb-tabs" id="jb-tabs"></div>' +
       '<input id="jb-q" class="sq" aria-label="Search mail" placeholder="Search subject, sender, GSTIN, PAN…" oninput="jkgQ(this.value)">' +
       '<div class="jb-list" id="jb-list"></div>';
@@ -151,6 +161,19 @@
   window.jkgTab = function (t) { ST.tab = t; paint(); };
   window.jkgQ = function (v) { ST.q = v; paint(); };
   window.jkgRefresh = function () { load(true); };
+  window.jkgTrashAll = async function (restore) {
+    var a = shown(); if (!a.length || !isAdm()) return;
+    var what = ST.q ? ' that match your search' : (ST.tab === 'act' ? ' in "Needs action"' : ST.tab === 'notice' ? ' in "Notices"' : ST.tab === 'del' ? ' in "Deleted"' : '');
+    var q = restore ? 'This brings ' + a.length + ' mail(s)' + what + ' back to the list. Continue?'
+      : 'This moves ' + a.length + ' mail(s)' + what + ' to "Deleted". Nothing is erased: you can restore them from the Deleted tab. Continue?';
+    if (!confirm(q)) return;
+    try {
+      var r = await rpc('mail_trash', { p_t: tok(), p_ids: a.map(function (x) { return x.message_id; }), p_restore: !!restore });
+      ST.err = ''; await load(true);
+      var b = $('jb-status'); if (b) b.insertAdjacentHTML('beforeend', '<div class="jb-st"><b></b>' + (restore ? 'Restored ' : 'Moved to Deleted: ') + (r.changed || 0) + '</div>');
+    } catch (e) { ST.err = 'Could not do this: ' + e.message; paint(); }
+  };
+  window.addEventListener('jkg-mail-changed', function () { load(true); });
   window.jkgOld = function () { window.__jkgInOld = true; if (typeof window.__ntOld === 'function') window.__ntOld(); };
 
   /* opening a mail uses the existing mail window (summary, reply drafts, approvals) */
