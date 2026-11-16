@@ -1071,8 +1071,8 @@ function build(rows,a,df,dt){
   T.push(t)});
  if(T.length>1&&T.every(t=>t.bal!=null&&!isNaN(t.bal))){const asc=T[0].date<=T[T.length-1].date;
   for(let i=1;i<T.length;i++){const[p,q]=asc?[T[i-1],T[i]]:[T[i],T[i-1]];if(Math.abs(p.bal+q.cr-q.dr-q.bal)>1)T[i].warn=1}}
- T.forEach(t=>{if(t.out||t.dup)return;const g=guess(t,a);t.g=g;if(g.conf=='high'&&!t.warn)t.l=g.l;else if(!t.warn){t.l=susName(c);t.susp=1}});
- S.T=T;S.bad=bad;S.done=0;S.uc=0;S.NL=null;scanRep()}
+ T.forEach(t=>{if(t.out||t.dup)return;const g=guess(t,a);t.g=g;if(g.conf=='high'&&!t.warn)t.l=g.l;else{t.l=susName(c);t.susp=1}});
+ S.T=T;S.bad=bad;S.done=0;S.uc=0;S.pf=0;S.NL=null;scanRep()}
 
 const GEN=/^(the|and|ltd|pvt|private|limited|co|company|bank|account|traders|enterprise|enterprises|stores|store|india|payment|payments|upi|neft|imps|rtgs|fund|transfer|paymen|trf|ref|mrs|shri|smt|yes|axis|hdfc|icici|sbin|canara|state|cash)$/,tk=x=>(String(x).toLowerCase().match(/[a-z]{3,}/g)||[]).filter(w=>!GEN.test(w));
 function fz(n,L){const ns=new Set(tk(n));let b=null,tie=0;
@@ -1112,7 +1112,7 @@ function review(){const a=C().accounts[S.a],T=S.T,ask=T.map((t,i)=>[t,i]).filter
  ${G.length||sing.length?'<h3>Kept in Suspense until a ledger is certain</h3><p><small>I only fill a ledger by myself when its full name is in the narration. Everything else sits in the suspense ledger. Choose a ledger to move entries out of it.</small></p>':''}${G.map((g,k)=>{const tot=g.idx.reduce((a,i)=>a+(S.T[i].dr||S.T[i].cr),0),sg=[...new Set(g.idx.map(i=>S.T[i].g&&S.T[i].g.l).filter(Boolean))];return '<div class="card ask"><b>'+g.idx.length+' entries look like the same party: '+E(g.ph.toUpperCase())+'</b> (total ₹'+M(tot)+')<br><small>'+g.idx.slice(0,5).map(i=>fd(S.T[i].date)+' · '+E(S.T[i].narr.slice(0,70))+' · ₹'+M(S.T[i].dr||S.T[i].cr)).join('<br>')+(g.idx.length>5?'<br>and '+(g.idx.length-5)+' more':'')+'</small><br>'+(sg.length==1?'<button onclick="document.getElementById(\'gin'+k+'\').value=this.dataset.l;gdec('+k+')" data-l="'+E(sg[0])+'">Use '+E(sg[0])+' for all</button> ':'')+'<input id="gin'+k+'" list="ll" placeholder="Choose ledger for all"> <button onclick="gdec('+k+')">Use for all '+g.idx.length+'</button> '+(gRule(g)?'<label><input type="checkbox" id="gsv'+k+'" checked> remember "'+E(gRule(g))+'"</label>':'')+'</div>'}).join('')}${sing.length?'<details><summary>'+sing.length+' single entries in Suspense</summary><div style="overflow-x:auto"><table><tr><th>Date</th><th>Narration</th><th>Amount</th><th>Ledger</th></tr>'+sing.map(x=>'<tr><td>'+fd(x[0].date)+'</td><td>'+E(x[0].narr)+(x[0].g&&x[0].g.l?'<br><small>Maybe: '+E(x[0].g.l)+'</small>':'')+'</td><td>'+(x[0].dr?'Dr ':'Cr ')+M(x[0].dr||x[0].cr)+'</td><td><input list="ll" size="24" placeholder="'+E(x[0].l)+'" onchange="chg('+x[1]+',this.value)"></td></tr>').join('')+'</table></div></details>':''}
  <details open><summary>Preview: all assigned transactions (${auto.length}). You can change any ledger.</summary><div style="overflow-x:auto"><table><tr><th>Date</th><th>Narration</th><th>Dr / Cr</th><th>Amount</th><th>Ledger</th></tr>${auto.map(x=>'<tr><td>'+fd(x[0].date)+'</td><td>'+E(x[0].narr)+'</td><td>'+(x[0].dr?'Dr':'Cr')+'</td><td>'+M(x[0].dr||x[0].cr)+'</td><td><input list="ll" size="24" value="'+E(x[0].l)+'" onchange="chg('+x[1]+',this.value)"></td></tr>').join('')}</table></div></details>
  <div id="mc">${mcard()}</div><h3>Export for Tally</h3><p>Pending entries are not in the file. Re-import the same statement later: rows already exported are skipped automatically.</p>
- <button class="g xb" onclick="ex('xml')">Tally XML</button> <button class="g xb" onclick="ex('tpl')">Auto Entry template (Excel)</button> <button class="g xb" onclick="ex('csv')">CSV</button> ${window.XLSX?'<button class="g xb" onclick="ex(\'xlsx\')">Excel</button>':''}`;sum();if(S.auto){const f=S.auto;S.auto=0;if(!S.T.some(t=>st(t)=='ask')){ex(f);document.getElementById('sm').insertAdjacentHTML('beforeend','<br><b>✔ Converted and downloaded.</b>')}}}
+ <button class="g xb" onclick="ex('xml')">Tally XML</button> <button class="g xb" onclick="ex('tpl')">Auto Entry template (Excel)</button> <button class="g xb" onclick="ex('csv')">CSV</button> ${window.XLSX?'<button class="g xb" onclick="ex(\'xlsx\')">Excel</button>':''}`;sum();if(S.auto){const f=S.auto;S.auto=0;if(!S.uc&&uList().length){S.pf=f;document.getElementById('sm').insertAdjacentHTML('beforeend','<br><b>Choose below what to do with the unmatched entries; the file downloads right after.</b>')}else if(!S.T.some(t=>st(t)=='ask')){ex(f);document.getElementById('sm').insertAdjacentHTML('beforeend','<br><b>✔ Converted and downloaded.</b>')}}}
 /* Unmatched entries: ask whether to use Suspense or create ledgers */
 const UST=new Set('chq deposit clg nun cts neft rtgs imps upi ifsc npci rrn net new ow ref cheque transfer'.split(' '));
 function uList(){return S.T.map((t,i)=>[t,i]).filter(x=>!x[0].out&&!x[0].dup&&!x[0].pend&&(x[0].susp||st(x[0])=='ask'))}
@@ -1120,9 +1120,9 @@ function uName(t){const w=(String(t.narr).replace(/\d+/g,' ').match(/[A-Za-z]{3,
 function uCard(){const nl=Object.keys(S.NL||{});
  if(S.uc=='new'&&nl.length)return '<div class="card ok" id="ud"><b>✔ '+nl.length+' new ledger'+(nl.length>1?'s':'')+' will be created.</b> The <b>Tally XML</b> export creates them for you: '+nl.map(E).join(', ')+'.<br><small>If you use Excel or CSV instead, create these ledgers in Tally first.</small></div>';
  if(S.uc)return '';const n=uList().length;if(!n)return '';
- return '<div class="card ask" id="ud"><b>'+n+' entr'+(n>1?'ies':'y')+' could not be matched to a ledger.</b><br>What should I do with them?<br><button onclick="uDec(\'susp\')">Put all in '+E(susName(C()))+'</button> <button onclick="uDec(\'new\')">Create new ledgers</button><br><small>Suspense keeps every one in a single ledger to sort out later in Tally. Creating ledgers gives each party its own ledger; you can edit the names first.</small></div>'}
+ return '<div class="card ask" id="ud"><b>'+n+' entr'+(n>1?'ies':'y')+' could not be matched to a ledger.</b><br>All of them are now in <b>'+E(susName(C()))+'</b>. Keep them there, or create ledgers instead?<br><button onclick="uDec(\'susp\')">Keep all in '+E(susName(C()))+'</button> <button onclick="uDec(\'new\')">Create new ledgers</button><br><small>Suspense keeps every one in a single ledger to sort out later in Tally. Creating ledgers gives each party its own ledger; you can edit the names first.</small></div>'}
 function uDec(m){const c=C();
- if(m=='susp'){uList().forEach(x=>{x[0].l=susName(c);x[0].susp=1;x[0].pend=0});S.uc='susp';save();return review()}
+ if(m=='susp'){uList().forEach(x=>{x[0].l=susName(c);x[0].susp=1;x[0].pend=0});S.uc='susp';save();review();return uGo()}
  const g=new Map();uList().forEach(x=>{const nm=uName(x[0]),o=g.get(nm)||{idx:[],dr:0,cr:0};o.idx.push(x[1]);if(x[0].dr)o.dr++;else o.cr++;g.set(nm,o)});
  S.UR=[...g].map(([n,o])=>({n,idx:o.idx,p:o.dr>=o.cr?'Sundry Creditors':'Sundry Debtors'}));
  const PG=['Sundry Creditors','Sundry Debtors','Indirect Expenses','Indirect Incomes','Loans & Advances (Asset)','Current Liabilities'];
@@ -1132,7 +1132,8 @@ function uApply(){const c=C();c.ledgers=c.ledgers||[];S.NL=S.NL||{};
   const ex=c.ledgers.find(l=>String(l).toLowerCase()==L.toLowerCase()),nm=ex||L;
   if(!ex){c.ledgers.push(nm);S.NL[nm]=v('up'+k)}
   r.idx.forEach(i=>{const t=S.T[i];t.l=nm;t.susp=0;t.pend=0})});
- S.uc='new';save();review()}
+ S.uc='new';save();review();uGo()}
+function uGo(){if(S.pf){const f=S.pf;S.pf=0;ex(f);const s=document.getElementById('sm');if(s)s.insertAdjacentHTML('beforeend','<br><b>✔ Converted and downloaded.</b>')}}
 const uMasters=V=>Object.keys(S.NL||{}).filter(n=>V.some(x=>x.dl==n||x.cl==n)).map(n=>'<TALLYMESSAGE xmlns:UDF="TallyUDF"><LEDGER NAME="'+E(n)+'" ACTION="Create"><NAME.LIST><NAME>'+E(n)+'</NAME></NAME.LIST><PARENT>'+E(S.NL[n])+'</PARENT></LEDGER></TALLYMESSAGE>').join('');
 function chg(i,val){const t=S.T[i],c=C();val=val.trim();if(!val){return review()}const was=t.susp;t.l=val;t.susp=0;if(t.contra){t.contra=0;t.skip=0}save();if(was)review();else sum()}
 function dec(i,yes){const t=S.T[i],c=C(),L=(yes?t.g.l:v('in'+i)).trim();if(!L)return alert('Please choose a ledger.');
