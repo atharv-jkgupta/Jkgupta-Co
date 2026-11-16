@@ -1781,7 +1781,7 @@ function PNAME(n){return String(n||'').replace(/[._-]+/g,' ').trim().replace(/(^
    Jaykaran Gupta & Co. - interface, client tracker, attendance, staff control
    (added on top of the original program; everything above is unchanged)
    ==================================================================== */
-const BUILD='b2611161300';
+const BUILD='b2611161302';
 let CURP='';
 const $id=i=>document.getElementById(i);
 const jkP2=n=>String(n).padStart(2,'0');
@@ -3175,18 +3175,20 @@ function bxFromVision(o,s){const cl=bxCl(s),warn=['Read by Gemini. Please check 
   else if(items.length>1){const t=k=>bxR2(items.reduce((a,i)=>a+i.taxable*i[k],0));['igst','cgst','sgst'].forEach(k=>{if(pr[k]>0&&Math.abs(t(k)-pr[k])>=0.01)warn.push('Printed '+k.toUpperCase()+' is '+bxMoney(pr[k])+' but the rate gives '+bxMoney(t(k))+'. Please fix it by hand.')})}}
  if(o.notes)warn.push('Gemini note: '+bxC(o.notes));
  return{kind:o.kind=='purchase'?'purchase':'sales',no:bxC(o.no),date:bxDate(o.date)||'',party:bxC(o.party),gstin:bxC(o.gstin).toUpperCase(),printed_total:+o.total>0?+o.total:null,warn,items}}
-async function bxVision(f,s){if(!(window.LS&&LS.on&&LS.token))return null;
+async function bxVision(f,s){if(!(typeof LS!='undefined'&&LS.on&&LS.token))return null;
  const n=f.name.toLowerCase(),mime=/\.pdf$/.test(n)?'application/pdf':/\.jpe?g$/.test(n)?'image/jpeg':/\.png$/.test(n)?'image/png':/\.webp$/.test(n)?'image/webp':'';
  if(!mime||f.size>3*1024*1024)return null;
  try{const r=await fetch('/api/vision',{method:'POST',headers:{'Content-Type':'application/json','x-token':LS.token},body:JSON.stringify({data:await bxB64(f),mime,company:s.company||'',gstin:s.gstin||'',month:String(s.month||'').slice(0,7)})});
-  if(!r.ok)return null;const j=await r.json();if(!j||!Array.isArray(j.bills)||!j.bills.length)return null;return j.bills.map(o=>bxFromVision(o,s))}catch(e){return null}}
-async function bxAi(rows,sheet){if(!(window.LS&&LS.on&&LS.token))return null;
+  let j=null;try{j=await r.json()}catch(e){}
+  if(!r.ok||!j||!Array.isArray(j.bills)||!j.bills.length){window.BXERR=(j&&j.error)||('server answered '+r.status);try{toast('AI reader: '+window.BXERR)}catch(e){}return null}
+  return j.bills.map(o=>bxFromVision(o,s))}catch(e){window.BXERR='could not reach the server ('+e.message+')';try{toast('AI reader: '+window.BXERR)}catch(e2){}return null}}
+async function bxAi(rows,sheet){if(!(typeof LS!='undefined'&&LS.on&&LS.token))return null;
  const txt=rows.map(r=>(Array.isArray(r)?r:[r]).map(bxC).filter(Boolean).join(' | ')).filter(Boolean).join('\n').slice(0,5500);
  const q='Read this sales bill text and reply with ONLY one JSON object, no other words. The seller is '+(sheet.company||'')+' (GSTIN '+(sheet.gstin||'')+'); I need the CUSTOMER (buyer). Use exactly: {"no":"invoice number","date":"YYYY-MM-DD","party":"buyer name","gstin":"buyer GSTIN or empty","items":[{"hsn":"digits","qty":number,"unit":"unit","taxable":number,"cgst":number,"sgst":number,"igst":number}],"total":number}. cgst, sgst and igst are the tax RATES in percent (for example 9). taxable is the line amount before tax. If a line has a packing line like "3 Rolls", use that qty and unit. Never guess: use empty string or 0 when unreadable.\n\n'+txt;
- try{const r=await fetch('/api/ai',{method:'POST',headers:{'Content-Type':'application/json','x-token':LS.token},body:JSON.stringify({messages:[{role:'user',content:q}]})});const j=await r.json();if(!j.reply)return null;
-  const m=j.reply.match(/\{[\s\S]*\}/);if(!m)return null;const o=JSON.parse(m[0]);
+ try{const r=await fetch('/api/ai',{method:'POST',headers:{'Content-Type':'application/json','x-token':LS.token},body:JSON.stringify({messages:[{role:'user',content:q}]})});const j=await r.json();if(!j.reply){window.BXERR=j.error||'empty answer';return null}
+  const m=j.reply.match(/\{[\s\S]*\}/);if(!m){window.BXERR='answer had no data: '+String(j.reply).slice(0,120);return null}const o=JSON.parse(m[0]);
   return{no:bxC(o.no),date:bxDate(o.date),party:bxC(o.party),gstin:bxC(o.gstin).toUpperCase(),printed_total:o.total?+o.total:null,warn:['Read by AI. Please check every figure against the bill.'],
-   items:(o.items||[]).map(i=>({hsn:String(i.hsn||'').replace(/\D/g,''),qty:+i.qty||0,unit:bxUnit(i.unit),taxable:bxR2(+i.taxable||0),igst:(+i.igst||0)/100,cgst:(+i.cgst||0)/100,sgst:(+i.sgst||0)/100}))}}catch(e){return null}}
+   items:(o.items||[]).map(i=>({hsn:String(i.hsn||'').replace(/\D/g,''),qty:+i.qty||0,unit:bxUnit(i.unit),taxable:bxR2(+i.taxable||0),igst:(+i.igst||0)/100,cgst:(+i.cgst||0)/100,sgst:(+i.sgst||0)/100}))}}catch(e){window.BXERR='problem: '+e.message;return null}}
 
 /* ---------- checks (same rules as the sheet kit) ---------- */
 function bxFig(b){let t=0,ig=0,cg=0,sg=0;b.items.forEach(i=>{t+=i.taxable;ig+=i.taxable*(i.igst||0);cg+=i.taxable*(i.cgst||0);sg+=i.taxable*(i.sgst||0)});return[t,ig,cg,sg,t+ig+cg+sg]}
@@ -3345,7 +3347,7 @@ async function bxAdd(files){const s=bxCur();if(!s||!files.length)return;files=[.
   catch(e){BXP.push({src:f.name,no:'',date:'',party:'',gstin:'',items:[],warn:['Could not read this file: '+(e&&e.message||e)+' You can type the bill in below.']})}}
  BXBUSY=0;bxDraw()}
 async function bxAi1(i){const s=bxCur(),b=BXP[i];if(!b.rows)return alert('There is no text to read for this bill.');if(!(LS.on&&LS.token))return alert('The AI works only when you are signed in on the office server, and the admin has set it up.');
- const a=await bxAi(b.rows,s);if(!a)return alert('The AI could not read this bill (it may not be set up yet). Please type the details in.');a.src=b.src;a.rows=b.rows;BXP[i]=a;bxDraw()}
+ const a=await bxAi(b.rows,s);if(!a)return alert('The AI could not read this bill. Reason: '+(window.BXERR||'unknown')+'. Please type the details in.');a.src=b.src;a.rows=b.rows;BXP[i]=a;bxDraw()}
 function bxClean(b){return{kind:b.kind=='purchase'?'purchase':'sales',date:bxDate(b.date)||b.date||'',no:bxC(b.no),party:bxC(b.party),gstin:bxC(b.gstin).toUpperCase(),printed_total:b.printed_total==null?null:b.printed_total,flag:!!b.flag,einv:!!b.einv,
  items:b.items.map(i=>({hsn:String(i.hsn||'').trim(),qty:i.qty===''?'':+i.qty,unit:bxC(i.unit),taxable:bxR2(+i.taxable||0),igst:+i.igst||0,cgst:+i.cgst||0,sgst:+i.sgst||0}))}}
 function bxDk(b){const n=s=>String(s||'').toLowerCase().replace(/[^a-z0-9]/g,'');return[n(b.no),b.gstin?n(b.gstin):n(b.party),String(b.date||'')].join('|')}
