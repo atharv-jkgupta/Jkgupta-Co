@@ -241,15 +241,16 @@ function readF(m){const f=document.getElementById('sf').files[0],a=C().accounts[
  ext=='csv'?rd.readAsText(f):rd.readAsArrayBuffer(f)}
 function pdfGrid(P){const L=[];P.forEach(pg=>{const ln=[];pg.forEach(i=>{let l=ln.find(o=>Math.abs(o.y-i.y)<=3);if(!l)ln.push(l={y:i.y,it:[]});l.it.push(i)});ln.sort((a,b)=>b.y-a.y).forEach(l=>{l.it.sort((a,b)=>a.x-b.x);L.push(l.it)})});
  if(!L.length)throw er('scan','This PDF has no readable text (it looks scanned). Please download the Excel/CSV or a text PDF from net banking.');
- const RO=[['date',/^(txn |tran |transaction )?date$/i],['narr',/narration|description|particulars|details|remarks/i],['dr',/withdraw|debit|^dr\b/i],['cr',/deposit|credit|^cr\b/i],['bal',/balance/i]],role=t=>{const r=RO.find(x=>x[1].test(t));return r?r[0]:'x'},DT=/^\d{1,2}[\/\-.]\d{1,2}[\/\-.]\d{2,4}$/;
+ const RO=[['date',/^(txn |tran |transaction )?date$/i],['narr',/narration|description|particulars|details|remarks/i],['dr',/withdraw|debit|^dr\b/i],['cr',/deposit|credit|^cr\b/i],['bal',/balance/i]],role=t=>{const r=RO.find(x=>x[1].test(t));return r?r[0]:'x'},DT=/^\d{1,2}[\/\-. ](\d{1,2}|[A-Za-z]{3,9})[\/\-. ]\d{2,4}$/;
  let H=null,cur=null,mode=null,buf=[];const out=[];
  L.forEach(l=>{const tx=l.map(i=>i.t).join(' ');
   if(/date/i.test(tx)&&/narration|description|particulars|details/i.test(tx)&&/balance/i.test(tx)){const m=[];l.forEach(i=>{const q=m[m.length-1];if(q&&i.x-q.r<8){q.t+=' '+i.t;q.r=i.x+i.w}else m.push({x:i.x,r:i.x+i.w,t:i.t})});H=m.map(q=>({x:q.x,r:q.r,k:role(q.t)}));buf=[];return}
-  if(!H||/statement summary|generated (on|by)|computer generated|registered office|page \d+ of/i.test(tx))return;
+  if(/end of statement/i.test(tx)){if(H)H.e=1;return}
+  if(!H||H.e||/statement summary|generated (on|by)|computer generated|registered office|page \d+ of/i.test(tx))return;
   const row={date:'',n:'',dr:'',cr:'',bal:''},ns=H.filter(h=>h.k=='dr'||h.k=='cr'||h.k=='bal');
   l.forEach(i=>{if(/^[\d,]+\.\d{2}$/.test(i.t)){if(!ns.length)return;const e=i.x+i.w,h=ns.reduce((a,b)=>Math.abs(a.r-e)<=Math.abs(b.r-e)?a:b);row[h.k]=i.t;return}
    if(DT.test(i.t)){if(!row.date)row.date=i.t;return}
-   let k='x';H.forEach((h,j)=>{if(j==0||H[j-1].r<=i.x+3)k=h.k});if(k=='narr')row.n+=(row.n?' ':'')+i.t});
+   let k='x';H.forEach((h,j)=>{if(j==0||H[j-1].r<=i.x+3)k=h.k});const nj=H.findIndex(h=>h.k=='narr');if(nj>=0&&i.x>=H[nj].x-3&&i.x<(H[nj+1]?H[nj+1].x-3:1e9))k='narr';if(k=='narr')row.n+=(row.n?' ':'')+i.t});
   if(DT.test(row.date)){if(mode===null)mode=buf.length?'pre':'post';if(mode=='pre'&&buf.length)row.n=buf.join(' ')+' '+row.n;buf=[];cur=row;out.push(row)}
   else if(row.n&&!row.dr&&!row.cr&&!row.bal){if(mode=='post'&&cur)cur.n+=' '+row.n;else buf.push(row.n)}});
  if(!H)throw er('pdf','Could not find the column headings (Date, Narration, Withdrawal/Debit, Deposit/Credit, Balance) in this PDF. Please use the bank Excel/CSV.');
