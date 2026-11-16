@@ -1,5 +1,6 @@
 // JK & Co office server. Run: node server.js  (needs Node.js 18 or newer). No other install needed.
 const http=require('http'),fs=require('fs'),path=require('path'),crypto=require('crypto'),os=require('os');
+const {readBill}=require('./vision.js');
 const D=__dirname,CF=path.join(D,'config.json');
 const cfg=Object.assign({port:3000,dataDir:'',adminPassword:'',masterPassword:'',backupDir:'',keepBackups:120,ai:{baseUrl:'',apiKey:'',model:''}},fs.existsSync(CF)?JSON.parse(fs.readFileSync(CF,'utf8')):{});
 const sha=s=>crypto.createHash('sha256').update(s).digest('hex');
@@ -26,10 +27,10 @@ const rpc={
   M.forEach((o,k)=>{if(!can(s,k)||(p_since&&o.t<=p_since))return;let v=o.v;
    if(k=='jkgusers'&&s.role!='admin'){try{const m=JSON.parse(v);Object.keys(m).forEach(x=>{if(x!=s.u)m[x]=''});v=JSON.stringify(m)}catch(e){}}
    rows.push({k,v,t:o.t})});return{ok:true,rows}},
- kv_put({p_t,p_k,p_v}){const s=sess(p_t);if(!s)return{ok:false,err:'session'};const k=String(p_k);if(!can(s,k))return{ok:false,err:'denied'};let v=String(p_v);
+ kv_put({p_t,p_k,p_v}){const s=sess(p_t);if(!s)return{ok:false,err:'session'};const k=String(p_k);if(!can(s,k)||(k=='jkgping'&&s.role!='admin'))return{ok:false,err:'denied'};let v=String(p_v);
   if(k=='jkgusers'&&s.role!='admin'){const cur=users();try{const inc=JSON.parse(v);if(inc[s.u]&&cur[s.u]!==undefined)cur[s.u]=inc[s.u]}catch(e){return{ok:false,err:'bad'}}v=JSON.stringify(cur)}
   put(k,v);return{ok:true}},
- kv_del({p_t,p_k}){const s=sess(p_t);if(!s)return{ok:false,err:'session'};const k=String(p_k);if(!can(s,k)||(k=='jkgusers'&&s.role!='admin'))return{ok:false,err:'denied'};del(k);return{ok:true}},
+ kv_del({p_t,p_k}){const s=sess(p_t);if(!s)return{ok:false,err:'session'};const k=String(p_k);if(!can(s,k)||(k=='jkgusers'&&s.role!='admin')||(k=='jkgping'&&s.role!='admin'))return{ok:false,err:'denied'};del(k);return{ok:true}},
  kv_pwcheck({p_t,p_h}){const s=sess(p_t);if(!s)return false;return p_h===(s.role=='admin'?admHash():users()[s.u])},
  kv_logout({p_t}){S.delete(p_t);return{ok:true}}
 };
@@ -59,6 +60,7 @@ const H=(q,res)=>{
  q.on('end',async()=>{try{const b=JSON.parse(Buffer.concat(ch).toString()||'{}');
   const m=/^\/rest\/v1\/rpc\/(\w+)$/.exec(q.url);if(m&&rpc[m[1]])return send(res,200,rpc[m[1]](b));
   if(q.url=='/api/ai'){const s=sess(q.headers['x-token']);if(!s)return send(res,401,{error:'Please log in again.'});return send(res,200,await ai(b))}
+  if(q.url=='/api/vision'){const s=sess(q.headers['x-token']);if(!s)return send(res,401,{error:'Please log in again.'});return send(res,200,await readBill(Object.assign({key:(cfg.gemini&&cfg.gemini.apiKey)||'',model:(cfg.gemini&&cfg.gemini.model)||''},b)))}
   send(res,404,{})}catch(e){send(res,500,{error:String(e.message||e)})}})
 };
 http.createServer(H).on('error',e=>{console.log('\nCannot start: '+(e.code=='EADDRINUSE'?'the server is already running in another window (or port '+cfg.port+' is used by another program).':e.message)+'\n');process.exit(1)}).listen(cfg.port,'0.0.0.0',()=>{console.log('JK & Co office server is running. Open one of these on any office PC:');
