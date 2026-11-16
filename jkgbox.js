@@ -120,6 +120,7 @@
     if (isAdm() || c.del) tabs.push(['del', 'Deleted', c.del]);
     var act = $('jb-act');
     if (act) act.innerHTML = '<button type="button" class="jb-btn" onclick="jkgRefresh()">Refresh</button>' +
+      (window.LS && LS.role === 'admin' ? '<button type="button" class="jb-btn" onclick="jkgPingSettings()">Ping settings</button>' : '') +
       '<button type="button" class="jb-btn p" onclick="jkgOld()">+ Add notice</button>';
     $('jb-tabs').innerHTML = tabs.map(function (t) { return '<button type="button" class="jb-tab' + (ST.tab === t[0] ? ' on' : '') + '" onclick="jkgTab(\'' + t[0] + '\')">' + t[1] + '<i>' + t[2] + '</i></button>'; }).join('');
     $('jb-status').innerHTML = statusLine() + (ST.err ? '<div class="jb-st bad"><b></b>' + esc(ST.err) + '</div>' : '');
@@ -250,6 +251,64 @@
       n1.__jkg = true; window.notices = n1;
     }
   }
+  /* ---------- ping: tells one staff member about each new notice or important mail ----------
+     Works while that person is logged in on the site (any page, any tab). The admin chooses who, and turns it on or off, with the Ping settings button in this page. */
+  var PING_DEFAULT = { on: true, users: ['amit'], scope: 'important' }; /* used until the admin saves settings */
+  function pingCfg() { try { var c = JSON.parse(LS.getItem('jkgping') || 'null'); if (c && typeof c === 'object') return { on: c.on !== false, users: Array.isArray(c.users) ? c.users : [], scope: c.scope === 'all' ? 'all' : 'important' }; } catch (e) { } return PING_DEFAULT; }
+  function pingSetup() {
+    var KEY = 'jkg_ping_seen', n = 0, busy = false;
+    var seen = function () { try { return JSON.parse(localStorage.getItem(KEY) || 'null'); } catch (e) { return null; } };
+    var keep = function (a) { try { localStorage.setItem(KEY, JSON.stringify(a.slice(-600))); } catch (e) { } };
+    var important = function (x) { if (x.deleted_at || /^(filed|completed)$/i.test(x.case_status || '')) return false; return pingCfg().scope === 'all' || x.requires_action || x.priority === 'Urgent' || x.priority === 'High'; };
+    var ask = function () { try { if ('Notification' in window && Notification.permission === 'default') Notification.requestPermission(); } catch (e) { } document.removeEventListener('click', ask); };
+    document.addEventListener('click', ask);
+    async function check() {
+      if (busy || document.hidden || !tok()) return; busy = true;
+      try {
+        var r = await rpc('mail_list', { p_t: tok(), p_limit: 60 }), me = String((r.me && r.me.u) || '').toLowerCase();
+        var cf = pingCfg(); if (!me || !cf.on || cf.users.map(function (u) { return String(u).toLowerCase(); }).indexOf(me) < 0) return;
+        var items = (r.items || []).filter(important), old = seen(), ids = items.map(function (x) { return x.message_id; });
+        if (!old) { keep(ids); return; } /* first time on this computer: note what is already there, do not ping for it */
+        var fresh = items.filter(function (x) { return old.indexOf(x.message_id) < 0; });
+        if (!fresh.length) return;
+        keep(old.concat(fresh.map(function (x) { return x.message_id; })));
+        n += fresh.length; document.title = '(' + n + ') ' + document.title.replace(/^\(\d+\)\s*/, '');
+        var f = fresh[0], txt = fresh.length > 1 ? fresh.length + ' new mails need attention' : 'New ' + (f.priority === 'Urgent' ? 'URGENT ' : '') + 'mail: ' + (f.subject || '(no subject)');
+        try { if (typeof toast === 'function') toast(txt, 'Open', function () { ensureMail().then(function () { window.miOpen(f.message_id); }).catch(function () { }); }, 20000); } catch (e) { }
+        try { if ('Notification' in window && Notification.permission === 'granted') new Notification('JK Gupta & Co', { body: txt }); } catch (e) { }
+      } catch (e) { } finally { busy = false; }
+    }
+    window.addEventListener('focus', function () { n = 0; document.title = document.title.replace(/^\(\d+\)\s*/, ''); check(); });
+    document.addEventListener('visibilitychange', function () { if (!document.hidden) check(); });
+    setTimeout(check, 4000); setInterval(check, 60000);
+  }
+  try { pingSetup(); } catch (e) { }
+  window.jkgPingSettings = function () {
+    if (!(window.LS && LS.role === 'admin')) return alert('Only the admin can change ping settings.');
+    var names = []; try { names = Object.keys(U() || {}); } catch (e) { }
+    var c = pingCfg(); c.users.forEach(function (u) { if (names.map(function (x) { return x.toLowerCase(); }).indexOf(String(u).toLowerCase()) < 0) names.push(u); });
+    var el = $('jb-modal'); if (el) el.remove();
+    el = document.createElement('div'); el.id = 'jb-modal';
+    el.setAttribute('style', 'position:fixed;inset:0;z-index:99999;background:rgba(5,10,18,.7);display:flex;align-items:flex-start;justify-content:center;overflow:auto;padding:18px 10px');
+    el.innerHTML = '<div style="width:min(520px,100%);background:var(--s1,#fff);color:var(--ink,#18283b);border:1px solid var(--line,#dce3ec);border-radius:16px;padding:18px;font:14px/1.55 var(--sans,Inter,system-ui,sans-serif)">' +
+      '<button type="button" class="jb-btn" style="float:right" onclick="document.getElementById(\'jb-modal\').remove()">Close</button>' +
+      '<h3 style="margin:0 0 6px;font:700 18px var(--serif,Georgia,serif)">Ping settings</h3>' +
+      '<div style="color:var(--mute,#65758a);font-size:12.5px;margin-bottom:10px">The people ticked below get a pop-up for each new mail while they are logged in on the site.</div>' +
+      '<label style="display:flex;gap:8px;align-items:center;margin:8px 0"><input type="checkbox" id="pg-on"' + (c.on ? ' checked' : '') + ' style="width:auto"> <b>Pings are ON</b></label>' +
+      '<div style="margin:10px 0 4px"><b>Who gets pinged</b></div>' +
+      (names.length ? names.map(function (n, i) { return '<label style="display:flex;gap:8px;align-items:center;margin:4px 0"><input type="checkbox" class="pg-u" value="' + esc(n) + '"' + (c.users.map(function (u) { return String(u).toLowerCase(); }).indexOf(n.toLowerCase()) >= 0 ? ' checked' : '') + ' style="width:auto"> ' + esc(n) + '</label>'; }).join('') : '<div>No staff logins found.</div>') +
+      '<div style="margin:12px 0 4px"><b>What to ping for</b></div>' +
+      '<select id="pg-sc" style="width:100%;padding:8px"><option value="important"' + (c.scope === 'important' ? ' selected' : '') + '>Notices, urgent or action-needed mails only</option><option value="all"' + (c.scope === 'all' ? ' selected' : '') + '>Every new mail</option></select>' +
+      '<div style="margin-top:14px"><button type="button" class="jb-btn p" onclick="jkgPingSave()">Save</button></div><div id="pg-m" style="margin-top:8px"></div></div>';
+    document.body.appendChild(el);
+  };
+  window.jkgPingSave = function () {
+    if (!(window.LS && LS.role === 'admin')) return;
+    var us = [].slice.call(document.querySelectorAll('.pg-u')).filter(function (x) { return x.checked; }).map(function (x) { return x.value; });
+    LS.setItem('jkgping', JSON.stringify({ on: !!$('pg-on').checked, users: us, scope: $('pg-sc').value }));
+    var m = $('pg-m'); if (m) m.textContent = 'Saved.';
+    setTimeout(function () { var e = $('jb-modal'); if (e) e.remove(); }, 700);
+  };
   hook();
   try { homeCard(); } catch (e) { }
 })();

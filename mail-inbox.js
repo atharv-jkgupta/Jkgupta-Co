@@ -191,6 +191,7 @@
       h += '<h4>Reply pack: ' + esc(r.title) + '</h4><div class="card"><b>Where to reply:</b> ' + esc(r.how_to_reply) + '<br><b>Time limit:</b> ' + esc(r.time_limit) + (r.legal_basis && r.legal_basis.length ? '<br><b>Law:</b> ' + esc(r.legal_basis.join(' · ')) : '') + '</div>' +
         '<div class="g2" style="margin-top:8px"><div><h4 style="margin-top:6px">Options</h4>' + list(r.options) + '<h4>Documents to collect</h4>' + list(r.documents) + '</div><div><h4 style="margin-top:6px">Points to examine</h4>' + list(r.points) + '<h4>Cautions</h4>' + list(r.cautions) + '</div></div>';
     }
+    h += '<h4>Quick reply (AI draft)</h4><div class="btns" style="margin-top:0"><button type="button" class="ni-btn alt" onclick="miAiReply()">Draft a reply</button></div><div id="mi-ai"></div><div class="log" style="margin-top:6px">A draft only. Check every fact and date, then send it yourself. Nothing is sent from here.</div>';
     h += '<details><summary>Email text as received</summary><pre>' + esc(m.body_text || '') + '</pre></details>';
     if (m.attachment_text) h += '<details><summary>Text read from the PDF attachment(s)</summary><pre>' + esc(m.attachment_text) + '</pre></details>';
     h += '<h4>History</h4><div class="log" style="padding-bottom:12px">' + ((m.activity || []).slice().reverse().map(function (a) { return '<div>' + esc(when(a.at)) + ' · ' + esc(a.by) + ': ' + esc(a.what) + '</div>'; }).join('') || 'No history yet.') + '</div>';
@@ -269,6 +270,18 @@
     } catch (e) { msg(e.message, true); }
   }
   window.miCopyText = copyText; window.miAssign = assign; window.miTrash = trash;
+  async function aiReply() {
+    var m = CUR, box = $('mi-ai'); if (!m || !box) return;
+    box.innerHTML = '<div class="log">Writing a draft…</div>';
+    var q = 'Write a short, polite reply, on behalf of JK Gupta & Co (chartered accountants, India), to the email below. Reply in the same language as the email. Do not invent facts, amounts, dates or section numbers: where something is not in the email, write it in [square brackets] for staff to fill. If it is a government notice, only acknowledge it and say we are looking into it, and give no legal opinion. Give only the reply text, with a greeting and a sign-off "JK Gupta & Co".\n\nFrom: ' + (m.from_name || '') + ' <' + (m.from_address || '') + '>\nSubject: ' + (m.subject || '') + '\n\n' + String(m.body_text || m.summary || '').slice(0, 4000);
+    try {
+      var r = await fetch('/api/ai', { method: 'POST', headers: { 'Content-Type': 'application/json', 'x-token': tok() }, body: JSON.stringify({ messages: [{ role: 'user', content: q }] }) });
+      var j = await r.json();
+      if (!j.reply) { box.innerHTML = '<div class="card bad">' + esc(j.error || 'The AI could not write a draft. Try again.') + '</div>'; return; }
+      box.innerHTML = '<textarea id="mi-ait" style="width:100%;min-height:170px;margin-top:8px">' + esc(j.reply) + '</textarea><div class="btns"><button type="button" class="ni-btn alt" data-v="" onclick="this.dataset.v=document.getElementById(\'mi-ait\').value;miCopyText(this)">Copy</button></div>';
+    } catch (e) { box.innerHTML = '<div class="card bad">Could not reach the AI.</div>'; }
+  }
+  window.miAiReply = aiReply;
   window.miOpen = open; window.miClose = function () { var e = $('mi-modal'); if (e) e.remove(); CUR = null; };
   window.miMake = make; window.miSave = save; window.miStep = step; window.miReject = reject; window.miCopy = copy; window.miGmail = gmail; window.miDownload = download;
   window.miLoad = load; window.miQ = function (v) { ST.q = v; paint(); }; window.miF = function (v) { ST.filter = v; paint(); };

@@ -1,5 +1,5 @@
 <!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Jaykaran Gupta &amp; Co</title>
-<meta name="description" content="Jaykaran Gupta &amp; Co client accounting workspace"><meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#0b1020"><meta name="jkg-build" content="b2611141530"><script>try{var t=localStorage.getItem("jkgtheme")||(matchMedia("(prefers-color-scheme:dark)").matches?"dark":"light");document.documentElement.dataset.theme=t}catch(e){document.documentElement.dataset.theme="light"}</script><link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns=%27http://www.w3.org/2000/svg%27%20viewBox=%270%200%2064%2064%27%3E%3Cdefs%3E%3ClinearGradient%20id=%27g%27%20x1=%270%27%20y1=%270%27%20x2=%271%27%20y2=%271%27%3E%3Cstop%20offset=%270%27%20stop-color=%27#5b4bf0%27/%3E%3Cstop%20offset=%271%27%20stop-color=%27#22b8d9%27/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect%20width=%2764%27%20height=%2764%27%20rx=%2716%27%20fill=%27url(#g)%27/%3E%3Ctext%20x=%2732%27%20y=%2743%27%20font-size=%2727%27%20font-family=%27Arial,Helvetica,sans-serif%27%20font-weight=%27800%27%20text-anchor=%27middle%27%20fill=%27#fff%27%3EJK%3C/text%3E%3C/svg%3E"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@600;700;800&display=swap" media="print" onload="this.media='all'"><noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@600;700;800&display=swap"></noscript><style>
+<meta name="description" content="Jaykaran Gupta &amp; Co client accounting workspace"><meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#0b1020"><meta name="jkg-build" content="b2611161300"><script>try{var t=localStorage.getItem("jkgtheme")||(matchMedia("(prefers-color-scheme:dark)").matches?"dark":"light");document.documentElement.dataset.theme=t}catch(e){document.documentElement.dataset.theme="light"}</script><link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns=%27http://www.w3.org/2000/svg%27%20viewBox=%270%200%2064%2064%27%3E%3Cdefs%3E%3ClinearGradient%20id=%27g%27%20x1=%270%27%20y1=%270%27%20x2=%271%27%20y2=%271%27%3E%3Cstop%20offset=%270%27%20stop-color=%27#5b4bf0%27/%3E%3Cstop%20offset=%271%27%20stop-color=%27#22b8d9%27/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect%20width=%2764%27%20height=%2764%27%20rx=%2716%27%20fill=%27url(#g)%27/%3E%3Ctext%20x=%2732%27%20y=%2743%27%20font-size=%2727%27%20font-family=%27Arial,Helvetica,sans-serif%27%20font-weight=%27800%27%20text-anchor=%27middle%27%20fill=%27#fff%27%3EJK%3C/text%3E%3C/svg%3E"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@600;700;800&display=swap" media="print" onload="this.media='all'"><noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@600;700;800&display=swap"></noscript><style>
 /* ============ tokens ============ */
 :root{--serif:'Source Serif 4',Georgia,'Times New Roman',serif;--sans:'Inter','Segoe UI',system-ui,-apple-system,Arial,sans-serif;--r:12px;--ease:cubic-bezier(.2,.7,.2,1)}
 :root,:root[data-theme=light]{color-scheme:light;
@@ -803,6 +803,25 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{ou
 #sb{padding-bottom:110px!important}
 #app{padding-bottom:96px}
 @media(max-width:600px){#aiw{right:12px!important;bottom:12px!important}.aip{width:calc(100vw - 24px)}}
+/* ===== final polish: Ask AI panel, CHECK bills, ping pop-up ===== */
+.aip{border-radius:18px!important;box-shadow:0 24px 60px -18px rgba(0,0,0,.45)!important}
+.aih{padding:12px 14px!important;background:linear-gradient(135deg,#4f46e5,#7c3aed)!important;color:#fff!important;border:0!important}
+.aih b{font-size:15px;letter-spacing:.2px}.aih button{color:#fff!important;background:rgba(255,255,255,.16)!important;border:0!important;border-radius:8px!important;padding:5px 10px!important;cursor:pointer}
+.aih button:hover{background:rgba(255,255,255,.28)!important}
+.aim{padding:14px!important;scroll-behavior:smooth}
+.aig{white-space:pre-wrap;word-break:break-word;line-height:1.55;border-radius:14px!important;padding:10px 13px!important;margin:0 0 10px!important;max-width:92%}
+.aig.me{margin-left:auto!important;background:linear-gradient(135deg,#4f46e5,#7c3aed)!important;color:#fff!important;border-bottom-right-radius:4px!important}
+.aig.bot{border-bottom-left-radius:4px!important}
+.aig.err{background:rgba(229,72,77,.1)!important;color:#c62a2f!important;border:1px solid rgba(229,72,77,.35)!important}
+.aiq{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}.aiq button{border-radius:999px!important;padding:6px 12px!important;font-size:12.5px!important;cursor:pointer}
+.aif{padding:10px!important;gap:8px!important;border-top:1px solid var(--line2)!important}
+.aif textarea{border-radius:12px!important;padding:10px 12px!important;resize:none}.aif textarea:focus{outline:2px solid #7c3aed;outline-offset:0}
+.aif button{border-radius:12px!important;padding:0 18px!important;font-weight:600;cursor:pointer}
+.aiw2{opacity:.7;animation:aipulse 1.1s ease-in-out infinite}@keyframes aipulse{50%{opacity:.35}}
+.bxck{margin:8px 0;padding:10px 12px;border-radius:10px;background:rgba(229,72,77,.1);border:1px solid rgba(229,72,77,.45);color:#b42328;font-size:13px;line-height:1.55}
+.bxck b{background:#e5484d;color:#fff;border-radius:6px;padding:1px 7px;margin-right:6px;font-size:11.5px;letter-spacing:.4px}
+#toasts .toast,#toasts>div{border-radius:12px}
+@media(prefers-reduced-motion:reduce){.aiw2{animation:none}.aim{scroll-behavior:auto}}
 /* sidebar: every row has an icon so text lines up */
 .li.bxl:before,.li.cl:before,.li[onclick^="tlNew"]:before{content:'';flex:none;width:19px;height:19px;background:var(--gold);-webkit-mask:var(--ic) center/contain no-repeat;mask:var(--ic) center/contain no-repeat}
 .li.bxl{--ic:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 3h9l4 4v14H6z'/%3E%3Cpath d='M14 3v5h5M9 13h6M9 17h6'/%3E%3C/svg%3E")}
@@ -1505,7 +1524,7 @@ function gRead(){const f=document.getElementById('gf').files[0];if(!f)return gFa
  {const c0=C();if(brNames(c0).length>1&&!confirm('This file will use the ledgers of branch "'+brAct(c0)+'". Is that right?\n\nPress Cancel to pick another branch first.'))return}
  const g=C().gs={out:v('g1').trim()||'OUTPUT',inp:v('g2').trim()||'INPUT',co:v('g3').trim()};save();const isC=/\.csv$/i.test(f.name),rd=new FileReader();
  rd.onload=async()=>{try{const sh=isC?[{name:f.name.replace(/\.csv$/i,''),rows:csv(rd.result)}]:await xlAll(rd.result);gStart(sh,g)}catch(e){gFail('The file could not be opened: '+e.message,FIX.xls)}};isC?rd.readAsText(f):rd.readAsArrayBuffer(f)}
-/* PATCH b2611141530: some 2B files have a Rate column inserted in the DATA without a heading, so every heading sits one column
+/* PATCH b2611161300: some 2B files have a Rate column inserted in the DATA without a heading, so every heading sits one column
    to the left of its numbers (Taxable Value then holds 18, Tax holds the taxable value ...). Every bill then fails with NO GST RATE FOUND.
    Detect it from the VALUES (rate-like, and tax / taxable = that rate on the next columns) and insert the missing 'Rate' heading. */
 function jkRealign(rows){try{
@@ -1762,7 +1781,7 @@ function PNAME(n){return String(n||'').replace(/[._-]+/g,' ').trim().replace(/(^
    Jaykaran Gupta & Co. - interface, client tracker, attendance, staff control
    (added on top of the original program; everything above is unchanged)
    ==================================================================== */
-const BUILD='b2611141530';
+const BUILD='b2611161300';
 let CURP='';
 const $id=i=>document.getElementById(i);
 const jkP2=n=>String(n).padStart(2,'0');
@@ -2870,7 +2889,7 @@ document.addEventListener('keydown',e=>{if(e.key=='Escape'){const w=document.get
 /* AI chat box: asks the office server (/api/ai) with the login token */
 let AIMSG=[],AIBUSY=0,AIERR='';
 try{AIMSG=JSON.parse(sessionStorage.getItem('jkai')||'[]')}catch(e){AIMSG=[]}
-function aiFmt(t){return E(t).replace(/\*\*([^*\n]+)\*\*/g,'<b>$1</b>')}
+function aiFmt(t){return E(t).replace(/\*\*([^*\n]+)\*\*/g,'<b>$1</b>').replace(/^[ \t]*[-*][ \t]+/gm,'\u2022 ').replace(/\n{3,}/g,'\n\n')}
 function aiSave(){try{sessionStorage.setItem('jkai',JSON.stringify(AIMSG.slice(-30)))}catch(e){}}
 function aiCopy(i){const t=(AIMSG[i]||{}).content||'';let ok=false;try{if(navigator.clipboard&&window.isSecureContext){navigator.clipboard.writeText(t);ok=true}}catch(e){}if(!ok)ok=gCopyFb(t);toast(ok?'Copied':'Copy not available here')}
 const AIQ=[['Client reminder','Write a short, polite WhatsApp message reminding a client to send the pending documents (bank statements and purchase/sales bills) so we can file their GST return on time.'],['Explain a notice','Explain in simple words what this notice means and what to do next: '],['GST due dates','What are the usual monthly GST due dates for GSTR-1 and GSTR-3B? Remind me to verify on the portal.'],['Amount in words','Write this amount in Indian rupees in words: '],['Email draft','Draft a short professional email to a client about: ']];
@@ -2881,8 +2900,8 @@ async function aiSend(){const i=document.getElementById('aii'),q=((i&&i.value)||
  try{const r=await fetch('/api/ai',{method:'POST',headers:{'Content-Type':'application/json','x-token':LS.token||''},body:JSON.stringify({messages:AIMSG.slice(-20)})});
   let j={};try{j=await r.json()}catch(e){}
   if(j&&j.reply)AIMSG.push({role:'assistant',content:j.reply});
-  else AIERR=(j&&j.error)||('The office server gave an unexpected answer ('+r.status+').')}
- catch(e){AIERR='Cannot reach the office server. Check that the server window is open on the main PC.'}
+  else AIERR=(j&&j.error)||(r.status==401?'Your login has expired. Please log in again.':r.status==404?'The AI is not switched on yet. Ask the admin to finish setting it up.':'The AI gave an unexpected answer ('+r.status+'). Please try again.')}
+ catch(e){AIERR='Cannot reach the server. Check your internet (or that the office server window is open) and try again.'}
  AIBUSY=0;aiSave();aiDraw(1)}
 function aiDraw(open){let w=document.getElementById('aiw');if(!w){w=document.createElement('div');w.id='aiw';w.className='notranslate';document.body.appendChild(w)}
  const o=open||w.dataset.o=='1';w.dataset.o=o?'1':'0';
@@ -3012,6 +3031,9 @@ const BXGS=/\b\d{2}[A-Z]{5}\d{4}[A-Z][1-9A-Z]Z[0-9A-Z]\b/g;
 const bxN=x=>{const n=parseFloat(String(x==null?'':x).replace(/[,\s₹]/g,''));return isNaN(n)?0:n};
 const bxC=s=>String(s==null?'':s).replace(/\s+/g,' ').trim();
 const bxR2=x=>Math.round(x*100)/100;
+/* dates that are NOT the invoice date: ack, printed on, PO / order, delivery note, e-way, challan, due, dispatch, vehicle, LR */
+const BXBADD=/ack\.?\s*(no|date|dt)|acknowledg|printed\s*on|\bp\.?o\.?\s*(no|date|dt)|purchase\s*order|order\s*(no|date)|delivery\s*note|challan|e-?\s?way|due\s*date|despatch|dispatch|vehicle|\bl\.?r\.?\s*(no|date)/i;
+const BXBADP=/(ack\w*|printed|p\.?o\.?|order|delivery\s*note|d\.?n\.?|challan|e-?\s?way\s*bill|due|despatch|dispatch|supply|l\.?r\.?)\s*[:;\-]?\s*$/i;
 function bxGstOk(g){g=String(g||'').trim().toUpperCase();if(!/^\d{2}[A-Z]{5}\d{4}[A-Z][1-9A-Z]Z[0-9A-Z]$/.test(g))return false;const C='0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';let s=0;for(let i=0;i<14;i++){const q=C.indexOf(g[i])*(i%2?2:1);s+=Math.floor(q/36)+q%36}return C[(36-s%36)%36]==g[14]}
 const bxLoc=d=>{d=new Date(d.getTime()+432e5);return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')};
 const BXMN={jan:1,feb:2,mar:3,apr:4,may:5,jun:6,jul:7,aug:8,sep:9,oct:10,nov:11,dec:12};
@@ -3034,10 +3056,10 @@ function bxFromRows(rows,ownG,ownN){
   if(/\d/.test(v)){B.no=v;li=k}}
  for(let k=0;k<Math.min(R.length-1,30)&&!B.date;k++){const ci=R[k].findIndex(c=>/^dated?\s*:?$/i.test(c));if(ci>=0&&R[k+1]&&R[k+1][ci]){const d=bxDate(R[k+1][ci].replace(/\s+\d{1,2}:\d\d.*$/,''));if(d)B.date=d}}
  if(li>=0){
-  for(let k=li;k<=li+1&&k<L.length&&!B.date;k++){const m2=L[k].match(/date\s*[:;]?\s*(\d{1,2}[\/\-.]\d{1,2}[\/\-.]\d{2,4})/i);if(m2)B.date=bxDate(m2[1])}}
- if(!B.date){for(let k=0;k<Math.min(L.length,14)&&!B.date;k++){const m=(B.no?L[k].split(B.no).join(' '):L[k]).match(/(\d{1,2}[\/\-.]\d{1,2}[\/\-.]\d{2,4})/);if(m)B.date=bxDate(m[1])}}
+  for(let k=li;k<=li+1&&k<L.length&&!B.date;k++){const m2=L[k].match(/date\s*[:;]?\s*(\d{1,2}[\/\-.]\d{1,2}[\/\-.]\d{2,4})/i);if(m2&&!BXBADP.test(L[k].slice(0,m2.index)))B.date=bxDate(m2[1])}}
+ if(!B.date){for(let k=0;k<Math.min(L.length,14)&&!B.date;k++){if(BXBADD.test(L[k]))continue;const m=(B.no?L[k].split(B.no).join(' '):L[k]).match(/(\d{1,2}[\/\-.]\d{1,2}[\/\-.]\d{2,4})/);if(m)B.date=bxDate(m[1])}}
  if(!B.date){const MN={jan:1,feb:2,mar:3,apr:4,may:5,jun:6,jul:7,aug:8,sep:9,oct:10,nov:11,dec:12};
-  for(let k=0;k<Math.min(L.length,16)&&!B.date;k++){const m=L[k].match(/(\d{1,2})\s*(?:st|nd|rd|th)?\s+(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*\.?,?\s+(\d{4})/i);if(m)B.date=m[3]+'-'+String(MN[m[2].toLowerCase()]).padStart(2,'0')+'-'+String(+m[1]).padStart(2,'0')}}
+  for(let k=0;k<Math.min(L.length,16)&&!B.date;k++){if(BXBADD.test(L[k]))continue;const m=L[k].match(/(\d{1,2})\s*(?:st|nd|rd|th)?\s+(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*\.?,?\s+(\d{4})/i);if(m)B.date=m[3]+'-'+String(MN[m[2].toLowerCase()]).padStart(2,'0')+'-'+String(+m[1]).padStart(2,'0')}}
  const bi=(i=>i>=0?i:L.findIndex(l=>/^\s*(buyer|bill(ed)?\s*to|customer|party|m\/s|sold\s*to|consignee|name\s*of\s*(?:buyer|customer|party))\b/i.test(l)))(L.findIndex(l=>/^\s*buyer\s*\(\s*bill\s*to\s*\)/i.test(l)));
  if(bi>=0){let t=R[bi];let name='';const ix=t.findIndex(c=>/^(buyer|bill(ed)?\s*to|customer|party|m\/s|sold\s*to|consignee|name\s*of\s*(?:buyer|customer|party))\s*[:;\-]*$/i.test(c));
   if(ix>=0&&t[ix+1])name=t[ix+1];else name=t.join(' ').replace(/^\s*(buyer|bill(ed)?\s*to|customer|party|m\/s|sold\s*to|consignee|name\s*of\s*(?:buyer|customer|party))\s*[:;\-]*\s*/i,'');
@@ -3055,7 +3077,7 @@ function bxFromRows(rows,ownG,ownN){
    for(let k=0;k<Math.min(L.length,12);k++){if(/tax\s*invoice|invoice\s*no|bill\s*of\s*supply/i.test(L[k]))break;const c=R[k][0].split('\u0001')[0];if(/[A-Za-z]{3}/.test(c)&&!/mob|tel|phone|e-?mail|gstin|gst\s*no|original|duplicate|triplicate|www\.|@|^\s*(office|godown)/i.test(c)){sup=bxC(c);break}}
    if(!sup){for(let k=L.length-1;k>=0&&!sup;k--){for(const c of R[k]){const m=c.replace(/\u0001/g,' ').match(/^(?:.*\.\s*)?for\s+([A-Za-z0-9][A-Za-z0-9 &.,'\-\/()]{2,60})$/i);if(m&&!/^(authori|and on behalf)/i.test(m[1])){sup=bxC(m[1]);break}}}
     if(!sup){const k=L.findIndex(l=>/a\/c\s*holder/i.test(l));if(k>=0){const m=L[k].match(/holder.{0,3}s?\s*name\s*:?\s*(.+)$/i);if(m)sup=bxC(m[1].replace(/^[:\s]+/,''))}}}
-   if(sup)B.party=sup;B.warn.push('This is a PURCHASE bill (your client is the buyer). The supplier name '+(sup?'was taken from the top of the bill':'could not be found')+' - please check it.')}}
+   if(!sup){for(let k=0;k<Math.min(from,12)&&!sup;k++){const c=R[k][0].split('\u0001')[0];if(/[A-Za-z]{3}/.test(c)&&!/mob|tel|phone|e-?mail|gstin|gst\s*no|original|duplicate|triplicate|www\.|@|invoice|bill\s*of|^\s*(office|godown)/i.test(c))sup=bxC(c)}}if(sup)B.party=sup;{const top=(L.slice(0,Math.max(from,1)).join(' ').match(BXGS)||[]).filter(x=>x!=own),any=(L.join(' ').match(BXGS)||[]).filter(x=>x!=own);B.gstin=top[0]||any[0]||''}B.warn.push('This is a PURCHASE bill (your client is the buyer). The supplier name '+(sup?'was taken from the top of the bill':'could not be found')+' - please check it.')}}
  const hi=L.findIndex(l=>/hsn|\bsac\b/i.test(l)&&/(qty|quantity)/i.test(l));let ti=-1;
  if(hi>=0){ti=L.findIndex((l,k)=>k>hi&&/^\s*total\b/i.test(l));if(ti<0)ti=L.length}
  if(hi>=0){let last=null;
@@ -3137,6 +3159,27 @@ async function bxOcr(cvs){if(!window.Tesseract)await loadJs('https://cdn.jsdeliv
  const me=document.getElementById('bxmsg'),w=await Tesseract.createWorker('eng'),P=[];await w.setParameters({tessedit_pageseg_mode:'6',preserve_interword_spaces:'1'});
  try{for(let n=0;n<cvs.length;n++){if(me)me.textContent='Scanned file: reading page '+(n+1)+' of '+cvs.length+' (5 to 10 seconds a page)…';const c=await cvs[n]();if(typeof cleanCv=='function')cleanCv(c);const r=await w.recognize(c);P.push(ocrItems(r.data.words,595/c.width))}}finally{await w.terminate()}
  return bxLines(P)}
+/* ---------- reading a bill file with Gemini (server /api/vision) ---------- */
+/* Per-client rules (matched on the client name of the open sheet). Edit this list to add or change a client. */
+const BXCL=[{re:/ashraf/i,incl:1},/* amount on the lines includes GST: take the GST out to get the taxable value */{re:/noble/i,transport:1},/* transport charge is added to the taxable value */{re:/madhukar/i,exact:1}/* tax copied as printed, to the paisa */];
+function bxCl(s){const n=String(s&&s.company||'');return BXCL.find(x=>x.re.test(n))||{}}
+async function bxB64(f){const u=new Uint8Array(await f.arrayBuffer());let t='';for(let i=0;i<u.length;i+=0x8000)t+=String.fromCharCode.apply(null,u.subarray(i,i+0x8000));return btoa(t)}
+function bxFromVision(o,s){const cl=bxCl(s),warn=['Read by Gemini. Please check every figure against the bill.'];
+ let items=(o.items||[]).map(i=>({hsn:String(i.hsn||'').replace(/\D/g,''),qty:+i.qty||0,unit:bxUnit(i.unit),taxable:bxR2(+i.taxable||0),igst:(+i.igst||0)/100,cgst:(+i.cgst||0)/100,sgst:(+i.sgst||0)/100,desc:bxC(i.desc)}));
+ const rate=i=>(i.igst||0)+(i.cgst||0)+(i.sgst||0);
+ if(cl.incl&&o.amount_includes_gst){items.forEach(i=>{i.taxable=bxR2(i.taxable/(1+rate(i)))});warn.push('The amounts on this bill include GST. The GST was taken out to get the taxable value.')}
+ const tr=+o.transport||0;
+ if(cl.transport&&tr>0&&items.length){const m=items.reduce((a,i)=>i.taxable>a.taxable?i:a,items[0]);items.push({hsn:m.hsn,qty:'',unit:'',taxable:bxR2(tr),igst:m.igst,cgst:m.cgst,sgst:m.sgst,desc:'Transport'});warn.push('Transport charge '+bxMoney(tr)+' was added to the taxable value.')}
+ if(cl.exact){const pr={igst:+o.tax_igst||0,cgst:+o.tax_cgst||0,sgst:+o.tax_sgst||0};
+  if(items.length==1&&items[0].taxable>0){const it=items[0];['igst','cgst','sgst'].forEach(k=>{const p=pr[k],c=bxR2(it.taxable*it[k]);if(p>0&&Math.abs(c-p)>=0.01&&Math.abs(c-p)<1)it[k]=p/it.taxable})}
+  else if(items.length>1){const t=k=>bxR2(items.reduce((a,i)=>a+i.taxable*i[k],0));['igst','cgst','sgst'].forEach(k=>{if(pr[k]>0&&Math.abs(t(k)-pr[k])>=0.01)warn.push('Printed '+k.toUpperCase()+' is '+bxMoney(pr[k])+' but the rate gives '+bxMoney(t(k))+'. Please fix it by hand.')})}}
+ if(o.notes)warn.push('Gemini note: '+bxC(o.notes));
+ return{kind:o.kind=='purchase'?'purchase':'sales',no:bxC(o.no),date:bxDate(o.date)||'',party:bxC(o.party),gstin:bxC(o.gstin).toUpperCase(),printed_total:+o.total>0?+o.total:null,warn,items}}
+async function bxVision(f,s){if(!(window.LS&&LS.on&&LS.token))return null;
+ const n=f.name.toLowerCase(),mime=/\.pdf$/.test(n)?'application/pdf':/\.jpe?g$/.test(n)?'image/jpeg':/\.png$/.test(n)?'image/png':/\.webp$/.test(n)?'image/webp':'';
+ if(!mime||f.size>3*1024*1024)return null;
+ try{const r=await fetch('/api/vision',{method:'POST',headers:{'Content-Type':'application/json','x-token':LS.token},body:JSON.stringify({data:await bxB64(f),mime,company:s.company||'',gstin:s.gstin||'',month:String(s.month||'').slice(0,7)})});
+  if(!r.ok)return null;const j=await r.json();if(!j||!Array.isArray(j.bills)||!j.bills.length)return null;return j.bills.map(o=>bxFromVision(o,s))}catch(e){return null}}
 async function bxAi(rows,sheet){if(!(window.LS&&LS.on&&LS.token))return null;
  const txt=rows.map(r=>(Array.isArray(r)?r:[r]).map(bxC).filter(Boolean).join(' | ')).filter(Boolean).join('\n').slice(0,5500);
  const q='Read this sales bill text and reply with ONLY one JSON object, no other words. The seller is '+(sheet.company||'')+' (GSTIN '+(sheet.gstin||'')+'); I need the CUSTOMER (buyer). Use exactly: {"no":"invoice number","date":"YYYY-MM-DD","party":"buyer name","gstin":"buyer GSTIN or empty","items":[{"hsn":"digits","qty":number,"unit":"unit","taxable":number,"cgst":number,"sgst":number,"igst":number}],"total":number}. cgst, sgst and igst are the tax RATES in percent (for example 9). taxable is the line amount before tax. If a line has a packing line like "3 Rolls", use that qty and unit. Never guess: use empty string or 0 when unreadable.\n\n'+txt;
@@ -3147,6 +3190,16 @@ async function bxAi(rows,sheet){if(!(window.LS&&LS.on&&LS.token))return null;
 
 /* ---------- checks (same rules as the sheet kit) ---------- */
 function bxFig(b){let t=0,ig=0,cg=0,sg=0;b.items.forEach(i=>{t+=i.taxable;ig+=i.taxable*(i.igst||0);cg+=i.taxable*(i.cgst||0);sg+=i.taxable*(i.sgst||0)});return[t,ig,cg,sg,t+ig+cg+sg]}
+/* reasons a bill must be marked CHECK (empty list = fine) */
+function bxChk(sheet,b){const r=[],ym=String(sheet.month||'').slice(0,7),own=String(sheet.gstin||'').toUpperCase(),g=String(b.gstin||'').toUpperCase();
+ if(!b.no)r.push('bill number is missing');
+ if(!b.date)r.push('date is missing');else if(/^\d{4}-\d\d/.test(ym)&&String(b.date).slice(0,7)!=ym)r.push('date '+b.date+' is outside the sheet month ('+ym+')');
+ if(!b.party)r.push('party name is missing');else{const p=String(b.party);let same=false;try{same=sheet.company&&lgNorm(p)==lgNorm(sheet.company)}catch(e){}
+  if(same)r.push('party is the client itself');else if(/^\d+[\/,\-\s]|\b(estate|road|marg|nagar|naka|plot|flat|floor|street|society|building|chs|apartment|pin\s*code|maharashtra)\b|\b\d{6}\b/i.test(p))r.push('party looks like an address, not a name')}
+ if(!g&&b.kind=='purchase')r.push('GSTIN of the seller is missing');
+ if(g&&own&&g==own)r.push('GSTIN is the client\'s own GSTIN');
+ if(b.printed_total!=null&&b.items&&b.items.length){const f=bxFig(b),rates=b.items.reduce((a,i)=>a+(i.igst||0)+(i.cgst||0)+(i.sgst||0),0);if(rates==0&&b.printed_total>f[0]+1)r.push('GST rate is 0 but the printed total ('+b.printed_total.toFixed(2)+') is more than the taxable value ('+f[0].toFixed(2)+')')}
+ return r}
 function bxCheck(sheet,bills){const W=[],seen={};(sheet.bills||[]).forEach(b=>seen[b.no]=1);const own=String(sheet.gstin||'').slice(0,2);
  bills.forEach(b=>{const add=(p,f)=>{if(!W.some(w=>w.bill==(b.no||b.src||'(no number)')&&w.problem==p))W.push({bill:b.no||b.src||'(no number)',party:b.party,problem:p,fix:f})};
   if(b.no&&seen[b.no])add('This bill number is already in the sheet.','Check whether it is a repeat. Remove it, or correct the number.');if(b.no)seen[b.no]=1;
@@ -3159,6 +3212,7 @@ function bxCheck(sheet,bills){const W=[],seen={};(sheet.bills||[]).forEach(b=>se
    if(g&&bxGstOk(g)){const same=g.slice(0,2)==own;if(same&&i.igst)add('IGST charged but the customer is in the same state ('+g.slice(0,2)+').','Within the state it should be CGST + SGST.');if(!same&&(i.cgst||i.sgst))add('CGST/SGST charged but the customer state is '+g.slice(0,2)+' (other state).','Between states it should be IGST.')}
    if(Math.abs((i.cgst||0)-(i.sgst||0))>1e-9)add('CGST rate and SGST rate differ.','They are normally equal. Check the bill.')});
   if(b.printed_total!=null&&b.items.length){const calc=bxFig(b)[4];if(Math.abs(calc-b.printed_total)>1){b.flag=true;add('Printed bill total '+b.printed_total.toFixed(2)+' differs from the sheet total '+calc.toFixed(2)+'.','A difference under about 1 rupee is rounding. Otherwise check amounts, rates or a missing item. The total cell is highlighted yellow.')}}
+  const cr=bxChk(sheet,b);b.chk=cr;if(cr.length){b.flag=true;cr.forEach(x=>add('CHECK: '+x,'Open the bill and correct it. A CHECK bill is marked in the Excel file and is left out of the TOTAL row.'))}
  });return W}
 
 /* ---------- writing the Excel file (same look and formulas as the HSN Number Layout sample) ---------- */
@@ -3188,18 +3242,18 @@ function bxSheetXml(sh){
  const bB=S({b:1}),bD=S({b:1,nf:'mm-dd-yy'}),bP=S({b:1,nf:'0%'}),bA=S({b:1,nf:ACC,h:'right'}),bAY=S({b:1,nf:ACC,h:'right',fill:1});
  let r=5;const billRows=[];
  (sh.bills||[]).forEach(b=>{const first=r;let T=0,IG=0,CG=0,SG=0;
-  b.items.forEach(it=>{const tx=+it.taxable||0,ig=+it.igst||0,cg=+it.cgst||0,sg=+it.sgst||0;let x='';
+  (b.items.length?b.items:[{hsn:'',qty:'',unit:'',taxable:0,igst:0,cgst:0,sgst:0}]).forEach(it=>{const tx=+it.taxable||0,ig=+it.igst||0,cg=+it.cgst||0,sg=+it.sgst||0;let x='';
    x+=cell(r,1,null,sD)+cell(r,2,null,sG)+cell(r,3,null,sG)+cell(r,4,null,sG);const h=String(it.hsn||'').trim();x+=cell(r,5,/^\d+$/.test(h)?+h:h,sG);
    x+=cell(r,6,it.qty===''||it.qty==null?null:+it.qty,sG)+cell(r,7,it.unit||null,sG)+cell(r,8,tx,sACC);
    x+=cell(r,9,ig,sP)+cell(r,10,'H'+r+'*I'+r,sACC,'f',bxR2(tx*ig))+cell(r,11,cg,sP)+cell(r,12,'H'+r+'*K'+r,sACC,'f',bxR2(tx*cg))+cell(r,13,sg,sP)+cell(r,14,'H'+r+'*M'+r,sACC,'f',bxR2(tx*sg));
    x+=cell(r,15,'H'+r+'+J'+r+'+L'+r+'+N'+r,sACC,'f',bxR2(tx+tx*ig+tx*cg+tx*sg));rows.push('<row r="'+r+'">'+x+'</row>');T+=tx;IG+=tx*ig;CG+=tx*cg;SG+=tx*sg;r++});
   const last=r-1,fy=b.flag,a=fy?bAY:bA,sm=c=>'SUM('+c+first+':'+c+last+')';let x='';
-  x+=cell(r,1,bxSerial(b.date),bD)+cell(r,2,b.no||'',bB)+cell(r,3,b.party||'',bB)+cell(r,4,b.gstin||'',bB);[5,6,7].forEach(c=>x+=cell(r,c,null,bB));
+  x+=cell(r,1,bxSerial(b.date),bD)+cell(r,2,b.no||'',bB)+cell(r,3,b.party||'',bB)+cell(r,4,b.gstin||'',bB);[5,6,7].forEach(c=>x+=cell(r,c,c==5&&b.chk&&b.chk.length?'CHECK':null,bB));
   x+=cell(r,8,sm('H'),a,'f',bxR2(T))+cell(r,9,null,bP)+cell(r,10,sm('J'),a,'f',bxR2(IG))+cell(r,11,null,bP)+cell(r,12,sm('L'),a,'f',bxR2(CG))+cell(r,13,null,bP)+cell(r,14,sm('N'),a,'f',bxR2(SG))+cell(r,15,'H'+r+'+J'+r+'+L'+r+'+N'+r,a,'f',bxR2(T+IG+CG+SG));
-  rows.push('<row r="'+r+'">'+x+'</row>');billRows.push(r);r++});
+  rows.push('<row r="'+r+'">'+x+'</row>');if(!(b.chk&&b.chk.length))billRows.push(r);r++});
  // grand total
  {let x='';const tl=S({f:'Times New Roman',sz:12,b:1,h:'left',v:'bottom'});const tc={};tc[1]=cell(r,1,'TOTAL',tl);tc[2]=cell(r,2,null,tl);tc[3]=cell(r,3,null,tl);tc[4]=cell(r,4,null,tl);[5,6,7,9,11,13].forEach(c=>tc[c]=cell(r,c,null,bB));
-  const tot={8:0,10:0,12:0,14:0,15:0};(sh.bills||[]).forEach(b=>{const f=bxFig(b);tot[8]+=f[0];tot[10]+=f[1];tot[12]+=f[2];tot[14]+=f[3];tot[15]+=f[4]});
+  const tot={8:0,10:0,12:0,14:0,15:0};(sh.bills||[]).filter(b=>!(b.chk&&b.chk.length)).forEach(b=>{const f=bxFig(b);tot[8]+=f[0];tot[10]+=f[1];tot[12]+=f[2];tot[14]+=f[3];tot[15]+=f[4]});
   [[8,'H'],[10,'J'],[12,'L'],[14,'N'],[15,'O']].forEach(([c,Lt])=>tc[c]=cell(r,c,(billRows.length?billRows.map(x=>Lt+x).join('+'):'0'),bA,'f',bxR2(tot[c])));
   for(let c=1;c<=15;c++)x+=tc[c];
   rows.push('<row r="'+r+'">'+x+'</row>');mrg.push('A'+r+':D'+r)}
@@ -3263,6 +3317,7 @@ function bxDraw(){if(CURP!='bx')return;const d=bxDb(),s=bxCur();
 function bxCard(b,i){const f=bxFig(b);
  const inp=(k,v,w,ph)=>'<input value="'+E(v==null?'':v)+'" style="width:'+w+'" placeholder="'+(ph||'')+'" oninput="bxEd('+i+',\''+k+'\',this.value)">';
  let h='<div class="card bxc"><div class="bxh"><b>'+E(b.src||'Bill')+'</b>'+(b.warn&&b.warn.length?'<span class="bxbad">'+b.warn.length+' to check</span>':'<span class="bxok">Read</span>')+'<select title="Sales or purchase bill" onchange="BXP['+i+'].kind=this.value;bxDraw()"><option value="sales"'+(b.kind=='purchase'?'':' selected')+'>Sales bill</option><option value="purchase"'+(b.kind=='purchase'?' selected':'')+'>Purchase bill</option></select><span class="sp"></span><button class="g sm" onclick="bxAi1('+i+')">Read with AI</button><button class="g sm" onclick="BXP.splice('+i+',1);bxDraw()">Remove</button></div>';
+ {let cr=[];try{cr=bxChk(bxCur()||{},bxClean(b))}catch(e){}if(cr.length)h+='<div class="bxck"><b>CHECK</b> This bill will be marked CHECK and left out of the total until fixed:<br>'+cr.map(x=>'\u2022 '+E(x)).join('<br>')+'</div>'}
  if(b.warn&&b.warn.length)h+='<div class="bxwn">'+b.warn.map(E).join('<br>')+'</div>';
  h+='<div class="bxg"><label>Date'+inp('date',b.date,'9.5em','YYYY-MM-DD')+'</label><label>Bill no'+inp('no',b.no,'8em')+'</label><label>Party'+inp('party',b.party,'18em')+'</label><label>GSTIN'+inp('gstin',b.gstin,'12em')+'</label></div>';
  h+='<table class="bxt"><tr><th>HSN</th><th>Qty</th><th>Unit</th><th>Taxable ₹</th><th>CGST %</th><th>SGST %</th><th>IGST %</th><th></th></tr>'+b.items.map((it,j)=>'<tr>'+['hsn','qty','unit','taxable'].map(k=>'<td><input value="'+E(it[k]==null?'':it[k])+'" size="'+(k=='taxable'?9:k=='hsn'?9:5)+'" oninput="bxEdI('+i+','+j+',\''+k+'\',this.value)"></td>').join('')+['cgst','sgst','igst'].map(k=>'<td><input value="'+(+(((it[k]||0)*100).toFixed(2)))+'" size="4" oninput="bxEdR('+i+','+j+',\''+k+'\',this.value)"></td>').join('')+'<td><button class="g sm" onclick="BXP['+i+'].items.splice('+j+',1);bxDraw()">×</button></td></tr>').join('')+'</table>';
@@ -3281,7 +3336,8 @@ function bxDelSheet(){const s=bxCur();if(!s||!confirm('Delete the sheet "'+s.com
 async function bxCont(f){if(!f)return;try{const s=await bxReadSheet(f);if(!s.bills.length&&!s.company)throw new Error('empty');const d=bxDb();const ex=d.sheets.find(x=>bxSame(x,s,bxKd(s)));if(ex){const have=new Set((ex.bills||[]).filter(b=>b.no).map(bxDk));let n=0;s.bills.forEach(b=>{if(b.no&&have.has(bxDk(b)))return;if(b.no)have.add(bxDk(b));ex.bills.push(b);n++});if(!ex.gstin&&s.gstin)ex.gstin=s.gstin;d.cur=ex.id;save();toast('This sheet already exists, so I added '+n+' new bill'+(n==1?'':'s')+' to it (no new sheet made).');return bxDraw()}d.sheets.push(s);d.cur=s.id;save();toast('Loaded '+s.bills.length+' bills from '+f.name);bxDraw()}catch(e){alert('I could not read that file as a sheet in this layout. Please pick the Excel file that this page made (or your HSN Number Layout sample).')}}
 async function bxAdd(files){const s=bxCur();if(!s||!files.length)return;files=[...files];BXBUSY=1;const me=$id('bxmsg');
  for(let k=0;k<files.length;k++){const f=files[k];if(me)me.textContent='Reading '+(k+1)+' of '+files.length+': '+f.name;
-  try{const grp=await bxFileBills(f),list=grp||[{rows:await bxFileRows(f),pg:null}];
+  try{const vb=await bxVision(f,s);if(vb){vb.forEach((b,n)=>{b.src=f.name+(vb.length>1?' (bill '+(n+1)+')':'');BXP.push(b)});if(me&&vb.length>1)me.textContent='This file has '+vb.length+' bills.';continue}
+   const grp=await bxFileBills(f),list=grp||[{rows:await bxFileRows(f),pg:null}];
    for(const gi of list){const rows=gi.rows,sr=f.name+(gi.pg?' (page '+gi.pg.join('-')+')':'');let b=bxEinv(rows,s.gstin,s)||bxFromRows(rows,s.gstin,s.company);b.src=sr;b.rows=rows;
     if(!b.items.length||!b.party){const a=await bxAi(rows,s);if(a){a.src=sr;a.rows=rows;b=a}}
     BXP.push(b)}
@@ -3327,21 +3383,21 @@ function bxEinv(rows,ownG,sh){
 function bxFmt(v){const s=bxCur();if(!s)return;s.fmt=v=='si'?'si':'india';save();toast(s.fmt=='si'?'Excel format: Bill Number Layout':'Excel format: HSN Number Layout')}
 async function bxXlsxSi(s){if(!window.ExcelJS)await loadJs('https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.4.0/exceljs.min.js');
  const pu=s.kind=='purchase',wb=new ExcelJS.Workbook(),w=wb.addWorksheet(pu?'Purchase':'SALES');wb.calcProperties={fullCalcOnLoad:true};
- const H=pu?['SI No','Bill No','Date','Party Name','GSTIN No','Taxble Value','IGST Rate','IGST Amount','CGST Rate','CGST Amount','SGST Rate','SGST Amount','Total']:['SI No','Bill No','Date','Party Name','GSTIN No','HSN CODE','Taxble Value','IGST Rate','IGST Amount','CGST Rate','CGST Amount','SGST Rate','SGST Amount','Total','Remark'];
+ const H=pu?['SI No','Bill No','Date','Party Name','GSTIN No','Taxble Value','IGST Rate','IGST Amount','CGST Rate','CGST Amount','SGST Rate','SGST Amount','Total','Remark']:['SI No','Bill No','Date','Party Name','GSTIN No','HSN CODE','Taxble Value','IGST Rate','IGST Amount','CGST Rate','CGST Amount','SGST Rate','SGST Amount','Total','Remark'];
  const T=pu?6:7,L=c=>String.fromCharCode(64+c),dt=x=>{const m=String(x||'').match(/^(\d{4})-(\d{2})-(\d{2})/);return m?new Date(Date.UTC(+m[1],+m[2]-1,+m[3])):(x||null)},pf=x=>(x*100)%1?'0.0#%':'0%';
  w.getCell('D1').value=s.company||'';w.getCell('D2').value=s.gstin||'';const mm=String(s.month||'').match(/^(\d{4})-(\d{2})/);if(mm){w.getCell('D3').value=new Date(Date.UTC(+mm[1],+mm[2]-1,1));w.getCell('D3').numFmt='mmm-yy'}
  ['D1','D2','D3'].forEach(a=>{w.getCell(a).font={bold:true,size:12}});
  H.forEach((t,i)=>{const c=w.getCell(4,i+1);c.value=t;c.font={bold:true};c.fill={type:'pattern',pattern:'solid',fgColor:{argb:'FFE7EEF7'}};c.alignment={horizontal:'center',wrapText:true}});
  [6,14,13,36,18].concat(pu?[14,9,13,9,13,9,13,14]:[11,14,9,13,9,13,9,13,14,12]).forEach((x,i)=>{w.getColumn(i+1).width=x});
- let r=5,n=0;
- s.bills.forEach(b=>{(b.items.length?b.items:[{}]).forEach((it,k)=>{n++;w.getCell(r,1).value=n;
+ let r=5,n=0;const okSeg=[];
+ s.bills.forEach(b=>{const bad=b.chk&&b.chk.length,r0=r;(b.items.length?b.items:[{}]).forEach((it,k)=>{n++;w.getCell(r,1).value=n;
   if(k==0){w.getCell(r,2).value=b.no;const d=w.getCell(r,3);d.value=dt(b.date);d.numFmt='dd-mm-yyyy';w.getCell(r,4).value=b.party;w.getCell(r,5).value=b.gstin}
   if(!pu)w.getCell(r,6).value=it.hsn?(/^\d+$/.test(it.hsn)?+it.hsn:it.hsn):null;
   const X=L(T);w.getCell(r,T).value=it.taxable==null?null:it.taxable;w.getCell(r,T).numFmt='#,##0.00';
   [[1,it.igst],[3,it.cgst],[5,it.sgst]].forEach(([o,v])=>{const rc=w.getCell(r,T+o),ac=w.getCell(r,T+o+1);rc.value=v||0;rc.numFmt=pf(v||0);ac.value={formula:X+r+'*'+L(T+o)+r};ac.numFmt='#,##0.00'});
   const tc=w.getCell(r,T+7);tc.value={formula:X+r+'+'+L(T+2)+r+'+'+L(T+4)+r+'+'+L(T+6)+r};tc.numFmt='#,##0.00';
-  if(!pu&&k==0)w.getCell(r,15).value=b.einv?'E-Invoice':'';r++})});
- if(n){const t=w.getCell(r,4);t.value='Total';t.font={bold:true};[T,T+2,T+4,T+6,T+7].forEach(c=>{const x=w.getCell(r,c);x.value={formula:'SUM('+L(c)+'5:'+L(c)+(r-1)+')'};x.font={bold:true};x.numFmt='#,##0.00'})}
+  if(!pu&&k==0)w.getCell(r,15).value=bad?'CHECK':(b.einv?'E-Invoice':'');if(pu&&k==0&&bad)w.getCell(r,14).value='CHECK';if(bad)for(let c=1;c<=(pu?14:15);c++)w.getCell(r,c).fill={type:'pattern',pattern:'solid',fgColor:{argb:'FFFFFF00'}};r++});if(!bad)okSeg.push([r0,r-1])});
+ if(n){const t=w.getCell(r,4);t.value='Total';t.font={bold:true};[T,T+2,T+4,T+6,T+7].forEach(c=>{const x=w.getCell(r,c);x.value={formula:okSeg.length?'SUM('+okSeg.map(g=>L(c)+g[0]+':'+L(c)+g[1]).join(',')+')':'0'};x.font={bold:true};x.numFmt='#,##0.00'})}
  w.views=[{state:'frozen',ySplit:4}];return await wb.xlsx.writeBuffer()}
 
 async function bxDown(){const s=bxCur();if(!s)return;try{const u=s.fmt=='si'?await bxXlsxSi(s):await bxXlsx(s),nm=(s.company||'Sheet').replace(/[^A-Za-z0-9]+/g,'_')+(s.kind=='purchase'?'_Purchase':'')+'_'+(s.month||'').slice(0,7)+'.xlsx',a=document.createElement('a');
