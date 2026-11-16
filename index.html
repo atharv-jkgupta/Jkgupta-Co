@@ -1111,7 +1111,7 @@ function review(){const a=C().accounts[S.a],T=S.T,ask=T.map((t,i)=>[t,i]).filter
  ${ask.length?'<h3>I need your decision on these</h3>'+ask.map(x=>'<div class="card '+(x[0].g.l?'ask':'bad')+'" id="q'+x[1]+'">'+card(x[0],x[1])+'</div>').join(''):''}
  ${G.length||sing.length?'<h3>Kept in Suspense until a ledger is certain</h3><p><small>I only fill a ledger by myself when its full name is in the narration. Everything else sits in the suspense ledger. Choose a ledger to move entries out of it.</small></p>':''}${G.map((g,k)=>{const tot=g.idx.reduce((a,i)=>a+(S.T[i].dr||S.T[i].cr),0),sg=[...new Set(g.idx.map(i=>S.T[i].g&&S.T[i].g.l).filter(Boolean))];return '<div class="card ask"><b>'+g.idx.length+' entries look like the same party: '+E(g.ph.toUpperCase())+'</b> (total ₹'+M(tot)+')<br><small>'+g.idx.slice(0,5).map(i=>fd(S.T[i].date)+' · '+E(S.T[i].narr.slice(0,70))+' · ₹'+M(S.T[i].dr||S.T[i].cr)).join('<br>')+(g.idx.length>5?'<br>and '+(g.idx.length-5)+' more':'')+'</small><br>'+(sg.length==1?'<button onclick="document.getElementById(\'gin'+k+'\').value=this.dataset.l;gdec('+k+')" data-l="'+E(sg[0])+'">Use '+E(sg[0])+' for all</button> ':'')+'<input id="gin'+k+'" list="ll" placeholder="Choose ledger for all"> <button onclick="gdec('+k+')">Use for all '+g.idx.length+'</button> '+(gRule(g)?'<label><input type="checkbox" id="gsv'+k+'" checked> remember "'+E(gRule(g))+'"</label>':'')+'</div>'}).join('')}${sing.length?'<details><summary>'+sing.length+' single entries in Suspense</summary><div style="overflow-x:auto"><table><tr><th>Date</th><th>Narration</th><th>Amount</th><th>Ledger</th></tr>'+sing.map(x=>'<tr><td>'+fd(x[0].date)+'</td><td>'+E(x[0].narr)+(x[0].g&&x[0].g.l?'<br><small>Maybe: '+E(x[0].g.l)+'</small>':'')+'</td><td>'+(x[0].dr?'Dr ':'Cr ')+M(x[0].dr||x[0].cr)+'</td><td><input list="ll" size="24" placeholder="'+E(x[0].l)+'" onchange="chg('+x[1]+',this.value)"></td></tr>').join('')+'</table></div></details>':''}
  <details open><summary>Preview: all assigned transactions (${auto.length}). You can change any ledger.</summary><div style="overflow-x:auto"><table><tr><th>Date</th><th>Narration</th><th>Dr / Cr</th><th>Amount</th><th>Ledger</th></tr>${auto.map(x=>'<tr><td>'+fd(x[0].date)+'</td><td>'+E(x[0].narr)+'</td><td>'+(x[0].dr?'Dr':'Cr')+'</td><td>'+M(x[0].dr||x[0].cr)+'</td><td><input list="ll" size="24" value="'+E(x[0].l)+'" onchange="chg('+x[1]+',this.value)"></td></tr>').join('')}</table></div></details>
- <div id="mc">${mcard()}</div><h3>Export for Tally</h3><p>Pending entries are not in the file. Re-import the same statement later: rows already exported are skipped automatically.</p>
+ <div id="mc">${mcard()}</div>${vnCard()}<h3>Export for Tally</h3><p>Pending entries are not in the file. Re-import the same statement later: rows already exported are skipped automatically.</p>
  <button class="g xb" onclick="ex('xml')">Tally XML</button> <button class="g xb" onclick="ex('tpl')">Auto Entry template (Excel)</button> <button class="g xb" onclick="ex('csv')">CSV</button> ${window.XLSX?'<button class="g xb" onclick="ex(\'xlsx\')">Excel</button>':''}`;sum();if(S.auto){const f=S.auto;S.auto=0;if(!S.uc&&uList().length){S.pf=f;document.getElementById('sm').insertAdjacentHTML('beforeend','<br><b>Choose below what to do with the unmatched entries; the file downloads right after.</b>')}else if(!S.T.some(t=>st(t)=='ask')){ex(f);document.getElementById('sm').insertAdjacentHTML('beforeend','<br><b>✔ Converted and downloaded.</b>')}}}
 /* Unmatched entries: ask whether to use Suspense or create ledgers */
 const UST=new Set('chq deposit clg nun cts neft rtgs imps upi ifsc npci rrn net new ow ref cheque transfer'.split(' '));
@@ -1179,12 +1179,12 @@ function xgAnyway(){const X=window.XG;modal();dlRaw(X.n,X.t,X.m)}
 function dl2(n,t,m){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([t],{type:m}));a.download=n;a.click()}
 const le=(n,d,a)=>'<ALLLEDGERENTRIES.LIST><LEDGERNAME>'+E(n)+'</LEDGERNAME><ISDEEMEDPOSITIVE>'+(d?'Yes':'No')+'</ISDEEMEDPOSITIVE><AMOUNT>'+(d?'-':'')+a.toFixed(2)+'</AMOUNT></ALLLEDGERENTRIES.LIST>';
 function ex(f){const a=C().accounts[S.a],b=a.ledger;
- const X=S.T.filter(t=>t.l&&!t.skip&&!t.pend&&!t.out&&!t.dup),V=X.map(t=>{const m=t.dr||t.cr,ty=t.contra?'Contra':t.dr?'Payment':'Receipt';return t.dr?{d:t.date,t:ty,dl:t.l,cl:b,a:m,n:t.narr}:{d:t.date,t:ty,dl:b,cl:t.l,a:m,n:t.narr}});
+ const X=S.T.filter(t=>t.l&&!t.skip&&!t.pend&&!t.out&&!t.dup),VN=vnoAll(X),V=X.map(t=>{const m=t.dr||t.cr,ty=t.contra?'Contra':t.dr?'Payment':'Receipt',no=t.vno;return t.dr?{no,d:t.date,t:ty,dl:t.l,cl:b,a:m,n:t.narr}:{no,d:t.date,t:ty,dl:b,cl:t.l,a:m,n:t.narr}});
  if(!V.length)return alert('Nothing is ready to export yet.');
  const nm='JK-'+S.c+'-'+a.label+'-'+(S.df&&S.dt?S.df+'_to_'+S.dt:'all');
- if(f=='xml')dl(nm+'.xml','<ENVELOPE><HEADER><TALLYREQUEST>Import Data</TALLYREQUEST></HEADER><BODY><IMPORTDATA><REQUESTDESC><REPORTNAME>Vouchers</REPORTNAME></REQUESTDESC><REQUESTDATA>'+uMasters(V)+V.map(x=>'<TALLYMESSAGE xmlns:UDF="TallyUDF"><VOUCHER VCHTYPE="'+x.t+'" ACTION="Create"><DATE>'+x.d.replace(/-/g,'')+'</DATE><VOUCHERTYPENAME>'+x.t+'</VOUCHERTYPENAME><NARRATION>'+E(x.n)+'</NARRATION>'+le(x.dl,1,x.a)+le(x.cl,0,x.a)+'</VOUCHER></TALLYMESSAGE>').join('')+'</REQUESTDATA></IMPORTDATA></BODY></ENVELOPE>','application/xml');
+ if(f=='xml')dl(nm+'.xml','<ENVELOPE><HEADER><TALLYREQUEST>Import Data</TALLYREQUEST></HEADER><BODY><IMPORTDATA><REQUESTDESC><REPORTNAME>Vouchers</REPORTNAME></REQUESTDESC><REQUESTDATA>'+uMasters(V)+V.map(x=>'<TALLYMESSAGE xmlns:UDF="TallyUDF"><VOUCHER VCHTYPE="'+x.t+'" ACTION="Create"><DATE>'+x.d.replace(/-/g,'')+'</DATE><VOUCHERTYPENAME>'+x.t+'</VOUCHERTYPENAME><VOUCHERNUMBER>'+x.no+'</VOUCHERNUMBER><NARRATION>'+E(x.n)+'</NARRATION>'+le(x.dl,1,x.a)+le(x.cl,0,x.a)+'</VOUCHER></TALLYMESSAGE>').join('')+'</REQUESTDATA></IMPORTDATA></BODY></ENVELOPE>','application/xml');
  else if(f=='tpl'){lpXlsm(V,mvl().m.map(x=>x.n),nm+'-Tally-Auto-Entry.xlsm').then(ok=>{if(!ok)alert('Could not load the helper library. Please check the internet and try again.')})}
- else{const R=[['Date','Voucher Type','Debit Ledger','Credit Ledger','Amount','Narration']].concat(V.map(x=>[fd(x.d),x.t,x.dl,x.cl,x.a,x.n]));
+ else{const R=[['Date','Voucher No.','Voucher Type','Debit Ledger','Credit Ledger','Amount','Narration']].concat(V.map(x=>[fd(x.d),x.no,x.t,x.dl,x.cl,x.a,x.n]));
   if(f=='csv')dl(nm+'.csv',R.map(r=>r.map(x=>'"'+String(x).replace(/"/g,'""')+'"').join(',')).join('\r\n'),'text/csv');
   else{const wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(R),'Vouchers');XLSX.writeFile(wb,nm+'.xlsx')}}
  if(mvl().m.length)setTimeout(mlx,700);
@@ -4298,4 +4298,18 @@ function pwExp(){if(!USER)return;const D=pwD(),R=[['Head','Client','Username','P
 
 </script>
 <script src="/jkgbox.js"></script>
+<script>
+/* Voucher numbers: one running series per voucher type per client, in date order */
+function vnoAll(X){const c=C();c.vno=c.vno||{};let n=0;X.map((t,i)=>[t,i]).sort((a,b)=>a[0].date<b[0].date?-1:a[0].date>b[0].date?1:a[1]-b[1]).forEach(p=>{const t=p[0];if(!t.vno){const ty=t.contra?'Contra':t.dr?'Payment':'Receipt';t.vno=c.vno[ty]=(c.vno[ty]||0)+1;n++}});if(n)save();return n}
+function vnCard(){const c=C(),V=c.vno||{};return '<div class="card" id="vn"><b>Voucher numbers</b> <small>Each transaction gets its own number, in date order. They continue from your last import. If Tally already has vouchers with these numbers, set the first number here before you export.</small><br>'+['Payment','Receipt','Contra'].map(ty=>ty+' starts at <input type="number" min="1" style="width:90px" value="'+((V[ty]||0)+1)+'" onchange="vnSet(\''+ty+'\',this.value)">').join(' &nbsp; ')+'</div>'}
+function vnSet(ty,val){const c=C();c.vno=c.vno||{};c.vno[ty]=Math.max(0,(parseInt(val,10)||1)-1);S.T.forEach(t=>{t.vno=0});save()}
+/* Esc key: close the open window, menu or side panel; otherwise go Back */
+document.addEventListener('keydown',function(e){if(e.key!=='Escape'||e.defaultPrevented)return;
+ const md=document.getElementById('md');if(md&&md.classList.contains('o')){modal();e.preventDefault();return}
+ const dd=document.getElementById('dd');if(dd&&dd.classList.contains('o')){dd.classList.remove('o');e.preventDefault();return}
+ const sb=document.getElementById('sb');if(sb&&sb.classList.contains('o')){tg(0);e.preventDefault();return}
+ const a=document.activeElement;if(a&&/^(INPUT|TEXTAREA|SELECT)$/.test(a.tagName)){a.blur();return}
+ if(document.getElementById('sm'))return;
+ const b=[...document.querySelectorAll('#app button')].find(x=>/^\s*←\s*Back/.test(x.textContent)&&x.offsetParent);if(b){b.click();e.preventDefault()}});
+</script>
 </body></html>
