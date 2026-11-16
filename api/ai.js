@@ -1,10 +1,12 @@
 // Vercel serverless function: /api/ai
 // The AI key stays here (Vercel environment variables). The browser never sees it.
+// Uses Gemini (GEMINI_API_KEY) when AI_BASE_URL / AI_MODEL are not set; otherwise the settings below.
 // Needs these Vercel environment variables:
 //   AI_BASE_URL  e.g. https://api.groq.com/openai/v1   (any OpenAI-style service)
 //   AI_API_KEY   the secret key
 //   AI_MODEL     e.g. llama-3.3-70b-versatile
 //   SUPABASE_URL and SUPABASE_ANON_KEY  (used only to check the person is logged in)
+const { chat } = require('../lib/vision.js');
 const SYS = "You are a helpful assistant for staff of JK Gupta & Co, a chartered accountant office in India. Help with drafting messages and emails to clients, quick conversions and calculations, GST, income tax, Tally, Excel and computer problems. Be short and practical. When you are not sure about a rate, date or rule, say so and tell them to verify it.";
 const J = (res, c, o) => { res.statusCode = c; res.setHeader('Content-Type', 'application/json'); res.setHeader('Cache-Control', 'no-store'); res.end(JSON.stringify(o)); };
 async function loggedIn(token) {
@@ -24,6 +26,12 @@ module.exports = async (req, res) => {
   if (req.method !== 'POST') return J(res, 405, { error: 'POST only' });
   if (!(await loggedIn(req.headers['x-token']))) return J(res, 401, { error: 'Please log in again.' });
   const base = process.env.AI_BASE_URL, key = process.env.AI_API_KEY, model = process.env.AI_MODEL;
+  // No Groq/OpenAI-style settings: use Gemini (GEMINI_API_KEY) instead
+  if ((!base || !model) && process.env.GEMINI_API_KEY) {
+    let g = req.body; if (typeof g === 'string') { try { g = JSON.parse(g) } catch (e) { g = {} } } g = g || {};
+    const gm = (Array.isArray(g.messages) ? g.messages : []).slice(-20).map(m => ({ role: m && m.role === 'assistant' ? 'assistant' : 'user', content: String((m && m.content) || '').slice(0, 6000) }));
+    return J(res, 200, await chat(gm, SYS));
+  }
   if (!base || !model) return J(res, 200, { error: 'The AI is not set up yet. Ask the admin to add the AI settings in Vercel.' });
   let b = req.body; if (typeof b === 'string') { try { b = JSON.parse(b) } catch (e) { b = {} } } b = b || {};
   const msgs = (Array.isArray(b.messages) ? b.messages : []).slice(-20).map(m => ({ role: m && m.role === 'assistant' ? 'assistant' : 'user', content: String((m && m.content) || '').slice(0, 6000) }));
