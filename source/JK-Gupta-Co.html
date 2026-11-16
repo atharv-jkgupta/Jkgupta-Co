@@ -298,7 +298,7 @@ function build(rows,a,df,dt){
  if(T.length>1&&T.every(t=>t.bal!=null&&!isNaN(t.bal))){const asc=T[0].date<=T[T.length-1].date;
   for(let i=1;i<T.length;i++){const[p,q]=asc?[T[i-1],T[i]]:[T[i],T[i-1]];if(Math.abs(p.bal+q.cr-q.dr-q.bal)>0.01)T[i].warn=1}}
  T.forEach(t=>{if(t.out||t.dup)return;const g=guess(t,a);t.g=g;if(g.conf=='high'&&!t.warn)t.l=g.l});
- S.T=T;S.bad=bad;S.done=0;scanRep()}
+ S.T=T;S.bad=bad;S.done=0;S.uc=0;S.NL=null;scanRep()}
 
 const GEN=/^(the|and|ltd|pvt|private|limited|co|company|bank|account|traders|enterprises|stores|store|india|payment|payments|upi|neft|imps|rtgs|fund|transfer|paymen|trf|ref|mrs|shri|smt|yes|axis|hdfc|icici|sbin|canara|state|cash)$/,tk=x=>(String(x).toLowerCase().match(/[a-z]{3,}/g)||[]).filter(w=>!GEN.test(w));
 function fz(n,L){const nt=new Set(tk(n));let b=null;L.forEach(l=>{const t=tk(l);if(!t.length)return;const h=t.filter(w=>nt.has(w));if(!h.length)return;const sc=h.length/t.length*100+h.join('').length;if(!b||sc>b.sc)b={l,sc,full:h.length==t.length,t,tie:false};else if(sc==b.sc)b.tie=true});
@@ -325,11 +325,33 @@ function review(){const a=C().accounts[S.a],T=S.T,ask=T.map((t,i)=>[t,i]).filter
  app.innerHTML=`<button class="g" onclick="start(${S.a})">← Back</button><h2>${E(a.label)} — preview</h2>${stepBar(3)}
  ${gap?'<div class="card bad">⚠ This statement starts '+fd(first.date)+', but the last imported transaction was '+fd(a.lastTxn)+'. There may be a gap — please check before importing.</div>':''}
  <div class="card ok" id="sm"></div>
+ ${uCard()}
  ${S.bad.length?'<div class="card bad"><b>Not imported — fix these rows in the file and import again:</b><br>'+S.bad.map(b=>'Row '+b.row+': '+b.why+' — '+E(b.narr)).join('<br>')+'</div>':''}
  ${ask.length?'<h3>I need your decision on these</h3>'+ask.map(x=>'<div class="card '+(x[0].g.l?'ask':'bad')+'" id="q'+x[1]+'">'+card(x[0],x[1])+'</div>').join(''):''}
  <details open><summary>Preview: all assigned transactions (${auto.length}). You can change any ledger.</summary><div style="overflow-x:auto"><table><tr><th>Date</th><th>Narration</th><th>Dr / Cr</th><th>Amount</th><th>Ledger</th></tr>${auto.map(x=>'<tr><td>'+fd(x[0].date)+'</td><td>'+E(x[0].narr)+'</td><td>'+(x[0].dr?'Dr':'Cr')+'</td><td>'+M(x[0].dr||x[0].cr)+'</td><td><input list="ll" size="24" value="'+E(x[0].l)+'" onchange="chg('+x[1]+',this.value)"></td></tr>').join('')}</table></div></details>
  <div id="mc">${mcard()}</div><h3>Export for Tally</h3><p>Pending entries are not in the file. Re-import the same statement later: rows already exported are skipped automatically.</p>
  <button class="g xb" onclick="ex('xml')">Tally XML</button> <button class="g xb" onclick="ex('tpl')">Auto Entry template (Excel)</button> <button class="g xb" onclick="ex('csv')">CSV</button> ${window.XLSX?'<button class="g xb" onclick="ex(\'xlsx\')">Excel</button>':''}`;sum();if(S.auto){const f=S.auto;S.auto=0;if(!S.T.some(t=>st(t)=='ask')){ex(f);document.getElementById('sm').insertAdjacentHTML('beforeend','<br><b>✔ Converted and downloaded.</b>')}}}
+/* Unmatched entries: ask whether to use Suspense or create ledgers */
+const UST=new Set('chq deposit clg nun cts neft rtgs imps upi ifsc npci rrn net new ow ref cheque transfer'.split(' '));
+function uList(){return S.T.map((t,i)=>[t,i]).filter(x=>!x[0].out&&!x[0].dup&&!x[0].pend&&(x[0].susp||st(x[0])=='ask'))}
+function uName(t){const w=(String(t.narr).replace(/\d+/g,' ').match(/[A-Za-z]{3,}/g)||[]).filter(x=>!UST.has(x.toLowerCase())&&!GEN.test(x.toLowerCase())).slice(0,4);return w.length?w.map(x=>x[0].toUpperCase()+x.slice(1).toLowerCase()).join(' '):'Unknown Party'}
+function uCard(){const nl=Object.keys(S.NL||{});
+ if(S.uc=='new'&&nl.length)return '<div class="card ok" id="ud"><b>✔ '+nl.length+' new ledger'+(nl.length>1?'s':'')+' will be created.</b> The <b>Tally XML</b> export creates them for you: '+nl.map(E).join(', ')+'.<br><small>If you use Excel or CSV instead, create these ledgers in Tally first.</small></div>';
+ if(S.uc)return '';const n=uList().length;if(!n)return '';
+ return '<div class="card ask" id="ud"><b>'+n+' entr'+(n>1?'ies':'y')+' could not be matched to a ledger.</b><br>What should I do with them?<br><button onclick="uDec(\'susp\')">Put all in '+E(susName(C()))+'</button> <button onclick="uDec(\'new\')">Create new ledgers</button><br><small>Suspense keeps every one in a single ledger to sort out later in Tally. Creating ledgers gives each party its own ledger; you can edit the names first.</small></div>'}
+function uDec(m){const c=C();
+ if(m=='susp'){uList().forEach(x=>{x[0].l=susName(c);x[0].susp=1;x[0].pend=0});S.uc='susp';save();return review()}
+ const g=new Map();uList().forEach(x=>{const nm=uName(x[0]),o=g.get(nm)||{idx:[],dr:0,cr:0};o.idx.push(x[1]);if(x[0].dr)o.dr++;else o.cr++;g.set(nm,o)});
+ S.UR=[...g].map(([n,o])=>({n,idx:o.idx,p:o.dr>=o.cr?'Sundry Creditors':'Sundry Debtors'}));
+ const PG=['Sundry Creditors','Sundry Debtors','Indirect Expenses','Indirect Incomes','Loans & Advances (Asset)','Current Liabilities'];
+ document.getElementById('ud').innerHTML='<b>Create new ledgers</b><br><small>One ledger per party. Change a name or its group if needed; leave a name empty to keep those entries in Suspense.</small><div style="overflow-x:auto"><table><tr><th>Ledger name</th><th>Under group</th><th>Entries</th><th>Example narration</th></tr>'+S.UR.map((r,k)=>'<tr><td><input id="un'+k+'" size="26" value="'+E(r.n)+'"></td><td><select id="up'+k+'">'+PG.map(p=>'<option'+(p==r.p?' selected':'')+'>'+E(p)+'</option>').join('')+'</select></td><td>'+r.idx.length+'</td><td><small>'+E(S.T[r.idx[0]].narr.slice(0,60))+'</small></td></tr>').join('')+'</table></div><button onclick="uApply()">Create ledgers and assign</button> <button class="g" onclick="review()">Cancel</button>'}
+function uApply(){const c=C();c.ledgers=c.ledgers||[];S.NL=S.NL||{};
+ S.UR.forEach((r,k)=>{const L=v('un'+k).trim();if(!L){r.idx.forEach(i=>{S.T[i].l=susName(c);S.T[i].susp=1});return}
+  const ex=c.ledgers.find(l=>String(l).toLowerCase()==L.toLowerCase()),nm=ex||L;
+  if(!ex){c.ledgers.push(nm);S.NL[nm]=v('up'+k)}
+  r.idx.forEach(i=>{const t=S.T[i];t.l=nm;t.susp=0;t.pend=0})});
+ S.uc='new';save();review()}
+const uMasters=V=>Object.keys(S.NL||{}).filter(n=>V.some(x=>x.dl==n||x.cl==n)).map(n=>'<TALLYMESSAGE xmlns:UDF="TallyUDF"><LEDGER NAME="'+E(n)+'" ACTION="Create"><NAME.LIST><NAME>'+E(n)+'</NAME></NAME.LIST><PARENT>'+E(S.NL[n])+'</PARENT></LEDGER></TALLYMESSAGE>').join('');
 function chg(i,val){const t=S.T[i],c=C();val=val.trim();if(!val){return review()}t.l=val;if(t.contra){t.contra=0;t.skip=0}save();sum()}
 function dec(i,yes){const t=S.T[i],c=C(),L=(yes?t.g.l:v('in'+i)).trim();if(!L)return alert('Please choose a ledger.');
  t.l=L;t.pend=0;const k=key(t.narr);if(yes&&t.g.contra){t.contra=1;if(t.g.covered)t.skip=1}
@@ -345,7 +367,7 @@ function ex(f){const a=C().accounts[S.a],b=a.ledger;
  const X=S.T.filter(t=>t.l&&!t.skip&&!t.pend&&!t.out&&!t.dup),V=X.map(t=>{const m=t.dr||t.cr,ty=t.contra?'Contra':t.dr?'Payment':'Receipt';return t.dr?{d:t.date,t:ty,dl:t.l,cl:b,a:m,n:t.narr}:{d:t.date,t:ty,dl:b,cl:t.l,a:m,n:t.narr}});
  if(!V.length)return alert('Nothing is ready to export yet.');
  const nm='JK-'+S.c+'-'+a.label+'-'+(S.df||'')+'_'+(S.dt||'');
- if(f=='xml')dl(nm+'.xml','<ENVELOPE><HEADER><TALLYREQUEST>Import Data</TALLYREQUEST></HEADER><BODY><IMPORTDATA><REQUESTDESC><REPORTNAME>Vouchers</REPORTNAME></REQUESTDESC><REQUESTDATA>'+V.map(x=>'<TALLYMESSAGE xmlns:UDF="TallyUDF"><VOUCHER VCHTYPE="'+x.t+'" ACTION="Create"><DATE>'+x.d.replace(/-/g,'')+'</DATE><VOUCHERTYPENAME>'+x.t+'</VOUCHERTYPENAME><NARRATION>'+E(x.n)+'</NARRATION>'+le(x.dl,1,x.a)+le(x.cl,0,x.a)+'</VOUCHER></TALLYMESSAGE>').join('')+'</REQUESTDATA></IMPORTDATA></BODY></ENVELOPE>','application/xml');
+ if(f=='xml')dl(nm+'.xml','<ENVELOPE><HEADER><TALLYREQUEST>Import Data</TALLYREQUEST></HEADER><BODY><IMPORTDATA><REQUESTDESC><REPORTNAME>Vouchers</REPORTNAME></REQUESTDESC><REQUESTDATA>'+uMasters(V)+V.map(x=>'<TALLYMESSAGE xmlns:UDF="TallyUDF"><VOUCHER VCHTYPE="'+x.t+'" ACTION="Create"><DATE>'+x.d.replace(/-/g,'')+'</DATE><VOUCHERTYPENAME>'+x.t+'</VOUCHERTYPENAME><NARRATION>'+E(x.n)+'</NARRATION>'+le(x.dl,1,x.a)+le(x.cl,0,x.a)+'</VOUCHER></TALLYMESSAGE>').join('')+'</REQUESTDATA></IMPORTDATA></BODY></ENVELOPE>','application/xml');
  else if(f=='tpl'){const R=[['DATE','BY / DR','TO / CR','AMOUNT','NARRATION','VOUCHER TYPE','DAY']].concat(V.map(x=>[x.d.split('-').reverse().join('-'),x.dl,x.cl,x.a,x.n,x.t,'']));
   if(window.XLSX){const wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(R),'Vouchers');XLSX.writeFile(wb,nm+'-AutoEntry.xlsx')}else dl(nm+'-AutoEntry.csv',R.map(r=>r.map(x=>'"'+String(x).replace(/"/g,'""')+'"').join(',')).join('\r\n'),'text/csv')}
  else{const R=[['Date','Voucher Type','Debit Ledger','Credit Ledger','Amount','Narration']].concat(V.map(x=>[fd(x.d),x.t,x.dl,x.cl,x.a,x.n]));
